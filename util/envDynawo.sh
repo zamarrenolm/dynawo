@@ -1758,15 +1758,6 @@ deploy_dynawo() {
   cd $current_dir
 }
 
-copy_sources() {
-  mkdir -p $DYNAWO_DEPLOY_DIR/sources || error_exit "Impossible to create $DYNAWO_DEPLOY_DIR."
-  if [ -e "$DYNAWO_HOME/.git" ]; then
-    for file in $(git ls-files); do
-      tar cf - $file | (cd $DYNAWO_DEPLOY_DIR/sources && tar xf -)
-    done
-  fi
-}
-
 binary_rpath_for_darwin() {
   if [ "`uname`" = "Darwin" ]; then
     version=$($DYNAWO_DEPLOY_DIR/bin/dynawo --version | cut -d ' ' -f 1)
@@ -1864,9 +1855,7 @@ create_distrib_with_headers() {
     fi
   fi
 
-  copy_sources
-
-  ln -s $DYNAWO_DEPLOY_DIR/sources/nrt/data $DYNAWO_DEPLOY_DIR/testcases
+  ln -s $DYNAWO_HOME/examples $DYNAWO_DEPLOY_DIR/examples
 
   if [ ! -x "$(command -v zip)" ]; then
     error_exit "You need to install zip command line utility."
@@ -1891,10 +1880,9 @@ create_distrib_with_headers() {
     error_exit "$DYNAWO_DEPLOY_DIR does not exist."
   fi
   cd "$DYNAWO_DEPLOY_DIR/.."
-  zip -r -y $ZIP_FILE dynawo/bin/ dynawo/lib/ dynawo/sources/ dynawo/testcases/
+  zip -r -y $ZIP_FILE dynawo/bin/ dynawo/lib/ dynawo/share/
+  zip -r -g -y $ZIP_FILE dynawo/examples/ -x "*.py"
   zip -r -g -y $ZIP_FILE dynawo/dynawo.sh
-
-  zip -r -g -y $ZIP_FILE dynawo/share/iidm dynawo/share/xsd dynawo/share/*.dic dynawo/share/*.par dynawo/share/cmake dynawo/share/dynawo-*.cmake
 
   # need with omc binary
   zip -r -g -y $ZIP_FILE dynawo/ddb/ dynawo/include/ dynawo/sbin/ dynawo/cmake/
@@ -1931,11 +1919,9 @@ create_distrib() {
 
   create_modelica_distrib $version
 
-  copy_sources
-
   if [ "`uname`" = "Darwin" ]; then
     version=$($DYNAWO_DEPLOY_DIR/bin/dynawo --version | cut -d ' ' -f 1)
-    bins=("bin/dynawo" "bin/dynawo-$version" "sbin/dumpModel" "sbin/compileModelicaModel" "sbin/dumpSolver" "sbin/generate-preassembled" "sbin/generate-preassembled-$version")
+    bins=("bin/dynawo" "bin/dynawo-$version")
 
     for bin in ${bins[@]}; do
       for lib_path in $(otool -l $DYNAWO_DEPLOY_DIR/$bin | grep `id -n -u` | grep path | awk '{print $2}'); do
@@ -1956,8 +1942,22 @@ create_distrib() {
     done
   fi
 
+  ln -s $DYNAWO_HOME/examples $DYNAWO_DEPLOY_DIR/examples
+
   if [ ! -x "$(command -v zip)" ]; then
     error_exit "You need to install zip command line utility."
+  fi
+
+  if [ "`uname`" = "Linux" ]; then
+    if [ -x "$(command -v chrpath)" ]; then
+      if [ "$DYNAWO_LIBRARY_TYPE" = "SHARED" ]; then
+        chrpath -d $DYNAWO_DEPLOY_DIR/lib/libamd.so
+        chrpath -d $DYNAWO_DEPLOY_DIR/lib/libbtf.so
+        chrpath -d $DYNAWO_DEPLOY_DIR/lib/libcolamd.so
+        chrpath -d $DYNAWO_DEPLOY_DIR/lib/libklu.so
+        chrpath -d $DYNAWO_DEPLOY_DIR/lib/libsuitesparseconfig.so
+      fi
+    fi
   fi
 
   # create distribution
@@ -1965,7 +1965,8 @@ create_distrib() {
     error_exit "$DYNAWO_DEPLOY_DIR does not exist."
   fi
   cd "$DYNAWO_DEPLOY_DIR/.."
-  zip -r -y $ZIP_FILE dynawo/bin/ dynawo/lib/ dynawo/share/ dynawo/sources/
+  zip -r -y $ZIP_FILE dynawo/bin/ dynawo/lib/ dynawo/share/
+  zip -r -g -y $ZIP_FILE dynawo/examples/ -x "*.py" "*DynaSwing/Kundur_Example13*"
   zip -r -g -y $ZIP_FILE dynawo/dynawo.sh
   zip -r -g -y $ZIP_FILE dynawo/ddb/*.$DYNAWO_SHARED_LIBRARY_SUFFIX dynawo/ddb/*.desc.xml dynawo/ddb/*.extvar
   zip -r -g -y $ZIP_FILE dynawo/sbin/curvesToHtml
