@@ -15,40 +15,38 @@
  * @file  DYNModelCPP.h
  *
  * @brief Class Interface to describe a c++ model : header file
- *
  */
 #ifndef MODELS_CPP_COMMON_DYNMODELCPP_H_
 #define MODELS_CPP_COMMON_DYNMODELCPP_H_
 
-#include <vector>
-#include <set>
-#include <map>
-
+#include "DYNSparseMatrix.h"
 #include "DYNSubModel.h"
 
 namespace DYN {
-class SparseMatrix;
 
 /**
- * class ModelCPP
+ * Class ModelCPP
  */
 class ModelCPP : public SubModel {
  public:
   /**
-   * @brief Default constructor
-   *
+   * @brief constructor
    */
-  ModelCPP() { }
+  ModelCPP();
+  /**
+   * @brief constructor
+   * @param modelType
+   */
+  explicit ModelCPP(const std::string& modelType);
 
   /**
-   * @brief Default destructor
-   *
+   * @brief desctructor
    */
-  ~ModelCPP() { }
+  ~ModelCPP() {}
 
+ public:
   /**
    * @brief paramters initiation
-   *
    */
   virtual void initParams() = 0;
 
@@ -59,64 +57,32 @@ class ModelCPP : public SubModel {
   virtual void init(const double& t0) = 0;
 
   /**
-   * @brief get the global indexes of the variables used to compute a calculated variable
-   *
-   * @param iCalculatedVar index of the calculated variable
-   * @param indexes vector to fill with the indexes
-   *
-   */
-  virtual void getIndexesOfVariablesUsedForCalculatedVarI(unsigned iCalculatedVar, std::vector<int>& indexes) const = 0;
-
-  /**
-   * @brief evaluate the jacobian associated to a calculated variable
-   *
-   * @param iCalculatedVar index of the calculated variable
-   * @param res values of the jacobian
-   */
-  virtual void evalJCalculatedVarI(unsigned iCalculatedVar, std::vector<double>& res) const = 0;
-
-  /**
-   * @brief evaluate the value of a calculated variable
-   *
-   * @param iCalculatedVar index of the calculated variable
-   *
-   * @return value of the calculated variable based on current continuous variables values
-   */
-  virtual double evalCalculatedVarI(unsigned iCalculatedVar) const = 0;
-
-  /**
-   * @brief get model type
-   * @return model type
-   */
-  virtual std::string modelType() const = 0;
-
-  /**
    * @brief export the parameters of the sub model for dump
    *
    * @param mapParameters : map associating the file where parameters should be dumped with the stream of parameters
    */
-  virtual void dumpParameters(std::map< std::string, std::string > & mapParameters) = 0;
+  void dumpParameters(std::map<std::string, std::string>& mapParameters);
 
   /**
    * @brief export the variables values of the sub model for dump
    *
    * @param mapVariables : map associating the file where values should be dumped with the stream of values
    */
-  virtual void dumpVariables(std::map< std::string, std::string > & mapVariables) = 0;
+  void dumpVariables(std::map<std::string, std::string>& mapVariables);
 
   /**
    * @brief load the parameters values from a previous dump
    *
    * @param parameters : stream of values where the parameters were dumped
    */
-  virtual void loadParameters(const std::string &parameters) = 0;
+  void loadParameters(const std::string& parameters);
 
   /**
    * @brief load the variables values from a previous dump
    *
    * @param variables : stream of values where the variables were dumped
    */
-  virtual void loadVariables(const std::string &variables) = 0;
+  void loadVariables(const std::string& variables);
 
   /**
    * @brief  CPP Model F(t,y,y') function evaluation
@@ -134,7 +100,7 @@ class ModelCPP : public SubModel {
    * Get the roots' value
    * @param[in] t Simulation instant
    */
-  virtual void evalG(const double & t) = 0;
+  virtual void evalG(const double& t) = 0;
 
   /**
    * @brief  CPP Model discrete variables evaluation
@@ -145,7 +111,7 @@ class ModelCPP : public SubModel {
    * @throws Error::MODELER typed @p Error. Shouldn't, but if it happens
    * it shows that there is a bug in the selection of activated shunt.
    */
-  virtual void evalZ(const double & t) = 0;
+  virtual void evalZ(const double& t) = 0;
 
   /**
    * @brief  CPP Model transposed jacobian evaluation
@@ -156,7 +122,7 @@ class ModelCPP : public SubModel {
    * @param jt jacobian matrix to fullfill
    * @param rowOffset offset to use to identify the row where data should be added
    */
-  virtual void evalJt(const double & t, const double & cj, SparseMatrix& jt, const int& rowOffset) = 0;
+  virtual void evalJt(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset) = 0;
 
   /**
    * @brief calculate jacobien prime matrix
@@ -166,12 +132,12 @@ class ModelCPP : public SubModel {
    * @param jt jacobian matrix to fullfill
    * @param rowOffset offset to use to identify the row where data should be added
    */
-  virtual void evalJtPrim(const double & t, const double & cj, SparseMatrix& jt, const int& rowOffset) = 0;
+  virtual void evalJtPrim(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset) = 0;
 
   /**
    * @copydoc SubModel::evalMode(const double& t)
    */
-  virtual modeChangeType_t evalMode(const double & t) = 0;
+  virtual modeChangeType_t evalMode(const double& t) = 0;
 
   /**
    * @brief  CPP Model initial state variables' evaluation
@@ -229,12 +195,14 @@ class ModelCPP : public SubModel {
   /**
    * @copydoc SubModel::setSharedParametersDefaultValues()
    */
-  virtual void setSharedParametersDefaultValues() { /* no parameter */ }
+  virtual void setSharedParametersDefaultValues() { /* no parameter */
+  }
 
   /**
    * @copydoc SubModel::setSharedParametersDefaultValuesInit()
    */
-  virtual void setSharedParametersDefaultValuesInit() { /* no parameter */ }
+  virtual void setSharedParametersDefaultValuesInit() { /* no parameter */
+  }
 
   /**
    * @brief  CPP Model elements initializer
@@ -244,7 +212,7 @@ class ModelCPP : public SubModel {
    * @param[out] mapElement Map associating each element index in the elements vector to its name
    */
   //---------------------------------------------------------------------
-  virtual void defineElements(std::vector<Element> &elements, std::map<std::string, int >& mapElement) = 0;
+  virtual void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement) = 0;
 
   /**
    * @brief initialze static data
@@ -257,13 +225,15 @@ class ModelCPP : public SubModel {
    *
    * @param directory directory where the file should be printed
    */
-  virtual void printInitValues(const std::string & directory) = 0;
+  void printInitValues(const std::string& directory);
 
   /**
    * @brief rotate buffers
    *
    */
-  virtual void rotateBuffers() = 0;
+  void rotateBuffers() {
+    /* not needed */
+  }
 
   /**
    * @copydoc SubModel::defineVariables(std::vector<boost::shared_ptr<Variable> >& variables)
@@ -278,22 +248,22 @@ class ModelCPP : public SubModel {
   /**
    * @copydoc SubModel::defineVariablesInit(std::vector<boost::shared_ptr<Variable> >& variables)
    */
-  virtual void defineVariablesInit(std::vector<boost::shared_ptr<Variable> >& variables) = 0;
+  void defineVariablesInit(std::vector<boost::shared_ptr<Variable> >& variables);
 
   /**
    * @copydoc SubModel::defineParametersInit(std::vector<ParameterModeler>& parameters)
    */
-  virtual void defineParametersInit(std::vector<ParameterModeler>& parameters) = 0;
+  void defineParametersInit(std::vector<ParameterModeler>& parameters);
 
   /**
    * @copydoc SubModel::checkDataCoherence(const double& t)
    */
-  virtual void checkDataCoherence(const double & t) = 0;
+  void checkDataCoherence(const double& t);
 
   /**
    * @copydoc SubModel::checkParametersCoherence() const
    */
-  virtual void checkParametersCoherence() const = 0;
+  void checkParametersCoherence() const;
 
   /**
    * @copydoc SubModel::setFequations()
@@ -306,30 +276,79 @@ class ModelCPP : public SubModel {
   virtual void setGequations() = 0;
 
   /**
-   * @copydoc SubModel::setFequationsInit()
+   * @brief get the global indexes of the variables used to compute a calculated variable
+   *
+   * @param iCalculatedVar index of the calculated variable
+   * @param indexes vector to fill with the indexes
+   *
    */
-  virtual void setFequationsInit() = 0;
+  virtual void getIndexesOfVariablesUsedForCalculatedVarI(unsigned iCalculatedVar, std::vector<int>& indexes) const = 0;
 
   /**
-   * @copydoc SubModel::setGequationsInit()
+   * @brief evaluate the jacobian associated to a calculated variable based on the current values of continuous variables
+   *
+   * @param iCalculatedVar index of the calculated variable
+   * @param res values of the jacobian
    */
-  virtual void setGequationsInit() = 0;
+  virtual void evalJCalculatedVarI(unsigned iCalculatedVar, std::vector<double>& res) const = 0;
 
   /**
-   * @copydoc SubModel::initSubBuffers()
+   * @brief evaluate the value of a calculated variable
+   *
+   * @param iCalculatedVar index of the calculated variable
+   * @return value of the calculated variable based on the current values of continuous variables
    */
-  virtual void initSubBuffers() = 0;
+  virtual double evalCalculatedVarI(unsigned iCalculatedVar) const = 0;
 
   /**
-   * @copydoc SubModel::notifyTimeStep()
+   * @brief get checksum
+   * @return checksum string
    */
-  virtual void notifyTimeStep() = 0;
+  virtual std::string getCheckSum() const = 0;
 
   /**
-   * @brief class implementation
+   * @brief initialize the model from data interface
+   *
+   * @param data data interface to use to initialize the model
    */
+  virtual void initializeFromData(const boost::shared_ptr<DataInterface>& data) = 0;
 
-  class Impl;
+  /**
+   * @copydoc ModelCPP::setFequationsInit()
+   */
+  virtual void setFequationsInit() { /* no init model for most of CPP models */
+  }
+
+  /**
+   * @copydoc ModelCPP::setGequationsInit()
+   */
+  virtual void setGequationsInit() { /* no init model for CPP models */
+  }
+
+  /**
+   * @copydoc ModelCPP::initSubBuffers()
+   */
+  virtual void initSubBuffers() { /* no internal buffers for CPP models excepted the network model */
+  }
+
+  /**
+   * @copydoc ModelCPP::notifyTimeStep()
+   */
+  void notifyTimeStep() {
+    // do nothing
+  }
+
+ public:
+  /**
+   * @brief get model type
+   * @return model type
+   */
+  inline std::string modelType() const {
+    return modelType_;
+  }
+
+ private:
+  std::string modelType_;  ///< model type
 };
 
 }  // namespace DYN
