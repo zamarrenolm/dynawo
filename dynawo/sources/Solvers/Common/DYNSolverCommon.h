@@ -20,6 +20,8 @@
 #ifndef SOLVERS_COMMON_DYNSOLVERCOMMON_H_
 #define SOLVERS_COMMON_DYNSOLVERCOMMON_H_
 
+#include "DYNModel.h"
+
 #include <sundials/sundials_linearsolver.h>
 #include <sunmatrix/sunmatrix_band.h>
 #include <sunmatrix/sunmatrix_sparse.h>
@@ -27,7 +29,6 @@
 
 namespace DYN {
 class SparseMatrix;
-class Model;
 
 /**
  * @brief SolverCommon static class

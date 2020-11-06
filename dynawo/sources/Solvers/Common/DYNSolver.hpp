@@ -16,18 +16,17 @@
  * @brief Implementation of template methods
  *
  */
-#ifndef SOLVERS_COMMON_DYNSOLVERIMPL_HPP_
-#define SOLVERS_COMMON_DYNSOLVERIMPL_HPP_
+#ifndef SOLVERS_COMMON_DYNSOLVER_HPP_
+#define SOLVERS_COMMON_DYNSOLVER_HPP_
 
-#include "DYNTrace.h"
 #include "DYNMacrosMessage.h"
-#include "DYNSolverImpl.h"
+#include "DYNSolver.h"
+#include "DYNTrace.h"
 
 namespace DYN {
 
 template<typename T>
-void
-inline Solver::Impl::setParameterValue(ParameterSolver& parameter, const T& value) {
+void inline Solver::setParameterValue(ParameterSolver& parameter, const T& value) {
   if (hasParameter(parameter.getName())) {
     parameter.setValue(value);
   }
@@ -35,4 +34,4 @@ inline Solver::Impl::setParameterValue(ParameterSolver& parameter, const T& valu
 
 }  // namespace DYN
 
-#endif  // SOLVERS_COMMON_DYNSOLVERIMPL_HPP_
+#endif  // SOLVERS_COMMON_DYNSOLVER_HPP_

@@ -20,12 +20,13 @@
 #ifndef SOLVERS_COMMON_DYNSOLVERFACTORY_H_
 #define SOLVERS_COMMON_DYNSOLVERFACTORY_H_
 
+#include "DYNSolver.h"
+
 #include <map>
 #include <boost/core/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace DYN {
-class Solver;
 class SolverFactories;
 
 /**

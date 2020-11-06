@@ -33,7 +33,7 @@
 #include "DYNParameterSolver.h"
 #include "DYNSolverCommon.h"
 #include "DYNSolver.h"
-#include "DYNSolverImpl.h"
+#include "DYNSolver.h"
 #include "DYNSolverFactory.h"
 #include "DYNFileSystemUtils.h"
 

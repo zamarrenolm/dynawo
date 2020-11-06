@@ -12,29 +12,28 @@
 //
 
 /**
- * @file  DYNSolverImpl.cpp
+ * @file  DYNSolver.cpp
  *
  * @brief Dynawo solvers : implementation file
  *
  */
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <nvector/nvector_serial.h>
-#include <boost/static_assert.hpp>
-
-#include "DYNSolverImpl.h"
+#include "DYNSolver.h"
 
 #include "DYNMacrosMessage.h"
 #include "DYNMessage.h"
 #include "DYNModel.h"
 #include "DYNTimer.h"
 #include "DYNTrace.h"
-
-#include "PARParametersSet.h"
 #include "PARParameter.h"
+#include "PARParametersSet.h"
 #include "TLTimeline.h"
+
+#include <boost/static_assert.hpp>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <nvector/nvector_serial.h>
+#include <sstream>
 
 using std::endl;
 using std::make_pair;
@@ -47,7 +46,6 @@ using std::string;
 using std::stringstream;
 using std::vector;
 
-
 using timeline::Timeline;
 
 namespace DYN {
@@ -57,54 +55,57 @@ namespace conditions {
 /**
  * @brief Test is the type defining double in sundials is equivalent to double type
  */
-static_assert(sizeof (double) == sizeof (realtype), "wrong size of sundials::realtype");
+static_assert(sizeof(double) == sizeof(realtype), "wrong size of sundials::realtype");
 #else
 /**
  * @brief Test is the type defining double in sundials is equivalent to double type
  */
-BOOST_STATIC_ASSERT_MSG(sizeof (double) == sizeof (realtype), "wrong size of sundials::realtype");
+BOOST_STATIC_ASSERT_MSG(sizeof(double) == sizeof(realtype), "wrong size of sundials::realtype");
 #endif
 }  // namespace conditions
 
-Solver::Impl::Impl() :
-yy_(NULL),
-yp_(NULL),
-yId_(NULL),
-fnormtolAlg_(1e-4),
-initialaddtolAlg_(0.1),
-scsteptolAlg_(1e-4),
-mxnewtstepAlg_(100000),
-msbsetAlg_(5),
-mxiterAlg_(30),
-printflAlg_(0),
-fnormtolAlgJ_(1e-4),
-initialaddtolAlgJ_(0.1),
-scsteptolAlgJ_(1e-4),
-mxnewtstepAlgJ_(100000),
-msbsetAlgJ_(1),
-mxiterAlgJ_(50),
-printflAlgJ_(0),
-minimalAcceptableStep_(1e-6),
-maximumNumberSlowStepIncrease_(10),
-enableSilentZ_(true),
-optimizeReinitAlgebraicResidualsEvaluations_(true),
-minimumModeChangeTypeForAlgebraicRestoration_(ALGEBRAIC_MODE),
-tSolve_(0.),
-previousReinit_(None) { }
+Solver::Solver() :
+    yy_(NULL),
+    yp_(NULL),
+    yId_(NULL),
+    fnormtolAlg_(1e-4),
+    initialaddtolAlg_(0.1),
+    scsteptolAlg_(1e-4),
+    mxnewtstepAlg_(100000),
+    msbsetAlg_(5),
+    mxiterAlg_(30),
+    printflAlg_(0),
+    fnormtolAlgJ_(1e-4),
+    initialaddtolAlgJ_(0.1),
+    scsteptolAlgJ_(1e-4),
+    mxnewtstepAlgJ_(100000),
+    msbsetAlgJ_(1),
+    mxiterAlgJ_(50),
+    printflAlgJ_(0),
+    minimalAcceptableStep_(1e-6),
+    maximumNumberSlowStepIncrease_(10),
+    enableSilentZ_(true),
+    optimizeReinitAlgebraicResidualsEvaluations_(true),
+    minimumModeChangeTypeForAlgebraicRestoration_(ALGEBRAIC_MODE),
+    tSolve_(0.),
+    previousReinit_(None) {}
 
-Solver::Impl::~Impl() {
+Solver::~Solver() {
   clean();
 }
 
 void
-Solver::Impl::clean() {
-  if (yy_ != NULL) N_VDestroy_Serial(yy_);
-  if (yp_ != NULL) N_VDestroy_Serial(yp_);
-  if (yId_ != NULL) N_VDestroy_Serial(yId_);
+Solver::clean() {
+  if (yy_ != NULL)
+    N_VDestroy_Serial(yy_);
+  if (yp_ != NULL)
+    N_VDestroy_Serial(yp_);
+  if (yId_ != NULL)
+    N_VDestroy_Serial(yId_);
 }
 
 void
-Solver::Impl::init(const double& t0, const boost::shared_ptr<Model> & model) {
+Solver::init(const double& t0, const boost::shared_ptr<Model>& model) {
   model_ = model;
   model_->setEnableSilentZ(enableSilentZ_);
 
@@ -136,7 +137,7 @@ Solver::Impl::init(const double& t0, const boost::shared_ptr<Model> & model) {
   vYId_.resize(nbEq);
   std::copy(model->getYType(), model->getYType() + model->sizeY(), vYId_.begin());
 
-  double *idx = NV_DATA_S(yId_);
+  double* idx = NV_DATA_S(yId_);
   for (int ieq = 0; ieq < model->sizeY(); ++ieq) {
     idx[ieq] = RCONST(1.0);
     if (vYId_[ieq] != DYN::DIFFERENTIAL)  // Algebraic or external variable
@@ -149,7 +150,7 @@ Solver::Impl::init(const double& t0, const boost::shared_ptr<Model> & model) {
 }
 
 void
-Solver::Impl::printHeader() const {
+Solver::printHeader() const {
   Trace::info() << "-----------------------------------------------------------------------" << Trace::endline;
   stringstream ss;
   ss << DYNLog(SolverNbYVar, model_->sizeY());
@@ -167,7 +168,7 @@ Solver::Impl::printHeader() const {
 }
 
 void
-Solver::Impl::printSolve() const {
+Solver::printSolve() const {
   std::stringstream msg;
   msg << setfill(' ') << setw(12) << std::fixed << std::setprecision(3) << getTSolve() << " ";
 
@@ -177,10 +178,11 @@ Solver::Impl::printSolve() const {
 }
 
 void
-Solver::Impl::printParameterValues() const {
+Solver::printParameterValues() const {
   if (!parameters_.empty()) {
     Trace::debug(Trace::parameters()) << "------------------------------" << Trace::endline;
-    Trace::debug(Trace::parameters()) << solverType() << " parameters" << " initial parameters"<< Trace::endline;
+    Trace::debug(Trace::parameters()) << solverType() << " parameters"
+                                      << " initial parameters" << Trace::endline;
     Trace::debug(Trace::parameters()) << "------------------------------" << Trace::endline;
   }
 
@@ -191,36 +193,33 @@ Solver::Impl::printParameterValues() const {
       continue;
     }
     switch (parameter.getValueType()) {
-      case VAR_TYPE_BOOL: {
-        const bool value = parameter.getValue<bool>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, it->first, origin2Str(PAR), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_INT: {
-        const int value = parameter.getValue<int>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, it->first, origin2Str(PAR), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_DOUBLE: {
-        const double& value = parameter.getValue<double>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, it->first, origin2Str(PAR), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_STRING: {
-        const string& value = parameter.getValue<string>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, it->first, origin2Str(PAR), value) << Trace::endline;
-        break;
-      }
-      default:
-      {
-        throw DYNError(Error::MODELER, ParameterNoTypeDetected, it->first);
-      }
+    case VAR_TYPE_BOOL: {
+      const bool value = parameter.getValue<bool>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, it->first, origin2Str(PAR), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_INT: {
+      const int value = parameter.getValue<int>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, it->first, origin2Str(PAR), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_DOUBLE: {
+      const double& value = parameter.getValue<double>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, it->first, origin2Str(PAR), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_STRING: {
+      const string& value = parameter.getValue<string>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, it->first, origin2Str(PAR), value) << Trace::endline;
+      break;
+    }
+    default: { throw DYNError(Error::MODELER, ParameterNoTypeDetected, it->first); }
     }
   }
 }
 
 void
-Solver::Impl::resetStats() {
+Solver::resetStats() {
   // Statistics reinitialization
   // -------------------------------
   stats_.nst_ = 0;
@@ -235,7 +234,7 @@ Solver::Impl::resetStats() {
 }
 
 void
-Solver::Impl::solve(double tAim, double &tNxt) {
+Solver::solve(double tAim, double& tNxt) {
   // Solving
   state_.reset();
   model_->reinitMode();
@@ -247,7 +246,7 @@ Solver::Impl::solve(double tAim, double &tNxt) {
 }
 
 bool
-Solver::Impl::evalZMode(vector<state_g> &G0, vector<state_g> &G1, const double & time) {
+Solver::evalZMode(vector<state_g>& G0, vector<state_g>& G1, const double& time) {
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
   Timer timer("SolverIMPL::evalZMode");
 #endif
@@ -295,7 +294,7 @@ Solver::Impl::evalZMode(vector<state_g> &G0, vector<state_g> &G1, const double &
 }
 
 void
-Solver::Impl::printUnstableRoot(const vector<state_g> &G0, const vector<state_g> &G1) const {
+Solver::printUnstableRoot(const vector<state_g>& G0, const vector<state_g>& G1) const {
   int i = 0;
   vector<state_g>::const_iterator iG0(G0.begin());
   vector<state_g>::const_iterator iG1(G1.begin());
@@ -313,22 +312,21 @@ Solver::Impl::printUnstableRoot(const vector<state_g> &G0, const vector<state_g>
 }
 
 void
-Solver::Impl::checkUnusedParameters(boost::shared_ptr<parameters::ParametersSet> params) {
+Solver::checkUnusedParameters(boost::shared_ptr<parameters::ParametersSet> params) {
   vector<string> unusedParamNameList = params->getParamsUnused();
-  for (vector<string>::iterator it = unusedParamNameList.begin();
-          it != unusedParamNameList.end();
-          ++it) {
+  for (vector<string>::iterator it = unusedParamNameList.begin(); it != unusedParamNameList.end(); ++it) {
     Trace::warn() << DYNLog(ParamUnused, *it, "SOLVER") << Trace::endline;
   }
 }
 
-void Solver::Impl::defineParameters() {
+void
+Solver::defineParameters() {
   defineCommonParameters();
   defineSpecificParameters();
 }
 
 void
-Solver::Impl::defineCommonParameters() {
+Solver::defineCommonParameters() {
   const bool optional = false;
   // Parameters for the algebraic restoration
   parameters_.insert(make_pair("fnormtolAlg", ParameterSolver("fnormtolAlg", VAR_TYPE_DOUBLE, optional)));
@@ -354,20 +352,20 @@ Solver::Impl::defineCommonParameters() {
 
   // Parameters for performance optimization
   parameters_.insert(make_pair("enableSilentZ", ParameterSolver("enableSilentZ", VAR_TYPE_BOOL, optional)));
-  parameters_.insert(make_pair("optimizeReinitAlgebraicResidualsEvaluations",
-      ParameterSolver("optimizeReinitAlgebraicResidualsEvaluations", VAR_TYPE_BOOL, optional)));
-  parameters_.insert(make_pair("minimumModeChangeTypeForAlgebraicRestoration",
-      ParameterSolver("minimumModeChangeTypeForAlgebraicRestoration", VAR_TYPE_STRING, optional)));
+  parameters_.insert(
+      make_pair("optimizeReinitAlgebraicResidualsEvaluations", ParameterSolver("optimizeReinitAlgebraicResidualsEvaluations", VAR_TYPE_BOOL, optional)));
+  parameters_.insert(
+      make_pair("minimumModeChangeTypeForAlgebraicRestoration", ParameterSolver("minimumModeChangeTypeForAlgebraicRestoration", VAR_TYPE_STRING, optional)));
 }
 
 bool
-Solver::Impl::hasParameter(const string & nameParameter) {
+Solver::hasParameter(const string& nameParameter) {
   map<string, ParameterSolver>::iterator it = parameters_.find(nameParameter);
   return it != parameters_.end();
 }
 
 ParameterSolver&
-Solver::Impl::findParameter(const string& name) {
+Solver::findParameter(const string& name) {
   map<string, ParameterSolver>::iterator it = parameters_.find(name);
   if (it == parameters_.end())
     throw DYNError(Error::GENERAL, ParameterNotDefined, name);
@@ -375,43 +373,40 @@ Solver::Impl::findParameter(const string& name) {
 }
 
 const std::map<std::string, ParameterSolver>&
-Solver::Impl::getParametersMap() const {
+Solver::getParametersMap() const {
   return parameters_;
 }
 
 void
-Solver::Impl::setParameterFromSet(const string& parName, const boost::shared_ptr<parameters::ParametersSet> parametersSet) {
+Solver::setParameterFromSet(const string& parName, const boost::shared_ptr<parameters::ParametersSet> parametersSet) {
   if (parametersSet) {
     ParameterSolver& parameter = findParameter(parName);
 
-     // Check if parameter is present in set
+    // Check if parameter is present in set
     if (parametersSet->hasParameter(parName)) {
       // Set the parameter value with the information given in PAR file
       switch (parameter.getValueType()) {
-        case VAR_TYPE_BOOL: {
-          const bool value = parametersSet->getParameter(parName)->getBool();
-          setParameterValue(parameter, value);
-          break;
-        }
-        case VAR_TYPE_INT: {
-          const int value = parametersSet->getParameter(parName)->getInt();
-          setParameterValue(parameter, value);
-          break;
-        }
-        case VAR_TYPE_DOUBLE: {
-          const double& value = parametersSet->getParameter(parName)->getDouble();
-          setParameterValue(parameter, value);
-          break;
-        }
-        case VAR_TYPE_STRING: {
-          const string& value = parametersSet->getParameter(parName)->getString();
-          setParameterValue(parameter, value);
-          break;
-        }
-        default:
-        {
-          throw DYNError(Error::GENERAL, ParameterNoTypeDetected, parName);
-        }
+      case VAR_TYPE_BOOL: {
+        const bool value = parametersSet->getParameter(parName)->getBool();
+        setParameterValue(parameter, value);
+        break;
+      }
+      case VAR_TYPE_INT: {
+        const int value = parametersSet->getParameter(parName)->getInt();
+        setParameterValue(parameter, value);
+        break;
+      }
+      case VAR_TYPE_DOUBLE: {
+        const double& value = parametersSet->getParameter(parName)->getDouble();
+        setParameterValue(parameter, value);
+        break;
+      }
+      case VAR_TYPE_STRING: {
+        const string& value = parametersSet->getParameter(parName)->getString();
+        setParameterValue(parameter, value);
+        break;
+      }
+      default: { throw DYNError(Error::GENERAL, ParameterNoTypeDetected, parName); }
       }
     } else if (parameter.isMandatory()) {
       throw DYNError(Error::GENERAL, SolverMissingParam, parameter.getName(), parametersSet->getId(), parametersSet->getFilePath());
@@ -421,12 +416,14 @@ Solver::Impl::setParameterFromSet(const string& parName, const boost::shared_ptr
   }
 }
 
-void Solver::Impl::setSolverParameters() {
+void
+Solver::setSolverParameters() {
   setSolverCommonParameters();
   setSolverSpecificParameters();
 }
 
-void Solver::Impl::setSolverCommonParameters() {
+void
+Solver::setSolverCommonParameters() {
   const ParameterSolver& fnormtolAlg = findParameter("fnormtolAlg");
   if (fnormtolAlg.hasValue())
     fnormtolAlg_ = fnormtolAlg.getValue<double>();
@@ -473,7 +470,7 @@ void Solver::Impl::setSolverCommonParameters() {
 
   const ParameterSolver& minimalAcceptableStep = findParameter("minimalAcceptableStep");
   if (minimalAcceptableStep.hasValue())
-     minimalAcceptableStep_ = minimalAcceptableStep.getValue<double>();
+    minimalAcceptableStep_ = minimalAcceptableStep.getValue<double>();
   const ParameterSolver& maximumNumberSlowStepIncrease = findParameter("maximumNumberSlowStepIncrease");
   if (maximumNumberSlowStepIncrease.hasValue())
     maximumNumberSlowStepIncrease_ = maximumNumberSlowStepIncrease.getValue<int>();
@@ -499,15 +496,15 @@ void Solver::Impl::setSolverCommonParameters() {
 }
 
 void
-Solver::Impl::setParametersFromPARFile(const boost::shared_ptr<parameters::ParametersSet>& params) {
+Solver::setParametersFromPARFile(const boost::shared_ptr<parameters::ParametersSet>& params) {
   // Set values of parameters
-  for (map<string, ParameterSolver>::iterator it=parameters_.begin(); it != parameters_.end(); ++it) {
+  for (map<string, ParameterSolver>::iterator it = parameters_.begin(); it != parameters_.end(); ++it) {
     setParameterFromSet(it->second.getName(), params);
   }
 }
 
 void
-Solver::Impl::setParameters(const boost::shared_ptr<parameters::ParametersSet>& params) {
+Solver::setParameters(const boost::shared_ptr<parameters::ParametersSet>& params) {
   parameters_.clear();
   defineParameters();
   setParametersFromPARFile(params);
@@ -515,12 +512,12 @@ Solver::Impl::setParameters(const boost::shared_ptr<parameters::ParametersSet>& 
 }
 
 void
-Solver::Impl::setTimeline(const boost::shared_ptr<Timeline>& timeline) {
+Solver::setTimeline(const boost::shared_ptr<Timeline>& timeline) {
   timeline_ = timeline;
 }
 
 void
-Solver::Impl::printEnd() const {
+Solver::printEnd() const {
   // (1) Print on the standard output
   // -----------------------------------
   Trace::info() << Trace::endline;
@@ -537,6 +534,5 @@ Solver::Impl::printEnd() const {
   Trace::info() << DYNLog(SolverNbDiscreteVarsEval, stats_.nze_) << Trace::endline;
   Trace::info() << DYNLog(SolverNbModeEval, stats_.nme_) << Trace::endline;
 }
-
 
 }  // end namespace DYN
