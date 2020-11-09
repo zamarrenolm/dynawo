@@ -17,17 +17,16 @@
  *
  */
 
-#ifndef MODELS_CPP_MODELNETWORK_DYNNETWORKCOMPONENTIMPL_HPP_
-#define MODELS_CPP_MODELNETWORK_DYNNETWORKCOMPONENTIMPL_HPP_
+#ifndef MODELS_CPP_MODELNETWORK_DYNNETWORKCOMPONENT_HPP_
+#define MODELS_CPP_MODELNETWORK_DYNNETWORKCOMPONENT_HPP_
 
 #include "DYNParameterModeler.h"
 
 namespace DYN {
 
 template<typename T>
-T
-inline NetworkComponent::Impl::getParameterDynamic(const boost::unordered_map<std::string, ParameterModeler>& params,
-    const std::string& id, const std::vector<std::string>& ids) const {
+T inline NetworkComponent::getParameterDynamic(const boost::unordered_map<std::string, ParameterModeler>& params, const std::string& id,
+                                               const std::vector<std::string>& ids) const {
   bool foundParam = false;
   T value = getParameterDynamicNoThrow<T>(params, id, foundParam, ids);
   if (foundParam)
@@ -37,9 +36,8 @@ inline NetworkComponent::Impl::getParameterDynamic(const boost::unordered_map<st
 }
 
 template<typename T>
-void
-inline NetworkComponent::Impl::findParameterDynamicNoThrow(const boost::unordered_map<std::string, ParameterModeler>& params,
-    const std::string& id, bool& foundParam, const std::vector<std::string>& ids, T& value) const {
+void inline NetworkComponent::findParameterDynamicNoThrow(const boost::unordered_map<std::string, ParameterModeler>& params, const std::string& id,
+                                                          bool& foundParam, const std::vector<std::string>& ids, T& value) const {
   foundParam = false;
   if (ids.empty()) {
     if (hasParameter(id, params)) {
@@ -67,4 +65,4 @@ inline NetworkComponent::Impl::findParameterDynamicNoThrow(const boost::unordere
 
 }  // namespace DYN
 
-#endif  // MODELS_CPP_MODELNETWORK_DYNNETWORKCOMPONENTIMPL_HPP_
+#endif  // MODELS_CPP_MODELNETWORK_DYNNETWORKCOMPONENT_HPP_
