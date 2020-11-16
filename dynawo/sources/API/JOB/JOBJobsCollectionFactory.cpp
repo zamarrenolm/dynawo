@@ -19,6 +19,7 @@
  */
 
 #include "JOBJobsCollectionFactory.h"
+
 #include "JOBJobsCollection.h"
 
 namespace job {

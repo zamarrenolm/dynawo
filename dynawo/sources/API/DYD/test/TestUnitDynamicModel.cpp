@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYDUnitDynamicModelFactory.h"
 #include "DYDUnitDynamicModel.h"
+#include "DYDUnitDynamicModelFactory.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 //-----------------------------------------------------

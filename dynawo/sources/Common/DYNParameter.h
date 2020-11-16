@@ -20,15 +20,14 @@
 #ifndef COMMON_DYNPARAMETER_H_
 #define COMMON_DYNPARAMETER_H_
 
-#include <string>
-#include <vector>
-#include <map>
-
-#include <boost/optional.hpp>
-#include <boost/any.hpp>
-
 #include "DYNCommon.h"
 #include "DYNError.h"
+
+#include <boost/any.hpp>
+#include <boost/optional.hpp>
+#include <map>
+#include <string>
+#include <vector>
 
 namespace DYN {
 
@@ -60,7 +59,7 @@ class ParameterCommon {
   /**
    * @brief Destructor
    */
-  virtual ~ParameterCommon() { }
+  virtual ~ParameterCommon() {}
 
   /**
    * @brief Getter for parameter's name
@@ -110,7 +109,8 @@ class ParameterCommon {
    * @brief parameter's value getter
    * @return parameter's value
    */
-  template<typename T> T getValue() const;
+  template<typename T>
+  T getValue() const;
 
   /**
    * @brief value intermediary getter
@@ -137,23 +137,23 @@ class ParameterCommon {
   ParameterCommon();  ///< private default constructor
 #endif
 
-  std::string name_;  ///< name of the parameter
-  typeVarC_t valueType_;  ///< type of the parameter value (BOOL, INT, DOUBLE, STRING: as defined in enum)
+  std::string name_;                     ///< name of the parameter
+  typeVarC_t valueType_;                 ///< type of the parameter value (BOOL, INT, DOUBLE, STRING: as defined in enum)
   boost::optional<unsigned int> index_;  ///< parameter index in the raw parameters' vector
-  bool mandatory_;  ///< true if this parameter is mandatory
+  bool mandatory_;                       ///< true if this parameter is mandatory
 };
 
 /**
  * @brief Parameter origins enum (ordered by increasing priority)
  */
 typedef enum {
-  MO,  ///< Parameter from MODELICA model
+  MO,           ///< Parameter from MODELICA model
   LOADED_DUMP,  ///< Value loaded from previous dump
-  PAR,  ///< Parameter from PAR file
-  IIDM,  ///< Parameter from IIDM file
-  LOCAL_INIT,  ///< Parameter from local initialization
-  FINAL,  ///< Value used for dynamic simulation
-  NB_ORIGINS  ///< Number of origins (for data dimensions)
+  PAR,          ///< Parameter from PAR file
+  IIDM,         ///< Parameter from IIDM file
+  LOCAL_INIT,   ///< Parameter from local initialization
+  FINAL,        ///< Value used for dynamic simulation
+  NB_ORIGINS    ///< Number of origins (for data dimensions)
 } parameterOrigin_t;
 
 /**

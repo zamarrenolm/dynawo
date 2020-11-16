@@ -11,21 +11,20 @@
 // simulation tool for power systems.
 //
 
-
-#include <IIDM/Network.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/BusBarSection.h>
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBarSectionBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
+#include "DYNBusBarSectionInterfaceIIDM.h"
 #include "DYNDataInterfaceIIDM.h"
 #include "DYNNetworkInterface.h"
 #include "DYNVoltageLevelInterface.h"
-#include "DYNBusBarSectionInterfaceIIDM.h"
-
 #include "gtest_dynawo.h"
+
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBarSectionBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/BusBarSection.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/VoltageLevel.h>
 
 using boost::shared_ptr;
 
@@ -61,16 +60,15 @@ TEST(DataInterfaceTest, testBusBarSectionInterface) {
   shared_ptr<DataInterface> data;
   DataInterfaceIIDM* ptr = new DataInterfaceIIDM(network);
   ptr->initFromIIDM();
-  const std::vector< boost::shared_ptr<VoltageLevelInterface> >& vls =  ptr->getNetwork()->getVoltageLevels();
+  const std::vector<boost::shared_ptr<VoltageLevelInterface> >& vls = ptr->getNetwork()->getVoltageLevels();
   ASSERT_EQ(vls.size(), 1);
   boost::shared_ptr<VoltageLevelInterface> vlModel = vls[0];
-  const std::vector< boost::shared_ptr<BusInterface> >& buses = vlModel->getBuses();
+  const std::vector<boost::shared_ptr<BusInterface> >& buses = vlModel->getBuses();
   ASSERT_EQ(buses.size(), 1);
   boost::shared_ptr<BusInterface> bus = buses[0];
   std::vector<std::string> bbsNames = bus->getBusBarSectionNames();
   ASSERT_EQ(bbsNames.size(), 1);
   ASSERT_EQ(bbsNames[0], "MyBusBarSection");
-
 
   BusBarSectionInterfaceIIDM bbsIIDM(bbs);
   ASSERT_EQ(bbsIIDM.id(), "MyBusBarSection");

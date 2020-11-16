@@ -18,11 +18,11 @@
  */
 
 #include "PARParametersSetFactory.h"
+
 #include "PARParametersSet.h"
 
 using std::map;
 using std::string;
-
 
 namespace parameters {
 

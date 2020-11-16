@@ -17,14 +17,12 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
+#include "FSIterators.h"
 #include "FSModel.h"
 #include "FSModelFactory.h"
 #include "FSVariable.h"
 #include "FSVariableFactory.h"
-#include "FSIterators.h"
-
+#include "gtest_dynawo.h"
 
 namespace finalState {
 
@@ -55,17 +53,13 @@ TEST(APIFSTest, ModelAddVariable) {
 
   // test const iterator
   int nbVariables = 0;
-  for (finalStateVariable_const_iterator itVariable = model->cbeginVariable();
-          itVariable != model->cendVariable();
-          ++itVariable)
+  for (finalStateVariable_const_iterator itVariable = model->cbeginVariable(); itVariable != model->cendVariable(); ++itVariable)
     ++nbVariables;
   ASSERT_EQ(nbVariables, 2);
 
   // test iterator
   nbVariables = 0;
-  for (finalStateVariable_iterator itVariable = model->beginVariable();
-          itVariable != model->endVariable();
-          ++itVariable)
+  for (finalStateVariable_iterator itVariable = model->beginVariable(); itVariable != model->endVariable(); ++itVariable)
     ++nbVariables;
   ASSERT_EQ(nbVariables, 2);
 }
@@ -85,17 +79,13 @@ TEST(APIFSTest, ModelAddSubModel) {
 
   // test const iterator
   int nbModels = 0;
-  for (finalStateModel_const_iterator itModel = model->cbeginFinalStateModel();
-          itModel != model->cendFinalStateModel();
-          ++itModel)
+  for (finalStateModel_const_iterator itModel = model->cbeginFinalStateModel(); itModel != model->cendFinalStateModel(); ++itModel)
     ++nbModels;
   ASSERT_EQ(nbModels, 2);
 
   // test iterator
   nbModels = 0;
-  for (finalStateModel_iterator itModel = model->beginFinalStateModel();
-          itModel != model->endFinalStateModel();
-          ++itModel)
+  for (finalStateModel_iterator itModel = model->beginFinalStateModel(); itModel != model->endFinalStateModel(); ++itModel)
     ++nbModels;
   ASSERT_EQ(nbModels, 2);
 }

@@ -6,25 +6,24 @@
 
 namespace DYN {
 
-  class ModelGeneratorPQFactory : public SubModelFactory
-  {
-    public:
-    ModelGeneratorPQFactory() {}
-    ~ModelGeneratorPQFactory() {}
+class ModelGeneratorPQFactory : public SubModelFactory {
+ public:
+  ModelGeneratorPQFactory() {}
+  ~ModelGeneratorPQFactory() {}
 
-    SubModel* create() const;
-    void destroy(SubModel*) const;
-  };
+  SubModel* create() const;
+  void destroy(SubModel*) const;
+};
 
-  class ModelGeneratorPQ : public ModelManager
-  {
-    public:
-    ModelGeneratorPQ();
-    ~ModelGeneratorPQ();
+class ModelGeneratorPQ : public ModelManager {
+ public:
+  ModelGeneratorPQ();
+  ~ModelGeneratorPQ();
 
-    bool hasInit() const { return true; }
-  };
-}
+  bool hasInit() const {
+    return true;
+  }
+};
+}  // namespace DYN
 
 #endif
-

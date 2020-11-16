@@ -11,8 +11,6 @@
 // simulation tool for power systems.
 //
 
-
-namespace DYN
-{
+namespace DYN {
 // Hi!
 }

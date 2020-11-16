@@ -16,21 +16,18 @@
  * @brief Unit tests for API_DYD
  *
  */
-#include <boost/shared_ptr.hpp>
-#include "gtest_dynawo.h"
-
-#include "DYDBlackBoxModelFactory.h"
 #include "DYDBlackBoxModel.h"
-#include "DYDXmlImporter.h"
-#include "DYDXmlExporter.h"
-#include "DYDMacroStaticRefFactory.h"
-#include "DYDMacroStaticRef.h"
+#include "DYDBlackBoxModelFactory.h"
 #include "DYDIterators.h"
+#include "DYDMacroStaticRef.h"
 #include "DYDMacroStaticRefFactory.h"
 #include "DYDStaticRef.h"
-#include "DYDMacroStaticRef.h"
-
+#include "DYDXmlExporter.h"
+#include "DYDXmlImporter.h"
 #include "TestUtil.h"
+#include "gtest_dynawo.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace dynamicdata {
 //-----------------------------------------------------
@@ -85,9 +82,7 @@ TEST(APIDYDTest, BlackBoxModelWithMacroStaticRef) {
   ASSERT_THROW_DYNAWO(model->addMacroStaticRef(mStRef11), DYN::Error::API, DYN::KeyError_t::MacroStaticRefNotUnique);
 
   int nbMacroStaticRefs = 0;
-  for (macroStaticRef_const_iterator itMStRef = model->cbeginMacroStaticRef();
-          itMStRef != model->cendMacroStaticRef();
-          ++itMStRef)
+  for (macroStaticRef_const_iterator itMStRef = model->cbeginMacroStaticRef(); itMStRef != model->cendMacroStaticRef(); ++itMStRef)
     ++nbMacroStaticRefs;
   ASSERT_EQ(nbMacroStaticRefs, 3);
 

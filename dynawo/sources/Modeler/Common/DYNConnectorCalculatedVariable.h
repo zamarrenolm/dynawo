@@ -21,8 +21,9 @@
 #ifndef MODELER_COMMON_DYNCONNECTORCALCULATEDVARIABLE_H_
 #define MODELER_COMMON_DYNCONNECTORCALCULATEDVARIABLE_H_
 
-#include <boost/shared_ptr.hpp>
 #include "DYNSubModel.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class SubModel;
@@ -41,12 +42,13 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @brief default destructor
    */
-  ~ConnectorCalculatedVariable() { }
+  ~ConnectorCalculatedVariable() {}
 
   /**
    * @copydoc SubModel::initializeStaticData()
    */
-  void initializeStaticData() { /*no static data*/ }
+  void initializeStaticData() { /*no static data*/
+  }
 
   /**
    * @copydoc SubModel::init(const double& t0)
@@ -96,7 +98,8 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @copydoc SubModel::initParams()
    */
-  void initParams() { /*no parameter*/ }
+  void initParams() { /*no parameter*/
+  }
 
   /**
    * @copydoc SubModel::evalFType()
@@ -111,7 +114,8 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @copydoc SubModel::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @brief get the global indexes of the variables used to compute a calculated variable
@@ -151,12 +155,13 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @copydoc SubModel::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc SubModel::dumpParameters(std::map<std::string, std::string > & mapParameters)
    */
-  void dumpParameters(std::map<std::string, std::string >& mapParameters);
+  void dumpParameters(std::map<std::string, std::string>& mapParameters);
 
   /**
    * @copydoc SubModel::getSubModelParameterValue(const std::string& nameParameter, double& value, bool& found)
@@ -166,7 +171,7 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @copydoc SubModel::dumpVariables(std::map<std::string, std::string >& mapVariables)
    */
-  void dumpVariables(std::map<std::string, std::string >& mapVariables);
+  void dumpVariables(std::map<std::string, std::string>& mapVariables);
 
   /**
    * @copydoc SubModel::loadParameters(const std::string& parameters)
@@ -186,7 +191,8 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @copydoc SubModel::rotateBuffers()
    */
-  void rotateBuffers() { /*not needed*/ }
+  void rotateBuffers() { /*not needed*/
+  }
 
   /**
    * @copydoc SubModel::defineVariables(std::vector<boost::shared_ptr<Variable> >& variables)
@@ -226,17 +232,20 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @copydoc SubModel::setGequations()
    */
-  void setGequations() { /*no G equation*/ }
+  void setGequations() { /*no G equation*/
+  }
 
   /**
    * @copydoc SubModel::setFequationsInit()
    */
-  void setFequationsInit() { /*no F equation*/ }
+  void setFequationsInit() { /*no F equation*/
+  }
 
   /**
    * @copydoc SubModel::setGequationsInit()
    */
-  void setGequationsInit() { /*no G equation*/ }
+  void setGequationsInit() { /*no G equation*/
+  }
 
   /**
    * @copydoc SubModel::initializeFromData(const boost::shared_ptr<DataInterface>& data)
@@ -254,7 +263,8 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @copydoc SubModel::initSubBuffers()
    */
-  void initSubBuffers() { /*not needed*/ }
+  void initSubBuffers() { /*not needed*/
+  }
 
   /**
    * @copydoc SubModel::modelType() const
@@ -266,17 +276,20 @@ class ConnectorCalculatedVariable : public SubModel {
   /**
    * @copydoc SubModel::setSubModelParameters()
    */
-  inline void setSubModelParameters() { /*no parameter*/ }
+  inline void setSubModelParameters() { /*no parameter*/
+  }
 
   /**
    * @copydoc SubModel::setSharedParametersDefaultValues()
    */
-  inline void setSharedParametersDefaultValues() { /*no parameter*/ }
+  inline void setSharedParametersDefaultValues() { /*no parameter*/
+  }
 
   /**
    * @copydoc SubModel::setSharedParametersDefaultValuesInit()
    */
-  inline void setSharedParametersDefaultValuesInit() { /*no parameter*/ }
+  inline void setSharedParametersDefaultValuesInit() { /*no parameter*/
+  }
 
   /**
    * @copydoc SubModel::defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement)
@@ -290,7 +303,7 @@ class ConnectorCalculatedVariable : public SubModel {
     // do nothing
   }
 
-   /**
+  /**
     * @brief setter for the variable name
     *
     * @param variableName name of the calculated variable in the reference model
@@ -302,9 +315,9 @@ class ConnectorCalculatedVariable : public SubModel {
  private:
   // !!! We assume that the model variables starts at yLocal_[1] and ypLocal_[1]
   boost::shared_ptr<SubModel> model_;  ///< Model where the calculated variable is located.
-  std::string variableName_;  ///< Name of the calculated variable from the model
-  int indexCalculatedVariable_;  ///< Index of the calculated variable inside the list calculated variables in the model
-  std::vector<int> varExtIndexes_;  ///< Indexes of variables on which depends the calculated variable
+  std::string variableName_;           ///< Name of the calculated variable from the model
+  int indexCalculatedVariable_;        ///< Index of the calculated variable inside the list calculated variables in the model
+  std::vector<int> varExtIndexes_;     ///< Indexes of variables on which depends the calculated variable
 };
 }  // namespace DYN
 

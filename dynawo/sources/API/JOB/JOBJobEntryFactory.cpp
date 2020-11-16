@@ -12,6 +12,7 @@
 //
 
 #include "JOBJobEntryFactory.h"
+
 #include "JOBJobEntry.h"
 
 namespace job {

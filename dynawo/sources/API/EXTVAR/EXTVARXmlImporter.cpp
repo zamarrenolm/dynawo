@@ -16,21 +16,20 @@
  * @brief External variables collection XML importer : implementation file
  */
 
-#include <fstream>
+#include "EXTVARXmlImporter.h"
 
-#include <xml/sax/parser/ParserFactory.h>
-#include <xml/sax/parser/ParserException.h>
-
+#include "DYNExecUtils.h"
 #include "DYNMacrosMessage.h"
-
 #include "EXTVARVariablesCollectionFactory.h"
 #include "EXTVARXmlHandler.h"
-#include "EXTVARXmlImporter.h"
-#include "DYNExecUtils.h"
 
+#include <fstream>
+#include <xml/sax/parser/ParserException.h>
+#include <xml/sax/parser/ParserFactory.h>
+
+using boost::shared_ptr;
 using std::string;
 using std::vector;
-using boost::shared_ptr;
 
 namespace parser = xml::sax::parser;
 
@@ -49,7 +48,8 @@ XmlImporter::importFromFile(const string& fileName) const {
   }
 }
 
-boost::shared_ptr<VariablesCollection> XmlImporter::importFromStream(std::istream& stream) const {
+boost::shared_ptr<VariablesCollection>
+XmlImporter::importFromStream(std::istream& stream) const {
   XmlHandler extVarHandler;
   xml::sax::parser::ParserFactory parser_factory;
   xml::sax::parser::ParserPtr parser = parser_factory.createParser();

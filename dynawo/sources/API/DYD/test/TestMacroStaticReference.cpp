@@ -17,12 +17,11 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYDMacroStaticReferenceFactory.h"
-#include "DYDMacroStaticReference.h"
-#include "DYDStaticRef.h"
 #include "DYDIterators.h"
+#include "DYDMacroStaticReference.h"
+#include "DYDMacroStaticReferenceFactory.h"
+#include "DYDStaticRef.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 
@@ -39,17 +38,13 @@ TEST(APIDYDTest, MacroStaticReference) {
   ASSERT_EQ(macroStaticReference->getId(), "macroStaticReference");
 
   int nbStaticRefs = 0;
-  for (staticRef_const_iterator itSR = macroStaticReference->cbeginStaticRef();
-          itSR != macroStaticReference->cendStaticRef();
-          ++itSR) {
+  for (staticRef_const_iterator itSR = macroStaticReference->cbeginStaticRef(); itSR != macroStaticReference->cendStaticRef(); ++itSR) {
     ++nbStaticRefs;
   }
   ASSERT_EQ(nbStaticRefs, 2);
 
   nbStaticRefs = 0;
-  for (staticRef_iterator itSR = macroStaticReference->beginStaticRef();
-      itSR != macroStaticReference->endStaticRef();
-      ++itSR) {
+  for (staticRef_iterator itSR = macroStaticReference->beginStaticRef(); itSR != macroStaticReference->endStaticRef(); ++itSR) {
     ++nbStaticRefs;
   }
   ASSERT_EQ(nbStaticRefs, 2);

@@ -17,12 +17,12 @@
  *
  */
 
-#include "gtest_dynawo.h"
-#include "JOBModelerEntry.h"
-#include "JOBNetworkEntry.h"
 #include "JOBDynModelsEntry.h"
 #include "JOBInitialStateEntry.h"
+#include "JOBModelerEntry.h"
 #include "JOBModelsDirEntry.h"
+#include "JOBNetworkEntry.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 

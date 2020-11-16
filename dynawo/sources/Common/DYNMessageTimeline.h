@@ -23,11 +23,11 @@
 #ifndef COMMON_DYNMESSAGETIMELINE_H_
 #define COMMON_DYNMESSAGETIMELINE_H_
 
-#include <utility>
-#include <stdio.h>
-#include <iostream>
-
 #include "DYNMessage.hpp"
+
+#include <iostream>
+#include <stdio.h>
+#include <utility>
 
 namespace DYN {
 
@@ -65,7 +65,7 @@ class MessageTimeline : public Message {
   /**
    * @brief destructor
    */
-  ~MessageTimeline() { }
+  ~MessageTimeline() {}
 
   /**
    * @brief Operator , overload for message
@@ -74,7 +74,8 @@ class MessageTimeline : public Message {
    *
    * @return Reference to the message instance
    */
-  template <typename T> MessageTimeline& operator,(T& x);
+  template<typename T>
+  MessageTimeline& operator,(T& x);
 
   /**
    * @brief Operator , overload for message
@@ -83,7 +84,8 @@ class MessageTimeline : public Message {
    *
    * @return Reference to the message instance
    */
-  template <typename T> MessageTimeline& operator,(const T& x);
+  template<typename T>
+  MessageTimeline& operator,(const T& x);
 
   /**
    * @brief Operator << overlaod for Message
@@ -107,7 +109,9 @@ class MessageTimeline : public Message {
    *
    * @return Priority of the message timeline
    */
-  inline const boost::optional<int>& priority() const { return priority_; }
+  inline const boost::optional<int>& priority() const {
+    return priority_;
+  }
 
  private:
   MessageTimeline();

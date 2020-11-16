@@ -17,14 +17,14 @@
  *
  */
 
-#include "gtest_dynawo.h"
-#include "JOBOutputsEntry.h"
-#include "JOBInitValuesEntry.h"
 #include "JOBConstraintsEntry.h"
-#include "JOBTimelineEntry.h"
-#include "JOBFinalStateEntry.h"
 #include "JOBCurvesEntry.h"
+#include "JOBFinalStateEntry.h"
+#include "JOBInitValuesEntry.h"
 #include "JOBLogsEntry.h"
+#include "JOBOutputsEntry.h"
+#include "JOBTimelineEntry.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 
@@ -58,7 +58,6 @@ TEST(APIJOBTest, testOutputsEntry) {
 
   boost::shared_ptr<LogsEntry> logs = boost::shared_ptr<LogsEntry>(new LogsEntry());
   outputs->setLogsEntry(logs);
-
 
   ASSERT_EQ(outputs->getOutputsDirectory(), "/tmp/outputs");
   ASSERT_EQ(outputs->getInitValuesEntry(), initValues);

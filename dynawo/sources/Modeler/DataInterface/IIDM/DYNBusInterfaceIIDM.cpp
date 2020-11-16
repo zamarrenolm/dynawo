@@ -17,22 +17,21 @@
  * @brief Bus data interface  : implementation file for IIDM interface
  *
  */
-#include <cmath>  // M_PI
-
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/VoltageLevel.h>
 #include "DYNBusInterfaceIIDM.h"
+
 #include "DYNCommonConstants.h"
 #include "DYNStateVariable.h"
 #include "DYNTrace.h"
+
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <cmath>  // M_PI
 using boost::shared_ptr;
 using std::string;
 
 namespace DYN {
 
-BusInterfaceIIDM::BusInterfaceIIDM(IIDM::Bus& bus) :
-busIIDM_(bus),
-hasConnection_(false) {
+BusInterfaceIIDM::BusInterfaceIIDM(IIDM::Bus& bus) : busIIDM_(bus), hasConnection_(false) {
   setType(ComponentInterface::BUS);
   if (busIIDM_.has_v())
     U0_ = busIIDM_.v();
@@ -43,11 +42,10 @@ hasConnection_(false) {
   stateVariables_.resize(2);
   bool neededForCriteriaCheck = true;
   stateVariables_[VAR_V] = StateVariable("v", StateVariable::DOUBLE, neededForCriteriaCheck);  // V
-  stateVariables_[VAR_ANGLE] = StateVariable("angle", StateVariable::DOUBLE);  // angle
+  stateVariables_[VAR_ANGLE] = StateVariable("angle", StateVariable::DOUBLE);                  // angle
 }
 
-BusInterfaceIIDM::~BusInterfaceIIDM() {
-}
+BusInterfaceIIDM::~BusInterfaceIIDM() {}
 
 string
 BusInterfaceIIDM::getID() const {
@@ -57,7 +55,7 @@ BusInterfaceIIDM::getID() const {
 double
 BusInterfaceIIDM::getVMax() const {
   if (!busIIDM_.voltageLevel().has_highVoltageLimit()) {
-    return uMaxPu * getVNom();   // default data
+    return uMaxPu * getVNom();  // default data
   }
   return busIIDM_.voltageLevel().highVoltageLimit();
 }
@@ -65,7 +63,7 @@ BusInterfaceIIDM::getVMax() const {
 double
 BusInterfaceIIDM::getVMin() const {
   if (!busIIDM_.voltageLevel().has_lowVoltageLimit()) {
-    return uMinPu * getVNom();   // default data
+    return uMinPu * getVNom();  // default data
   }
   return busIIDM_.voltageLevel().lowVoltageLimit();
 }
@@ -90,7 +88,7 @@ BusInterfaceIIDM::getAngle0() const {
 
 double
 BusInterfaceIIDM::getVNom() const {
-  if ( busIIDM_.voltageLevel().nominalV() > 0)
+  if (busIIDM_.voltageLevel().nominalV() > 0)
     return busIIDM_.voltageLevel().nominalV();
   else
     throw DYNError(Error::MODELER, UndefinedNominalV, busIIDM_.voltageLevel().id());
@@ -119,9 +117,9 @@ BusInterfaceIIDM::hasConnection() const {
 int
 BusInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "v" )
+  if (varName == "v")
     index = VAR_V;
-  else if ( varName == "angle" )
+  else if (varName == "angle")
     index = VAR_ANGLE;
   return index;
 }

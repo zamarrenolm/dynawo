@@ -32,7 +32,7 @@ class DanglingLineInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~DanglingLineInterface() { }
+  virtual ~DanglingLineInterface() {}
 
   /**
    * @brief Add a curent limit interface

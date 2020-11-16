@@ -17,38 +17,38 @@
  * @brief Calculated bus interface implementation
  */
 
-#include <sstream>
-#include <cmath>
-#include <IIDM/components/BusBarSection.h>
-#include <IIDM/components/VoltageLevel.h>
-
 #include "DYNCalculatedBusInterfaceIIDM.h"
+
 #include "DYNBusBarSectionInterface.h"
 #include "DYNCommonConstants.h"
 #include "DYNStateVariable.h"
 #include "DYNTrace.h"
+
+#include <IIDM/components/BusBarSection.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <cmath>
+#include <sstream>
 using boost::shared_ptr;
+using std::set;
 using std::string;
 using std::stringstream;
-using std::set;
 using std::vector;
 
 namespace DYN {
 
 CalculatedBusInterfaceIIDM::CalculatedBusInterfaceIIDM(IIDM::VoltageLevel& voltageLevel, const string& name, const int busIndex) :
-busIndex_(busIndex),
-name_(name),
-voltageLevel_(voltageLevel),
-hasConnection_(false) {
+    busIndex_(busIndex),
+    name_(name),
+    voltageLevel_(voltageLevel),
+    hasConnection_(false) {
   setType(ComponentInterface::CALCULATED_BUS);
   stateVariables_.resize(2);
   bool neededForCriteriaCheck = true;
   stateVariables_[VAR_V] = StateVariable("v", StateVariable::DOUBLE, neededForCriteriaCheck);  // V
-  stateVariables_[VAR_ANGLE] = StateVariable("angle", StateVariable::DOUBLE);  // angle
+  stateVariables_[VAR_ANGLE] = StateVariable("angle", StateVariable::DOUBLE);                  // angle
 }
 
-CalculatedBusInterfaceIIDM::~CalculatedBusInterfaceIIDM() {
-}
+CalculatedBusInterfaceIIDM::~CalculatedBusInterfaceIIDM() {}
 
 void
 CalculatedBusInterfaceIIDM::addBusBarSection(const shared_ptr<BusBarSectionInterface>& bbs) {
@@ -78,7 +78,7 @@ CalculatedBusInterfaceIIDM::getID() const {
 double
 CalculatedBusInterfaceIIDM::getVMax() const {
   if (!voltageLevel_.has_highVoltageLimit()) {
-    return uMaxPu * getVNom();   // default data
+    return uMaxPu * getVNom();  // default data
   }
   return voltageLevel_.highVoltageLimit();
 }
@@ -86,7 +86,7 @@ CalculatedBusInterfaceIIDM::getVMax() const {
 double
 CalculatedBusInterfaceIIDM::getVMin() const {
   if (!voltageLevel_.has_lowVoltageLimit()) {
-    return uMinPu * getVNom();   // default data
+    return uMinPu * getVNom();  // default data
   }
   return voltageLevel_.lowVoltageLimit();
 }
@@ -138,9 +138,9 @@ CalculatedBusInterfaceIIDM::hasConnection() const {
 int
 CalculatedBusInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "v" )
+  if (varName == "v")
     index = VAR_V;
-  else if ( varName == "angle" )
+  else if (varName == "angle")
     index = VAR_ANGLE;
   return index;
 }
@@ -180,15 +180,16 @@ CalculatedBusInterfaceIIDM::getNodes() const {
   return nodes_;
 }
 
-std::ostream& operator<<(std::ostream& stream, const CalculatedBusInterfaceIIDM& calculatedBus) {
+std::ostream&
+operator<<(std::ostream& stream, const CalculatedBusInterfaceIIDM& calculatedBus) {
   stream << calculatedBus.getID() << " nodes : [";
   set<int> nodes = calculatedBus.getNodes();
-  for (set<int>::iterator it = nodes.begin(); it !=nodes.end(); ++it)
+  for (set<int>::iterator it = nodes.begin(); it != nodes.end(); ++it)
     stream << ' ' << *it;
   stream << " ]; busBarSection : [";
 
   vector<string> bbsNames = calculatedBus.getBusBarSectionNames();
-  for (unsigned int i =0; i < bbsNames.size(); ++i)
+  for (unsigned int i = 0; i < bbsNames.size(); ++i)
     stream << ' ' << bbsNames[i];
 
   stream << " ]";

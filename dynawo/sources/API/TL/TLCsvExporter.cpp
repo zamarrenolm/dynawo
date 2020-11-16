@@ -17,14 +17,14 @@
  * @brief Dynawo timeline csv exporter : implementation file
  *
  */
-#include <fstream>
-#include <sstream>
+#include "TLCsvExporter.h"
 
 #include "DYNMacrosMessage.h"
-
-#include "TLCsvExporter.h"
-#include "TLTimeline.h"
 #include "TLEvent.h"
+#include "TLTimeline.h"
+
+#include <fstream>
+#include <sstream>
 
 using std::fstream;
 using std::ostream;
@@ -46,17 +46,10 @@ void
 CsvExporter::exportToStream(const boost::shared_ptr<Timeline>& timeline, ostream& stream) const {
   const std::string CSVEXPORTER_SEPARATOR = ";";  ///< definition of the separator to use in csv files
 
-  for (Timeline::event_const_iterator itEvent = timeline->cbeginEvent();
-          itEvent != timeline->cendEvent();
-          ++itEvent) {
-    stream << (*itEvent)->getTime()
-            << CSVEXPORTER_SEPARATOR
-            << (*itEvent)->getModelName()
-            << CSVEXPORTER_SEPARATOR
-            << (*itEvent)->getMessage();
+  for (Timeline::event_const_iterator itEvent = timeline->cbeginEvent(); itEvent != timeline->cendEvent(); ++itEvent) {
+    stream << (*itEvent)->getTime() << CSVEXPORTER_SEPARATOR << (*itEvent)->getModelName() << CSVEXPORTER_SEPARATOR << (*itEvent)->getMessage();
     if ((*itEvent)->hasPriority()) {
-      stream << CSVEXPORTER_SEPARATOR
-              << (*itEvent)->getPriority();
+      stream << CSVEXPORTER_SEPARATOR << (*itEvent)->getPriority();
     }
     stream << "\n";
   }

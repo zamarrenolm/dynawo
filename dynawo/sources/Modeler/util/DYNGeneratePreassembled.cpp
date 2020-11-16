@@ -16,81 +16,79 @@
  * @brief compile a list of model modelica and verifiy .so linking stats
  */
 
-#include <string>
-#include <vector>
+#include "DYNCommon.h"
+#include "DYNCompiler.h"
+#include "DYNDynamicData.h"
+#include "DYNExecUtils.h"
+#include "DYNFileSystemUtils.h"
+#include "DYNIoDico.h"
+#include "DYNMacrosMessage.h"
+#include "DYNTrace.h"
+
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
+#include <boost/shared_ptr.hpp>
+#include <dlfcn.h>
 #include <iomanip>
 #include <iostream>
-#include <boost/program_options.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/filesystem.hpp>
-#include <dlfcn.h>
+#include <string>
+#include <vector>
 
-#include "DYNDynamicData.h"
-
-#include "DYNCommon.h"
-#include "DYNTrace.h"
-#include "DYNMacrosMessage.h"
-#include "DYNIoDico.h"
-#include "DYNFileSystemUtils.h"
-#include "DYNCompiler.h"
-#include "DYNExecUtils.h"
-
-using std::string;
-using std::exception;
-using std::endl;
+using DYN::Trace;
 using std::cerr;
 using std::cout;
+using std::endl;
+using std::exception;
+using std::string;
 using std::vector;
-using DYN::Trace;
 
+using boost::shared_ptr;
 using DYN::Compiler;
 using DYN::DydAnalyser;
-using boost::shared_ptr;
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
 
 bool verifySharedObject(string modelname);
-std::string verifyModelListFile(const string & modelList, const string & outputPath);
-std::string executeCommand1(const string & command);
+std::string verifyModelListFile(const string& modelList, const string& outputPath);
+std::string executeCommand1(const string& command);
 
 /**
  *
  * @brief main for dyd lib generator
  *
  */
-int main(int argc, char ** argv) {
-  string modelList = "";   // model list file
+int
+main(int argc, char** argv) {
+  string modelList = "";  // model list file
   bool useStandardPrecompiledModels = true;
-  string recursivePrecompiledModelsDir = "";   // BDD
+  string recursivePrecompiledModelsDir = "";  // BDD
   string nonRecursivePrecompiledModelsDir = "";
   string precompiledModelsExtension = DYN::sharedLibraryExtension();
   bool useStandardModelicaModels = true;
   string recursiveModelicaModelsDir = "";
   string nonRecursiveModelicaModelsDir = "";
   string modelicaModelsExtension = "";
-  string outputDir = ".";   // output dir
-  vector<string> additionalHeaderFiles;   // list of headers that should be included in the dynamic model files
+  string outputDir = ".";                // output dir
+  vector<string> additionalHeaderFiles;  // list of headers that should be included in the dynamic model files
   bool rmModels = false;
 
   po::options_description desc;
 
-  desc.add_options()
-          ("help,h", "produce help message")
-          ("model-list", po::value<string>(&modelList), "set model list file (required)")
-          ("use-standard-precompiled-models", po::value<bool>(&useStandardPrecompiledModels), "use standard precompiled models (default true)")
-          ("recursive-precompiled-models-dir", po::value<string>(&recursivePrecompiledModelsDir), "set precompiled models directory (default DYNAWO_DDB_DIR)")
-          ("non-recursive-precompiled-models-dir", po::value<string>(&nonRecursivePrecompiledModelsDir),
-              "set precompiled models directory (default DYNAWO_DDB_DIR)")
-          ("use-standard-modelica-models", po::value<bool>(&useStandardModelicaModels), "use standard Modelica models (default true)")
-          ("recursive-modelica-models-dir", po::value<string>(&recursiveModelicaModelsDir), "set Modelica models directory (default DYNAWO_DDB_DIR)")
-          ("non-recursive-modelica-models-dir", po::value<string>(&nonRecursiveModelicaModelsDir), "set Modelica models directory (default DYNAWO_DDB_DIR)")
-          ("modelica-models-extension", po::value<string>(&modelicaModelsExtension), "set Modelica models file extension (default .mo)")
-          ("output-dir", po::value<string>(&outputDir), "set output directory (default: current directory)")
-          ("remove-model-files", po::value<bool>(&rmModels), "if true the .mo input files will be deleted (default: false)")
-          ("additional-header-files", po::value< vector<string> >(&additionalHeaderFiles)->multitoken(),
-              "list of headers that should be included in the dynamic model files");
+  desc.add_options()("help,h", "produce help message")("model-list", po::value<string>(&modelList), "set model list file (required)")(
+      "use-standard-precompiled-models", po::value<bool>(&useStandardPrecompiledModels), "use standard precompiled models (default true)")(
+      "recursive-precompiled-models-dir", po::value<string>(&recursivePrecompiledModelsDir), "set precompiled models directory (default DYNAWO_DDB_DIR)")(
+      "non-recursive-precompiled-models-dir", po::value<string>(&nonRecursivePrecompiledModelsDir),
+      "set precompiled models directory (default DYNAWO_DDB_DIR)")("use-standard-modelica-models", po::value<bool>(&useStandardModelicaModels),
+                                                                   "use standard Modelica models (default true)")(
+      "recursive-modelica-models-dir", po::value<string>(&recursiveModelicaModelsDir), "set Modelica models directory (default DYNAWO_DDB_DIR)")(
+      "non-recursive-modelica-models-dir", po::value<string>(&nonRecursiveModelicaModelsDir), "set Modelica models directory (default DYNAWO_DDB_DIR)")(
+      "modelica-models-extension", po::value<string>(&modelicaModelsExtension), "set Modelica models file extension (default .mo)")(
+      "output-dir", po::value<string>(&outputDir), "set output directory (default: current directory)")(
+      "remove-model-files", po::value<bool>(&rmModels), "if true the .mo input files will be deleted (default: false)")(
+      "additional-header-files", po::value<vector<string> >(&additionalHeaderFiles)->multitoken(),
+      "list of headers that should be included in the dynamic model files");
 
   po::variables_map vm;
   // parse regular options
@@ -100,8 +98,8 @@ int main(int argc, char ** argv) {
   if (vm.count("help")) {
     cout << desc << endl;
     return 0;
-  } else if ((recursivePrecompiledModelsDir == "" && nonRecursivePrecompiledModelsDir == "")
-              || (recursiveModelicaModelsDir == "" && nonRecursiveModelicaModelsDir == "")) {
+  } else if ((recursivePrecompiledModelsDir == "" && nonRecursivePrecompiledModelsDir == "") ||
+             (recursiveModelicaModelsDir == "" && nonRecursiveModelicaModelsDir == "")) {
     cout << " Default BDD Models Directory is used. " << endl;
   }
 
@@ -124,7 +122,7 @@ int main(int argc, char ** argv) {
 
   string dydFileName = "";
   try {
-    dydFileName = verifyModelListFile(modelList, absOutputDir);   // verify the model list file
+    dydFileName = verifyModelListFile(modelList, absOutputDir);  // verify the model list file
 
     // Initializes logs, parsers & dictionnaries for Dynawo
     Trace::init();
@@ -140,7 +138,7 @@ int main(int argc, char ** argv) {
     dyd->initFromDydFiles(dydFile);
 
     // Compilation
-    std::vector <UserDefinedDirectory> precompiledModelsDirs;
+    std::vector<UserDefinedDirectory> precompiledModelsDirs;
 
     if (recursivePrecompiledModelsDir != "") {
       UserDefinedDirectory dir;
@@ -156,7 +154,7 @@ int main(int argc, char ** argv) {
       precompiledModelsDirs.push_back(dir);
     }
 
-    std::vector <UserDefinedDirectory> modelicaModelsDirs;
+    std::vector<UserDefinedDirectory> modelicaModelsDirs;
 
     if (recursiveModelicaModelsDir != "") {
       UserDefinedDirectory dir;
@@ -173,17 +171,17 @@ int main(int argc, char ** argv) {
     }
     const boost::unordered_set<fs::path> pathsToIgnore;
 
-    Compiler cf = Compiler(dyd, useStandardPrecompiledModels, precompiledModelsDirs, precompiledModelsExtension,
-            useStandardModelicaModels, modelicaModelsDirs, modelicaModelsExtension, pathsToIgnore, additionalHeaderFiles, rmModels, outputDir);
+    Compiler cf = Compiler(dyd, useStandardPrecompiledModels, precompiledModelsDirs, precompiledModelsExtension, useStandardModelicaModels, modelicaModelsDirs,
+                           modelicaModelsExtension, pathsToIgnore, additionalHeaderFiles, rmModels, outputDir);
     cf.compile();
 
     fs::remove(dydFileName);
-    vector<string > solist = cf.getCompiledLib();  // get all .so
-    vector<string > notValidsolist;
+    vector<string> solist = cf.getCompiledLib();  // get all .so
+    vector<string> notValidsolist;
 
-     // verification linking status of shared object
+    // verification linking status of shared object
     bool libValid = true;
-    for (vector<string >::iterator it = solist.begin(); it != solist.end(); ++it) {
+    for (vector<string>::iterator it = solist.begin(); it != solist.end(); ++it) {
       bool valid = verifySharedObject(*it);  // verification .so
       if (!valid) {
         libValid = false;
@@ -199,7 +197,7 @@ int main(int argc, char ** argv) {
     } else {
       Trace::info(Trace::compile()) << DYNLog(InvalidSharedObjects, notValidsolist.size()) << Trace::endline;
       string libList;
-      for (vector<string >::iterator it = notValidsolist.begin(); it != notValidsolist.end(); ++it) {
+      for (vector<string>::iterator it = notValidsolist.begin(); it != notValidsolist.end(); ++it) {
         Trace::info(Trace::compile()) << *it << Trace::endline;
         libList += *it;
       }
@@ -221,10 +219,11 @@ int main(int argc, char ** argv) {
  * 2nd step: ldd -r --> if exists undefinded symbol
  */
 
-bool verifySharedObject(string modelname) {
+bool
+verifySharedObject(string modelname) {
   // dlopen include <dlfcn.h>: to see if a shared object file
   const char* filename = modelname.c_str();
-  void *handle;
+  void* handle;
   handle = dlopen(filename, RTLD_NOW);
   if (!handle) {
     fprintf(stderr, "%s\n", dlerror());
@@ -250,7 +249,8 @@ bool verifySharedObject(string modelname) {
  * @brief Verify model list format
  * use script python: scriptVerifyModelList.py
  */
-std::string verifyModelListFile(const string & modelList, const string & outputPath) {
+std::string
+verifyModelListFile(const string& modelList, const string& outputPath) {
   string dydFileName = absolute(replace_extension(file_name(modelList), "dyd"), outputPath);
   string scriptsDir1 = getMandatoryEnvVar("DYNAWO_SCRIPTS_DIR");
   string pythonCmd = "python";
@@ -267,7 +267,8 @@ std::string verifyModelListFile(const string & modelList, const string & outputP
 /**
  * @brief execute a command
  */
-std::string executeCommand1(const std::string & command) {
+std::string
+executeCommand1(const std::string& command) {
   std::stringstream ss;
   executeCommand(command, ss);
   std::cout << ss.str() << std::endl;

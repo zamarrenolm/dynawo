@@ -13,16 +13,17 @@
 
 #include "DYNErrorQueue.h"
 
-#include <boost/lexical_cast.hpp>
-
-#include "DYNTrace.h"
 #include "DYNMacrosMessage.h"
+#include "DYNTrace.h"
+
+#include <boost/lexical_cast.hpp>
 
 namespace DYN {
 
 boost::shared_ptr<DYNErrorQueue> DYNErrorQueue::errorQueue = boost::shared_ptr<DYNErrorQueue>();
 
-size_t DYNErrorQueue::getMaxDisplayedError() const {
+size_t
+DYNErrorQueue::getMaxDisplayedError() const {
   static const size_t maxDisplayedError = 100;
   return maxDisplayedError;
 }
@@ -48,8 +49,7 @@ DYNErrorQueue::flush() {
     exceptionQueue_.pop();
     throw e;
   }
-  for (size_t nbErrorDisplayed = 0;
-      !exceptionQueue_.empty() && nbErrorDisplayed < maxDisplayedError; ++nbErrorDisplayed, exceptionQueue_.pop()) {
+  for (size_t nbErrorDisplayed = 0; !exceptionQueue_.empty() && nbErrorDisplayed < maxDisplayedError; ++nbErrorDisplayed, exceptionQueue_.pop()) {
     const DYN::Error e = exceptionQueue_.front();
     Trace::error() << e.what() << Trace::endline;
   }

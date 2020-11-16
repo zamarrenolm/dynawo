@@ -17,17 +17,16 @@
  * @brief Dynawo constraint xml exporter : implementation file
  *
  */
-#include <fstream>
-#include <sstream>
+#include "CSTRXmlExporter.h"
 
-#include <xml/sax/formatter/AttributeList.h>
-#include <xml/sax/formatter/Formatter.h>
-
+#include "CSTRConstraint.h"
+#include "CSTRConstraintsCollection.h"
 #include "DYNMacrosMessage.h"
 
-#include "CSTRXmlExporter.h"
-#include "CSTRConstraintsCollection.h"
-#include "CSTRConstraint.h"
+#include <fstream>
+#include <sstream>
+#include <xml/sax/formatter/AttributeList.h>
+#include <xml/sax/formatter/Formatter.h>
 
 using std::fstream;
 using std::ostream;
@@ -61,9 +60,7 @@ XmlExporter::exportToStream(const boost::shared_ptr<ConstraintsCollection>& cons
   AttributeList attrs;
 
   formatter->startElement("constraints", attrs);
-  for (ConstraintsCollection::const_iterator itConstraint = constraints->cbegin();
-          itConstraint != constraints->cend();
-          ++itConstraint) {
+  for (ConstraintsCollection::const_iterator itConstraint = constraints->cbegin(); itConstraint != constraints->cend(); ++itConstraint) {
     attrs.clear();
     attrs.add("modelName", (*itConstraint)->getModelName());
     attrs.add("description", (*itConstraint)->getDescription());
@@ -71,9 +68,9 @@ XmlExporter::exportToStream(const boost::shared_ptr<ConstraintsCollection>& cons
     if ((*itConstraint)->hasModelType())
       attrs.add("type", (*itConstraint)->getModelType());
     formatter->startElement("constraint", attrs);
-    formatter->endElement();   // constraint
+    formatter->endElement();  // constraint
   }
-  formatter->endElement();   // constraints
+  formatter->endElement();  // constraints
   formatter->endDocument();
 }
 

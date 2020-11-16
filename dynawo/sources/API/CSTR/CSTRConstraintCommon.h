@@ -27,9 +27,9 @@ namespace constraints {
  */
 typedef enum {
   CONSTRAINT_UNDEFINED = -1,  // Constraint type is undefined
-  CONSTRAINT_BEGIN = 0,  // Begin of a Constraint
-  CONSTRAINT_END = 1  // End of a Constraint
-} Type_t;  ///< type on constraint
+  CONSTRAINT_BEGIN = 0,       // Begin of a Constraint
+  CONSTRAINT_END = 1          // End of a Constraint
+} Type_t;                     ///< type on constraint
 
 }  // namespace constraints
 

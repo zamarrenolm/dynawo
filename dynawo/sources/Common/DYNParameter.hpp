@@ -28,7 +28,8 @@ namespace DYN {
  * template specialization for boolean type
  */
 template<>
-inline bool ParameterCommon::getValue() const {
+inline bool
+ParameterCommon::getValue() const {
   if (getValueType() != VAR_TYPE_BOOL)
     throw DYNError(getTypeError(), ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "BOOL");
 
@@ -38,8 +39,7 @@ inline bool ParameterCommon::getValue() const {
   bool value;
   try {
     value = boost::any_cast<bool>(getAnyValue());
-  }
-  catch (boost::bad_any_cast&)  {
+  } catch (boost::bad_any_cast&) {
     throw DYNError(getTypeError(), ParameterBadCast, getName(), typeVarC2Str(getValueType()));
   }
   return value;
@@ -50,7 +50,8 @@ inline bool ParameterCommon::getValue() const {
  * template specialization for double type
  */
 template<>
-inline double ParameterCommon::getValue() const {
+inline double
+ParameterCommon::getValue() const {
   if (getValueType() != VAR_TYPE_DOUBLE)
     throw DYNError(getTypeError(), ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "DOUBLE");
 
@@ -60,8 +61,7 @@ inline double ParameterCommon::getValue() const {
   double value;
   try {
     value = boost::any_cast<double>(getAnyValue());
-  }
-  catch (boost::bad_any_cast&)  {
+  } catch (boost::bad_any_cast&) {
     throw DYNError(getTypeError(), ParameterBadCast, getName(), typeVarC2Str(getValueType()));
   }
   return value;
@@ -72,7 +72,8 @@ inline double ParameterCommon::getValue() const {
  * template specialization for integer type
  */
 template<>
-inline int ParameterCommon::getValue() const {
+inline int
+ParameterCommon::getValue() const {
   if (getValueType() != VAR_TYPE_INT)
     throw DYNError(getTypeError(), ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "INT");
 
@@ -82,8 +83,7 @@ inline int ParameterCommon::getValue() const {
   int value;
   try {
     value = boost::any_cast<int>(getAnyValue());
-  }
-  catch (boost::bad_any_cast&)  {
+  } catch (boost::bad_any_cast&) {
     throw DYNError(getTypeError(), ParameterBadCast, getName(), typeVarC2Str(getValueType()));
   }
   return value;
@@ -94,7 +94,8 @@ inline int ParameterCommon::getValue() const {
  * template specialization for string type
  */
 template<>
-inline std::string ParameterCommon::getValue() const {
+inline std::string
+ParameterCommon::getValue() const {
   if (getValueType() != VAR_TYPE_STRING)
     throw DYNError(getTypeError(), ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "STRING");
 
@@ -104,13 +105,11 @@ inline std::string ParameterCommon::getValue() const {
   std::string value;
   try {
     value = boost::any_cast<std::string>(getAnyValue());
-  }
-  catch (boost::bad_any_cast&)  {
+  } catch (boost::bad_any_cast&) {
     throw DYNError(getTypeError(), ParameterBadCast, getName(), typeVarC2Str(getValueType()));
   }
   return value;
 }
-
 
 }  // namespace DYN
 

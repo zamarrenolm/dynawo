@@ -12,6 +12,7 @@
 //
 
 #include "JOBOutputsEntryFactory.h"
+
 #include "JOBOutputsEntry.h"
 
 namespace job {

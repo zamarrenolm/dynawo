@@ -19,13 +19,8 @@
  * XmlHandler is the implmentation of Dynawo handler for parsing final
  * state input files
  */
-#include <xml/sax/parser/Attributes.h>
-
-#include <boost/phoenix/core.hpp>
-#include <boost/phoenix/operator/self.hpp>
-#include <boost/phoenix/bind.hpp>
-
 #include "FSXmlHandler.h"
+
 #include "FSFinalStateCollection.h"
 #include "FSFinalStateCollectionFactory.h"
 #include "FSModel.h"
@@ -33,8 +28,13 @@
 #include "FSVariable.h"
 #include "FSVariableFactory.h"
 
-using std::map;
+#include <boost/phoenix/bind.hpp>
+#include <boost/phoenix/core.hpp>
+#include <boost/phoenix/operator/self.hpp>
+#include <xml/sax/parser/Attributes.h>
+
 using boost::shared_ptr;
+using std::map;
 
 namespace lambda = boost::phoenix;
 namespace lambda_args = lambda::placeholders;
@@ -42,14 +42,13 @@ namespace parser = xml::sax::parser;
 
 xml::sax::parser::namespace_uri fs_ns("http://www.rte-france.com/dynawo");  ///< namespace used to read final state xml file
 
-
 namespace finalState {
 
 XmlHandler::XmlHandler() :
-finalStateCollection_(FinalStateCollectionFactory::newInstance("")),
-modelHandler_(parser::ElementName(fs_ns, "model")),
-variableHandler_(parser::ElementName(fs_ns, "variable")),
-level_(0) {
+    finalStateCollection_(FinalStateCollectionFactory::newInstance("")),
+    modelHandler_(parser::ElementName(fs_ns, "model")),
+    variableHandler_(parser::ElementName(fs_ns, "variable")),
+    level_(0) {
   onElement(fs_ns("finalStateInput/model"), modelHandler_);
   onElement(fs_ns("finalStateInput/variable"), variableHandler_);
 
@@ -59,8 +58,7 @@ level_(0) {
   variableHandler_.onEnd(lambda::bind(&XmlHandler::addVariable, lambda::ref(*this)));
 }
 
-XmlHandler::~XmlHandler() {
-}
+XmlHandler::~XmlHandler() {}
 
 shared_ptr<FinalStateCollection>
 XmlHandler::getFinalStateCollection() {
@@ -103,12 +101,12 @@ XmlHandler::addVariable() {
   }
 }
 
-ModelHandler::ModelHandler(elementName_type const & root_element) {
+ModelHandler::ModelHandler(elementName_type const& root_element) {
   onStartElement(root_element, lambda::bind(&ModelHandler::create, lambda::ref(*this), lambda_args::arg2));
 }
 
 void
-ModelHandler::create(attributes_type const & attributes) {
+ModelHandler::create(attributes_type const& attributes) {
   modelRead_ = ModelFactory::newModel(attributes["id"]);
 }
 
@@ -117,12 +115,12 @@ ModelHandler::get() const {
   return modelRead_;
 }
 
-VariableHandler::VariableHandler(elementName_type const & root_element) {
+VariableHandler::VariableHandler(elementName_type const& root_element) {
   onStartElement(root_element, lambda::bind(&VariableHandler::create, lambda::ref(*this), lambda_args::arg2));
 }
 
 void
-VariableHandler::create(attributes_type const & attributes) {
+VariableHandler::create(attributes_type const& attributes) {
   variableRead_ = VariableFactory::newVariable(attributes["name"]);
 }
 

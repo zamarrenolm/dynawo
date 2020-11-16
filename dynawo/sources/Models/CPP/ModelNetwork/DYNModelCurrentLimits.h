@@ -20,8 +20,9 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELCURRENTLIMITS_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELCURRENTLIMITS_H_
 
-#include <vector>
 #include "DYNEnumUtils.h"
+
+#include <vector>
 
 namespace DYN {
 class ModelNetwork;
@@ -34,20 +35,12 @@ class ModelCurrentLimits {  ///< Generic Current Limits model
   /**
    * @brief structure for side
    */
-  typedef enum {
-    SIDE_UNDEFINED = 0,
-    SIDE_1 = 1,
-    SIDE_2 = 2,
-    SIDE_3 = 3
-  } side_t;
+  typedef enum { SIDE_UNDEFINED = 0, SIDE_1 = 1, SIDE_2 = 2, SIDE_3 = 3 } side_t;
 
   /**
    * @brief structure for state
    */
-  typedef enum {
-    COMPONENT_OPEN = 0,
-    COMPONENT_CLOSE = 1
-  } state_t;
+  typedef enum { COMPONENT_OPEN = 0, COMPONENT_CLOSE = 1 } state_t;
 
   /**
    * @brief default constructor
@@ -81,8 +74,8 @@ class ModelCurrentLimits {  ///< Generic Current Limits model
    *
    * @return
    */
-  state_t evalZ(const std::string& componentName, const double& t, state_g * g, ModelNetwork* network,
-                const double& desactivate, const std::string& modelType);  // compute the local Z function
+  state_t evalZ(const std::string& componentName, const double& t, state_g* g, ModelNetwork* network, const double& desactivate,
+                const std::string& modelType);  // compute the local Z function
 
   /**
    * @brief add a new current limit (p.u. base UNom, base SNRef)
@@ -115,15 +108,15 @@ class ModelCurrentLimits {  ///< Generic Current Limits model
 
  private:
   int nbTemporaryLimits_;  ///< number of temporary limits (limits with a time duration)
-  side_t side_;  ///< side
+  side_t side_;            ///< side
 
   double maxTimeOperation_;  ///< maximum time operation, if limits duration is over this time, the current limit does not operate
 
-  std::vector<double> limits_;  ///< vector of current limits (p.u. base UNom, base SNRef)
+  std::vector<double> limits_;               ///< vector of current limits (p.u. base UNom, base SNRef)
   std::vector<double> acceptableDurations_;  ///< vector of limits duration (unit : s)
-  std::vector<bool> openingAuthorized_;  ///< whether opening is authorized
-  std::vector<double> tLimitReached_;  ///< last time the limit was reached
-  std::vector<bool> activated_;  ///< state of activation
+  std::vector<bool> openingAuthorized_;      ///< whether opening is authorized
+  std::vector<double> tLimitReached_;        ///< last time the limit was reached
+  std::vector<bool> activated_;              ///< state of activation
 };
 }  // namespace DYN
 

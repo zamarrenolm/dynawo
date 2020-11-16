@@ -19,35 +19,35 @@
  */
 
 #include "DYNModelRatioTapChanger.h"
+
 #include "DYNModelConstants.h"
 #include "DYNModelNetwork.h"
 
 namespace DYN {
 
-ModelRatioTapChanger::ModelRatioTapChanger(const std::string& id,
-                                           const std::string& side, int lowIndex)
-    : ModelTapChanger(id, lowIndex),
-      side_(side),
-      tolV_(0.015),
-      targetV_(0),
-      whenUp_(VALDEF),
-      whenDown_(VALDEF),
-      whenLastTap_(VALDEF),
-      moveUp_(false),
-      moveDown_(false),
-      tapRefDown_(-1),
-      tapRefUp_(-1),
-      uMaxState_(false),
-      uMinState_(false),
-      uTargetState_(true) {}
+ModelRatioTapChanger::ModelRatioTapChanger(const std::string& id, const std::string& side, int lowIndex) :
+    ModelTapChanger(id, lowIndex),
+    side_(side),
+    tolV_(0.015),
+    targetV_(0),
+    whenUp_(VALDEF),
+    whenDown_(VALDEF),
+    whenLastTap_(VALDEF),
+    moveUp_(false),
+    moveDown_(false),
+    tapRefDown_(-1),
+    tapRefUp_(-1),
+    uMaxState_(false),
+    uMinState_(false),
+    uTargetState_(true) {}
 
-bool ModelRatioTapChanger::getUpIncreaseTargetU() const {
+bool
+ModelRatioTapChanger::getUpIncreaseTargetU() const {
   // decide whether we should increase/decrease tap
   bool increaseRate = false;
   bool upIncreaseTargetU = false;
   if (size() > 1)
-    increaseRate = (getStep(getLowStepIndex()).getRho() <
-                    getStep(getLowStepIndex() + 1).getRho());
+    increaseRate = (getStep(getLowStepIndex()).getRho() < getStep(getLowStepIndex() + 1).getRho());
 
   // in tfo, the main equation is U2 = rho*U1
   if (side_ == "ONE") {
@@ -69,17 +69,21 @@ bool ModelRatioTapChanger::getUpIncreaseTargetU() const {
 void
 ModelRatioTapChanger::evalG(double t, double uValue, bool nodeOff, state_g* g, double disable, double locked, bool tfoClosed) {
   int currentStepIndex = getCurrentStepIndex();
-  g[0] = (uValue > targetV_ + tolV_ && doubleNotEquals(uValue, targetV_ + tolV_)
-  && !(disable > 0) && !(nodeOff) && tfoClosed) ? ROOT_UP : ROOT_DOWN;  // U > Uc + deadBand
-  g[1] = (uValue < targetV_ - tolV_ && doubleNotEquals(uValue, targetV_ - tolV_)
-  && !(disable > 0) && !(nodeOff) && tfoClosed) ? ROOT_UP : ROOT_DOWN;  // U < Uc - deadBand
-  g[2] = (moveUp_ && ((t - whenUp_ >= getTFirst() && currentStepIndex == tapRefUp_) || (t - whenLastTap_ >= getTNext() && currentStepIndex != tapRefUp_))
-          && currentStepIndex < getHighStepIndex() && !(locked > 0) && getRegulating()
-          && !(nodeOff) && tfoClosed) ? ROOT_UP : ROOT_DOWN;  // first or next tap up
-  g[3] = (moveDown_
-          && ((t - whenDown_ >= getTFirst() && currentStepIndex == tapRefDown_) || (t - whenLastTap_ >= getTNext() && currentStepIndex != tapRefDown_))
-          && currentStepIndex > getLowStepIndex() && !(locked > 0) && getRegulating()
-          && !(nodeOff) && tfoClosed) ? ROOT_UP : ROOT_DOWN;  // first or next tap down
+  g[0] = (uValue > targetV_ + tolV_ && doubleNotEquals(uValue, targetV_ + tolV_) && !(disable > 0) && !(nodeOff) && tfoClosed)
+             ? ROOT_UP
+             : ROOT_DOWN;  // U > Uc + deadBand
+  g[1] = (uValue < targetV_ - tolV_ && doubleNotEquals(uValue, targetV_ - tolV_) && !(disable > 0) && !(nodeOff) && tfoClosed)
+             ? ROOT_UP
+             : ROOT_DOWN;  // U < Uc - deadBand
+  g[2] = (moveUp_ && ((t - whenUp_ >= getTFirst() && currentStepIndex == tapRefUp_) || (t - whenLastTap_ >= getTNext() && currentStepIndex != tapRefUp_)) &&
+          currentStepIndex < getHighStepIndex() && !(locked > 0) && getRegulating() && !(nodeOff) && tfoClosed)
+             ? ROOT_UP
+             : ROOT_DOWN;  // first or next tap up
+  g[3] = (moveDown_ &&
+          ((t - whenDown_ >= getTFirst() && currentStepIndex == tapRefDown_) || (t - whenLastTap_ >= getTNext() && currentStepIndex != tapRefDown_)) &&
+          currentStepIndex > getLowStepIndex() && !(locked > 0) && getRegulating() && !(nodeOff) && tfoClosed)
+             ? ROOT_UP
+             : ROOT_DOWN;  // first or next tap down
 }
 
 void

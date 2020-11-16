@@ -17,20 +17,19 @@
  *
  */
 
-#include <fstream>
-
-#include <xml/sax/parser/ParserException.h>
-
-#include "DYNMacrosMessage.h"
+#include "DYDXmlImporter.h"
 
 #include "DYDDynamicModelsCollectionFactory.h"
 #include "DYDXmlHandler.h"
-#include "DYDXmlImporter.h"
 #include "DYNExecUtils.h"
+#include "DYNMacrosMessage.h"
 
+#include <fstream>
+#include <xml/sax/parser/ParserException.h>
+
+using boost::shared_ptr;
 using std::string;
 using std::vector;
-using boost::shared_ptr;
 
 namespace parser = xml::sax::parser;
 
@@ -65,7 +64,8 @@ XmlImporter::importFromDydFiles(const vector<string>& fileNames) const {
   return dydHandler.getDynamicModelsCollection();
 }
 
-void XmlImporter::importFromStream(std::istream& stream, XmlHandler& dydHandler, xml::sax::parser::ParserPtr& parser, bool xsdValidation) const {
+void
+XmlImporter::importFromStream(std::istream& stream, XmlHandler& dydHandler, xml::sax::parser::ParserPtr& parser, bool xsdValidation) const {
   try {
     parser->parse(stream, dydHandler, xsdValidation);
   } catch (const xml::sax::parser::ParserException& exp) {

@@ -16,13 +16,12 @@
  * @brief Unit tests for API_PAR
  */
 
-#include <boost/shared_ptr.hpp>
-
+#include "PARParametersSetCollection.h"
+#include "PARParametersSetCollectionFactory.h"
+#include "PARParametersSetFactory.h"
 #include "gtest_dynawo.h"
 
-#include "PARParametersSetCollectionFactory.h"
-#include "PARParametersSetCollection.h"
-#include "PARParametersSetFactory.h"
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -95,9 +94,8 @@ TEST(APIPARTest, CollectionIterator) {
 
   // Test const iterator
   int nbParametersSets = 0;
-  for (ParametersSetCollection::parametersSet_const_iterator itParamSet = collection->cbeginParametersSet();
-        itParamSet != collection->cendParametersSet();
-        ++itParamSet)
+  for (ParametersSetCollection::parametersSet_const_iterator itParamSet = collection->cbeginParametersSet(); itParamSet != collection->cendParametersSet();
+       ++itParamSet)
     ++nbParametersSets;
   ASSERT_EQ(nbParametersSets, 3);
 

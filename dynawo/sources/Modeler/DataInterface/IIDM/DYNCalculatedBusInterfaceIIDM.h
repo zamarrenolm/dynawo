@@ -14,13 +14,12 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNCALCULATEDBUSINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNCALCULATEDBUSINTERFACEIIDM_H_
 
-#include <set>
-#include <ostream>
+#include "DYNBusInterface.h"
 
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
-
-#include "DYNBusInterface.h"
+#include <ostream>
+#include <set>
 
 namespace IIDM {
 class VoltageLevel;
@@ -38,10 +37,7 @@ class CalculatedBusInterfaceIIDM : public BusInterface {
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_V = 0,
-    VAR_ANGLE = 1
-  } indexVar_t;
+  typedef enum { VAR_V = 0, VAR_ANGLE = 1 } indexVar_t;
 
   /**
    * @brief destructor
@@ -189,16 +185,16 @@ class CalculatedBusInterfaceIIDM : public BusInterface {
   }
 
  private:
-  int busIndex_;  ///< bus index
-  boost::optional<double> U0_;  ///< initial value of the voltage magnitude
-  boost::optional<double> angle0_;  ///< initial value of the voltage angle
-  std::string name_;  ///< name of the calculated bus
+  int busIndex_;                                                            ///< bus index
+  boost::optional<double> U0_;                                              ///< initial value of the voltage magnitude
+  boost::optional<double> angle0_;                                          ///< initial value of the voltage angle
+  std::string name_;                                                        ///< name of the calculated bus
   std::vector<boost::shared_ptr<BusBarSectionInterface> > busBarSections_;  ///< bus bar section associated to the bus
-  std::set<int> nodes_;  ///< index of the nodes associated to the bus
-  IIDM::VoltageLevel& voltageLevel_;  ///< IIDM voltage level instance
-  bool hasConnection_;  ///< @b true if the bus has an outside connection, @b false else
-  std::string country_;  ///< country of the bus
-};  ///< Interface class for CalculatedBusInterface
+  std::set<int> nodes_;                                                     ///< index of the nodes associated to the bus
+  IIDM::VoltageLevel& voltageLevel_;                                        ///< IIDM voltage level instance
+  bool hasConnection_;                                                      ///< @b true if the bus has an outside connection, @b false else
+  std::string country_;                                                     ///< country of the bus
+};                                                                          ///< Interface class for CalculatedBusInterface
 
 std::ostream& operator<<(std::ostream& stream, const CalculatedBusInterfaceIIDM& calculatedBus);
 

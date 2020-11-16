@@ -18,31 +18,21 @@
  * Trace stream header for Dynawo. Used by @p Trace static class for
  * stream-like logging
  */
-#include "DYNTrace.h"
 #include "DYNTraceStream.h"
+
+#include "DYNTrace.h"
 
 namespace DYN {
 
-TraceStream::TraceStream() :
-buffer_(boost::shared_ptr<std::stringstream>(new std::stringstream)),
-slv_(INFO),
-tag_("") {
-}
+TraceStream::TraceStream() : buffer_(boost::shared_ptr<std::stringstream>(new std::stringstream)), slv_(INFO), tag_("") {}
 
-TraceStream::TraceStream(SeverityLevel slv, const std::string& tag) :
-buffer_(),
-slv_(slv),
-tag_(tag) {
+TraceStream::TraceStream(SeverityLevel slv, const std::string& tag) : buffer_(), slv_(slv), tag_(tag) {
   if (Trace::standardLogExists(slv) || Trace::logExists(tag, slv)) {
     buffer_ = boost::shared_ptr<std::stringstream>(new std::stringstream);
   }
 }
 
-TraceStream::TraceStream(const TraceStream& ts) :
-buffer_(boost::shared_ptr<std::stringstream>(new std::stringstream)),
-slv_(ts.slv_),
-tag_(ts.tag_) {
-}
+TraceStream::TraceStream(const TraceStream& ts) : buffer_(boost::shared_ptr<std::stringstream>(new std::stringstream)), slv_(ts.slv_), tag_(ts.tag_) {}
 
 TraceStream&
 TraceStream::operator=(const TraceStream& ts) {
@@ -53,8 +43,7 @@ TraceStream::operator=(const TraceStream& ts) {
   return *this;
 }
 
-TraceStream::~TraceStream() {
-}
+TraceStream::~TraceStream() {}
 
 TraceStream&
 TraceStream::operator<<(const char* t) {
@@ -77,7 +66,8 @@ TraceStream::operator<<(tspf pf) {
   return (*pf)(*this);
 }
 
-TraceStream& eol(TraceStream& os) {
+TraceStream&
+eol(TraceStream& os) {
   os.flush();
   return os;
 }

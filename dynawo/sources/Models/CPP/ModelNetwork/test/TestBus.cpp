@@ -11,32 +11,28 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-
-#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "CSTRConstraint.h"
+#include "CSTRConstraintsCollection.h"
+#include "CSTRConstraintsCollectionFactory.h"
 #include "DYNBusInterfaceIIDM.h"
-#include "DYNModelVoltageLevel.h"
 #include "DYNModelBus.h"
 #include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
+#include "DYNModelVoltageLevel.h"
 #include "DYNSparseMatrix.h"
 #include "DYNVariable.h"
 #include "DYNVariableAlias.h"
-#include "CSTRConstraintsCollectionFactory.h"
-#include "CSTRConstraintsCollection.h"
-#include "CSTRConstraint.h"
-
-#include "DYNModelBus.h"
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
 
-using boost::shared_ptr;
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
+using boost::shared_ptr;
 
 namespace DYN {
 
@@ -61,8 +57,7 @@ createModelBus(bool initModel) {
 
   ModelNetwork* network = new ModelNetwork();
   network->setIsInitModel(initModel);
-  boost::shared_ptr<constraints::ConstraintsCollection> constraints =
-      constraints::ConstraintsCollectionFactory::newInstance("MyConstraintsCollection");
+  boost::shared_ptr<constraints::ConstraintsCollection> constraints = constraints::ConstraintsCollectionFactory::newInstance("MyConstraintsCollection");
   network->setTimeline(timeline::TimelineFactory::newInstance("Test"));
   network->setConstraints(constraints);
   shared_ptr<ModelVoltageLevel> vl = shared_ptr<ModelVoltageLevel>(new ModelVoltageLevel(vlItfIIDM));
@@ -118,7 +113,7 @@ TEST(ModelsModelNetwork, ModelNetworkBusInitialization) {
   bus->setReferenceZ(&z[0], zConnected, 0);
   ASSERT_EQ(bus->id(), "MyBus1");
   ASSERT_FALSE(bus->getSwitchOff());
-  ASSERT_DOUBLE_EQUALS_DYNAWO(bus->getAngle0(), M_PI/2);
+  ASSERT_DOUBLE_EQUALS_DYNAWO(bus->getAngle0(), M_PI / 2);
   ASSERT_DOUBLE_EQUALS_DYNAWO(bus->getU0(), 20.);
   ASSERT_EQ(bus->getRefIslands(), 0);
   ASSERT_DOUBLE_EQUALS_DYNAWO(bus->getVNom(), 5.);
@@ -204,7 +199,7 @@ TEST(ModelsModelNetwork, ModelNetworkBusCalculatedVariables) {
   ASSERT_DOUBLE_EQUALS_DYNAWO(res[0], 0.);
   ASSERT_DOUBLE_EQUALS_DYNAWO(res[1], 0.);
   bus->switchOn();
-//
+  //
   int offset = 2;
   bus->init(offset);
   std::vector<int> numVars;
@@ -260,12 +255,10 @@ TEST(ModelsModelNetwork, ModelNetworkBusDiscreteVariables) {
   bus->setReferenceZ(&z[0], zConnected, 0);
   bus->setReferenceY(&y[0], &yp[0], &f[0], 0, 0);
   ModelNetwork* network = new ModelNetwork();
-  boost::shared_ptr<constraints::ConstraintsCollection> constraints =
-      constraints::ConstraintsCollectionFactory::newInstance("MyConstraintsCollection");
+  boost::shared_ptr<constraints::ConstraintsCollection> constraints = constraints::ConstraintsCollectionFactory::newInstance("MyConstraintsCollection");
   network->setTimeline(timeline::TimelineFactory::newInstance("Test"));
   network->setConstraints(constraints);
   bus->setNetwork(network);
-
 
   bus->numSubNetwork(2);
   ASSERT_TRUE(bus->numSubNetworkSet());
@@ -282,8 +275,7 @@ TEST(ModelsModelNetwork, ModelNetworkBusDiscreteVariables) {
   bus->evalZ(0.);
   ASSERT_EQ(bus->getConnectionState(), OPEN);
   unsigned i = 0;
-  for (constraints::ConstraintsCollection::const_iterator it = constraints->cbegin(),
-      itEnd = constraints->cend(); it != itEnd; ++it) {
+  for (constraints::ConstraintsCollection::const_iterator it = constraints->cbegin(), itEnd = constraints->cend(); it != itEnd; ++it) {
     boost::shared_ptr<constraints::Constraint> constraint = (*it);
     if (i == 0) {
       ASSERT_EQ(constraint->getModelName(), "MyBus1");
@@ -305,8 +297,7 @@ TEST(ModelsModelNetwork, ModelNetworkBusDiscreteVariables) {
   g[1] = ROOT_DOWN;
   bus->evalZ(10.);
   network->setCurrentTime(10);
-  for (constraints::ConstraintsCollection::const_iterator it = constraints->cbegin(),
-      itEnd = constraints->cend(); it != itEnd; ++it) {
+  for (constraints::ConstraintsCollection::const_iterator it = constraints->cbegin(), itEnd = constraints->cend(); it != itEnd; ++it) {
     boost::shared_ptr<constraints::Constraint> constraint = (*it);
     assert(0);
   }
@@ -525,7 +516,6 @@ TEST(ModelsModelNetwork, ModelNetworkBusDefineInstantiate) {
   ASSERT_EQ(nbCalc, 4);
   ASSERT_EQ(nbVar, 7);
 
-
   std::vector<ParameterModeler> parameters;
   bus->defineNonGenericParameters(parameters);
   ASSERT_TRUE(parameters.empty());
@@ -634,8 +624,7 @@ TEST(ModelsModelNetwork, ModelNetworkBusContainer) {
   bus3ItfIIDM->hasConnection(true);
 
   ModelNetwork* network = new ModelNetwork();
-  boost::shared_ptr<constraints::ConstraintsCollection> constraints =
-      constraints::ConstraintsCollectionFactory::newInstance("MyConstraintsCollection");
+  boost::shared_ptr<constraints::ConstraintsCollection> constraints = constraints::ConstraintsCollectionFactory::newInstance("MyConstraintsCollection");
   network->setTimeline(timeline::TimelineFactory::newInstance("Test"));
   network->setConstraints(constraints);
   shared_ptr<ModelVoltageLevel> vl = shared_ptr<ModelVoltageLevel>(new ModelVoltageLevel(vlItfIIDM));
@@ -731,9 +720,8 @@ TEST(ModelsModelNetwork, ModelNetworkBusContainer) {
   ASSERT_DOUBLE_EQUALS_DYNAWO(f3[0], 0.);
   ASSERT_DOUBLE_EQUALS_DYNAWO(f3[1], 0.);
 
-
   SparseMatrix smj;
-  int size = bus1->sizeY()+ bus2->sizeY() + bus3->sizeY();
+  int size = bus1->sizeY() + bus2->sizeY() + bus3->sizeY();
   smj.init(size, size);
   container.evalJt(smj, 1., 0);
   smj.changeCol();
@@ -766,7 +754,6 @@ TEST(ModelsModelNetwork, ModelNetworkBusContainer) {
   smjPrime.init(size, size);
   container.evalJtPrim(smjPrime, 0);
   ASSERT_EQ(smjPrime.nbElem(), 0);
-
 
   container.initRefIslands();
   ASSERT_EQ(bus1->getRefIslands(), 0);

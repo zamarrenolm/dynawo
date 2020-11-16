@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
 #include "DYDMacroConnection.h"
 #include "DYDMacroConnectionFactory.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 
@@ -35,6 +34,5 @@ TEST(APIDYDTest, MacroConnection) {
   ASSERT_EQ(connection->getFirstVariableId(), "var1");
   ASSERT_EQ(connection->getSecondVariableId(), "var2");
 }
-
 
 }  // namespace dynamicdata

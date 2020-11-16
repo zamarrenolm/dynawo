@@ -23,12 +23,12 @@
 #ifndef API_PAR_PARXMLHANDLER_H_
 #define API_PAR_PARXMLHANDLER_H_
 
+#include "PARParametersSet.h"
+#include "PARParametersSetCollection.h"
+
 #include <boost/shared_ptr.hpp>
 #include <xml/sax/parser/ComposableDocumentHandler.h>
 #include <xml/sax/parser/ComposableElementHandler.h>
-
-#include "PARParametersSetCollection.h"
-#include "PARParametersSet.h"
 
 namespace parameters {
 
@@ -37,8 +37,8 @@ namespace parameters {
  * @brief structure defining a parameter element inside a table
  */
 struct TableParameter {
-  std::string value;  ///< value of the parameter
-  std::string row;  ///< row of the parameter
+  std::string value;   ///< value of the parameter
+  std::string row;     ///< row of the parameter
   std::string column;  ///< column of the parameter
 };
 
@@ -52,12 +52,12 @@ class ParInTableHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Constructor
    * @param root_element complete name of the element read by the handler
    */
-  explicit ParInTableHandler(elementName_type const & root_element);
+  explicit ParInTableHandler(elementName_type const& root_element);
 
   /**
    * @brief default destructor
    */
-  ~ParInTableHandler() { }
+  ~ParInTableHandler() {}
 
   /**
    * @brief return the parameter in xml file
@@ -70,7 +70,7 @@ class ParInTableHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Called when the XML element opening tag is read
    * @param attributes attributes of the element
    */
-  void create(attributes_type const & attributes);
+  void create(attributes_type const& attributes);
 
  private:
   TableParameter par_;  ///< current parameter read
@@ -86,12 +86,12 @@ class ParTableHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Constructor
    * @param root_element complete name of the element read by the handler
    */
-  explicit ParTableHandler(elementName_type const & root_element);
+  explicit ParTableHandler(elementName_type const& root_element);
 
   /**
    * @brief default destructor
    */
-  ~ParTableHandler() { }
+  ~ParTableHandler() {}
 
   /**
    * @brief get the type of the current parTable
@@ -141,13 +141,13 @@ class ParTableHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Called when the XML element opening tag is read
    * @param attributes attributes of the element
    */
-  void create(attributes_type const & attributes);
+  void create(attributes_type const& attributes);
 
  private:
   ParInTableHandler parInTableHandler_;  ///< handler used to read parameter inside parTable element
-  std::vector<TableParameter> pars_;  ///< list of parameter of the parTable
-  std::string type_;  ///< type of the parTable (DOUBLE, INTEGER, BOOL,...)
-  std::string name_;  ///< name of the parTable
+  std::vector<TableParameter> pars_;     ///< list of parameter of the parTable
+  std::string type_;                     ///< type of the parTable (DOUBLE, INTEGER, BOOL,...)
+  std::string name_;                     ///< name of the parTable
 };
 
 /**
@@ -160,12 +160,12 @@ class ParHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Constructor
    * @param root_element complete name of the element read by the handler
    */
-  explicit ParHandler(elementName_type const & root_element);
+  explicit ParHandler(elementName_type const& root_element);
 
   /**
    * @brief default destructor
    */
-  ~ParHandler() { }
+  ~ParHandler() {}
 
   /**
    * @brief return the parameter read in xml file
@@ -178,7 +178,7 @@ class ParHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Called when the XML element opening tag is read
    * @param attributes attributes of the element
    */
-  void create(attributes_type const & attributes);
+  void create(attributes_type const& attributes);
 
  private:
   boost::shared_ptr<Parameter> parameter_;  ///< current parameter object
@@ -194,12 +194,12 @@ class RefHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Constructor
    * @param root_element complete name of the element read by the handler
    */
-  explicit RefHandler(elementName_type const & root_element);
+  explicit RefHandler(elementName_type const& root_element);
 
   /**
    * @brief default destructor
    */
-  ~RefHandler() { }
+  ~RefHandler() {}
 
   /**
    * @brief return the reference read in xml file
@@ -212,7 +212,7 @@ class RefHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Called when the XML element opening tag is read
    * @param attributes attributes of the element
    */
-  void create(attributes_type const & attributes);
+  void create(attributes_type const& attributes);
 
  private:
   boost::shared_ptr<Reference> referenceRead_;  ///< current reference object
@@ -228,12 +228,12 @@ class SetHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Constructor
    * @param root_element complete name of the element read by the handler
    */
-  explicit SetHandler(elementName_type const & root_element);
+  explicit SetHandler(elementName_type const& root_element);
 
   /**
    * @brief default destructor
    */
-  ~SetHandler() { }
+  ~SetHandler() {}
 
   /**
    * @brief return the set of parameters read in xml file
@@ -261,13 +261,13 @@ class SetHandler : public xml::sax::parser::ComposableElementHandler {
    * @brief Called when the XML element opening tag is read
    * @param attributes attributes of the element
    */
-  void create(attributes_type const & attributes);
+  void create(attributes_type const& attributes);
 
  private:
   boost::shared_ptr<ParametersSet> setRead_;  ///< current set of parameters object
-  ParHandler parHandler_;  ///< handler used to read par element
-  ParTableHandler parTableHandler_;  ///< handler used to read parTable element
-  RefHandler refHandler_;  ///< handler used to read reference element
+  ParHandler parHandler_;                     ///< handler used to read par element
+  ParTableHandler parTableHandler_;           ///< handler used to read parTable element
+  RefHandler refHandler_;                     ///< handler used to read reference element
 };
 
 /**
@@ -302,7 +302,7 @@ class XmlHandler : public xml::sax::parser::ComposableDocumentHandler {
   void addSet();
 
  private:
-  SetHandler setHandler_;  ///< handler used to read a set of parameter element
+  SetHandler setHandler_;                                               ///< handler used to read a set of parameter element
   boost::shared_ptr<ParametersSetCollection> parametersSetCollection_;  ///< Parameters sets collection parsed
 };
 

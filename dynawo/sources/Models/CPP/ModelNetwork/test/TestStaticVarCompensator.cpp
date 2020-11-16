@@ -11,31 +11,29 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/StaticVarCompensatorBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/components/StaticVarCompensator.h>
-#include <IIDM/components/CurrentLimit.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/extensions/StandbyAutomaton.h>
-
-#include "DYNStaticVarCompensatorInterfaceIIDM.h"
-#include "DYNVoltageLevelInterfaceIIDM.h"
-#include "DYNCurrentLimitInterfaceIIDM.h"
 #include "DYNBusInterfaceIIDM.h"
-#include "DYNModelStaticVarCompensator.h"
-#include "DYNModelVoltageLevel.h"
+#include "DYNCurrentLimitInterfaceIIDM.h"
 #include "DYNModelBus.h"
 #include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
+#include "DYNModelStaticVarCompensator.h"
+#include "DYNModelVoltageLevel.h"
 #include "DYNSparseMatrix.h"
+#include "DYNStaticVarCompensatorInterfaceIIDM.h"
 #include "DYNVariable.h"
-
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
+
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/StaticVarCompensatorBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/CurrentLimit.h>
+#include <IIDM/components/StaticVarCompensator.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <IIDM/extensions/StandbyAutomaton.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -56,8 +54,6 @@ createModelStaticVarCompensator(bool open, bool initModel) {
   vlIIDM.add(bus1IIDM);
   vlIIDM.lowVoltageLimit(0.5);
   vlIIDM.highVoltageLimit(2.);
-
-
 
   IIDM::builders::StaticVarCompensatorBuilder svcb;
   svcb.p(3);
@@ -107,7 +103,6 @@ createModelStaticVarCompensator(bool open, bool initModel) {
   return std::make_pair(sc, vl);
 }
 
-
 TEST(ModelsModelNetwork, ModelNetworkStaticVarCompensatorInitialization) {
   shared_ptr<ModelStaticVarCompensator> svc = createModelStaticVarCompensator(false, false).first;
   ASSERT_EQ(svc->id(), "MyStaticVarCompensator");
@@ -140,7 +135,6 @@ TEST(ModelsModelNetwork, ModelNetworkStaticVarCompensatorCalculatedVariables) {
   ASSERT_DOUBLE_EQUALS_DYNAWO(svc->evalCalculatedVarI(ModelStaticVarCompensator::qNum_), 0.);
   svc->setConnected(CLOSED);
   ASSERT_THROW_DYNAWO(svc->evalCalculatedVarI(42), Error::MODELER, KeyError_t::UndefCalculatedVarI);
-
 
   std::vector<double> res(3, 0.);
   ASSERT_THROW_DYNAWO(svc->evalJCalculatedVarI(42, res), Error::MODELER, KeyError_t::UndefJCalculatedVarI);
@@ -199,14 +193,14 @@ TEST(ModelsModelNetwork, ModelNetworkStaticVarCompensatorDiscreteVariables) {
   ASSERT_EQ(z[ModelStaticVarCompensator::connectionStateNum_], OPEN);
   ASSERT_DOUBLE_EQUALS_DYNAWO(z[ModelStaticVarCompensator::modeNum_], StaticVarCompensatorInterface::RUNNING_Q);
 
-  g[7] =  ROOT_UP;
+  g[7] = ROOT_UP;
   z[ModelStaticVarCompensator::connectionStateNum_] = CLOSED;
   ASSERT_EQ(svc->evalZ(10.), NetworkComponent::STATE_CHANGE);
   ASSERT_EQ(svc->evalState(10.), NetworkComponent::STATE_CHANGE);
   ASSERT_DOUBLE_EQUALS_DYNAWO(z[ModelStaticVarCompensator::modeNum_], StaticVarCompensatorInterface::RUNNING_V);
 
-  g[7] =  ROOT_DOWN;
-  g[6] =  ROOT_UP;
+  g[7] = ROOT_DOWN;
+  g[6] = ROOT_UP;
   ASSERT_EQ(svc->evalZ(10.), NetworkComponent::NO_CHANGE);
   ASSERT_EQ(svc->evalState(10.), NetworkComponent::NO_CHANGE);
   ASSERT_DOUBLE_EQUALS_DYNAWO(z[ModelStaticVarCompensator::modeNum_], StaticVarCompensatorInterface::RUNNING_V);
@@ -217,7 +211,7 @@ TEST(ModelsModelNetwork, ModelNetworkStaticVarCompensatorDiscreteVariables) {
   for (size_t i = 0; i < nbG; ++i) {
     ASSERT_TRUE(gEquationIndex.find(i) != gEquationIndex.end());
   }
-  g[6] =  ROOT_DOWN;
+  g[6] = ROOT_DOWN;
   y[ModelStaticVarCompensator::piOutNum_] = 2;
   z[ModelStaticVarCompensator::modeNum_] = StaticVarCompensatorInterface::OFF;
   ASSERT_NO_THROW(svc->evalZ(20.));
@@ -344,7 +338,6 @@ TEST(ModelsModelNetwork, ModelNetworkStaticVarCompensatorDefineInstantiate) {
     ASSERT_EQ(definedVariables[i]->getType(), instantiatedVariables[i]->getType());
   }
 
-
   std::vector<ParameterModeler> parameters;
   svc->defineNonGenericParameters(parameters);
   ASSERT_EQ(parameters.size(), 0);
@@ -394,7 +387,7 @@ TEST(ModelsModelNetwork, ModelNetworkStaticVarCompensatorJt) {
   ASSERT_EQ(smj.Ap_[2], 4);
   ASSERT_EQ(smj.Ap_[3], 5);
   ASSERT_EQ(smj.Ap_[4], 7);
-  g[0] =  ROOT_UP;
+  g[0] = ROOT_UP;
   z[ModelStaticVarCompensator::connectionStateNum_] = CLOSED;
   svc->evalZ(10.);  // isRunning = true
   SparseMatrix smj2;

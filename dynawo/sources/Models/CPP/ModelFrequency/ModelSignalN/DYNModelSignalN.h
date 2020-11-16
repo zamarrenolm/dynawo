@@ -38,13 +38,13 @@ class ModelSignalNFactory : public SubModelFactory {
    * @brief default constructor
    *
    */
-  ModelSignalNFactory() { }
+  ModelSignalNFactory() {}
 
   /**
    * @brief default destructor
    *
    */
-  ~ModelSignalNFactory() { }
+  ~ModelSignalNFactory() {}
   /**
    * @brief ModelSignalN getter
    *
@@ -70,9 +70,7 @@ class ModelSignalN : public ModelCPP {
    * @brief define type of calculated variables
    *
    */
-  typedef enum {
-    nbCalculatedVars_ = 0
-  } CalculatedVars_t;
+  typedef enum { nbCalculatedVars_ = 0 } CalculatedVars_t;
   /**
    * @brief SignalN model default constructor
    *
@@ -85,7 +83,7 @@ class ModelSignalN : public ModelCPP {
    *
    *
    */
-  ~ModelSignalN() { }
+  ~ModelSignalN() {}
   /**
    * @brief SignalN model initialization
    * @param t0 : initial time of the simulation
@@ -117,7 +115,7 @@ class ModelSignalN : public ModelCPP {
    *
    * @param t Simulation instant
    */
-  void evalG(const double & t);
+  void evalG(const double& t);
   /**
    * @brief SignalN discrete variables evaluation
    *
@@ -126,7 +124,7 @@ class ModelSignalN : public ModelCPP {
    *
    * @param t Simulation instant
    */
-  void evalZ(const double & t);
+  void evalZ(const double& t);
   /**
    * @brief set the silent flag for discrete variables
    * @param silentZTable flag table
@@ -140,7 +138,7 @@ class ModelSignalN : public ModelCPP {
    * @param[in] t Simulation instant
    * @return mode change type value
    */
-  modeChangeType_t evalMode(const double &t);
+  modeChangeType_t evalMode(const double& t);
   /**
    * @brief SignalN transposed jacobian evaluation
    *
@@ -151,7 +149,7 @@ class ModelSignalN : public ModelCPP {
    * @param jt jacobian matrix to fullfill
    * @param rowOffset offset to use to identify the row where data should be added
    */
-  void evalJt(const double &t, const double & cj, SparseMatrix& jt, const int& rowOffset);
+  void evalJt(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset);
   /**
    * @brief  SignalN transposed jacobian evaluation
    *
@@ -162,7 +160,7 @@ class ModelSignalN : public ModelCPP {
    * @param jt jacobian matrix to fullfill
    * @param rowOffset offset to use to identify the row where data should be added
    */
-  void evalJtPrim(const double &t, const double & cj, SparseMatrix& jt, const int& rowOffset);
+  void evalJtPrim(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset);
   /**
    * @brief calculate calculated variables
    */
@@ -176,7 +174,8 @@ class ModelSignalN : public ModelCPP {
   /**
    * @copydoc ModelCPP::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc ModelCPP::getY0()
@@ -191,7 +190,8 @@ class ModelSignalN : public ModelCPP {
   /**
    * @copydoc ModelCPP::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   // output management
   /**
@@ -232,7 +232,7 @@ class ModelSignalN : public ModelCPP {
    * @param elements  Reference to elements' vector
    * @param mapElement Map associating each element index in the elements vector to its name
    */
-  void defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement);
+  void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement);
   /**
    * @brief initialize variables of the model
    *
@@ -254,7 +254,8 @@ class ModelSignalN : public ModelCPP {
   /**
    * @copydoc ModelCPP::initializeStaticData()
    */
-  void initializeStaticData() { /* not needed */ }
+  void initializeStaticData() { /* not needed */
+  }
 
   /**
    * @brief initialize the model from data interface
@@ -271,12 +272,14 @@ class ModelSignalN : public ModelCPP {
   /**
    * @copydoc ModelCPP::setGequations()
    */
-  void setGequations() { /* not needed */ }
+  void setGequations() { /* not needed */
+  }
 
   /**
    * @copydoc ModelCPP::initParams()
    */
-  void initParams() { /* not needed */ }
+  void initParams() { /* not needed */
+  }
 
  private:
   /**
@@ -292,22 +295,22 @@ class ModelSignalN : public ModelCPP {
   void calculateInitialState();
 
  private:
-  static int col1stN_;  ///< offset to find the first row of the residual functions about n
-  static int col1stNGrp_;  ///< offset to find the first row of the residual functions about n for each generator
-  static int col1stTetaRef_;  ///< offset to find the first row of the residual functions about tetaRef
-  static int col1stAlphaSum_;  ///< offset to find the first row of the residual functions about alphaSum
-  static int col1stAlpha_;  ///< offset to find the first row of the residual functions about alpha
+  static int col1stN_;            ///< offset to find the first row of the residual functions about n
+  static int col1stNGrp_;         ///< offset to find the first row of the residual functions about n for each generator
+  static int col1stTetaRef_;      ///< offset to find the first row of the residual functions about tetaRef
+  static int col1stAlphaSum_;     ///< offset to find the first row of the residual functions about alphaSum
+  static int col1stAlpha_;        ///< offset to find the first row of the residual functions about alpha
   static int col1stAlphaSumGrp_;  ///< offset to find the first row of the residual functions about alphaSum for each generator
 
   bool firstState_;  ///< @b true if the initial state must be calculated
 
-  std::vector<int> numCCNode_;  ///< index of the network for each generator
-  std::vector<double> alphaSum0_;  ///< initial values for alphaSum
+  std::vector<int> numCCNode_;                            ///< index of the network for each generator
+  std::vector<double> alphaSum0_;                         ///< initial values for alphaSum
   boost::unordered_map<int, std::vector<int> > genByCC_;  ///< list of generators for each network
-  std::vector<int> numCCNodeOld_;  ///< save of the index of the network for each generator
+  std::vector<int> numCCNodeOld_;                         ///< save of the index of the network for each generator
 
-  int nbGen_;  ///< number of generators
-  int nbCC_;  ///< number of connected components
+  int nbGen_;                    ///< number of generators
+  int nbCC_;                     ///< number of connected components
   std::vector<int> indexAlpha_;  ///< index for each alpha inside the local buffer
 };
 

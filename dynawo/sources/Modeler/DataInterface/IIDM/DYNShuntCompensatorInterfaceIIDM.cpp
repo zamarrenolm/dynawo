@@ -20,36 +20,35 @@
  */
 //======================================================================
 
-#include <IIDM/components/ShuntCompensator.h>
-
 #include "DYNShuntCompensatorInterfaceIIDM.h"
 
-using std::string;
+#include <IIDM/components/ShuntCompensator.h>
+
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 
-ShuntCompensatorInterfaceIIDM::~ShuntCompensatorInterfaceIIDM() {
-}
+ShuntCompensatorInterfaceIIDM::~ShuntCompensatorInterfaceIIDM() {}
 
 ShuntCompensatorInterfaceIIDM::ShuntCompensatorInterfaceIIDM(IIDM::ShuntCompensator& shunt) :
-InjectorInterfaceIIDM<IIDM::ShuntCompensator>(shunt, shunt.id()),
-shuntCompensatorIIDM_(shunt) {
+    InjectorInterfaceIIDM<IIDM::ShuntCompensator>(shunt, shunt.id()),
+    shuntCompensatorIIDM_(shunt) {
   setType(ComponentInterface::SHUNT);
   stateVariables_.resize(3);
-  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);  // Q
-  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);   // connectionState
-  stateVariables_[VAR_CURRENTSECTION] = StateVariable("currentSection", StateVariable::INT);   // currentSection
+  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);                         // Q
+  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);                    // connectionState
+  stateVariables_[VAR_CURRENTSECTION] = StateVariable("currentSection", StateVariable::INT);  // currentSection
 }
 
 int
 ShuntCompensatorInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "currentSection" )
+  if (varName == "currentSection")
     index = VAR_CURRENTSECTION;
-  else if ( varName == "q" )
+  else if (varName == "q")
     index = VAR_Q;
-  else if ( varName == "state" )
+  else if (varName == "state")
     index = VAR_STATE;
   return index;
 }

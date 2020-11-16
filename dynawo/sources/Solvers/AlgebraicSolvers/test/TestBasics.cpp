@@ -17,50 +17,49 @@
  *
  */
 
-#include <fstream>
-#include <cmath>
-
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/algorithm/string/split.hpp>
-
-#include <kinsol/kinsol.h>
-#include <sunlinsol/sunlinsol_klu.h>
-#include <sundials/sundials_types.h>
-#include <sundials/sundials_math.h>
-#include <sundials/sundials_sparse.h>
-#include <nvector/nvector_serial.h>
-
-#include "gtest_dynawo.h"
 #include "DYNCommon.h"
-#include "DYNSolverKINCommon.h"
-#include "DYNSolverKINEuler.h"
-#include "DYNSolverKINAlgRestoration.h"
-#include "DYNModeler.h"
-#include "DYNModel.h"
-#include "DYNModelMulti.h"
 #include "DYNCompiler.h"
 #include "DYNDynamicData.h"
 #include "DYNExecUtils.h"
+#include "DYNModel.h"
+#include "DYNModelMulti.h"
+#include "DYNModeler.h"
+#include "DYNSolverKINAlgRestoration.h"
+#include "DYNSolverKINCommon.h"
+#include "DYNSolverKINEuler.h"
 #include "TLTimelineFactory.h"
+#include "gtest_dynawo.h"
+
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/filesystem.hpp>
+#include <cmath>
+#include <fstream>
+#include <kinsol/kinsol.h>
+#include <nvector/nvector_serial.h>
+#include <sundials/sundials_math.h>
+#include <sundials/sundials_sparse.h>
+#include <sundials/sundials_types.h>
+#include <sunlinsol/sunlinsol_klu.h>
 
 namespace DYN {
 
-boost::shared_ptr<Model> initModelFromDyd(std::string dydFileName) {
+boost::shared_ptr<Model>
+initModelFromDyd(std::string dydFileName) {
   // DYD
   boost::shared_ptr<DynamicData> dyd(new DynamicData());
-  std::vector <std::string> fileNames;
+  std::vector<std::string> fileNames;
   fileNames.push_back(dydFileName);
   dyd->initFromDydFiles(fileNames);
 
   bool preCompiledUseStandardModels = false;
-  std::vector <UserDefinedDirectory> precompiledModelsDirsAbsolute;
+  std::vector<UserDefinedDirectory> precompiledModelsDirsAbsolute;
   std::string preCompiledModelsExtension = sharedLibraryExtension();
   bool modelicaUseStandardModels = false;
 
-  std::vector <UserDefinedDirectory> modelicaModelsDirsAbsolute;
+  std::vector<UserDefinedDirectory> modelicaModelsDirsAbsolute;
   UserDefinedDirectory modelicaModel;
-  modelicaModel.path = getEnvVar("PWD") +"/dyd/";
+  modelicaModel.path = getEnvVar("PWD") + "/dyd/";
   modelicaModel.isRecursive = false;
   modelicaModelsDirsAbsolute.push_back(modelicaModel);
   std::string modelicaModelsExtension = ".mo";
@@ -73,16 +72,8 @@ boost::shared_ptr<Model> initModelFromDyd(std::string dydFileName) {
 
   const bool rmModels = true;
   boost::unordered_set<boost::filesystem::path> pathsToIgnore;
-  Compiler cf = Compiler(dyd, preCompiledUseStandardModels,
-            precompiledModelsDirsAbsolute,
-            preCompiledModelsExtension,
-            modelicaUseStandardModels,
-            modelicaModelsDirsAbsolute,
-            modelicaModelsExtension,
-            pathsToIgnore,
-            additionalHeaderFiles,
-            rmModels,
-            getEnvVar("PWD") +"/dyd");
+  Compiler cf = Compiler(dyd, preCompiledUseStandardModels, precompiledModelsDirsAbsolute, preCompiledModelsExtension, modelicaUseStandardModels,
+                         modelicaModelsDirsAbsolute, modelicaModelsExtension, pathsToIgnore, additionalHeaderFiles, rmModels, getEnvVar("PWD") + "/dyd");
   cf.compile();  // modelOnly = false, compilation and parameter linking
   cf.concatConnects();
   cf.concatRefs();

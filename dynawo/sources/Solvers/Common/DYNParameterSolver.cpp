@@ -26,15 +26,11 @@ using std::string;
 namespace DYN {
 
 ParameterSolver::ParameterSolver(const string& name, const typeVarC_t& valueType, bool mandatory) :
-  ParameterCommon(name, valueType, mandatory),
-  value_(boost::none) {
-}
+    ParameterCommon(name, valueType, mandatory),
+    value_(boost::none) {}
 
 #ifndef LANG_CXX11
-ParameterSolver::ParameterSolver(const ParameterSolver& parameter) :
-    ParameterCommon(parameter),
-    value_(parameter.value_) {
-}
+ParameterSolver::ParameterSolver(const ParameterSolver& parameter) : ParameterCommon(parameter), value_(parameter.value_) {}
 #endif
 
 double
@@ -42,7 +38,7 @@ ParameterSolver::getDoubleValue() const {
   if (getValueType() == VAR_TYPE_DOUBLE)
     return getValue<double>();
   else if (getValueType() == VAR_TYPE_INT)
-    return static_cast<double> (getValue<int>());
+    return static_cast<double>(getValue<int>());
   else if (getValueType() == VAR_TYPE_BOOL)
     return fromNativeBool(getValue<bool>());
   else

@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYDMacroConnectorFactory.h"
 #include "DYDMacroConnector.h"
+#include "DYDMacroConnectorFactory.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 
@@ -62,6 +61,5 @@ TEST(APIDYDTest, MacroConnector) {
     ++index2;
   }
 }
-
 
 }  // namespace dynamicdata

@@ -16,19 +16,16 @@
  * @brief Unit tests for API_DYD
  *
  */
-#include "gtest_dynawo.h"
-
-#include "DYDXmlImporter.h"
+#include "DYDMacroStaticReference.h"
+#include "DYDMacroStaticReferenceFactory.h"
+#include "DYDStaticRef.h"
 #include "DYDXmlExporter.h"
 #include "DYDXmlHandler.h"
-
-#include "DYDMacroStaticReferenceFactory.h"
-#include "DYDMacroStaticReference.h"
-#include "DYDStaticRef.h"
+#include "DYDXmlImporter.h"
 #include "DYNExecUtils.h"
 #include "DYNMacrosMessage.h"
-
 #include "TestUtil.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 
@@ -84,13 +81,13 @@ TEST(APIDYDTest, ImporterStream) {
     xsdValidation = true;
   }
   std::istringstream goodInputStream(
-    "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>"
-    "<dyn:dynamicModelsArchitecture xmlns:dyn=\"http://www.rte-france.com/dynawo\">"
-    "<dyn:blackBoxModel id=\"BlackBoxModel\" staticId=\"bbmId\" lib=\"model\" parFile=\"parFile.par\" parId=\"1\">"
-    "<dyn:staticRef var=\"M2S_P_value\" staticVar=\"p\"/>"
-    "</dyn:blackBoxModel>"
-    "<dyn:connect id1=\"BlackBoxModel\" var1=\"variable\" id2=\"externalModel\" var2=\"externalModel_variable\"/>"
-    "</dyn:dynamicModelsArchitecture>");
+      "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>"
+      "<dyn:dynamicModelsArchitecture xmlns:dyn=\"http://www.rte-france.com/dynawo\">"
+      "<dyn:blackBoxModel id=\"BlackBoxModel\" staticId=\"bbmId\" lib=\"model\" parFile=\"parFile.par\" parId=\"1\">"
+      "<dyn:staticRef var=\"M2S_P_value\" staticVar=\"p\"/>"
+      "</dyn:blackBoxModel>"
+      "<dyn:connect id1=\"BlackBoxModel\" var1=\"variable\" id2=\"externalModel\" var2=\"externalModel_variable\"/>"
+      "</dyn:dynamicModelsArchitecture>");
   std::istream goodStream(goodInputStream.rdbuf());
   ASSERT_NO_THROW(importer.importFromStream(goodStream, dydHandler, parser, xsdValidation));
 }

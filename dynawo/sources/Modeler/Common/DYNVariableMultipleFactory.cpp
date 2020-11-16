@@ -17,16 +17,17 @@
  * @brief Dynawo Multiple variable : factory file
  */
 #include "DYNVariableMultipleFactory.h"
+
 #include "DYNVariableMultiple.h"
 
-using std::string;
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 
 shared_ptr<VariableMultiple>
 VariableMultipleFactory::create(const string& name, const string& cardinalityName, const typeVar_t& type, bool isState, bool negated) {
-  return shared_ptr<VariableMultiple> (new VariableMultiple(name, cardinalityName, type, isState, negated));
+  return shared_ptr<VariableMultiple>(new VariableMultiple(name, cardinalityName, type, isState, negated));
 }
 
 }  // namespace DYN

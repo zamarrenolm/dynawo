@@ -17,20 +17,18 @@
  * @brief Dynawo curves collection XML exporter : implementation file
  *
  */
-#include <fstream>
-#include <sstream>
+#include "CRVXmlExporter.h"
 
-#include <xml/sax/formatter/AttributeList.h>
-#include <xml/sax/formatter/Formatter.h>
-
+#include "CRVCurve.h"
+#include "CRVCurvesCollection.h"
+#include "CRVPoint.h"
+#include "DYNCommon.h"
 #include "DYNMacrosMessage.h"
 
-#include "DYNCommon.h"
-
-#include "CRVCurvesCollection.h"
-#include "CRVCurve.h"
-#include "CRVPoint.h"
-#include "CRVXmlExporter.h"
+#include <fstream>
+#include <sstream>
+#include <xml/sax/formatter/AttributeList.h>
+#include <xml/sax/formatter/Formatter.h>
 
 using std::fstream;
 using std::ostream;
@@ -62,27 +60,23 @@ XmlExporter::exportToStream(const boost::shared_ptr<CurvesCollection>& curves, o
   AttributeList attrs;
   formatter->startElement("curvesOutput", attrs);
 
-  for (CurvesCollection::iterator itCurve = curves->begin();
-          itCurve != curves->end();
-          ++itCurve) {
+  for (CurvesCollection::iterator itCurve = curves->begin(); itCurve != curves->end(); ++itCurve) {
     if ((*itCurve)->getAvailable()) {
       attrs.clear();
       attrs.add("model", (*itCurve)->getModelName());
       attrs.add("variable", (*itCurve)->getVariable());
       formatter->startElement("curve", attrs);
-      for (Curve::const_iterator itPoint = (*itCurve)->cbegin();
-              itPoint != (*itCurve)->cend();
-              ++itPoint) {
+      for (Curve::const_iterator itPoint = (*itCurve)->cbegin(); itPoint != (*itCurve)->cend(); ++itPoint) {
         attrs.clear();
         attrs.add("time", DYN::double2String((*itPoint)->getTime()));
         attrs.add("value", DYN::double2String((*itPoint)->getValue()));
         formatter->startElement("point", attrs);
-        formatter->endElement();   // point
+        formatter->endElement();  // point
       }
-      formatter->endElement();   // curve
+      formatter->endElement();  // curve
     }
   }
-  formatter->endElement();   // curvesOutput
+  formatter->endElement();  // curvesOutput
   formatter->endDocument();
 }
 

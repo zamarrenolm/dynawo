@@ -20,9 +20,9 @@
 #ifndef API_FS_FSFINALSTATECOLLECTIONFACTORY_H_
 #define API_FS_FSFINALSTATECOLLECTIONFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "FSFinalStateCollection.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace finalState {
 class FinalStateCollectionFactory {

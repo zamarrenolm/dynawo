@@ -14,10 +14,9 @@
 #ifndef API_CRT_CRTCRITERIACOLLECTIONFACTORY_H_
 #define API_CRT_CRTCRITERIACOLLECTIONFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "CRTCriteriaCollection.h"
 
+#include <boost/shared_ptr.hpp>
 
 namespace criteria {
 /**

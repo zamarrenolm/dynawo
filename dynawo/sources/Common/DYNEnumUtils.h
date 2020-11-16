@@ -20,9 +20,9 @@
 #ifndef COMMON_DYNENUMUTILS_H_
 #define COMMON_DYNENUMUTILS_H_
 
-#include <string>
-
 #include "DYNCommon.h"
+
+#include <string>
 
 namespace DYN {
 
@@ -31,30 +31,30 @@ namespace DYN {
  */
 typedef enum {
   UNDEFINED_PROPERTY = 0,  ///< Undefined type
-  DIFFERENTIAL = 1,  ///< The continuous variable is a differential variable
-  ALGEBRAIC = -1,  ///< The continuous variable is an algebraic variable
-  EXTERNAL = -2,  ///< The continuous variable is an external variable
-  OPTIONAL_EXTERNAL = -3  ///< The continuous variable is an optional external variable
+  DIFFERENTIAL = 1,        ///< The continuous variable is a differential variable
+  ALGEBRAIC = -1,          ///< The continuous variable is an algebraic variable
+  EXTERNAL = -2,           ///< The continuous variable is an external variable
+  OPTIONAL_EXTERNAL = -3   ///< The continuous variable is an optional external variable
 } propertyContinuousVar_t;
 
 /**
  * @brief type definition for function's property
  */
 typedef enum {
-  UNDEFINED_EQ = 0,  ///< Undefined type
+  UNDEFINED_EQ = 0,     ///< Undefined type
   DIFFERENTIAL_EQ = 1,  ///< The residual function is a differential equation
-  ALGEBRAIC_EQ = -1  ///< The residual function is an algebraic equation
+  ALGEBRAIC_EQ = -1     ///< The residual function is an algebraic equation
 } propertyF_t;
 
 /**
  * @brief type definition for variable
  */
 typedef enum {
-  DISCRETE,  ///< The variable is a discrete real variable
-  CONTINUOUS,  ///< The variable is a continuous variable
-  FLOW,  ///< The variable is a flow variable
-  INTEGER,  ///< The variable is an integer variable
-  BOOLEAN,  ///< The variable is a boolean variable
+  DISCRETE,       ///< The variable is a discrete real variable
+  CONTINUOUS,     ///< The variable is a continuous variable
+  FLOW,           ///< The variable is a flow variable
+  INTEGER,        ///< The variable is an integer variable
+  BOOLEAN,        ///< The variable is a boolean variable
   UNDEFINED_TYPE  ///< Undefined type
 } typeVar_t;
 
@@ -65,8 +65,8 @@ typedef enum {
  */
 typedef enum {
   EXTERNAL_PARAMETER,  ///< The parameter only relies on external values
-  SHARED_PARAMETER,  ///< The parameter has a default internal value, which may be externally updated
-  INTERNAL_PARAMETER  ///< The parameter only computes its own value internally
+  SHARED_PARAMETER,    ///< The parameter has a default internal value, which may be externally updated
+  INTERNAL_PARAMETER   ///< The parameter only computes its own value internally
 } parameterScope_t;
 
 /**
@@ -76,9 +76,9 @@ typedef enum {
  * will change the simulation tool behavior.
  */
 typedef enum {
-  NO_MODE = 0,  ///< No function change
-  DIFFERENTIAL_MODE,  ///< Mode change on a differential function
-  ALGEBRAIC_MODE,  ///< Mode change on an algebraic function not requiring a Jacobian update
+  NO_MODE = 0,             ///< No function change
+  DIFFERENTIAL_MODE,       ///< Mode change on a differential function
+  ALGEBRAIC_MODE,          ///< Mode change on an algebraic function not requiring a Jacobian update
   ALGEBRAIC_J_UPDATE_MODE  ///< Mode change on an algebraic function requiring a Jacobian update
 } modeChangeType_t;
 
@@ -93,9 +93,9 @@ std::string modeChangeType2Str(const modeChangeType_t& modeChangeType);
  * @brief type definition for state of G (zero crossing? )
  */
 typedef int state_g;
-static const state_g ROOT_UP = 1;  ///< ROOT is activated
+static const state_g ROOT_UP = 1;     ///< ROOT is activated
 static const state_g ROOT_DOWN = -1;  ///< ROOT is unactivated
-static const state_g NO_ROOT = 0;  ///< State of the root is undefined
+static const state_g NO_ROOT = 0;     ///< State of the root is undefined
 
 /**
  * @brief return the property of variable(differential, algebraic, or external)

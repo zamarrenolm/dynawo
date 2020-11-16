@@ -21,10 +21,7 @@
 
 namespace curves {
 
-Point::Point(const double& time, const double& value) :
-time_(time),
-value_(value) {
-}
+Point::Point(const double& time, const double& value) : time_(time), value_(value) {}
 
 void
 Point::setTime(const double& time) {

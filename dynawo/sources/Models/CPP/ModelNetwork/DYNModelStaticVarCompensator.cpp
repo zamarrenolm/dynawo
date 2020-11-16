@@ -19,37 +19,37 @@
  *
  */
 //======================================================================
-#include <iostream>
-
 #include "DYNModelStaticVarCompensator.h"
 
-#include "DYNModelBus.h"
-#include "DYNTrace.h"
-#include "DYNSparseMatrix.h"
-#include "DYNVariableForModel.h"
-#include "DYNParameter.h"
-#include "DYNDerivative.h"
 #include "DYNBusInterface.h"
+#include "DYNDerivative.h"
+#include "DYNMessageTimeline.h"
+#include "DYNModelBus.h"
 #include "DYNModelConstants.h"
 #include "DYNModelNetwork.h"
-#include "DYNMessageTimeline.h"
-#include "DYNStaticVarCompensatorInterface.h"
 #include "DYNModelVoltageLevel.h"
+#include "DYNParameter.h"
+#include "DYNSparseMatrix.h"
+#include "DYNStaticVarCompensatorInterface.h"
+#include "DYNTrace.h"
+#include "DYNVariableForModel.h"
+
+#include <iostream>
 
 using boost::shared_ptr;
-using std::vector;
 using std::map;
 using std::string;
+using std::vector;
 
 namespace DYN {
 
 ModelStaticVarCompensator::ModelStaticVarCompensator(const shared_ptr<StaticVarCompensatorInterface>& svc) :
-NetworkComponent(svc->getID()),
-Statism_(0.01),
-kG_(4),
-kP_(1),
-Ti_(0.005),
-stateModified_(false) {
+    NetworkComponent(svc->getID()),
+    Statism_(0.01),
+    kG_(4),
+    kP_(1),
+    Ti_(0.005),
+    stateModified_(false) {
   // init data
   vNom_ = svc->getVNom();
   vSetPoint_ = svc->getVSetPoint();
@@ -98,7 +98,7 @@ stateModified_(false) {
     if (!doubleIsZero(U0)) {
       bTotal0 = -1. * Q0 / (U0 * U0);  // in order to have the same convention as a shunt : b < 0 when Q > 0 (network convention)
       ir0_ = Q0 * ui0 / (ur0 * ur0 + ui0 * ui0);
-      ii0_ = - Q0 * ur0 / (ur0 * ur0 + ui0 * ui0);
+      ii0_ = -Q0 * ur0 / (ur0 * ur0 + ui0 * ui0);
     }
 
     bSvc0_ = bTotal0;
@@ -106,7 +106,7 @@ stateModified_(false) {
     piOut0_ = bSvc0_;
     feedBack0_ = bSvc0_;
     feedBackPrim0_ = 0.;
-    vSetPoint_ = - Statism_ * Q0 * vNom_ + U0 * vNom_;  /// adapt vSetPoint to the model
+    vSetPoint_ = -Statism_ * Q0 * vNom_ + U0 * vNom_;  /// adapt vSetPoint to the model
   }
   piInYNum_ = 0;
   piOutYNum_ = 0;
@@ -139,9 +139,9 @@ ModelStaticVarCompensator::initSize() {
 
 void
 ModelStaticVarCompensator::evalYType() {
-  yType_[piInNum_] = ALGEBRAIC;  // piIn
-  yType_[piOutNum_] = ALGEBRAIC;  // piOut
-  yType_[bSvcNum_] = ALGEBRAIC;  // bSvc
+  yType_[piInNum_] = ALGEBRAIC;         // piIn
+  yType_[piOutNum_] = ALGEBRAIC;        // piOut
+  yType_[bSvcNum_] = ALGEBRAIC;         // bSvc
   yType_[feedBackNum_] = DIFFERENTIAL;  // feedBack
 }
 
@@ -210,7 +210,7 @@ ModelStaticVarCompensator::setFequations(map<int, string>& fEquationIndex) {
   fEquationIndex[index] = string("KP * Ti * d(feedBack)/dt - bSvc + feedBack localModel:").append(id());
   ++index;
 
-  assert(fEquationIndex.size() == (unsigned int) sizeF() && "ModelStaticVarCompensator:fEquationIndex.size() != f_.size()");
+  assert(fEquationIndex.size() == (unsigned int)sizeF() && "ModelStaticVarCompensator:fEquationIndex.size() != f_.size()");
 }
 
 void
@@ -229,7 +229,7 @@ ModelStaticVarCompensator::init(int& yNum) {
 
 double
 ModelStaticVarCompensator::Q() const {
-  return - bSvc() * modelBus_->getCurrentU(ModelBus::U2PuType_);
+  return -bSvc() * modelBus_->getCurrentU(ModelBus::U2PuType_);
 }
 
 double
@@ -279,7 +279,7 @@ ModelStaticVarCompensator::ir(const double& ui) const {
     ir = ir0_;
   } else {
     if ((isRunning_ || isStandBy_) && isConnected()) {
-      ir = - bSvc() * ui;
+      ir = -bSvc() * ui;
     }
   }
   return ir;
@@ -307,7 +307,7 @@ double
 ModelStaticVarCompensator::ir_dUi() const {
   double ir_dUi = 0.;
   if ((isRunning_ || isStandBy_) && isConnected()) {
-    ir_dUi = - bSvc();
+    ir_dUi = -bSvc();
   }
   return ir_dUi;
 }
@@ -316,7 +316,7 @@ double
 ModelStaticVarCompensator::ir_dBSvc(const double& ui) const {
   double ir_dBSvc = 0.;
   if ((isRunning_ || isStandBy_) && isConnected()) {
-    ir_dBSvc = - ui;
+    ir_dBSvc = -ui;
   }
   return ir_dBSvc;
 }
@@ -364,8 +364,8 @@ ModelStaticVarCompensator::evalJt(SparseMatrix& jt, const double& cj, const int&
     double termPiIn = 1.;
     double termUr = kG_ * ur * pow(U, -1) - kG_ * Statism_ * Q_dUr / SNREF;
     double termUi = kG_ * ui * pow(U, -1) - kG_ * Statism_ * Q_dUi / SNREF;
-    double Q_bSvc = - U * U * SNREF;
-    double termSvc = -kG_ * Statism_ * Q_bSvc /SNREF;
+    double Q_bSvc = -U * U * SNREF;
+    double termSvc = -kG_ * Statism_ * Q_bSvc / SNREF;
 
     jt.addTerm(piInYNum_ + rowOffset, termPiIn);
     jt.addTerm(urYNum + rowOffset, termUr);
@@ -476,7 +476,7 @@ ModelStaticVarCompensator::evalZ(const double& /*t*/) {
     stateModified_ = true;
     setConnected(currState);
   }
-  return (stateModified_)?NetworkComponent::STATE_CHANGE:NetworkComponent::NO_CHANGE;
+  return (stateModified_) ? NetworkComponent::STATE_CHANGE : NetworkComponent::NO_CHANGE;
 }
 
 void
@@ -486,18 +486,21 @@ ModelStaticVarCompensator::collectSilentZ(bool* silentZTable) {
 
 void
 ModelStaticVarCompensator::evalG(const double& /*t*/) {
-  g_[0] = (static_cast<StaticVarCompensatorInterface::RegulationMode_t>(static_cast<int>(z_[modeNum_])) == StaticVarCompensatorInterface::RUNNING_V
-      && !isRunning_) ? ROOT_UP : ROOT_DOWN;
-  g_[1] = (static_cast<StaticVarCompensatorInterface::RegulationMode_t>(static_cast<int>(z_[modeNum_])) == StaticVarCompensatorInterface::OFF
-      && isRunning_) ? ROOT_UP : ROOT_DOWN;
+  g_[0] =
+      (static_cast<StaticVarCompensatorInterface::RegulationMode_t>(static_cast<int>(z_[modeNum_])) == StaticVarCompensatorInterface::RUNNING_V && !isRunning_)
+          ? ROOT_UP
+          : ROOT_DOWN;
+  g_[1] = (static_cast<StaticVarCompensatorInterface::RegulationMode_t>(static_cast<int>(z_[modeNum_])) == StaticVarCompensatorInterface::OFF && isRunning_)
+              ? ROOT_UP
+              : ROOT_DOWN;
 
   double b = piOut();
   bool bIsbMin = doubleEquals(b, bMin_);
   bool bIsbMax = doubleEquals(b, bMax_);
   g_[2] = (!bIsbMin && (bMin_ - b > 0.)) ? ROOT_UP : ROOT_DOWN;  // B < BMin
   g_[3] = (!bIsbMax && (b - bMax_ > 0.)) ? ROOT_UP : ROOT_DOWN;  // B > BMax
-  g_[4] = (bIsbMin || (b - bMin_ > 0.)) ? ROOT_UP : ROOT_DOWN;  // B >= BMin
-  g_[5] = (bIsbMax || (bMax_ - b > 0.)) ? ROOT_UP : ROOT_DOWN;  // B <= BMax
+  g_[4] = (bIsbMin || (b - bMin_ > 0.)) ? ROOT_UP : ROOT_DOWN;   // B >= BMin
+  g_[5] = (bIsbMax || (bMax_ - b > 0.)) ? ROOT_UP : ROOT_DOWN;   // B <= BMax
 
   if (hasStandByAutomaton_) {
     double v = modelBus_->getCurrentU(ModelBus::UType_);
@@ -509,65 +512,64 @@ ModelStaticVarCompensator::evalG(const double& /*t*/) {
 void
 ModelStaticVarCompensator::evalCalculatedVars() {
   calculatedVars_[pNum_] = 0.;
-  calculatedVars_[qNum_] = (isConnected())?-Q():0.;
+  calculatedVars_[qNum_] = (isConnected()) ? -Q() : 0.;
 }
 
 void
 ModelStaticVarCompensator::getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, vector<int>& numVars) const {
   switch (numCalculatedVar) {
-    case pNum_:
-      break;
-    case qNum_: {
-      if (isConnected()) {
-        int urYNum = modelBus_->urYNum();
-        int uiYNum = modelBus_->uiYNum();
-        numVars.push_back(urYNum);
-        numVars.push_back(uiYNum);
-        numVars.push_back(bSvcYNum_);
-      }
-      break;
+  case pNum_:
+    break;
+  case qNum_: {
+    if (isConnected()) {
+      int urYNum = modelBus_->urYNum();
+      int uiYNum = modelBus_->uiYNum();
+      numVars.push_back(urYNum);
+      numVars.push_back(uiYNum);
+      numVars.push_back(bSvcYNum_);
     }
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
-
 
 void
 ModelStaticVarCompensator::evalJCalculatedVarI(unsigned numCalculatedVar, vector<double>& res) const {
   switch (numCalculatedVar) {
-    case pNum_:
-      break;
-    case qNum_: {
-      if (isConnected()) {
-        double ur = modelBus_->ur();
-        double ui = modelBus_->ui();
-        double b = bSvc();
-        // QProduced =  b * (ur * ur + ui * ui * ui)
-        res[0] = b * 2. * ur;  // @Q/@Ur
-        res[1] = b * 2. * ui;  // @Q/@Ui
-        res[2] = (ur * ur + ui * ui);  // @Q/@BSvc
-      }
-      break;
+  case pNum_:
+    break;
+  case qNum_: {
+    if (isConnected()) {
+      double ur = modelBus_->ur();
+      double ui = modelBus_->ui();
+      double b = bSvc();
+      // QProduced =  b * (ur * ur + ui * ui * ui)
+      res[0] = b * 2. * ur;          // @Q/@Ur
+      res[1] = b * 2. * ui;          // @Q/@Ui
+      res[2] = (ur * ur + ui * ui);  // @Q/@BSvc
     }
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
 double
 ModelStaticVarCompensator::evalCalculatedVarI(unsigned numCalculatedVar) const {
   switch (numCalculatedVar) {
-    case pNum_:
-      return 0.;
-    case qNum_: {
-      if (isConnected()) {
-        return (isConnected())?-Q():0.;
-      }
-      break;
+  case pNum_:
+    return 0.;
+  case qNum_: {
+    if (isConnected()) {
+      return (isConnected()) ? -Q() : 0.;
     }
-    default:
-      throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  default:
+    throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
   }
   return 0.;
 }
@@ -586,7 +588,7 @@ ModelStaticVarCompensator::setGequations(map<int, string>& gEquationIndex) {
     gEquationIndex[7] = "U > UMax";
   }
 
-  assert(gEquationIndex.size() == (unsigned int) sizeG() && "Model Static Var Compensator: gEquationIndex.size() != g_.size()");
+  assert(gEquationIndex.size() == (unsigned int)sizeG() && "Model Static Var Compensator: gEquationIndex.size() != g_.size()");
 }
 
 void
@@ -650,7 +652,7 @@ ModelStaticVarCompensator::defineVariables(vector<shared_ptr<Variable> >& variab
 }
 
 void
-ModelStaticVarCompensator::defineElements(vector<Element> &elements, map<string, int>& mapElement) {
+ModelStaticVarCompensator::defineElements(vector<Element>& elements, map<string, int>& mapElement) {
   string svcName = id_;
   // ======= STATE VARIABLES ========
   addElementWithValue(svcName + string("_piIn"), elements, mapElement);

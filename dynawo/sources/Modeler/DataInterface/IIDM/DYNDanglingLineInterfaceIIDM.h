@@ -22,10 +22,10 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNDANGLINGLINEINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNDANGLINGLINEINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNDanglingLineInterface.h"
 #include "DYNInjectorInterfaceIIDM.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class DanglingLine;
@@ -38,11 +38,7 @@ class DanglingLineInterfaceIIDM : public DanglingLineInterface, public InjectorI
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_P = 0,
-    VAR_Q,
-    VAR_STATE
-  } indexVar_t;
+  typedef enum { VAR_P = 0, VAR_Q, VAR_STATE } indexVar_t;
 
  public:
   /**
@@ -152,9 +148,9 @@ class DanglingLineInterfaceIIDM : public DanglingLineInterface, public InjectorI
   int getComponentVarIndex(const std::string& varName) const;
 
  private:
-  IIDM::DanglingLine& danglingLineIIDM_;  ///< reference to the iidm dangling line reference
+  IIDM::DanglingLine& danglingLineIIDM_;                                           ///< reference to the iidm dangling line reference
   std::vector<boost::shared_ptr<CurrentLimitInterface> > currentLimitInterfaces_;  ///< current limit interfaces
-};  ///< class for dangling line interface
+};                                                                                 ///< class for dangling line interface
 }  // namespace DYN
 
 #endif  // MODELER_DATAINTERFACE_IIDM_DYNDANGLINGLINEINTERFACEIIDM_H_

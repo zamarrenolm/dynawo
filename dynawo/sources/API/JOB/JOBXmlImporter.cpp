@@ -17,19 +17,18 @@
  * @brief Dynawo jobs collection XML importer : implementation file
  *
  */
-#include <fstream>
-
-#include <xml/sax/parser/ParserFactory.h>
-#include <xml/sax/parser/ParserException.h>
-
-#include "DYNMacrosMessage.h"
-
 #include "JOBXmlImporter.h"
-#include "JOBXmlHandler.h"
-#include "DYNExecUtils.h"
 
-using std::string;
+#include "DYNExecUtils.h"
+#include "DYNMacrosMessage.h"
+#include "JOBXmlHandler.h"
+
+#include <fstream>
+#include <xml/sax/parser/ParserException.h>
+#include <xml/sax/parser/ParserFactory.h>
+
 using boost::shared_ptr;
+using std::string;
 namespace parser = xml::sax::parser;
 
 namespace job {
@@ -47,7 +46,8 @@ XmlImporter::importFromFile(const string& fileName) const {
   }
 }
 
-boost::shared_ptr<JobsCollection> XmlImporter::importFromStream(std::istream& stream) const {
+boost::shared_ptr<JobsCollection>
+XmlImporter::importFromStream(std::istream& stream) const {
   XmlHandler jobsHandler;
   xml::sax::parser::ParserFactory parser_factory;
   xml::sax::parser::ParserPtr parser = parser_factory.createParser();

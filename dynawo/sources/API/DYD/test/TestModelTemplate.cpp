@@ -16,27 +16,24 @@
  * @brief Unit tests for API_DYD
  *
  */
-#include <map>
-
-#include <boost/shared_ptr.hpp>
-
+#include "DYDDynamicModelsCollectionFactory.h"
+#include "DYDIterators.h"
+#include "DYDMacroConnect.h"
+#include "DYDMacroConnectFactory.h"
+#include "DYDMacroStaticRef.h"
+#include "DYDMacroStaticRefFactory.h"
+#include "DYDModelTemplate.h"
+#include "DYDModelTemplateFactory.h"
+#include "DYDStaticRef.h"
+#include "DYDUnitDynamicModel.h"
+#include "DYDUnitDynamicModelFactory.h"
+#include "DYDXmlExporter.h"
+#include "DYDXmlImporter.h"
+#include "TestUtil.h"
 #include "gtest_dynawo.h"
 
-#include "DYDDynamicModelsCollectionFactory.h"
-#include "DYDModelTemplateFactory.h"
-#include "DYDModelTemplate.h"
-#include "DYDUnitDynamicModelFactory.h"
-#include "DYDUnitDynamicModel.h"
-#include "DYDMacroConnectFactory.h"
-#include "DYDMacroConnect.h"
-#include "DYDXmlImporter.h"
-#include "DYDXmlExporter.h"
-#include "DYDIterators.h"
-#include "DYDMacroStaticRefFactory.h"
-#include "DYDStaticRef.h"
-#include "DYDMacroStaticRef.h"
-
-#include "TestUtil.h"
+#include <boost/shared_ptr.hpp>
+#include <map>
 
 namespace dynamicdata {
 //-----------------------------------------------------
@@ -74,7 +71,6 @@ TEST(APIDYDTest, ModelTemplateCreate) {
 
   ASSERT_EQ(model->getInitConnectors().size(), 2);
 
-
   ASSERT_THROW_DYNAWO(model->addUnitDynamicModel(udm1), DYN::Error::API, DYN::KeyError_t::ModelIDNotUnique);  // component already exist
 
   ASSERT_EQ(model->getType(), Model::MODEL_TEMPLATE);
@@ -110,14 +106,14 @@ TEST(APIDYDTest, ModelTemplateBadConnectors) {
   model->addUnitDynamicModel(udm2);
 
   ASSERT_THROW_DYNAWO(model->addConnect("component1", "var1", "component3", "var2"), DYN::Error::API,
-          DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
+                      DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
   ASSERT_THROW_DYNAWO(model->addConnect("component3", "var1", "component2", "var2"), DYN::Error::API,
-          DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
+                      DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
 
   ASSERT_THROW_DYNAWO(model->addInitConnect("component1", "var1", "component3", "var2"), DYN::Error::API,
-          DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
+                      DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
   ASSERT_THROW_DYNAWO(model->addInitConnect("component3", "var1", "component2", "var2"), DYN::Error::API,
-          DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
+                      DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
 }
 
 TEST(APIDYDTest, ModelTemplateWithMacroConnect) {
@@ -145,7 +141,7 @@ TEST(APIDYDTest, ModelTemplateWithMacroConnect) {
   std::map<std::string, boost::shared_ptr<MacroConnect> > macroConnects = model->getMacroConnects();
   ASSERT_EQ(macroConnects.size(), 2);
 
-  std::map<std::string, boost::shared_ptr<MacroConnect > >::const_iterator iter = macroConnects.begin();
+  std::map<std::string, boost::shared_ptr<MacroConnect> >::const_iterator iter = macroConnects.begin();
   int index = 0;
   for (; iter != macroConnects.end(); ++iter) {
     if (index == 0)

@@ -17,21 +17,21 @@
  *
  */
 
-#include "gtest_dynawo.h"
-#include "JOBJobsCollectionFactory.h"
-#include "JOBJobsCollection.h"
-#include "JOBJobEntry.h"
 #include "JOBIterators.h"
+#include "JOBJobEntry.h"
+#include "JOBJobsCollection.h"
+#include "JOBJobsCollectionFactory.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 
 TEST(APIJOBTest, testJobCollection) {
   boost::shared_ptr<JobsCollection> jobsCollection = JobsCollectionFactory::newInstance();
-  boost::shared_ptr<JobEntry> job1 = boost::shared_ptr<JobEntry> ( new JobEntry());
+  boost::shared_ptr<JobEntry> job1 = boost::shared_ptr<JobEntry>(new JobEntry());
   job1->setName("job1");
-  boost::shared_ptr<JobEntry> job2 = boost::shared_ptr<JobEntry> ( new JobEntry());
+  boost::shared_ptr<JobEntry> job2 = boost::shared_ptr<JobEntry>(new JobEntry());
   job2->setName("job2");
-  boost::shared_ptr<JobEntry> job3 = boost::shared_ptr<JobEntry> ( new JobEntry());
+  boost::shared_ptr<JobEntry> job3 = boost::shared_ptr<JobEntry>(new JobEntry());
   job3->setName("job3");
 
   jobsCollection->addJob(job1);
@@ -39,9 +39,7 @@ TEST(APIJOBTest, testJobCollection) {
   jobsCollection->addJob(job3);
 
   int nbJobs = 0;
-  for (job_const_iterator itJob = jobsCollection->cbegin();
-          itJob != jobsCollection->cend();
-          ++itJob) {
+  for (job_const_iterator itJob = jobsCollection->cbegin(); itJob != jobsCollection->cend(); ++itJob) {
     ++nbJobs;
     if (nbJobs == 1)
       ASSERT_EQ((*itJob)->getName(), "job1");
@@ -57,9 +55,7 @@ TEST(APIJOBTest, testJobCollection) {
   ASSERT_EQ((*itJob1)->getName(), "job1");
 
   nbJobs = 0;
-  for (job_iterator itJob = jobsCollection->begin();
-          itJob != jobsCollection->end();
-          ++itJob) {
+  for (job_iterator itJob = jobsCollection->begin(); itJob != jobsCollection->end(); ++itJob) {
     ++nbJobs;
     if (nbJobs == 1)
       ASSERT_EQ((*itJob)->getName(), "job1");

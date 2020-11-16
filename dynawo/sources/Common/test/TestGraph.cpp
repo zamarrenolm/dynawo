@@ -17,13 +17,13 @@
  *
  */
 
-#include "gtest_dynawo.h"
 #include "DYNGraph.h"
 #include "DYNParameter.h"
+#include "gtest_dynawo.h"
 
-using std::vector;
-using std::string;
 using std::list;
+using std::string;
+using std::vector;
 
 namespace DYN {
 
@@ -68,7 +68,8 @@ TEST(CommonTest, testBuildSimpleGraph2) {
  *                 9
  */
 
-Graph defineGraph() {
+Graph
+defineGraph() {
   Graph graph;
   for (unsigned int i = 0; i < 10; ++i)
     graph.addVertex(i);
@@ -89,7 +90,8 @@ Graph defineGraph() {
   return graph;
 }
 
-boost::unordered_map<string, float> defineWeights() {
+boost::unordered_map<string, float>
+defineWeights() {
   boost::unordered_map<string, float> weights;
   weights["0-1"] = 1;
   weights["0-2"] = 1;
@@ -133,22 +135,22 @@ TEST(CommonTest, testFindAllPathsGraph) {
   boost::unordered_map<string, float> weights = defineWeights();
 
   // shortest path between 0 -0 : empty path
-  list<vector<string> >paths0;
+  list<vector<string> > paths0;
   graph.findAllPaths(0, 0, weights, paths0);
   ASSERT_EQ(paths0.empty(), true);
 
   // all path between 0-5 : 0->3->5, 0->2->4->5, 0->1->4->5, 0->6->8->9->5, 0->7->8->9->5
-  list<vector<string> >paths1;
+  list<vector<string> > paths1;
   graph.findAllPaths(0, 5, weights, paths1);
   ASSERT_EQ(paths1.size(), 5);
 
   // return the first path
-  list<vector<string> >paths1bis;
+  list<vector<string> > paths1bis;
   graph.findAllPaths(0, 5, weights, paths1bis, true);
   ASSERT_EQ(paths1bis.size(), 1);
 
   // return the first path for vertices which are neighbours
-  list<vector<string> >paths1ter;
+  list<vector<string> > paths1ter;
   graph.findAllPaths(0, 1, weights, paths1ter, true);
   ASSERT_EQ(paths1ter.size(), 1);
 
@@ -171,7 +173,7 @@ TEST(CommonTest, testFindAllPathsGraph) {
   ASSERT_EQ(secondPath[2], "8-9");
 
   // shortest path between 0 and 10 : empty path
-  list<vector<string> >paths2;
+  list<vector<string> > paths2;
   graph.findAllPaths(0, 10, weights, paths2);
   ASSERT_EQ(paths2.empty(), true);
 }
@@ -259,7 +261,6 @@ TEST(CommonTest, testComponentGraph) {
  *            5
  */
 
-
 TEST(CommonTest, testGraphWithLoop) {
   Graph graph;
   for (unsigned int i = 0; i < 12; ++i)
@@ -284,8 +285,7 @@ TEST(CommonTest, testGraphWithLoop) {
   weights["3-5"] = 1;
   weights["6-0"] = 1;
 
-
-  list<vector<string> >paths;
+  list<vector<string> > paths;
   graph.findAllPaths(4, 6, weights, paths);
   ASSERT_EQ(paths.size(), 3);  // paths : 4->1->0->6, 4->2->0->6, 4->5->3->0->6
   vector<string> path = paths.front();

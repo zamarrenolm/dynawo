@@ -21,59 +21,59 @@
  *
  */
 
+#include "DYDXmlHandler.h"
+
+#include "DYDBlackBoxModel.h"
+#include "DYDBlackBoxModelFactory.h"
+#include "DYDDynamicModelsCollection.h"
+#include "DYDDynamicModelsCollectionFactory.h"
+#include "DYDMacroConnect.h"
+#include "DYDMacroConnectFactory.h"
+#include "DYDMacroConnector.h"
+#include "DYDMacroConnectorFactory.h"
+#include "DYDMacroStaticRef.h"
+#include "DYDMacroStaticRefFactory.h"
+#include "DYDMacroStaticReference.h"
+#include "DYDMacroStaticReferenceFactory.h"
+#include "DYDModelTemplate.h"
+#include "DYDModelTemplateExpansion.h"
+#include "DYDModelTemplateExpansionFactory.h"
+#include "DYDModelTemplateFactory.h"
+#include "DYDModelicaModel.h"
+#include "DYDModelicaModelFactory.h"
+#include "DYDUnitDynamicModel.h"
+#include "DYDUnitDynamicModelFactory.h"
+#include "DYNMacrosMessage.h"
+
+#include <boost/phoenix/bind.hpp>
+#include <boost/phoenix/core.hpp>
+#include <boost/phoenix/operator/self.hpp>
 #include <vector>
 #include <xml/sax/parser/Attributes.h>
 
-#include <boost/phoenix/core.hpp>
-#include <boost/phoenix/operator/self.hpp>
-#include <boost/phoenix/bind.hpp>
-
-#include "DYNMacrosMessage.h"
-#include "DYDUnitDynamicModelFactory.h"
-#include "DYDModelTemplateExpansionFactory.h"
-#include "DYDModelTemplateFactory.h"
-#include "DYDBlackBoxModelFactory.h"
-#include "DYDModelicaModelFactory.h"
-#include "DYDDynamicModelsCollectionFactory.h"
-#include "DYDMacroConnectFactory.h"
-#include "DYDMacroConnectorFactory.h"
-#include "DYDMacroStaticRefFactory.h"
-#include "DYDMacroStaticReferenceFactory.h"
-#include "DYDXmlHandler.h"
-#include "DYDUnitDynamicModel.h"
-#include "DYDMacroConnector.h"
-#include "DYDMacroConnect.h"
-#include "DYDMacroStaticRef.h"
-#include "DYDMacroStaticReference.h"
-#include "DYDModelTemplateExpansion.h"
-#include "DYDBlackBoxModel.h"
-#include "DYDModelTemplate.h"
-#include "DYDModelicaModel.h"
-#include "DYDDynamicModelsCollection.h"
-
+using boost::shared_ptr;
 using std::map;
 using std::string;
 using std::vector;
-using boost::shared_ptr;
 
 namespace lambda = boost::phoenix;
 namespace lambda_args = lambda::placeholders;
 namespace parser = xml::sax::parser;
 
-xml::sax::parser::namespace_uri dyd_ns("http://www.rte-france.com/dynawo"); ///< namespace used to read dyd xml file
+xml::sax::parser::namespace_uri dyd_ns("http://www.rte-france.com/dynawo");  ///< namespace used to read dyd xml file
 
 namespace dynamicdata {
 
 XmlHandler::XmlHandler() :
-dynamicModelsCollection_(DynamicModelsCollectionFactory::newCollection()),
-modelicaModelHandler_(parser::ElementName(dyd_ns, "modelicaModel")),
-modelTemplateHandler_(parser::ElementName(dyd_ns, "modelTemplate")),
-blackBoxModelHandler_(parser::ElementName(dyd_ns, "blackBoxModel")),
-modelTemplateExpansionHandler_(parser::ElementName(dyd_ns, "modelTemplateExpansion")),
-connectHandler_(parser::ElementName(dyd_ns, "connect")),
-macroConnectHandler_(parser::ElementName(dyd_ns, "macroConnect")),
-macroConnectorHandler_(parser::ElementName(dyd_ns, "macroConnector")),
-macroStaticReferenceHandler_(parser::ElementName(dyd_ns, "macroStaticReference")) {
+    dynamicModelsCollection_(DynamicModelsCollectionFactory::newCollection()),
+    modelicaModelHandler_(parser::ElementName(dyd_ns, "modelicaModel")),
+    modelTemplateHandler_(parser::ElementName(dyd_ns, "modelTemplate")),
+    blackBoxModelHandler_(parser::ElementName(dyd_ns, "blackBoxModel")),
+    modelTemplateExpansionHandler_(parser::ElementName(dyd_ns, "modelTemplateExpansion")),
+    connectHandler_(parser::ElementName(dyd_ns, "connect")),
+    macroConnectHandler_(parser::ElementName(dyd_ns, "macroConnect")),
+    macroConnectorHandler_(parser::ElementName(dyd_ns, "macroConnector")),
+    macroStaticReferenceHandler_(parser::ElementName(dyd_ns, "macroStaticReference")) {
   onElement(dyd_ns("dynamicModelsArchitecture/modelicaModel"), modelicaModelHandler_);
   onElement(dyd_ns("dynamicModelsArchitecture/modelTemplate"), modelTemplateHandler_);
   onElement(dyd_ns("dynamicModelsArchitecture/blackBoxModel"), blackBoxModelHandler_);
@@ -142,12 +142,12 @@ XmlHandler::addMacroStaticReference() {
 }
 
 ModelicaModelHandler::ModelicaModelHandler(elementName_type const& root_element) :
-connectHandler_(parser::ElementName(dyd_ns, "connect")),
-initConnectHandler_(parser::ElementName(dyd_ns, "initConnect")),
-macroConnectHandler_(parser::ElementName(dyd_ns, "macroConnect")),
-staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")),
-macroStaticRefHandler_(parser::ElementName(dyd_ns, "macroStaticRef")),
-unitDynamicModelHandler_(parser::ElementName(dyd_ns, "unitDynamicModel")) {
+    connectHandler_(parser::ElementName(dyd_ns, "connect")),
+    initConnectHandler_(parser::ElementName(dyd_ns, "initConnect")),
+    macroConnectHandler_(parser::ElementName(dyd_ns, "macroConnect")),
+    staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")),
+    macroStaticRefHandler_(parser::ElementName(dyd_ns, "macroStaticRef")),
+    unitDynamicModelHandler_(parser::ElementName(dyd_ns, "unitDynamicModel")) {
   onStartElement(root_element, lambda::bind(&ModelicaModelHandler::create, lambda::ref(*this), lambda_args::arg2));
 
   onElement(root_element + dyd_ns("connect"), connectHandler_);
@@ -218,14 +218,13 @@ ModelicaModelHandler::addUnitDynamicModel() {
 }
 
 ModelTemplateHandler::ModelTemplateHandler(elementName_type const& root_element) :
-connectHandler_(parser::ElementName(dyd_ns, "connect")),
-initConnectHandler_(parser::ElementName(dyd_ns, "initConnect")),
-macroConnectHandler_(parser::ElementName(dyd_ns, "macroConnect")),
-staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")),
-macroStaticRefHandler_(parser::ElementName(dyd_ns, "macroStaticRef")),
-unitDynamicModelHandler_(parser::ElementName(dyd_ns, "unitDynamicModel")) {
+    connectHandler_(parser::ElementName(dyd_ns, "connect")),
+    initConnectHandler_(parser::ElementName(dyd_ns, "initConnect")),
+    macroConnectHandler_(parser::ElementName(dyd_ns, "macroConnect")),
+    staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")),
+    macroStaticRefHandler_(parser::ElementName(dyd_ns, "macroStaticRef")),
+    unitDynamicModelHandler_(parser::ElementName(dyd_ns, "unitDynamicModel")) {
   onStartElement(root_element, lambda::bind(&ModelTemplateHandler::create, lambda::ref(*this), lambda_args::arg2));
-
 
   onElement(root_element + dyd_ns("connect"), connectHandler_);
   onElement(root_element + dyd_ns("initConnect"), initConnectHandler_);
@@ -293,8 +292,8 @@ ModelTemplateHandler::addUnitDynamicModel() {
 }
 
 BlackBoxModelHandler::BlackBoxModelHandler(elementName_type const& root_element) :
-staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")),
-macroStaticRefHandler_(parser::ElementName(dyd_ns, "macroStaticRef")) {
+    staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")),
+    macroStaticRefHandler_(parser::ElementName(dyd_ns, "macroStaticRef")) {
   onStartElement(root_element, lambda::bind(&BlackBoxModelHandler::create, lambda::ref(*this), lambda_args::arg2));
 
   onElement(root_element + dyd_ns("staticRef"), staticRefHandler_);
@@ -336,8 +335,8 @@ BlackBoxModelHandler::get() const {
 }
 
 ModelTemplateExpansionHandler::ModelTemplateExpansionHandler(elementName_type const& root_element) :
-staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")),
-macroStaticRefHandler_(parser::ElementName(dyd_ns, "macroStaticRef")) {
+    staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")),
+    macroStaticRefHandler_(parser::ElementName(dyd_ns, "macroStaticRef")) {
   onStartElement(root_element, lambda::bind(&ModelTemplateExpansionHandler::create, lambda::ref(*this), lambda_args::arg2));
 
   onElement(root_element + dyd_ns("staticRef"), staticRefHandler_);
@@ -418,8 +417,8 @@ MacroConnectHandler::get() const {
 }
 
 MacroConnectorHandler::MacroConnectorHandler(const elementName_type& root_element) :
-macroConnectionHandler_(parser::ElementName(dyd_ns, "connect")),
-macroInitConnectionHandler_(parser::ElementName(dyd_ns, "initConnect")) {
+    macroConnectionHandler_(parser::ElementName(dyd_ns, "connect")),
+    macroInitConnectionHandler_(parser::ElementName(dyd_ns, "initConnect")) {
   onStartElement(root_element, lambda::bind(&MacroConnectorHandler::create, lambda::ref(*this), lambda_args::arg2));
 
   onElement(root_element + dyd_ns("connect"), macroConnectionHandler_);
@@ -430,7 +429,7 @@ macroInitConnectionHandler_(parser::ElementName(dyd_ns, "initConnect")) {
 }
 
 void
-MacroConnectorHandler::create(attributes_type const & attributes) {
+MacroConnectorHandler::create(attributes_type const& attributes) {
   macroConnector_ = MacroConnectorFactory::newMacroConnector(attributes["id"]);
 }
 
@@ -495,8 +494,7 @@ MacroStaticRefHandler::get() const {
   return macroStaticRef_;
 }
 
-MacroStaticReferenceHandler::MacroStaticReferenceHandler(const elementName_type& root_element) :
-staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")) {
+MacroStaticReferenceHandler::MacroStaticReferenceHandler(const elementName_type& root_element) : staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")) {
   onStartElement(root_element, lambda::bind(&MacroStaticReferenceHandler::create, lambda::ref(*this), lambda_args::arg2));
 
   onElement(root_element + dyd_ns("staticRef"), staticRefHandler_);
@@ -505,7 +503,7 @@ staticRefHandler_(parser::ElementName(dyd_ns, "staticRef")) {
 }
 
 void
-MacroStaticReferenceHandler::create(attributes_type const & attributes) {
+MacroStaticReferenceHandler::create(attributes_type const& attributes) {
   macroStaticReference_ = MacroStaticReferenceFactory::newMacroStaticReference(attributes["id"]);
 }
 

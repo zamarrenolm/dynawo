@@ -11,11 +11,11 @@
 // simulation tool for power systems.
 //
 
-#include <boost/algorithm/string.hpp>
-
 #include "DYNExecUtils.h"
 #include "DYNFileSystemUtils.h"
 #include "gtest_dynawo.h"
+
+#include <boost/algorithm/string.hpp>
 
 namespace DYN {
 
@@ -28,7 +28,7 @@ TEST(Models, TestBuildCheckSum) {
   executeCommand(cmd, ssPython);
   std::string result = ssPython.str();
   boost::erase_all(result, "\n");
-  ASSERT_EQ(result, "Executing command : "+cmd+"Usage: checkSum_ModelsCPP.py [options]checkSum_ModelsCPP.py: error: Model name is not given");
+  ASSERT_EQ(result, "Executing command : " + cmd + "Usage: checkSum_ModelsCPP.py [options]checkSum_ModelsCPP.py: error: Model name is not given");
   ssPython.str(std::string());
 
   cmd = pythonCmd + " checkSum_ModelsCPP.py --model res/MyModelMissingFile";
@@ -81,6 +81,5 @@ TEST(Models, TestBuildCheckSum) {
   ASSERT_EQ(ssDiff.str(), "Executing command : diff res/MyModelOK.hpp.ref res/MyModelKOHppBadlyFormed.hpp\n");
   ssDiff.str(std::string());
 }
-
 
 }  // namespace DYN

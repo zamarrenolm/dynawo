@@ -17,11 +17,11 @@
  *
  */
 
-#include "DYNMacrosMessage.h"
+#include "PARParametersSetCollection.h"
 
+#include "DYNMacrosMessage.h"
 #include "PARParametersSet.h"
 #include "PARParametersSetFactory.h"
-#include "PARParametersSetCollection.h"
 
 using std::map;
 using std::string;
@@ -50,7 +50,7 @@ ParametersSetCollection::addParametersSet(shared_ptr<ParametersSet> paramSet, bo
 
 shared_ptr<ParametersSet>
 ParametersSetCollection::getParametersSet(const string& id) {
-  map< string, shared_ptr<ParametersSet> >::iterator itParamSet = parametersSets_.find(id);
+  map<string, shared_ptr<ParametersSet> >::iterator itParamSet = parametersSets_.find(id);
   if (itParamSet == parametersSets_.end())
     throw DYNError(DYN::Error::API, ParametersSetNotFound, id);
   return itParamSet->second;
@@ -63,9 +63,7 @@ ParametersSetCollection::hasParametersSet(const string& id) {
 
 void
 ParametersSetCollection::propagateOriginData(const std::string& filepath) {
-  for (map<string, shared_ptr<ParametersSet> >::const_iterator itParams = parametersSets_.begin();
-          itParams != parametersSets_.end();
-          ++itParams) {
+  for (map<string, shared_ptr<ParametersSet> >::const_iterator itParams = parametersSets_.begin(); itParams != parametersSets_.end(); ++itParams) {
     itParams->second->setFilePath(filepath);
   }
 }
@@ -81,7 +79,7 @@ ParametersSetCollection::cendParametersSet() const {
 }
 
 ParametersSetCollection::parametersSet_const_iterator::parametersSet_const_iterator(const ParametersSetCollection* iterated, bool begin) :
-current_((begin ? iterated->parametersSets_.begin() : iterated->parametersSets_.end())) { }
+    current_((begin ? iterated->parametersSets_.begin() : iterated->parametersSets_.end())) {}
 
 ParametersSetCollection::parametersSet_const_iterator&
 ParametersSetCollection::parametersSet_const_iterator::operator++() {
@@ -119,13 +117,11 @@ ParametersSetCollection::parametersSet_const_iterator::operator!=(const Paramete
   return current_ != other.current_;
 }
 
-const shared_ptr<ParametersSet>&
-ParametersSetCollection::parametersSet_const_iterator::operator*() const {
+const shared_ptr<ParametersSet>& ParametersSetCollection::parametersSet_const_iterator::operator*() const {
   return current_->second;
 }
 
-const shared_ptr<ParametersSet>*
-ParametersSetCollection::parametersSet_const_iterator::operator->() const {
+const shared_ptr<ParametersSet>* ParametersSetCollection::parametersSet_const_iterator::operator->() const {
   return &(current_->second);
 }
 

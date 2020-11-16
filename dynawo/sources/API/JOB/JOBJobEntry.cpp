@@ -21,7 +21,7 @@
 namespace job {
 
 void
-JobEntry::setModelerEntry(const boost::shared_ptr<ModelerEntry> & modelerEntry) {
+JobEntry::setModelerEntry(const boost::shared_ptr<ModelerEntry>& modelerEntry) {
   modelerEntry_ = modelerEntry;
 }
 
@@ -31,7 +31,7 @@ JobEntry::getModelerEntry() const {
 }
 
 void
-JobEntry::setSolverEntry(const boost::shared_ptr<SolverEntry> & solverEntry) {
+JobEntry::setSolverEntry(const boost::shared_ptr<SolverEntry>& solverEntry) {
   solverEntry_ = solverEntry;
 }
 
@@ -41,7 +41,7 @@ JobEntry::getSolverEntry() const {
 }
 
 void
-JobEntry::setSimulationEntry(const boost::shared_ptr<SimulationEntry> & simulationEntry) {
+JobEntry::setSimulationEntry(const boost::shared_ptr<SimulationEntry>& simulationEntry) {
   simulationEntry_ = simulationEntry;
 }
 
@@ -51,7 +51,7 @@ JobEntry::getSimulationEntry() const {
 }
 
 void
-JobEntry::setOutputsEntry(const boost::shared_ptr<OutputsEntry> & outputsEntry) {
+JobEntry::setOutputsEntry(const boost::shared_ptr<OutputsEntry>& outputsEntry) {
   outputsEntry_ = outputsEntry;
 }
 
@@ -61,7 +61,7 @@ JobEntry::getOutputsEntry() const {
 }
 
 void
-JobEntry::setName(const std::string & name) {
+JobEntry::setName(const std::string& name) {
   name_ = name;
 }
 

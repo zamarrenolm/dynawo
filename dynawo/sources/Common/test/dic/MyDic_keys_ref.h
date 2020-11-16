@@ -14,21 +14,19 @@
 #include <string>
 namespace DYN {
 
-  ///< struct of Keyic to declare enum values and names associated to the enum to be used in dynawo
-  struct Keyic_t
-  {
-    ///< enum of possible key for ic
-    enum value
-    {
-      MyLabel,                                                                ///< Hi.
-    };
+///< struct of Keyic to declare enum values and names associated to the enum to be used in dynawo
+struct Keyic_t {
+  ///< enum of possible key for ic
+  enum value {
+    MyLabel,  ///< Hi.
+  };
 
-    /**
+  /**
     * @brief Return the name associated to the enum.
     *
     * @return The name associated to the enum.
     */
-    static const char* names(const value&); ///< names associated to the enum
-  };
-} //namespace DYN
+  static const char* names(const value&);  ///< names associated to the enum
+};
+}  //namespace DYN
 #endif

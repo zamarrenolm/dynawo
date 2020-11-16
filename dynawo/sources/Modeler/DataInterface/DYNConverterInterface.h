@@ -34,7 +34,7 @@ class ConverterInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~ConverterInterface() { }
+  virtual ~ConverterInterface() {}
 
   /**
    * @brief Setter for the converter bus interface
@@ -108,33 +108,32 @@ class ConverterInterface : public ComponentInterface {
    */
   inline ConverterType_t getConverterType() const {
     switch (type_) {
-      case ComponentInterface::BUS:
-      case ComponentInterface::CALCULATED_BUS:
-      case ComponentInterface::SWITCH:
-      case ComponentInterface::LOAD:
-      case ComponentInterface::LINE:
-      case ComponentInterface::GENERATOR:
-      case ComponentInterface::SHUNT:
-      case ComponentInterface::DANGLING_LINE:
-      case ComponentInterface::TWO_WTFO:
-      case ComponentInterface::THREE_WTFO:
-      case ComponentInterface::SVC:
-      case ComponentInterface::HVDC_LINE:
-      case ComponentInterface::UNKNOWN:
-      case ComponentInterface::VSC_CONVERTER: {
-        return VSC_CONVERTER;
-        break;
-      }
-      case ComponentInterface::LCC_CONVERTER: {
-        return LCC_CONVERTER;
-        break;
-      }
-      default:
-        throw DYNError(Error::MODELER, ConverterWrongType, getID());
+    case ComponentInterface::BUS:
+    case ComponentInterface::CALCULATED_BUS:
+    case ComponentInterface::SWITCH:
+    case ComponentInterface::LOAD:
+    case ComponentInterface::LINE:
+    case ComponentInterface::GENERATOR:
+    case ComponentInterface::SHUNT:
+    case ComponentInterface::DANGLING_LINE:
+    case ComponentInterface::TWO_WTFO:
+    case ComponentInterface::THREE_WTFO:
+    case ComponentInterface::SVC:
+    case ComponentInterface::HVDC_LINE:
+    case ComponentInterface::UNKNOWN:
+    case ComponentInterface::VSC_CONVERTER: {
+      return VSC_CONVERTER;
+      break;
+    }
+    case ComponentInterface::LCC_CONVERTER: {
+      return LCC_CONVERTER;
+      break;
+    }
+    default:
+      throw DYNError(Error::MODELER, ConverterWrongType, getID());
     }
   }
 };  ///< common interface class for converters
 }  // namespace DYN
-
 
 #endif  // MODELER_DATAINTERFACE_DYNCONVERTERINTERFACE_H_

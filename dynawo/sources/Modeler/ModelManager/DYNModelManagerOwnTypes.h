@@ -20,7 +20,6 @@
 #ifndef MODELER_MODELMANAGER_DYNMODELMANAGEROWNTYPES_H_
 #define MODELER_MODELMANAGER_DYNMODELMANAGEROWNTYPES_H_
 
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 // redefine modelica_types like we want
@@ -41,24 +40,24 @@ typedef signed char m_boolean;
 typedef m_integer _index_t;
 typedef unsigned long mmc_uint_t;
 struct mmc_string {
-    mmc_uint_t header;  /* MMC_STRINGHDR(bytes) */
-    char data[1];  /* `bytes' elements + terminating '\0' */
+  mmc_uint_t header; /* MMC_STRINGHDR(bytes) */
+  char data[1];      /* `bytes' elements + terminating '\0' */
 };
 
 struct index_spec_s {
-  _index_t ndims;  ///< number of indices/subscripts
+  _index_t ndims;      ///< number of indices/subscripts
   _index_t* dim_size;  ///< size for each subscript
-  char* index_type;  ///< type of each subscript, any of 'S','A' or 'W'
-  _index_t** index;  ///< all indices
-};  ///< structure index_spec_s
+  char* index_type;    ///< type of each subscript, any of 'S','A' or 'W'
+  _index_t** index;    ///< all indices
+};                     ///< structure index_spec_s
 
 typedef struct index_spec_s index_spec_t;
 
 struct base_array_s {
-  int ndims;  ///< number of array
-  _index_t *dim_size;  ///< size for each array
-  void *data;  ///< data for each array
-};  ///< structure base_array_s
+  int ndims;           ///< number of array
+  _index_t* dim_size;  ///< size for each array
+  void* data;          ///< data for each array
+};                     ///< structure base_array_s
 
 typedef struct base_array_s base_array_t;
 

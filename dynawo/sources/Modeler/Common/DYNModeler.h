@@ -21,10 +21,10 @@
 #ifndef MODELER_COMMON_DYNMODELER_H_
 #define MODELER_COMMON_DYNMODELER_H_
 
-#include <map>
+#include "DYDModelicaModel.h"
 
 #include <boost/shared_ptr.hpp>
-#include "DYDModelicaModel.h"
+#include <map>
 
 namespace DYN {
 
@@ -46,12 +46,12 @@ class Modeler {
   /**
    * @brief default constructor
    */
-  Modeler() { }
+  Modeler() {}
 
   /**
    * @brief destructor
    */
-  ~Modeler() { }
+  ~Modeler() {}
 
   /**
    * @brief set the data interface to use do define the model multi
@@ -128,7 +128,7 @@ class Modeler {
    * @param variablesConnectedInternally : output, at the end of the called will contain the connected variables of the model
    */
   void collectAllInternalConnections(boost::shared_ptr<dynamicdata::ModelicaModel> model,
-      std::vector<std::pair<std::string, std::string> >& variablesConnectedInternally) const;
+                                     std::vector<std::pair<std::string, std::string> >& variablesConnectedInternally) const;
 
   /**
    * @brief replace STATIC and NODE macros in a macro connection
@@ -137,8 +137,8 @@ class Modeler {
    * @param subModel2: second connected model
    * @param var2: second connected variable
    */
-  void replaceStaticAndNodeMacroInVariableName(const boost::shared_ptr<SubModel>& subModel1, std::string& var1,
-      const boost::shared_ptr<SubModel>& subModel2, std::string& var2) const;
+  void replaceStaticAndNodeMacroInVariableName(const boost::shared_ptr<SubModel>& subModel1, std::string& var1, const boost::shared_ptr<SubModel>& subModel2,
+                                               std::string& var2) const;
 
  private:
   /**
@@ -155,18 +155,17 @@ class Modeler {
    * @param var2: second connected variable
    * @param labelNode: \@NODE\@ or \@NODE1\@ or \@NODE2\@
    */
-  void replaceNodeWithBus(const boost::shared_ptr<SubModel>& subModel1, std::string& var1,
-      const boost::shared_ptr<SubModel>& subModel2, std::string& var2, const std::string& labelNode) const;
+  void replaceNodeWithBus(const boost::shared_ptr<SubModel>& subModel1, std::string& var1, const boost::shared_ptr<SubModel>& subModel2, std::string& var2,
+                          const std::string& labelNode) const;
 
  private:
   boost::shared_ptr<DataInterface> data_;  ///< data used to build the model multi
-  boost::shared_ptr<DynamicData> dyd_;  ///< dynamic data used to build the model multi
-  boost::shared_ptr<ModelMulti> model_;  ///< model created thanks to previous data
+  boost::shared_ptr<DynamicData> dyd_;     ///< dynamic data used to build the model multi
+  boost::shared_ptr<ModelMulti> model_;    ///< model created thanks to previous data
 
   std::map<std::string, boost::shared_ptr<SubModel> > subModels_;  ///< association between name and subModel : usefull when the connectors should be created
 };
 
 }  // namespace DYN
-
 
 #endif  // MODELER_COMMON_DYNMODELER_H_

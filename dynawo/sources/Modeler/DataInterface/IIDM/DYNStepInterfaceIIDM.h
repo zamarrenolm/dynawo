@@ -20,14 +20,14 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNSTEPINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNSTEPINTERFACEIIDM_H_
 
-#include <boost/optional.hpp>
-
 #include "DYNStepInterface.h"
+
+#include <boost/optional.hpp>
 
 namespace IIDM {
 struct PhaseTapChangerStep;
 struct RatioTapChangerStep;
-}
+}  // namespace IIDM
 
 namespace DYN {
 
@@ -88,8 +88,8 @@ class StepInterfaceIIDM : public StepInterface {
 
   boost::optional<IIDM::PhaseTapChangerStep> phaseStep_;  ///< reference to the iidm phase tap changer step instance
   boost::optional<IIDM::RatioTapChangerStep> ratioStep_;  ///< reference to the iidm ratio tap changer step instance
-  bool isPhaseStep_;  ///< @b true if the step belongs to a phase tap changer
-};  ///< interface class for step of tap changer
+  bool isPhaseStep_;                                      ///< @b true if the step belongs to a phase tap changer
+};                                                        ///< interface class for step of tap changer
 
 }  // namespace DYN
 

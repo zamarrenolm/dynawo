@@ -18,6 +18,7 @@
  */
 
 #include "EXTVARVariableFactory.h"
+
 #include "EXTVARVariable.h"
 
 using std::string;

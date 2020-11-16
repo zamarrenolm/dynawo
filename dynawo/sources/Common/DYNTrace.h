@@ -24,10 +24,10 @@
 #ifndef COMMON_DYNTRACE_H_
 #define COMMON_DYNTRACE_H_
 
+#include "DYNTraceStream.h"
+
 #include <string>
 #include <vector>
-
-#include "DYNTraceStream.h"
 
 namespace DYN {
 
@@ -54,20 +54,12 @@ class Trace {
     /**
      * @brief TraceAppender constructor
      */
-    TraceAppender():
-      tag_(),
-      filePath_(),
-      lvlFilter_(INFO),
-      showLevelTag_(false),
-      separator_(),
-      showTimeStamp_(false),
-      timeStampFormat_(),
-      append_(false) { }
+    TraceAppender() : tag_(), filePath_(), lvlFilter_(INFO), showLevelTag_(false), separator_(), showTimeStamp_(false), timeStampFormat_(), append_(false) {}
 
     /**
      * @brief TraceAppender destructor
      */
-    ~TraceAppender() { }
+    ~TraceAppender() {}
 
     /**
      * @brief Tag attribute getter
@@ -199,14 +191,14 @@ class Trace {
     }
 
    private:
-    std::string tag_;  ///< Tag filtered by the appender
-    std::string filePath_;  ///< Output file path of the appender
-    SeverityLevel lvlFilter_;  ///< Minimum severity level exported by the appender
-    bool showLevelTag_;  ///< @b true if the tag of the log should be printed
-    std::string separator_;  ///< separator used between each log information date severity log
-    bool showTimeStamp_;  ///< @b true if the timestamp of the log should be printed
+    std::string tag_;              ///< Tag filtered by the appender
+    std::string filePath_;         ///< Output file path of the appender
+    SeverityLevel lvlFilter_;      ///< Minimum severity level exported by the appender
+    bool showLevelTag_;            ///< @b true if the tag of the log should be printed
+    std::string separator_;        ///< separator used between each log information date severity log
+    bool showTimeStamp_;           ///< @b true if the timestamp of the log should be printed
     std::string timeStampFormat_;  ///< format of the timestamp information , "" if no time to print
-    bool append_;  ///< Append to existing file instead of erasing
+    bool append_;                  ///< Append to existing file instead of erasing
   };
 
   /**

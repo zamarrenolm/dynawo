@@ -18,13 +18,9 @@
  * JobsHandler is the implementation of Dynawo handler for parsing jobs
  * files.
  */
-#include <boost/phoenix/core.hpp>
-#include <boost/phoenix/operator/self.hpp>
-#include <boost/phoenix/bind.hpp>
-
-#include <xml/sax/parser/Attributes.h>
-
 #include "JOBXmlHandler.h"
+
+#include "DYNMacrosMessage.h"
 #include "JOBAppenderEntry.h"
 #include "JOBConstraintsEntry.h"
 #include "JOBCurvesEntry.h"
@@ -32,19 +28,23 @@
 #include "JOBFinalStateEntry.h"
 #include "JOBInitValuesEntry.h"
 #include "JOBInitialStateEntry.h"
-#include "JOBJobsCollectionFactory.h"
 #include "JOBJobEntry.h"
 #include "JOBJobsCollection.h"
+#include "JOBJobsCollectionFactory.h"
 #include "JOBLogsEntry.h"
 #include "JOBModelerEntry.h"
+#include "JOBModelsDirEntry.h"
 #include "JOBNetworkEntry.h"
 #include "JOBOutputsEntry.h"
 #include "JOBSimulationEntry.h"
 #include "JOBSolverEntry.h"
 #include "JOBTimelineEntry.h"
 #include "JOBTimetableEntry.h"
-#include "DYNMacrosMessage.h"
-#include "JOBModelsDirEntry.h"
+
+#include <boost/phoenix/bind.hpp>
+#include <boost/phoenix/core.hpp>
+#include <boost/phoenix/operator/self.hpp>
+#include <xml/sax/parser/Attributes.h>
 
 using std::map;
 using std::string;
@@ -60,15 +60,12 @@ xml::sax::parser::namespace_uri jobs_ns("http://www.rte-france.com/dynawo");  //
 
 namespace job {
 
-XmlHandler::XmlHandler() :
-jobsCollection_(JobsCollectionFactory::newInstance()),
-jobHandler_(parser::ElementName(jobs_ns, "job")) {
+XmlHandler::XmlHandler() : jobsCollection_(JobsCollectionFactory::newInstance()), jobHandler_(parser::ElementName(jobs_ns, "job")) {
   onElement(jobs_ns("jobs/job"), jobHandler_);
   jobHandler_.onEnd(lambda::bind(&XmlHandler::addJob, lambda::ref(*this)));
 }
 
-XmlHandler::~XmlHandler() {
-}
+XmlHandler::~XmlHandler() {}
 
 void
 XmlHandler::addJob() {
@@ -81,17 +78,16 @@ XmlHandler::getJobsCollection() const {
 }
 
 JobHandler::JobHandler(elementName_type const& root_element) :
-solverHandler_(parser::ElementName(jobs_ns, "solver")),
-modelerHandler_(parser::ElementName(jobs_ns, "modeler")),
-simulationHandler_(parser::ElementName(jobs_ns, "simulation")),
-outputsHandler_(parser::ElementName(jobs_ns, "outputs")) {
+    solverHandler_(parser::ElementName(jobs_ns, "solver")),
+    modelerHandler_(parser::ElementName(jobs_ns, "modeler")),
+    simulationHandler_(parser::ElementName(jobs_ns, "simulation")),
+    outputsHandler_(parser::ElementName(jobs_ns, "outputs")) {
   onStartElement(root_element, lambda::bind(&JobHandler::create, lambda::ref(*this), lambda_args::arg2));
 
   onElement(root_element + jobs_ns("solver"), solverHandler_);
   onElement(root_element + jobs_ns("modeler"), modelerHandler_);
   onElement(root_element + jobs_ns("simulation"), simulationHandler_);
   onElement(root_element + jobs_ns("outputs"), outputsHandler_);
-
 
   solverHandler_.onEnd(lambda::bind(&JobHandler::addSolver, lambda::ref(*this)));
   modelerHandler_.onEnd(lambda::bind(&JobHandler::addModeler, lambda::ref(*this)));
@@ -135,7 +131,7 @@ SolverHandler::SolverHandler(elementName_type const& root_element) {
 }
 
 void
-SolverHandler::create(attributes_type const & attributes) {
+SolverHandler::create(attributes_type const& attributes) {
   solver_ = shared_ptr<SolverEntry>(new SolverEntry());
   solver_->setLib(attributes["lib"]);
   solver_->setParametersFile(attributes["parFile"]);
@@ -148,11 +144,11 @@ SolverHandler::get() const {
 }
 
 ModelerHandler::ModelerHandler(elementName_type const& root_element) :
-networkHandler_(parser::ElementName(jobs_ns, "network")),
-dynModelsHandler_(parser::ElementName(jobs_ns, "dynModels")),
-initialStateHandler_(parser::ElementName(jobs_ns, "initialState")),
-preCompiledModelsHandler_(parser::ElementName(jobs_ns, "precompiledModels")),
-modelicaModelsHandler_(parser::ElementName(jobs_ns, "modelicaModels")) {
+    networkHandler_(parser::ElementName(jobs_ns, "network")),
+    dynModelsHandler_(parser::ElementName(jobs_ns, "dynModels")),
+    initialStateHandler_(parser::ElementName(jobs_ns, "initialState")),
+    preCompiledModelsHandler_(parser::ElementName(jobs_ns, "precompiledModels")),
+    modelicaModelsHandler_(parser::ElementName(jobs_ns, "modelicaModels")) {
   onElement(root_element + jobs_ns("network"), networkHandler_);
   onElement(root_element + jobs_ns("dynModels"), dynModelsHandler_);
   onElement(root_element + jobs_ns("initialState"), initialStateHandler_);
@@ -217,8 +213,7 @@ CriteriaFileHandler::get() const {
   return criteriaFile_;
 }
 
-SimulationHandler::SimulationHandler(elementName_type const& root_element) :
-criteriaFileHandler_(parser::ElementName(jobs_ns, "criteria")) {
+SimulationHandler::SimulationHandler(elementName_type const& root_element) : criteriaFileHandler_(parser::ElementName(jobs_ns, "criteria")) {
   onStartElement(root_element, lambda::bind(&SimulationHandler::create, lambda::ref(*this), lambda_args::arg2));
   onElement(root_element + jobs_ns("criteria"), criteriaFileHandler_);
 
@@ -247,13 +242,13 @@ SimulationHandler::addCriteriaFile() {
 }
 
 OutputsHandler::OutputsHandler(elementName_type const& root_element) :
-initValuesHandler_(parser::ElementName(jobs_ns, "dumpInitValues")),
-constraintsHandler_(parser::ElementName(jobs_ns, "constraints")),
-timelineHandler_(parser::ElementName(jobs_ns, "timeline")),
-timetableHandler_(parser::ElementName(jobs_ns, "timetable")),
-finalStateHandler_(parser::ElementName(jobs_ns, "finalState")),
-curvesHandler_(parser::ElementName(jobs_ns, "curves")),
-logsHandler_(parser::ElementName(jobs_ns, "logs")) {
+    initValuesHandler_(parser::ElementName(jobs_ns, "dumpInitValues")),
+    constraintsHandler_(parser::ElementName(jobs_ns, "constraints")),
+    timelineHandler_(parser::ElementName(jobs_ns, "timeline")),
+    timetableHandler_(parser::ElementName(jobs_ns, "timetable")),
+    finalStateHandler_(parser::ElementName(jobs_ns, "finalState")),
+    curvesHandler_(parser::ElementName(jobs_ns, "curves")),
+    logsHandler_(parser::ElementName(jobs_ns, "logs")) {
   onStartElement(root_element, lambda::bind(&OutputsHandler::create, lambda::ref(*this), lambda_args::arg2));
 
   onElement(root_element + jobs_ns("dumpInitValues"), initValuesHandler_);
@@ -412,8 +407,7 @@ CurvesHandler::get() const {
   return curves_;
 }
 
-LogsHandler::LogsHandler(elementName_type const& root_element) :
-appenderHandler_(parser::ElementName(jobs_ns, "appender")) {
+LogsHandler::LogsHandler(elementName_type const& root_element) : appenderHandler_(parser::ElementName(jobs_ns, "appender")) {
   onElement(root_element + jobs_ns("appender"), appenderHandler_);
 
   onStartElement(root_element, lambda::bind(&LogsHandler::create, lambda::ref(*this), lambda_args::arg2));
@@ -513,8 +507,7 @@ InitialStateHandler::get() const {
   return initialState_;
 }
 
-ModelsDirHandler::ModelsDirHandler(elementName_type const& root_element) :
-directoryHandler_(parser::ElementName(jobs_ns, "directory")) {
+ModelsDirHandler::ModelsDirHandler(elementName_type const& root_element) : directoryHandler_(parser::ElementName(jobs_ns, "directory")) {
   onStartElement(root_element, lambda::bind(&ModelsDirHandler::create, lambda::ref(*this), lambda_args::arg2));
 
   onElement(root_element + jobs_ns("directory"), directoryHandler_);

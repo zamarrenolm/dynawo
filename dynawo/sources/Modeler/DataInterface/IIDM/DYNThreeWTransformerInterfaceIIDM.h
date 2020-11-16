@@ -20,9 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNTHREEWTRANSFORMERINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNTHREEWTRANSFORMERINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNThreeWTransformerInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class Transformer3Windings;
@@ -157,19 +157,19 @@ class ThreeWTransformerInterfaceIIDM : public ThreeWTransformerInterface {
   int getComponentVarIndex(const std::string& varName) const;
 
  private:
-  IIDM::Transformer3Windings& tfoIIDM_;  ///< reference to the tfo's iidm instance
-  boost::shared_ptr<BusInterface> busInterface1_;  ///< busInterface of the bus where the side 1 of the tfo is connected
-  boost::shared_ptr<BusInterface> busInterface2_;  ///< busInterface of the bus where the side 2 of the tfo is connected
-  boost::shared_ptr<BusInterface> busInterface3_;  ///< busInterface of the bus where the side 3 of the tfo is connected
+  IIDM::Transformer3Windings& tfoIIDM_;                              ///< reference to the tfo's iidm instance
+  boost::shared_ptr<BusInterface> busInterface1_;                    ///< busInterface of the bus where the side 1 of the tfo is connected
+  boost::shared_ptr<BusInterface> busInterface2_;                    ///< busInterface of the bus where the side 2 of the tfo is connected
+  boost::shared_ptr<BusInterface> busInterface3_;                    ///< busInterface of the bus where the side 3 of the tfo is connected
   boost::shared_ptr<VoltageLevelInterface> voltageLevelInterface1_;  ///< voltageLevelInterface of the voltageLevel where the side 1 of the tfo is connected
   boost::shared_ptr<VoltageLevelInterface> voltageLevelInterface2_;  ///< voltageLevelInterface of the voltageLevel where the side 2 of the tfo is connected
   boost::shared_ptr<VoltageLevelInterface> voltageLevelInterface3_;  ///< voltageLevelInterface of the voltageLevel where the side 3 of the tfo is connected
   std::vector<boost::shared_ptr<CurrentLimitInterface> > currentLimitInterfaces1_;  ///< current limit interfaces for side 1
   std::vector<boost::shared_ptr<CurrentLimitInterface> > currentLimitInterfaces2_;  ///< current limit interfaces for side 2
   std::vector<boost::shared_ptr<CurrentLimitInterface> > currentLimitInterfaces3_;  ///< current limit interfaces for side 3
-  boost::optional<bool> initialConnected1_;  ///< whether the tfo is initially connected at side 1
-  boost::optional<bool> initialConnected2_;  ///< whether the tfo is initially connected at side 2
-  boost::optional<bool> initialConnected3_;  ///< whether the tfo is initially connected at side 3
+  boost::optional<bool> initialConnected1_;                                         ///< whether the tfo is initially connected at side 1
+  boost::optional<bool> initialConnected2_;                                         ///< whether the tfo is initially connected at side 2
+  boost::optional<bool> initialConnected3_;                                         ///< whether the tfo is initially connected at side 3
 };
 }  // namespace DYN
 

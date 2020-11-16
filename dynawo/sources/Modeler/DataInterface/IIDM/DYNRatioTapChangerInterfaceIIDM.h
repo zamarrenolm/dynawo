@@ -134,7 +134,7 @@ class RatioTapChangerInterfaceIIDM : public RatioTapChangerInterface {
 
  private:
   std::vector<boost::shared_ptr<StepInterface> > steps_;  ///< steps of the ratio tap changer
-  IIDM::RatioTapChanger& tapChangerIIDM_;  ///< reference to the iidm ratioTapChanger's instance
+  IIDM::RatioTapChanger& tapChangerIIDM_;                 ///< reference to the iidm ratioTapChanger's instance
 };
 }  // namespace DYN
 

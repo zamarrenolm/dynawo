@@ -43,15 +43,12 @@ class VoltageLevelInterface {
   /**
    * @brief destructor
    */
-  virtual ~VoltageLevelInterface() { }
+  virtual ~VoltageLevelInterface() {}
 
   /**
    * @brief Definition of the voltage level topology
    */
-  typedef enum {
-    BUS_BREAKER = 1,
-    NODE_BREAKER = 2
-  } VoltageLevelTopologyKind_t;
+  typedef enum { BUS_BREAKER = 1, NODE_BREAKER = 2 } VoltageLevelTopologyKind_t;
 
   /**
    * @brief Getter for the voltageLevel's id
@@ -107,7 +104,7 @@ class VoltageLevelInterface {
    */
   virtual void addSwitch(const boost::shared_ptr<SwitchInterface>& sw) = 0;
 
-   /**
+  /**
    * @brief Add a new instance of load interface to the voltageLevel interface
    * @param load instance of load interface to add
    */
@@ -137,7 +134,7 @@ class VoltageLevelInterface {
    */
   virtual void addDanglingLine(const boost::shared_ptr<DanglingLineInterface>& danglingLine) = 0;
 
-   /**
+  /**
    * @brief Add a new instance of vsc converter interface to the voltageLevel interface
    * @param vsc: instance of vsc converter interface to add
    */
@@ -153,55 +150,55 @@ class VoltageLevelInterface {
    * @brief Getter for the vector of bus interface
    * @return vector of bus interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<BusInterface> >& getBuses() const = 0;
+  virtual const std::vector<boost::shared_ptr<BusInterface> >& getBuses() const = 0;
 
   /**
    * @brief Getter for the vector of switch interface
    * @return vector of switch interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<SwitchInterface> >& getSwitches() const = 0;
+  virtual const std::vector<boost::shared_ptr<SwitchInterface> >& getSwitches() const = 0;
 
   /**
    * @brief Getter for the vector of load interface
    * @return vector of load interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<LoadInterface> >& getLoads() const = 0;
+  virtual const std::vector<boost::shared_ptr<LoadInterface> >& getLoads() const = 0;
 
   /**
    * @brief Getter for the vector of shunt compensator interface
    * @return vector of shunt compensator interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<ShuntCompensatorInterface> >& getShuntCompensators() const = 0;
+  virtual const std::vector<boost::shared_ptr<ShuntCompensatorInterface> >& getShuntCompensators() const = 0;
 
   /**
    * @brief Getter for the vector of static var compensator interface
    * @return vector of static var compensator interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<StaticVarCompensatorInterface> >& getStaticVarCompensators() const = 0;
+  virtual const std::vector<boost::shared_ptr<StaticVarCompensatorInterface> >& getStaticVarCompensators() const = 0;
 
   /**
    * @brief Getter for the vector of generator interface
    * @return vector of generator interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<GeneratorInterface> >& getGenerators() const = 0;
+  virtual const std::vector<boost::shared_ptr<GeneratorInterface> >& getGenerators() const = 0;
 
   /**
    * @brief Getter for the vector of danglingLine interface
    * @return vector of danglingLine of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<DanglingLineInterface> >& getDanglingLines() const = 0;
+  virtual const std::vector<boost::shared_ptr<DanglingLineInterface> >& getDanglingLines() const = 0;
 
   /**
    * @brief Getter for the vector of vsc converter interface
    * @return vector of vsc converter of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<VscConverterInterface> >& getVscConverters() const = 0;
+  virtual const std::vector<boost::shared_ptr<VscConverterInterface> >& getVscConverters() const = 0;
 
   /**
    * @brief Getter for the vector of lcc converter interface
    * @return vector of lcc converter of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<LccConverterInterface> >& getLccConverters() const = 0;
+  virtual const std::vector<boost::shared_ptr<LccConverterInterface> >& getLccConverters() const = 0;
 
   /**
    * @brief for each components, if there is a dynamic model, indicate for

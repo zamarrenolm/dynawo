@@ -20,39 +20,38 @@
  */
 //======================================================================
 
-#include <IIDM/components/Load.h>
-
 #include "DYNLoadInterfaceIIDM.h"
+
+#include <IIDM/components/Load.h>
 
 using boost::shared_ptr;
 using std::string;
 
 namespace DYN {
 
-LoadInterfaceIIDM::~LoadInterfaceIIDM() {
-}
+LoadInterfaceIIDM::~LoadInterfaceIIDM() {}
 
 LoadInterfaceIIDM::LoadInterfaceIIDM(IIDM::Load& load) :
-InjectorInterfaceIIDM<IIDM::Load>(load, load.id()),
-loadIIDM_(load),
-loadPUnderV_(0.),
-v0_(0.),
-vNom_(0.) {
+    InjectorInterfaceIIDM<IIDM::Load>(load, load.id()),
+    loadIIDM_(load),
+    loadPUnderV_(0.),
+    v0_(0.),
+    vNom_(0.) {
   setType(ComponentInterface::LOAD);
   stateVariables_.resize(3);
-  stateVariables_[VAR_P] = StateVariable("p", StateVariable::DOUBLE);  // P
-  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);  // Q
-  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);   // connectionState
+  stateVariables_[VAR_P] = StateVariable("p", StateVariable::DOUBLE);       // P
+  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);       // Q
+  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);  // connectionState
 }
 
 int
 LoadInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "p" )
+  if (varName == "p")
     index = VAR_P;
-  else if ( varName == "q" )
+  else if (varName == "q")
     index = VAR_Q;
-  else if ( varName == "state" )
+  else if (varName == "state")
     index = VAR_STATE;
   return index;
 }

@@ -44,8 +44,8 @@
 #ifndef MODELICA_UTILITIES_H
 #define MODELICA_UTILITIES_H
 
-#include <stddef.h>
 #include <stdarg.h>
+#include <stddef.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -65,12 +65,10 @@ extern "C" {
 #define MODELICA_NORETURN _Noreturn
 #define MODELICA_NORETURNATTR
 #elif defined(__cplusplus) && __cplusplus >= 201103L
-#if (defined(__GNUC__) && __GNUC__ >= 5) || \
-    (defined(__GNUC__) && defined(__GNUC_MINOR__) && __GNUC__ == 4 && __GNUC_MINOR__ >= 8)
+#if (defined(__GNUC__) && __GNUC__ >= 5) || (defined(__GNUC__) && defined(__GNUC_MINOR__) && __GNUC__ == 4 && __GNUC_MINOR__ >= 8)
 #define MODELICA_NORETURN [[noreturn]]
 #define MODELICA_NORETURNATTR
-#elif (defined(__GNUC__) && __GNUC__ >= 3) || \
-      (defined(__GNUC__) && defined(__GNUC_MINOR__) && __GNUC__ == 2 && __GNUC_MINOR__ >= 8)
+#elif (defined(__GNUC__) && __GNUC__ >= 3) || (defined(__GNUC__) && defined(__GNUC_MINOR__) && __GNUC__ == 2 && __GNUC_MINOR__ >= 8)
 #define MODELICA_NORETURN
 #define MODELICA_NORETURNATTR __attribute__((noreturn))
 #elif defined(__GNUC__)
@@ -89,13 +87,11 @@ extern "C" {
 #define MODELICA_NORETURN
 #define MODELICA_NORETURNATTR
 #endif
-#elif (defined(__GNUC__) && __GNUC__ >= 3) || \
-      (defined(__GNUC__) && defined(__GNUC_MINOR__) && __GNUC__ == 2 && __GNUC_MINOR__ >= 8) || \
-      (defined(__SUNPRO_C) && __SUNPRO_C >= 0x5110)
+#elif (defined(__GNUC__) && __GNUC__ >= 3) || (defined(__GNUC__) && defined(__GNUC_MINOR__) && __GNUC__ == 2 && __GNUC_MINOR__ >= 8) || \
+    (defined(__SUNPRO_C) && __SUNPRO_C >= 0x5110)
 #define MODELICA_NORETURN
 #define MODELICA_NORETURNATTR __attribute__((noreturn))
-#elif (defined(_MSC_VER) && _MSC_VER >= 1200) || \
-       defined(__BORLANDC__)
+#elif (defined(_MSC_VER) && _MSC_VER >= 1200) || defined(__BORLANDC__)
 #define MODELICA_NORETURN __declspec(noreturn)
 #define MODELICA_NORETURNATTR
 #else
@@ -130,18 +126,15 @@ void ModelicaMessage(const char *string);
 Output the message string (no format control).
 */
 
-
 void ModelicaFormatMessage(const char *string, ...) MODELICA_FORMATATTR_PRINTF;
 /*
 Output the message under the same format control as the C-function printf.
 */
 
-
 void ModelicaVFormatMessage(const char *string, va_list args) MODELICA_FORMATATTR_VPRINTF;
 /*
 Output the message under the same format control as the C-function vprintf.
 */
-
 
 MODELICA_NORETURN void ModelicaError(const char *string) MODELICA_NORETURNATTR;
 /*
@@ -150,14 +143,12 @@ never returns to the calling function, but handles the error
 similarly to an assert in the Modelica code.
 */
 
-
 MODELICA_NORETURN void ModelicaFormatError(const char *string, ...) MODELICA_NORETURNATTR MODELICA_FORMATATTR_PRINTF;
 /*
 Output the error message under the same format control as the C-function
 printf. This function never returns to the calling function,
 but handles the error similarly to an assert in the Modelica code.
 */
-
 
 MODELICA_NORETURN void ModelicaVFormatError(const char *string, va_list args) MODELICA_NORETURNATTR MODELICA_FORMATATTR_VPRINTF;
 /*
@@ -166,8 +157,7 @@ vprintf. This function never returns to the calling function,
 but handles the error similarly to an assert in the Modelica code.
 */
 
-
-char* ModelicaAllocateString(size_t len);
+char *ModelicaAllocateString(size_t len);
 /*
 Allocate memory for a Modelica string which is used as return
 argument of an external Modelica function. Note, that the storage
@@ -176,8 +166,7 @@ calling program, as for any other array. If an error occurs, this
 function does not return, but calls "ModelicaError".
 */
 
-
-char* ModelicaAllocateStringWithErrorReturn(size_t len);
+char *ModelicaAllocateStringWithErrorReturn(size_t len);
 /*
 Same as ModelicaAllocateString, except that in case of error, the
 function returns 0. This allows the external function to close files

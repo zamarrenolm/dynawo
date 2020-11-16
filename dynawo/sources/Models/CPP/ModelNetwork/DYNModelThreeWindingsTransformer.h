@@ -20,8 +20,9 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELTHREEWINDINGSTRANSFORMER_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELTHREEWINDINGSTRANSFORMER_H_
 
-#include <boost/shared_ptr.hpp>
 #include "DYNNetworkComponent.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class ModelBus;
@@ -41,19 +42,18 @@ class ModelThreeWindingsTransformer : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelThreeWindingsTransformer() { }
+  ~ModelThreeWindingsTransformer() {}
 
   /**
    * @brief  calculated variables type
    */
-  void init() { /* not needed */ }
+  void init() { /* not needed */
+  }
 
   /**
    * @brief  calculated variables type
    */
-  typedef enum {
-    nbCalculatedVariables_ = 0
-  } CalculatedVariables_t;
+  typedef enum { nbCalculatedVariables_ = 0 } CalculatedVariables_t;
 
   /**
    * @brief set the bus at end 1 of the transformer
@@ -110,17 +110,20 @@ class ModelThreeWindingsTransformer : public NetworkComponent {
    * @brief evaluate node injection
    *
    */
-  void evalNodeInjection() { /* not needed */ }
+  void evalNodeInjection() { /* not needed */
+  }
 
   /**
    * @brief evaluate derivatives
    */
-  void evalDerivatives(const double /*cj*/) { /* not needed */ }
+  void evalDerivatives(const double /*cj*/) { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalDerivativesPrim()
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalF()
@@ -184,22 +187,26 @@ class ModelThreeWindingsTransformer : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::evalYType()
    */
-  void evalYType() { /* not needed */ }
+  void evalYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
    */
-  void evalFType() { /* not needed */ }
+  void evalFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::collectSilentZ()
@@ -219,7 +226,8 @@ class ModelThreeWindingsTransformer : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::getY0()
    */
-  void getY0() { /* not needed */ }
+  void getY0() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::setSubModelParameters(const boost::unordered_map<std::string, ParameterModeler>& params)
@@ -244,7 +252,8 @@ class ModelThreeWindingsTransformer : public NetworkComponent {
   /**
    * @brief addBusNeighbors
    */
-  void addBusNeighbors() { /* not needed */ }
+  void addBusNeighbors() { /* not needed */
+  }
   /**
    * @brief init size
    */

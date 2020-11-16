@@ -17,14 +17,13 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "CRVCurvesCollectionFactory.h"
-#include "CRVCurvesCollection.h"
-#include "CRVCurveFactory.h"
-#include "CRVCurve.h"
 #include "CRVCsvExporter.h"
+#include "CRVCurve.h"
+#include "CRVCurveFactory.h"
+#include "CRVCurvesCollection.h"
+#include "CRVCurvesCollectionFactory.h"
 #include "CRVXmlExporter.h"
+#include "gtest_dynawo.h"
 
 namespace curves {
 
@@ -115,17 +114,18 @@ TEST(APICRVTest, CurvesCollectionXmlExporter) {
   XmlExporter exporter;
   std::stringstream ss;
   exporter.exportToStream(curvesCollection1, ss);
-  ASSERT_EQ(ss.str(), "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>\n<curvesOutput "
-      "xmlns=\"http://www.rte-france.com/dynawo\">\n  <curve model=\"\" variable=\"variable1\">\n    "
-      "<point time=\"0.000000\" value=\"5.000000\"/>\n    "
-      "<point time=\"1.000000\" value=\"5.000000\"/>\n    "
-      "<point time=\"2.000000\" value=\"5.000000\"/>\n  "
-      "</curve>\n  <curve model=\"\" variable=\"variable2\">\n    "
-      "<point time=\"0.000000\" value=\"7.000000\"/>\n    "
-      "<point time=\"1.000000\" value=\"7.000000\"/>\n    "
-      "<point time=\"2.000000\" value=\"7.000000\"/>\n  "
-      "</curve>\n"
-      "</curvesOutput>\n");
+  ASSERT_EQ(ss.str(),
+            "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>\n<curvesOutput "
+            "xmlns=\"http://www.rte-france.com/dynawo\">\n  <curve model=\"\" variable=\"variable1\">\n    "
+            "<point time=\"0.000000\" value=\"5.000000\"/>\n    "
+            "<point time=\"1.000000\" value=\"5.000000\"/>\n    "
+            "<point time=\"2.000000\" value=\"5.000000\"/>\n  "
+            "</curve>\n  <curve model=\"\" variable=\"variable2\">\n    "
+            "<point time=\"0.000000\" value=\"7.000000\"/>\n    "
+            "<point time=\"1.000000\" value=\"7.000000\"/>\n    "
+            "<point time=\"2.000000\" value=\"7.000000\"/>\n  "
+            "</curve>\n"
+            "</curvesOutput>\n");
 }
 
 }  // namespace curves

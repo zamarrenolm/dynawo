@@ -22,19 +22,19 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNSTATICVARCOMPENSATORINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNSTATICVARCOMPENSATORINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
-#include "DYNStaticVarCompensatorInterface.h"
 #include "DYNInjectorInterfaceIIDM.h"
+#include "DYNStaticVarCompensatorInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 namespace extensions {
 namespace standbyautomaton {
 class StandbyAutomaton;
 }
-}
+}  // namespace extensions
 class StaticVarCompensator;
-}
+}  // namespace IIDM
 
 namespace DYN {
 
@@ -46,12 +46,7 @@ class StaticVarCompensatorInterfaceIIDM : public StaticVarCompensatorInterface, 
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_P = 0,
-    VAR_Q,
-    VAR_STATE,
-    VAR_REGULATINGMODE
-  } indexVar_t;
+  typedef enum { VAR_P = 0, VAR_Q, VAR_STATE, VAR_REGULATINGMODE } indexVar_t;
 
  public:
   /**
@@ -176,8 +171,8 @@ class StaticVarCompensatorInterfaceIIDM : public StaticVarCompensatorInterface, 
   double getQ();
 
  private:
-  IIDM::StaticVarCompensator& staticVarCompensatorIIDM_;  ///< reference to the iidm static var compensator instance
-  IIDM::extensions::standbyautomaton::StandbyAutomaton * sa_;  ///< pointer to StandbyAutomaton extension when it exists
+  IIDM::StaticVarCompensator& staticVarCompensatorIIDM_;      ///< reference to the iidm static var compensator instance
+  IIDM::extensions::standbyautomaton::StandbyAutomaton* sa_;  ///< pointer to StandbyAutomaton extension when it exists
 };
 }  // namespace DYN
 

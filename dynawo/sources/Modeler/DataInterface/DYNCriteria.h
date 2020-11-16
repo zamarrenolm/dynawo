@@ -14,11 +14,12 @@
 #ifndef MODELER_DATAINTERFACE_DYNCRITERIA_H_
 #define MODELER_DATAINTERFACE_DYNCRITERIA_H_
 
-#include <boost/shared_ptr.hpp>
 #include "CRTCriteriaParams.h"
 #include "DYNBusInterface.h"
-#include "DYNLoadInterface.h"
 #include "DYNGeneratorInterface.h"
+#include "DYNLoadInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 
@@ -52,10 +53,12 @@ class Criteria {
    *
    * @return list of failing criteria
    */
-  const std::vector<std::pair<double, std::string> >& getFailingCriteria() const {return failingCriteria_;}
+  const std::vector<std::pair<double, std::string> >& getFailingCriteria() const {
+    return failingCriteria_;
+  }
 
  protected:
-  const boost::shared_ptr<criteria::CriteriaParams>& params_;  ///< parameters of this criteria
+  const boost::shared_ptr<criteria::CriteriaParams>& params_;     ///< parameters of this criteria
   std::vector<std::pair<double, std::string> > failingCriteria_;  ///< keeps the ids of the failing criteria
 };
 
@@ -101,12 +104,13 @@ class BusCriteria : public Criteria {
    * @brief returns true if no bus was added
    * @return true if no bus was added
    */
-  bool empty() const {return buses_.empty();}
+  bool empty() const {
+    return buses_.empty();
+  }
 
  private:
   std::vector<boost::shared_ptr<BusInterface> > buses_;  ///< buses of this criteria
 };
-
 
 /**
  * @brief LoadCriteria class: handle the check of load criteria
@@ -150,12 +154,13 @@ class LoadCriteria : public Criteria {
    * @brief returns true if no load was added
    * @return true if no load was added
    */
-  bool empty() const {return loads_.empty();}
+  bool empty() const {
+    return loads_.empty();
+  }
 
  private:
   std::vector<boost::shared_ptr<LoadInterface> > loads_;  ///< loads of this criteria
 };
-
 
 /**
  * @brief GeneratorCriteria class: handle the check of generator criteria
@@ -199,7 +204,9 @@ class GeneratorCriteria : public Criteria {
    * @brief returns true if no generator was added
    * @return true if no generator was added
    */
-  bool empty() const {return generators_.empty();}
+  bool empty() const {
+    return generators_.empty();
+  }
 
  private:
   std::vector<boost::shared_ptr<GeneratorInterface> > generators_;  ///< loads of this criteria

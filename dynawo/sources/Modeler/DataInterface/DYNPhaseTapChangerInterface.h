@@ -20,8 +20,8 @@
 #ifndef MODELER_DATAINTERFACE_DYNPHASETAPCHANGERINTERFACE_H_
 #define MODELER_DATAINTERFACE_DYNPHASETAPCHANGERINTERFACE_H_
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
+#include <vector>
 
 namespace DYN {
 class StepInterface;
@@ -31,7 +31,7 @@ class PhaseTapChangerInterface {
   /**
    * @brief Destructor
    */
-  virtual ~PhaseTapChangerInterface() { }
+  virtual ~PhaseTapChangerInterface() {}
 
   /**
    * @brief Getter for steps of the phase tap changer
@@ -86,7 +86,6 @@ class PhaseTapChangerInterface {
    * @return the current threshold
    */
   virtual double getThresholdI() const = 0;
-
 
   /**
    * @brief Getter for the current step's resistance of the phase tap changer

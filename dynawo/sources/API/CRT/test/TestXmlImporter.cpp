@@ -17,13 +17,12 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "CRTXmlImporter.h"
-#include "CRTCriteriaCollection.h"
 #include "CRTCriteria.h"
+#include "CRTCriteriaCollection.h"
 #include "CRTCriteriaParams.h"
+#include "CRTXmlImporter.h"
 #include "DYNCommon.h"
+#include "gtest_dynawo.h"
 
 using DYN::doubleEquals;
 
@@ -59,14 +58,12 @@ TEST(APICRTTest, testXmlFileImporter) {
   ASSERT_NO_THROW(criteria = importer.importFromFile("res/criteria.crt"));
 
   size_t idx = 0;
-  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::BUS),
-      itEnd = criteria->end(CriteriaCollection::BUS);
-      it != itEnd; ++it, ++idx) {
+  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::BUS), itEnd = criteria->end(CriteriaCollection::BUS);
+       it != itEnd; ++it, ++idx) {
     boost::shared_ptr<Criteria> criteria = *it;
     if (idx == 0) {
       size_t idx2 = 0;
-      for (Criteria::component_id_const_iterator it2 = criteria->begin(), it2End = criteria->end();
-          it2 != it2End; ++it2, ++idx2) {
+      for (Criteria::component_id_const_iterator it2 = criteria->begin(), it2End = criteria->end(); it2 != it2End; ++it2, ++idx2) {
         if (idx2 == 0)
           ASSERT_EQ(*it2, "MyId");
         else if (idx2 == 1)
@@ -91,9 +88,8 @@ TEST(APICRTTest, testXmlFileImporter) {
   }
 
   idx = 0;
-  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::LOAD),
-      itEnd = criteria->end(CriteriaCollection::LOAD);
-      it != itEnd; ++it, ++idx) {
+  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::LOAD), itEnd = criteria->end(CriteriaCollection::LOAD);
+       it != itEnd; ++it, ++idx) {
     boost::shared_ptr<Criteria> criteria = *it;
     if (idx == 0) {
       assert(criteria->begin() == criteria->end());
@@ -125,8 +121,7 @@ TEST(APICRTTest, testXmlFileImporter) {
       ASSERT_TRUE(criteria->containsCountry("IT"));
     } else if (idx == 2) {
       size_t idx2 = 0;
-      for (Criteria::component_id_const_iterator it2 = criteria->begin(), it2End = criteria->end();
-          it2 != it2End; ++it2, ++idx2) {
+      for (Criteria::component_id_const_iterator it2 = criteria->begin(), it2End = criteria->end(); it2 != it2End; ++it2, ++idx2) {
         if (idx2 == 0)
           ASSERT_EQ(*it2, "MyLoad");
         else if (idx2 == 1)
@@ -154,12 +149,12 @@ TEST(APICRTTest, testXmlStreamImporter) {
   boost::shared_ptr<XmlImporter> importer = boost::shared_ptr<XmlImporter>(new XmlImporter());
   boost::shared_ptr<CriteriaCollection> criteria;
   std::istringstream goodInputStream(
-    "<?xml version='1.0' encoding='UTF-8'?>"
-    "<criteria xmlns=\"http://www.rte-france.com/dynawo\">"
-    "<busCriteria>"
-    "<parameters id =\"MyId\" scope=\"DYNAMIC\" type=\"LOCAL_VALUE\" uMaxPu=\"0.8\"/>"
-    "</busCriteria>"
-    "</criteria>");
+      "<?xml version='1.0' encoding='UTF-8'?>"
+      "<criteria xmlns=\"http://www.rte-france.com/dynawo\">"
+      "<busCriteria>"
+      "<parameters id =\"MyId\" scope=\"DYNAMIC\" type=\"LOCAL_VALUE\" uMaxPu=\"0.8\"/>"
+      "</busCriteria>"
+      "</criteria>");
   std::istream goodStream(goodInputStream.rdbuf());
   ASSERT_NO_THROW(criteria = importer->importFromStream(goodStream));
 }

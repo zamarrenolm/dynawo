@@ -19,13 +19,13 @@
  */
 #ifndef MODELER_COMMON_DYNMODELMULTI_H_
 #define MODELER_COMMON_DYNMODELMULTI_H_
+#include "DYNModel.h"
+
+#include <boost/core/noncopyable.hpp>
+#include <boost/unordered_map.hpp>
 #include <set>
 #include <string>
 #include <vector>
-#include <boost/core/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
-
-#include "DYNModel.h"
 
 namespace DYN {
 class SubModel;
@@ -71,7 +71,7 @@ class ModelMulti : public Model, private boost::noncopyable {
   /**
    * @copydoc Model::evalG(double t, std::vector<state_g> &g)
    */
-  void evalG(double t, std::vector<state_g> &g);
+  void evalG(double t, std::vector<state_g>& g);
 
   /**
    * @copydoc Model::evalZ(double t)
@@ -96,7 +96,7 @@ class ModelMulti : public Model, private boost::noncopyable {
   /**
    * @copydoc Model::checkDataCoherence(const double & t)
    */
-  void checkDataCoherence(const double & t);
+  void checkDataCoherence(const double& t);
 
   /**
    * @copydoc Model::checkParametersCoherence() const
@@ -116,7 +116,7 @@ class ModelMulti : public Model, private boost::noncopyable {
   /**
    * @copydoc Model::getY0(const double& t0, std::vector<double> &y0, std::vector<double> &yp0)
    */
-  void getY0(const double& t0, std::vector<double> &y0, std::vector<double> &yp0);
+  void getY0(const double& t0, std::vector<double>& y0, std::vector<double>& yp0);
 
   /**
    * @copydoc Model::modeChange()
@@ -289,12 +289,12 @@ class ModelMulti : public Model, private boost::noncopyable {
   /**
    * @copydoc Model::printInitValues(const std::string & directory)
    */
-  void printInitValues(const std::string & directory);
+  void printInitValues(const std::string& directory);
 
   /**
    * @copydoc Model::evalCalculatedVariables(const double & t, const std::vector<double> &y, const std::vector<double> &yp,const std::vector<double> &z)
    */
-  void evalCalculatedVariables(const double & t, const std::vector<double> &y, const std::vector<double> &yp, const std::vector<double> &z);
+  void evalCalculatedVariables(const double& t, const std::vector<double>& y, const std::vector<double>& yp, const std::vector<double>& z);
 
   /**
    * @copydoc Model::updateCalculatedVarForCurves(boost::shared_ptr<curves::CurvesCollection> curvesCollection)
@@ -304,27 +304,27 @@ class ModelMulti : public Model, private boost::noncopyable {
   /**
    * @copydoc Model::dumpParameters(std::map< std::string, std::string> & mapParameters)
    */
-  void dumpParameters(std::map< std::string, std::string> & mapParameters);
+  void dumpParameters(std::map<std::string, std::string>& mapParameters);
 
   /**
    * @copydoc Model::getModelParameterValue(const std::string & curveModelName, const std::string & curveVariable, double & value, bool & found)
    */
-  void getModelParameterValue(const std::string & curveModelName, const std::string & curveVariable, double & value, bool & found);
+  void getModelParameterValue(const std::string& curveModelName, const std::string& curveVariable, double& value, bool& found);
 
   /**
    * @copydoc Model::loadParameters(const std::map< std::string, std::string> & mapParameters)
    */
-  void loadParameters(const std::map< std::string, std::string> & mapParameters);
+  void loadParameters(const std::map<std::string, std::string>& mapParameters);
 
   /**
    * @copydoc Model::dumpVariables(std::map< std::string, std::string> & mapVariables)
    */
-  void dumpVariables(std::map< std::string, std::string> & mapVariables);
+  void dumpVariables(std::map<std::string, std::string>& mapVariables);
 
   /**
    * @copydoc Model::loadVariables(const std::map< std::string, std::string> & mapVariables)
    */
-  void loadVariables(const std::map< std::string, std::string> & mapVariables);
+  void loadVariables(const std::map<std::string, std::string>& mapVariables);
 
   /**
    * @copydoc Model::rotateBuffers()
@@ -378,7 +378,7 @@ class ModelMulti : public Model, private boost::noncopyable {
    * @param subModel2 second subModel where the variable is located
    * @param name2 name of the variable to connect inside the subModel 2
    */
-  void connectElements(boost::shared_ptr<SubModel> &subModel1, const std::string &name1, boost::shared_ptr<SubModel> &subModel2, const std::string &name2);
+  void connectElements(boost::shared_ptr<SubModel>& subModel1, const std::string& name1, boost::shared_ptr<SubModel>& subModel2, const std::string& name2);
   /**
 
    * @brief seek all variables that are connected by a connection
@@ -389,8 +389,8 @@ class ModelMulti : public Model, private boost::noncopyable {
    * @param name2 name of the variable to connect inside the subModel 2
    * @param variables outputs: after the call contains all couples variable1->variable2 connected by this connection
    */
-  void findVariablesConnectedBy(const boost::shared_ptr<SubModel> &subModel1, const std::string &name1,
-      const boost::shared_ptr<SubModel> &subModel2, const std::string &name2, std::vector<std::pair<std::string, std::string> >& variables) const;
+  void findVariablesConnectedBy(const boost::shared_ptr<SubModel>& subModel1, const std::string& name1, const boost::shared_ptr<SubModel>& subModel2,
+                                const std::string& name2, std::vector<std::pair<std::string, std::string> >& variables) const;
 
   /**
    * @brief find a sub model inside the model multi thanks to its name
@@ -451,12 +451,12 @@ class ModelMulti : public Model, private boost::noncopyable {
   /**
    * @copydoc Model::getCurrentZ(std::vector<double> &z)
    */
-  void getCurrentZ(std::vector<double> &z);
+  void getCurrentZ(std::vector<double>& z);
 
   /**
    * @copydoc Model::setCurrentZ(const std::vector<double> &zLocal)
    */
-  void setCurrentZ(const std::vector<double> &z);
+  void setCurrentZ(const std::vector<double>& z);
 
  private:
   /**
@@ -475,8 +475,8 @@ class ModelMulti : public Model, private boost::noncopyable {
    * @param name2  name of the variable to connect inside the subModel 2
    * @param forceConnection @b true if whe should ignore the flow type for continuous variable
    */
-  void createConnection(boost::shared_ptr<SubModel> &subModel1, const std::string & name1, boost::shared_ptr<SubModel> &subModel2,
-                        const std::string &name2, bool forceConnection = false);
+  void createConnection(boost::shared_ptr<SubModel>& subModel1, const std::string& name1, boost::shared_ptr<SubModel>& subModel2, const std::string& name2,
+                        bool forceConnection = false);
 
   /**
    * @brief create a connection bewteen a variable and a calculated variable
@@ -486,22 +486,21 @@ class ModelMulti : public Model, private boost::noncopyable {
    * @param subModel2 second  subModel where the variable is located
    * @param yNum index of the variable inside the subModel 2
    */
-  void createCalculatedVariableConnection(boost::shared_ptr<SubModel> &subModel1, const int & numVar, boost::shared_ptr<SubModel> &subModel2, const int &yNum);
+  void createCalculatedVariableConnection(boost::shared_ptr<SubModel>& subModel1, const int& numVar, boost::shared_ptr<SubModel>& subModel2, const int& yNum);
 
   /**
    * @brief struct used identify properties from a subModel found with a variable name
    */
   struct findSubModelFromVarName_t {
     boost::shared_ptr<SubModel> subModel_;  ///< The SubModel containing the variable, NULL if not found
-    bool isNetwork_;  ///< true if the subModel found is the network
-    bool isDynParam_;  ///< true if the variable is a dynamic parameter
-    std::string variableNameInSubModel_;  ///< The accurate name of the variable in the subModel
+    bool isNetwork_;                        ///< true if the subModel found is the network
+    bool isDynParam_;                       ///< true if the variable is a dynamic parameter
+    std::string variableNameInSubModel_;    ///< The accurate name of the variable in the subModel
 
     /**
      * @brief default constructor
      */
-    findSubModelFromVarName_t() :isNetwork_(false),
-            isDynParam_(false) {}
+    findSubModelFromVarName_t() : isNetwork_(false), isDynParam_(false) {}
     /**
      * @brief constructor
      *
@@ -510,11 +509,11 @@ class ModelMulti : public Model, private boost::noncopyable {
      * @param isDynParam true if the variable is a dynamic parameter
      * @param variableNameInSubModel The accurate name of the variable in the subModel
      */
-    findSubModelFromVarName_t(boost::shared_ptr<SubModel> subModel,
-        bool isNetwork, bool isDynParam, std::string variableNameInSubModel) :subModel_(subModel),
-            isNetwork_(isNetwork),
-            isDynParam_(isDynParam),
-            variableNameInSubModel_(variableNameInSubModel){}
+    findSubModelFromVarName_t(boost::shared_ptr<SubModel> subModel, bool isNetwork, bool isDynParam, std::string variableNameInSubModel) :
+        subModel_(subModel),
+        isNetwork_(isNetwork),
+        isDynParam_(isDynParam),
+        variableNameInSubModel_(variableNameInSubModel) {}
   };
   /**
    * @brief find the subModel which contains this variable
@@ -537,44 +536,43 @@ class ModelMulti : public Model, private boost::noncopyable {
    */
   void cleanBuffers();
 
-  boost::unordered_map<int, int> mapAssociationF_;  ///< association between an index of f functions and a subModel
-  boost::unordered_map<int, int> mapAssociationG_;  ///< association between an index of g functions and a subModel
-  std::vector<std::string> yNames_;  ///< names of all variables y
-  std::vector<boost::shared_ptr<SubModel> > subModels_;  ///< list of each sub models
-  boost::unordered_map<std::string, size_t > subModelByName_;  ///< map associating a sub model name to its index in subModels_
+  boost::unordered_map<int, int> mapAssociationF_;            ///< association between an index of f functions and a subModel
+  boost::unordered_map<int, int> mapAssociationG_;            ///< association between an index of g functions and a subModel
+  std::vector<std::string> yNames_;                           ///< names of all variables y
+  std::vector<boost::shared_ptr<SubModel> > subModels_;       ///< list of each sub models
+  boost::unordered_map<std::string, size_t> subModelByName_;  ///< map associating a sub model name to its index in subModels_
   boost::unordered_map<std::string, std::vector<boost::shared_ptr<SubModel> > > subModelByLib_;  ///< associates a lib and each SubModel created with it
-  boost::unordered_map<size_t, std::vector<size_t > >
-    subModelIdxToConnectorCalcVarsIdx_;  ///< associates a subModel index to the associated calculated variables connectors indexes
+  boost::unordered_map<size_t, std::vector<size_t> >
+      subModelIdxToConnectorCalcVarsIdx_;                     ///< associates a subModel index to the associated calculated variables connectors indexes
   boost::shared_ptr<ConnectorContainer> connectorContainer_;  ///< list of each connector
-  std::vector<double> zSave_;  ///< save of the last discretes values
-  propertyF_t* fType_;  ///< local buffer to fill with the property of each continuous equation (Algebraic or Differential)
+  std::vector<double> zSave_;                                 ///< save of the last discretes values
+  propertyF_t* fType_;              ///< local buffer to fill with the property of each continuous equation (Algebraic or Differential)
   propertyContinuousVar_t* yType_;  ///< local buffer to fill with the property of each variable (Algebraic / Differential / External)
 
-  int sizeF_;  ///< number of the residuals functions
-  int sizeZ_;  ///< number of discretes values
-  int sizeG_;  ///< number of root functions
-  int sizeMode_;  ///< number of mode
-  int sizeY_;  ///< number of continuous values
-  bool zChange_;  ///< @b true if at least one non-silent discrete value has changed
-  bool silentZChange_;  ///< @b true if at least one silent discrete value has changed
-  bool modeChange_;  ///< @b true if one mode has changed
+  int sizeF_;                        ///< number of the residuals functions
+  int sizeZ_;                        ///< number of discretes values
+  int sizeG_;                        ///< number of root functions
+  int sizeMode_;                     ///< number of mode
+  int sizeY_;                        ///< number of continuous values
+  bool zChange_;                     ///< @b true if at least one non-silent discrete value has changed
+  bool silentZChange_;               ///< @b true if at least one silent discrete value has changed
+  bool modeChange_;                  ///< @b true if one mode has changed
   modeChangeType_t modeChangeType_;  ///< type of mode change
 
-  unsigned int offsetFOptional_;  ///< offset in whole F buffer for optional equations
+  unsigned int offsetFOptional_;   ///< offset in whole F buffer for optional equations
   std::set<int> numVarsOptional_;  ///< index of optional variables
 
-  double* fLocal_;  ///< local buffer to fill with the residual values
-  state_g* gLocal_;  ///< local buffer to fill with the roots values
-  double* yLocal_;  ///< local buffer to use when accessing continuous variables
-  double* ypLocal_;  ///< local buffer to use when accessing derivatives of continuous variables
-  double* zLocal_;  ///< local buffer to use when accessing discretes variables
-  bool* zConnectedLocal_;  ///< local buffer to use when accessing discretes variables connection status
-  bool* silentZ_;  ///< local buffer indicating if the corresponding discrete variable is used only in residual equations
-  bool enableSilentZ_;  ///< enable or disable the use of silentZ in the discrete variable propagation loop
-  std::vector<size_t> silentZIndexes_;  ///< indexes of silent discrete variables
+  double* fLocal_;                         ///< local buffer to fill with the residual values
+  state_g* gLocal_;                        ///< local buffer to fill with the roots values
+  double* yLocal_;                         ///< local buffer to use when accessing continuous variables
+  double* ypLocal_;                        ///< local buffer to use when accessing derivatives of continuous variables
+  double* zLocal_;                         ///< local buffer to use when accessing discretes variables
+  bool* zConnectedLocal_;                  ///< local buffer to use when accessing discretes variables connection status
+  bool* silentZ_;                          ///< local buffer indicating if the corresponding discrete variable is used only in residual equations
+  bool enableSilentZ_;                     ///< enable or disable the use of silentZ in the discrete variable propagation loop
+  std::vector<size_t> silentZIndexes_;     ///< indexes of silent discrete variables
   std::vector<size_t> nonSilentZIndexes_;  ///< indexes of non silent discrete variables
-};  ///< Class for Multiple-Model
-
+};                                         ///< Class for Multiple-Model
 
 }  // namespace DYN
 

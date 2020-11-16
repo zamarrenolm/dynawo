@@ -17,8 +17,6 @@
  *
  */
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNElement.h"
 #include "DYNModelVariationArea.h"
 #include "DYNModelVariationArea.hpp"
@@ -28,12 +26,14 @@
 #include "DYNVariable.h"
 #include "PARParametersSet.h"
 #include "PARParametersSetFactory.h"
-
 #include "gtest_dynawo.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 
-boost::shared_ptr<SubModel> initModelVariationArea(double deltaPLoad2, double deltaQLoad2) {
+boost::shared_ptr<SubModel>
+initModelVariationArea(double deltaPLoad2, double deltaQLoad2) {
   boost::shared_ptr<SubModel> modelVariationArea = SubModelFactory::createSubModelFromLib("../DYNModelVariationArea" + std::string(sharedLibraryExtension()));
 
   std::vector<ParameterModeler> parameters;

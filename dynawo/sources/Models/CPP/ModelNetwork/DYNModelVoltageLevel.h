@@ -24,11 +24,11 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELVOLTAGELEVEL_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELVOLTAGELEVEL_H_
 
-#include <boost/shared_ptr.hpp>
-
+#include "DYNGraph.h"
 #include "DYNNetworkComponent.h"
 #include "DYNVoltageLevelInterface.h"
-#include "DYNGraph.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class VoltageLevelInterface;
@@ -49,14 +49,12 @@ class ModelVoltageLevel : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelVoltageLevel() { }
+  ~ModelVoltageLevel() {}
 
   /**
    * @brief list of calculated variables indexes
    */
-  typedef enum {
-    nbCalculatedVariables_ = 0
-  } CalculatedVariables_t;
+  typedef enum { nbCalculatedVariables_ = 0 } CalculatedVariables_t;
 
   /**
    * @brief getter for the voltage level components
@@ -245,7 +243,8 @@ class ModelVoltageLevel : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::evalDerivativesPrim()
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalCalculatedVars()
@@ -328,16 +327,16 @@ class ModelVoltageLevel : public NetworkComponent {
    */
   void defineGraph();
 
-  boost::optional<Graph> graph_;  ///< topology graph to find node connection
-  boost::unordered_map<std::string, float> weights1_;  ///< weight of 1 for each edge in the graph
+  boost::optional<Graph> graph_;                                                                ///< topology graph to find node connection
+  boost::unordered_map<std::string, float> weights1_;                                           ///< weight of 1 for each edge in the graph
   boost::unordered_map<unsigned, std::pair<unsigned, std::vector<std::string> > > ClosestBBS_;  ///< node id -> closest bbs + shortest path
-  VoltageLevelInterface::VoltageLevelTopologyKind_t topologyKind_;  ///< voltage level topology (bus breaker or node breaker)
-  std::vector<boost::shared_ptr<NetworkComponent> > components_;  ///< all components in a voltage level
-  std::map<int, boost::shared_ptr<ModelBus> > busesByIndex_;  ///< map of voltage level buses with their index
-  std::vector<boost::shared_ptr<ModelBus> > busesWithBBS_;  ///< vector of buses that contain a bus bar section
-  std::vector<boost::shared_ptr<ModelSwitch> > switches_;  ///< all switch components in a voltage level
-  std::map<std::string, boost::shared_ptr<ModelSwitch> > switchesById_;  ///< map of voltage level switches with their id
-  std::vector<int> componentIndexByCalculatedVar_;  ///< index of component for each calculated var
+  VoltageLevelInterface::VoltageLevelTopologyKind_t topologyKind_;                              ///< voltage level topology (bus breaker or node breaker)
+  std::vector<boost::shared_ptr<NetworkComponent> > components_;                                ///< all components in a voltage level
+  std::map<int, boost::shared_ptr<ModelBus> > busesByIndex_;                                    ///< map of voltage level buses with their index
+  std::vector<boost::shared_ptr<ModelBus> > busesWithBBS_;                                      ///< vector of buses that contain a bus bar section
+  std::vector<boost::shared_ptr<ModelSwitch> > switches_;                                       ///< all switch components in a voltage level
+  std::map<std::string, boost::shared_ptr<ModelSwitch> > switchesById_;                         ///< map of voltage level switches with their id
+  std::vector<int> componentIndexByCalculatedVar_;                                              ///< index of component for each calculated var
 };
 
 }  // namespace DYN

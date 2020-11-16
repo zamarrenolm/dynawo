@@ -17,42 +17,33 @@
  * @brief  Sparse Matrix class implementation
  *
  */
+#include "DYNSparseMatrix.h"
+
+#include "DYNCommon.h"
+#include "DYNFileSystemUtils.h"
+#include "DYNMacrosMessage.h"
+#include "DYNTrace.h"
+
+#include <cassert>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <map>
 #include <set>
 #include <sstream>
-#include <iomanip>
 #include <vector>
-#include <iostream>
-#include <fstream>
-#include <cassert>
-#include <cmath>
-
-#include "DYNCommon.h"
-#include "DYNMacrosMessage.h"
-#include "DYNFileSystemUtils.h"
-#include "DYNSparseMatrix.h"
-#include "DYNTrace.h"
-#include "DYNFileSystemUtils.h"
 
 using std::map;
 using std::set;
-using std::vector;
 using std::stringstream;
+using std::vector;
 
 namespace DYN {
 
 const int MATRIX_BLOCK_LENGTH = 1024;  ///< Number of block reallocated when maximum number of variables allocated is reached
 
-SparseMatrix::SparseMatrix() :
-withoutNan_(true),
-withoutInf_(true),
-nbRow_(0),
-nbCol_(0),
-iAp_(0),
-iAi_(0),
-iAx_(0),
-nbTerm_(0),
-currentMaxTerm_(0) { }
+SparseMatrix::SparseMatrix() : withoutNan_(true), withoutInf_(true), nbRow_(0), nbCol_(0), iAp_(0), iAi_(0), iAx_(0), nbTerm_(0), currentMaxTerm_(0) {}
 
 SparseMatrix::~SparseMatrix() {
   free();
@@ -70,14 +61,15 @@ SparseMatrix::addTerm(const int& row, const double& val) {
   if (!doubleIsZero(val)) {
     assert(row < nbRow_);
     // To deal with exploding matrix sizes
-    if (nbTerm_ >= currentMaxTerm_) increaseReserve();
+    if (nbTerm_ >= currentMaxTerm_)
+      increaseReserve();
     ++Ap_[iAp_];
     Ai_[iAi_] = row;
     Ax_[iAx_] = val;
     ++iAi_;
     ++iAx_;
     ++nbTerm_;
-    if (std::isnan(val)) {   // right way to check is the value is a NaN value
+    if (std::isnan(val)) {  // right way to check is the value is a NaN value
       withoutNan_ = false;
     }
 
@@ -91,7 +83,8 @@ void
 SparseMatrix::init(const int& nbRow, const int& nbCol) {
   free();
 
-  if (nbRow == 0) return;
+  if (nbRow == 0)
+    return;
   nbRow_ = nbRow;
   nbCol_ = nbCol;
   currentMaxTerm_ = MATRIX_BLOCK_LENGTH;
@@ -114,7 +107,8 @@ void
 SparseMatrix::reserve(const int& nbCol) {
   free();
 
-  if (nbCol == 0) return;
+  if (nbCol == 0)
+    return;
   nbRow_ = 0;
   nbCol_ = 0;
   currentMaxTerm_ = MATRIX_BLOCK_LENGTH;
@@ -153,7 +147,8 @@ SparseMatrix::free() {
   currentMaxTerm_ = 0;
 }
 
-void SparseMatrix::printToFile(bool sparse) const {
+void
+SparseMatrix::printToFile(bool sparse) const {
   static std::string base = "tmpMat/mat-";
   static int nbPrint = 0;
   stringstream nomFichier;
@@ -161,13 +156,13 @@ void SparseMatrix::printToFile(bool sparse) const {
 
   if (!exists("tmpMat")) {
     create_directory("tmpMat");
-    }
+  }
 
   std::ofstream file;
   file.open(nomFichier.str().c_str(), std::ofstream::out);
 
   if (!sparse) {
-    std::vector< std::vector<double> > matrix;
+    std::vector<std::vector<double> > matrix;
     for (int i = 0; i < nbCol_; ++i) {
       std::vector<double> row(nbCol_, 0);
       matrix.push_back(row);
@@ -205,7 +200,8 @@ void SparseMatrix::printToFile(bool sparse) const {
   file.close();
 }
 
-void SparseMatrix::print() const {
+void
+SparseMatrix::print() const {
   for (int iCol = 0; iCol < nbCol_; ++iCol) {
     for (unsigned ind = Ap_[iCol]; ind < Ap_[iCol + 1]; ++ind) {
       int iRow = Ai_[ind];
@@ -261,7 +257,8 @@ SparseMatrix::erase(const boost::unordered_set<int>& rows, const boost::unordere
   return;
 }
 
-double SparseMatrix::frobeniusNorm() const {
+double
+SparseMatrix::frobeniusNorm() const {
   double squared_froNorm = 0.;
   for (int i = 0; i < nbTerm_; ++i) {
     squared_froNorm += Ax_[i] * Ax_[i];
@@ -269,7 +266,8 @@ double SparseMatrix::frobeniusNorm() const {
   return std::sqrt(squared_froNorm);
 }
 
-double SparseMatrix::norm1() const {
+double
+SparseMatrix::norm1() const {
   double norm1 = 0.;
   double colSum = 0.;
   for (int iCol = 0; iCol < nbCol_; ++iCol) {
@@ -284,12 +282,13 @@ double SparseMatrix::norm1() const {
   return norm1;
 }
 
-double SparseMatrix::infinityNorm() const {
+double
+SparseMatrix::infinityNorm() const {
   double infNorm = 0.;
   double rowSum = 0.;
-  for (int row = 0 ; row < nbRow_ ; ++row) {
+  for (int row = 0; row < nbRow_; ++row) {
     rowSum = 0.;
-    for (int ind = 0; ind < nbTerm_ ; ++ind) {
+    for (int ind = 0; ind < nbTerm_; ++ind) {
       if (Ai_[ind] == static_cast<unsigned>(row)) {
         rowSum += std::fabs(Ax_[ind]);
       }
@@ -301,12 +300,12 @@ double SparseMatrix::infinityNorm() const {
   return infNorm;
 }
 
-void SparseMatrix::getRowColIndicesFromPosition(unsigned int position, int& iRow, int& jCol) const {
+void
+SparseMatrix::getRowColIndicesFromPosition(unsigned int position, int& iRow, int& jCol) const {
   assert(position < static_cast<unsigned int>(nbTerm_) && "Position must be lower than number of terms");
   std::vector<unsigned>::const_iterator lower = std::upper_bound(Ap_.begin(), Ap_.end(), position);
   iRow = Ai_[position];
-  jCol = (lower-Ap_.begin()) - 1;
+  jCol = (lower - Ap_.begin()) - 1;
 }
-
 
 }  // end of namespace DYN

@@ -18,6 +18,7 @@
  */
 
 #include "DYDModelicaModelFactory.h"
+
 #include "DYDModelicaModel.h"
 
 using std::string;

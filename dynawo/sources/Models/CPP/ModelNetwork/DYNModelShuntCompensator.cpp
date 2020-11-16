@@ -19,35 +19,34 @@
  */
 #include "DYNModelShuntCompensator.h"
 
-#include "PARParametersSet.h"
-
-#include "DYNModelBus.h"
-#include "DYNTrace.h"
-#include "DYNVariableForModel.h"
-#include "DYNParameter.h"
-#include "DYNDerivative.h"
-#include "DYNShuntCompensatorInterface.h"
 #include "DYNBusInterface.h"
+#include "DYNDerivative.h"
+#include "DYNMessageTimeline.h"
+#include "DYNModelBus.h"
 #include "DYNModelConstants.h"
 #include "DYNModelNetwork.h"
-#include "DYNMessageTimeline.h"
 #include "DYNModelVoltageLevel.h"
+#include "DYNParameter.h"
+#include "DYNShuntCompensatorInterface.h"
+#include "DYNTrace.h"
+#include "DYNVariableForModel.h"
+#include "PARParametersSet.h"
 
 using boost::shared_ptr;
 
-using std::vector;
 using std::map;
 using std::string;
+using std::vector;
 
 using parameters::ParametersSet;
 
 namespace DYN {
 
 ModelShuntCompensator::ModelShuntCompensator(const shared_ptr<ShuntCompensatorInterface>& shunt) :
-NetworkComponent(shunt->getID()),
-modelBus_(),
-noReclosingDelay_(0.),
-stateModified_(false) {
+    NetworkComponent(shunt->getID()),
+    modelBus_(),
+    noReclosingDelay_(0.),
+    stateModified_(false) {
   // init data
   suscepPerSect_ = shunt->getBPerSection();
   currentSection_ = shunt->getCurrentSection();
@@ -65,7 +64,7 @@ stateModified_(false) {
   double ur0 = uNode / unomNode * cos(tetaNode * DEG_TO_RAD);
   double ui0 = uNode / unomNode * sin(tetaNode * DEG_TO_RAD);
   ir0_ = Q * ui0 / (ur0 * ur0 + ui0 * ui0);
-  ii0_ = - Q * ur0 / (ur0 * ur0 + ui0 * ui0);
+  ii0_ = -Q * ur0 / (ur0 * ur0 + ui0 * ui0);
 }
 
 void
@@ -226,7 +225,7 @@ ModelShuntCompensator::evalZ(const double& t) {
     suscepPu_ = (suscepPerSect_ * currentSection_) * vNom_ * vNom_ / SNREF;
     setConnected(currState);
   }
-  return (stateModified_)?NetworkComponent::STATE_CHANGE:NetworkComponent::NO_CHANGE;
+  return (stateModified_) ? NetworkComponent::STATE_CHANGE : NetworkComponent::NO_CHANGE;
 }
 
 void
@@ -266,20 +265,20 @@ void
 ModelShuntCompensator::setSubModelParameters(const boost::unordered_map<std::string, ParameterModeler>& params) {
   try {
     switch (type_) {
-      case CAPACITOR: {
-        vector<string> ids;
-        ids.push_back(id_);
-        ids.push_back("capacitor");
-        noReclosingDelay_ = getParameterDynamic<double>(params, "no_reclosing_delay", ids);
-        break;
-      }
-      case REACTANCE: {
-        vector<string> ids;
-        ids.push_back(id_);
-        ids.push_back("reactance");
-        noReclosingDelay_ = getParameterDynamic<double>(params, "no_reclosing_delay", ids);
-        break;
-      }
+    case CAPACITOR: {
+      vector<string> ids;
+      ids.push_back(id_);
+      ids.push_back("capacitor");
+      noReclosingDelay_ = getParameterDynamic<double>(params, "no_reclosing_delay", ids);
+      break;
+    }
+    case REACTANCE: {
+      vector<string> ids;
+      ids.push_back(id_);
+      ids.push_back("reactance");
+      noReclosingDelay_ = getParameterDynamic<double>(params, "no_reclosing_delay", ids);
+      break;
+    }
     }
   } catch (const DYN::Error& e) {
     Trace::error() << e.what() << Trace::endline;
@@ -313,59 +312,59 @@ ModelShuntCompensator::evalCalculatedVars() {
   double ui = modelBus_->ui();
   double i1 = ir(ui);
   double i2 = ii(ur);
-  calculatedVars_[qNum_] = (ui * i1 - ur * i2);   // Q value
+  calculatedVars_[qNum_] = (ui * i1 - ur * i2);  // Q value
 }
 
 void
 ModelShuntCompensator::getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, std::vector<int>& numVars) const {
   switch (numCalculatedVar) {
-    case qNum_: {
-      if (isConnected()) {
-        int urYNum = modelBus_->urYNum();
-        int uiYNum = modelBus_->uiYNum();
-        numVars.push_back(urYNum);
-        numVars.push_back(uiYNum);
-      }
-      break;
+  case qNum_: {
+    if (isConnected()) {
+      int urYNum = modelBus_->urYNum();
+      int uiYNum = modelBus_->uiYNum();
+      numVars.push_back(urYNum);
+      numVars.push_back(uiYNum);
     }
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
 void
 ModelShuntCompensator::evalJCalculatedVarI(unsigned numCalculatedVar, std::vector<double>& res) const {
   switch (numCalculatedVar) {
-    case qNum_: {
-      if (isConnected()) {
-        double ur = modelBus_->ur();
-        double ui = modelBus_->ui();
-         // q = -ui*ui*suscepPu_ - ur*ur*suscepPu_
-        res[0] = -2. * ur * suscepPu_;  // @Q/@ur
-        res[1] = -2. * ui * suscepPu_;  // @Q/@ui
-      }
-      break;
+  case qNum_: {
+    if (isConnected()) {
+      double ur = modelBus_->ur();
+      double ui = modelBus_->ui();
+      // q = -ui*ui*suscepPu_ - ur*ur*suscepPu_
+      res[0] = -2. * ur * suscepPu_;  // @Q/@ur
+      res[1] = -2. * ui * suscepPu_;  // @Q/@ui
     }
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
 double
 ModelShuntCompensator::evalCalculatedVarI(unsigned numCalculatedVar) const {
   switch (numCalculatedVar) {
-    case qNum_: {
-      if (isConnected()) {
-        double ur = modelBus_->ur();
-        double ui = modelBus_->ui();
-        double ir = -suscepPu_ * ui;
-        double ii = suscepPu_ * ur;
-        return (ui * ir - ur * ii);   // Q value
-      }
-      break;
+  case qNum_: {
+    if (isConnected()) {
+      double ur = modelBus_->ur();
+      double ui = modelBus_->ui();
+      double ir = -suscepPu_ * ui;
+      double ii = suscepPu_ * ur;
+      return (ui * ir - ur * ii);  // Q value
     }
-    default:
-      throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  default:
+    throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
   }
   return 0.;
 }
@@ -394,7 +393,7 @@ void
 ModelShuntCompensator::setGequations(std::map<int, std::string>& gEquationIndex) {
   gEquationIndex[0] = "Time out reached for reclosing delay";
 
-  assert(gEquationIndex.size() == (unsigned int) sizeG() && "Shunt compensator model: gEquationIndex.size() != gLocal_.size()");
+  assert(gEquationIndex.size() == (unsigned int)sizeG() && "Shunt compensator model: gEquationIndex.size() != gLocal_.size()");
 }
 
 }  // namespace DYN

@@ -20,10 +20,10 @@
 #ifndef MODELER_DATAINTERFACE_DYNSTATEVARIABLE_H_
 #define MODELER_DATAINTERFACE_DYNSTATEVARIABLE_H_
 
-#include <string>
 #include <boost/any.hpp>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
+#include <string>
 
 namespace DYN {
 class Variable;
@@ -34,12 +34,12 @@ class Variable;
  */
 class StateVariable {
  public:
- /**
+  /**
    * @brief Definition of the type of the state variable
    */
   enum StateVariableType {
-    BOOL,  ///<  the state variable is a boolean one
-    INT,  ///< the state variable is an integer one
+    BOOL,   ///<  the state variable is a boolean one
+    INT,    ///< the state variable is an integer one
     DOUBLE  ///< the state variable is a double one
   };
 
@@ -129,7 +129,8 @@ class StateVariable {
    * @brief get the value of a variable
    * @return the value of the state variable
    */
-  template<typename T> T getValue() const;
+  template<typename T>
+  T getValue() const;
 
   /**
    * @brief get the type of a state variable
@@ -157,16 +158,16 @@ class StateVariable {
   bool isNeededForCriteriaCheck() const;
 
  private:
-  StateVariableType type_;  ///< type of the state variable
-  boost::optional<boost::any> value_;  ///< value of the state variable
-  std::string name_;  ///< name of the state variable
-  std::string modelId_;  ///< id of the model associated to the state variable
-  std::string variableId_;  ///< id of the variable associated to the state variable
+  StateVariableType type_;                ///< type of the state variable
+  boost::optional<boost::any> value_;     ///< value of the state variable
+  std::string name_;                      ///< name of the state variable
+  std::string modelId_;                   ///< id of the model associated to the state variable
+  std::string variableId_;                ///< id of the variable associated to the state variable
   boost::shared_ptr<Variable> variable_;  ///< variable of the model associated to the state variable
-  bool valueAffected_;  ///< true if value_ was set at least once
-  double rawValue_;  ///< keep the double version of the current variable value
-  bool neededForCriteriaCheck_;  ///< true if the state variable's value is needed for criteria check
-};  ///< class for state variable
+  bool valueAffected_;                    ///< true if value_ was set at least once
+  double rawValue_;                       ///< keep the double version of the current variable value
+  bool neededForCriteriaCheck_;           ///< true if the state variable's value is needed for criteria check
+};                                        ///< class for state variable
 }  // namespace DYN
 
 #include "DYNStateVariable.hpp"

@@ -14,11 +14,11 @@
 #ifndef COMMON_DYNERRORQUEUE_H_
 #define COMMON_DYNERRORQUEUE_H_
 
-#include <queue>
+#include "DYNError.h"
+
 #include <boost/core/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
-
-#include "DYNError.h"
+#include <queue>
 
 namespace DYN {
 
@@ -26,7 +26,7 @@ namespace DYN {
  * @class DYNErrorQueue
  * @brief class to register multiple errors before failing
  */
-class DYNErrorQueue  : private boost::noncopyable{
+class DYNErrorQueue : private boost::noncopyable {
  public:
   ~DYNErrorQueue() {}
 
@@ -61,7 +61,7 @@ class DYNErrorQueue  : private boost::noncopyable{
 
  private:
   static boost::shared_ptr<DYNErrorQueue> errorQueue;  ///< singleton
-  std::queue< DYN::Error > exceptionQueue_;  ///< error queue
+  std::queue<DYN::Error> exceptionQueue_;              ///< error queue
 };
 
 } /* namespace DYN */

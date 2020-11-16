@@ -17,11 +17,10 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "CRVCurveFactory.h"
 #include "CRVCurve.h"
+#include "CRVCurveFactory.h"
 #include "CRVPoint.h"
+#include "gtest_dynawo.h"
 
 namespace curves {
 
@@ -81,17 +80,15 @@ TEST(APICRVTest, CurveUpdate) {
   ASSERT_NO_THROW(curve1->update(2));  // the curve is available and is not a parameter curve and the value has to be negated
 
   int nbPoints = 0;
-  for (Curve::const_iterator itPt = curve1->cbegin();
-          itPt != curve1->cend();
-          ++itPt) {
+  for (Curve::const_iterator itPt = curve1->cbegin(); itPt != curve1->cend(); ++itPt) {
     if (nbPoints == 0) {
-      ASSERT_EQ((*itPt)->getTime(), 0);  // uptade method called at time = 0
+      ASSERT_EQ((*itPt)->getTime(), 0);   // uptade method called at time = 0
       ASSERT_EQ((*itPt)->getValue(), 0);  // the curve is a parameter curve so the value is set to zero (défault value)
     } else if (nbPoints == 1) {
-      ASSERT_EQ((*itPt)->getTime(), 1);  // uptade method called at time = 1
+      ASSERT_EQ((*itPt)->getTime(), 1);   // uptade method called at time = 1
       ASSERT_EQ((*itPt)->getValue(), 1);  // negated is false so the value is 1 (value stored in the vector 'variables')
     } else {
-      ASSERT_EQ((*itPt)->getTime(), 2);  // uptade method called at time = 2
+      ASSERT_EQ((*itPt)->getTime(), 2);    // uptade method called at time = 2
       ASSERT_EQ((*itPt)->getValue(), -1);  // negated is true so the value is -1 (inverse of the value stored in the vector 'variables')
     }
     ++nbPoints;
@@ -119,17 +116,15 @@ TEST(APICRVTest, CurveUpdateParameterCurveValue) {
   ASSERT_NO_THROW(curve1->updateParameterCurveValue("variable1", 5));
 
   int nbPoints = 0;
-  for (Curve::const_iterator itPt = curve1->cbegin();
-          itPt != curve1->cend();
-          ++itPt) {
+  for (Curve::const_iterator itPt = curve1->cbegin(); itPt != curve1->cend(); ++itPt) {
     if (nbPoints == 0) {
-      ASSERT_EQ((*itPt)->getTime(), 0);  // uptade method called at time = 0
+      ASSERT_EQ((*itPt)->getTime(), 0);   // uptade method called at time = 0
       ASSERT_EQ((*itPt)->getValue(), 5);  // the value has been set to 5 by the updateParameterCurveValue method
     } else if (nbPoints == 1) {
-      ASSERT_EQ((*itPt)->getTime(), 1);  // uptade method called at time = 1
+      ASSERT_EQ((*itPt)->getTime(), 1);   // uptade method called at time = 1
       ASSERT_EQ((*itPt)->getValue(), 5);  // the value has been set to 5 by the updateParameterCurveValue method
     } else {
-      ASSERT_EQ((*itPt)->getTime(), 2);  // uptade method called at time = 2
+      ASSERT_EQ((*itPt)->getTime(), 2);   // uptade method called at time = 2
       ASSERT_EQ((*itPt)->getValue(), 5);  // the value has been set to 5 by the updateParameterCurveValue method
     }
     ++nbPoints;
@@ -143,7 +138,6 @@ TEST(APICRVTest, CurveUpdateParameterCurveValue) {
   ASSERT_EQ(itPt->get()->getTime(), 0);
   Curve::const_iterator itPt2 = itPt;
   ASSERT_EQ(itPt == itPt2, true);
-
 
   boost::shared_ptr<Curve> curve2 = CurveFactory::newCurve();
   curve2->setVariable("variable1");

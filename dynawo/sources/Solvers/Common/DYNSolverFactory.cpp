@@ -17,13 +17,14 @@
  *
  */
 
-#include <dlfcn.h>
-#include <sstream>
-#include <iostream>
-
-#include "DYNTrace.h"
 #include "DYNSolverFactory.h"
+
 #include "DYNMacrosMessage.h"
+#include "DYNTrace.h"
+
+#include <dlfcn.h>
+#include <iostream>
+#include <sstream>
 
 using std::map;
 using std::string;
@@ -37,7 +38,7 @@ typedef SolverFactory* getFactory_t();
 
 SolverFactories SolverFactory::factories_;
 
-SolverFactories::SolverFactories() { }
+SolverFactories::SolverFactories() {}
 
 SolverFactories::~SolverFactories() {
   SolverFactoryIterator iter = factoryMap_.begin();
@@ -54,11 +55,13 @@ SolverFactories::~SolverFactories() {
   }
 }
 
-SolverFactories::SolverFactoryIterator SolverFactories::find(const std::string& lib) {
+SolverFactories::SolverFactoryIterator
+SolverFactories::find(const std::string& lib) {
   return (factoryMap_.find(lib));
 }
 
-bool SolverFactories::end(SolverFactoryIterator& iter) {
+bool
+SolverFactories::end(SolverFactoryIterator& iter) {
   return (iter == factoryMap_.end());
 }
 
@@ -67,11 +70,13 @@ SolverFactories::add(const std::string& lib, SolverFactory* factory) {
   factoryMap_.insert(std::make_pair(lib, factory));
 }
 
-void SolverFactories::add(const std::string& lib, destroy_solver_t* deleteFactory) {
+void
+SolverFactories::add(const std::string& lib, destroy_solver_t* deleteFactory) {
   factoryMapDestroy_.insert(std::make_pair(lib, deleteFactory));
 }
 
-boost::shared_ptr<Solver> SolverFactory::createSolverFromLib(const std::string& lib) {
+boost::shared_ptr<Solver>
+SolverFactory::createSolverFromLib(const std::string& lib) {
   SolverFactories::SolverFactoryIterator iter = factories_.find(lib);
   Solver* solver;
   boost::shared_ptr<Solver> solverShared;
@@ -90,13 +95,13 @@ boost::shared_ptr<Solver> SolverFactory::createSolverFromLib(const std::string& 
     // reset errors
     dlerror();
 
-    getFactory_t* getFactory = reinterpret_cast<getFactory_t*> (dlsym(handle, "getFactory"));
+    getFactory_t* getFactory = reinterpret_cast<getFactory_t*>(dlsym(handle, "getFactory"));
     const char* dlsym_error = dlerror();
     if (dlsym_error) {
       stringstream msg;
       msg << "Load error :" << dlsym_error;
       Trace::error() << msg.str() << Trace::endline;
-      throw DYNError(DYN::Error::GENERAL, LibraryLoadFailure, lib+"::getFactory");
+      throw DYNError(DYN::Error::GENERAL, LibraryLoadFailure, lib + "::getFactory");
     }
 
     destroy_solver_t* deleteFactory = reinterpret_cast<destroy_solver_t*>(dlsym(handle, "deleteFactory"));
@@ -105,7 +110,7 @@ boost::shared_ptr<Solver> SolverFactory::createSolverFromLib(const std::string& 
       stringstream msg;
       msg << "Load error :" << dlsym_error;
       Trace::error() << msg.str() << Trace::endline;
-      throw DYNError(DYN::Error::GENERAL, LibraryLoadFailure, lib+"::deleteFactory");
+      throw DYNError(DYN::Error::GENERAL, LibraryLoadFailure, lib + "::deleteFactory");
     }
 
     SolverFactory* factory = getFactory();
@@ -123,10 +128,10 @@ boost::shared_ptr<Solver> SolverFactory::createSolverFromLib(const std::string& 
   return solverShared;
 }
 
-SolverDelete::SolverDelete(SolverFactory* factory) : factory_(factory) {
-}
+SolverDelete::SolverDelete(SolverFactory* factory) : factory_(factory) {}
 
-void SolverDelete::operator()(Solver* solver) {
+void
+SolverDelete::operator()(Solver* solver) {
   factory_->destroy(solver);
 }
 

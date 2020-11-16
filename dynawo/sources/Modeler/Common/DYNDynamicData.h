@@ -18,13 +18,12 @@
 #ifndef MODELER_COMMON_DYNDYNAMICDATA_H_
 #define MODELER_COMMON_DYNDYNAMICDATA_H_
 
+#include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 
 namespace parameters {
 class ParametersSet;
@@ -54,25 +53,25 @@ class DynamicData {
   /**
    * @brief default constructor.
    */
-  DynamicData() { }
+  DynamicData() {}
 
   /**
    * @brief default destructor.
    */
-  ~DynamicData() { }
+  ~DynamicData() {}
   /**
    * @brief initiation dynamic data from dyd files
    * @param fileNames the path to the file from which to build the dynamic data model
    * fills the dynamic data object or may throw exceptions
    */
-  void initFromDydFiles(const std::vector <std::string> & fileNames);
+  void initFromDydFiles(const std::vector<std::string>& fileNames);
 
   /**
    * @brief get network parameters from a directory
    * @param parFile parameter file
    * @param parSet parameter set
    */
-  void getNetworkParameters(const std::string & parFile, const std::string& parSet);
+  void getNetworkParameters(const std::string& parFile, const std::string& parSet);
 
   /**
    * @brief set network parameters
@@ -94,8 +93,7 @@ class DynamicData {
    * @brief initialize the parameter sets that were already read
    * @param parametersRef filepath->parameter sets collection
    */
-  inline void setParametersReference(const boost::unordered_map<std::string,
-      boost::shared_ptr<parameters::ParametersSetCollection> >& parametersRef) {
+  inline void setParametersReference(const boost::unordered_map<std::string, boost::shared_ptr<parameters::ParametersSetCollection> >& parametersRef) {
     referenceParameters_ = parametersRef;
   }
 
@@ -111,7 +109,7 @@ class DynamicData {
    * @brief get all system-wide (i.e. not within Modelica model) connects
    * @return list of connects
    */
-  inline const std::vector <boost::shared_ptr<dynamicdata::Connector> >& getSystemConnects() const {
+  inline const std::vector<boost::shared_ptr<dynamicdata::Connector> >& getSystemConnects() const {
     return systemConnects_;
   }
 
@@ -177,7 +175,7 @@ class DynamicData {
    * @brief get unit dynamic models map
    * @return map of unit dynamic models
    */
-  inline const std::map< boost::shared_ptr<dynamicdata::UnitDynamicModel>, boost::shared_ptr<dynamicdata::UnitDynamicModel> >& getUnitDynamicModelsMap() const {
+  inline const std::map<boost::shared_ptr<dynamicdata::UnitDynamicModel>, boost::shared_ptr<dynamicdata::UnitDynamicModel> >& getUnitDynamicModelsMap() const {
     return unitDynamicModelsMap_;
   }
 
@@ -185,7 +183,7 @@ class DynamicData {
    * @brief get modelica model reference map
    * @return map of modelica model reference
    */
-  inline const std::map< boost::shared_ptr<ModelDescription>, boost::shared_ptr<ModelDescription> >& getModelicaModelReferenceMap() const {
+  inline const std::map<boost::shared_ptr<ModelDescription>, boost::shared_ptr<ModelDescription> >& getModelicaModelReferenceMap() const {
     return modelicaModelReferenceMap_;
   }
 
@@ -193,7 +191,7 @@ class DynamicData {
    * @brief get reference modelica models
    * @return list of reference modelica models
    */
-  inline std::vector< boost::shared_ptr<ModelDescription> > getReferenceModelicaModels() const {
+  inline std::vector<boost::shared_ptr<ModelDescription> > getReferenceModelicaModels() const {
     return referenceModelicaModels_;
   }
 
@@ -263,34 +261,37 @@ class DynamicData {
  private:
   std::string rootDirectory_;  ///< directory to use as root when reading file
   boost::unordered_map<std::string,
-          boost::shared_ptr<parameters::ParametersSetCollection> > referenceParameters_;  ///< association between file name and parameters collection
+                       boost::shared_ptr<parameters::ParametersSetCollection> >
+      referenceParameters_;  ///< association between file name and parameters collection
 
   boost::shared_ptr<dynamicdata::DynamicModelsCollection> dynamicModelsCollection_;  ///< dynamic models collection, input from API DYD
 
-  boost::shared_ptr<DataInterface> dataInterface_;  ///< static data interface
+  boost::shared_ptr<DataInterface> dataInterface_;                  ///< static data interface
   boost::shared_ptr<parameters::ParametersSet> networkParameters_;  ///< network parameters
 
   /// warning : keep map container to be sure that models are always sorted with the same order whatever is the order in input file to avoid mathematical issues
   std::map<std::string, boost::shared_ptr<ModelDescription> > modelDescriptions_;  ///< map of model descriptions
-  std::vector <boost::shared_ptr<dynamicdata::Connector> > systemConnects_;  ///< connects which are not fully inside a model
-  std::map<std::string, boost::shared_ptr<ConnectInterface> > connects_;  ///< connects interfaces
+  std::vector<boost::shared_ptr<dynamicdata::Connector> > systemConnects_;         ///< connects which are not fully inside a model
+  std::map<std::string, boost::shared_ptr<ConnectInterface> > connects_;           ///< connects interfaces
 
   // generate by classifyModelDescriptions in DydAnalyser
-  std::map<std::string, boost::shared_ptr<ModelDescription> > modelicaModels_;  ///< modelica models presented in dynamic data
-  std::map<std::string, boost::shared_ptr<ModelDescription> > blackBoxModels_;  ///< black box models presented in dynamic data
+  std::map<std::string, boost::shared_ptr<ModelDescription> > modelicaModels_;           ///< modelica models presented in dynamic data
+  std::map<std::string, boost::shared_ptr<ModelDescription> > blackBoxModels_;           ///< black box models presented in dynamic data
   std::map<std::string, boost::shared_ptr<ModelDescription> > modelTemplateExpansions_;  ///< model templates expansions presented in dynamic data
-  std::map<std::string, boost::shared_ptr<ModelDescription> > modelTemplates_;  ///< model templates presented in dynamic data
+  std::map<std::string, boost::shared_ptr<ModelDescription> > modelTemplates_;           ///< model templates presented in dynamic data
 
   // generate by markModelTemplatesCalledByExpansions in DydAnalyser
   std::map<std::string, boost::shared_ptr<ModelDescription> > usefulModelTemplates_;  ///< useful model template called by at least one expansion
   // generate by mappingModelicaModels in DydAnalyser
-  std::map< boost::shared_ptr<dynamicdata::UnitDynamicModel>,
-            boost::shared_ptr<dynamicdata::UnitDynamicModel> > unitDynamicModelsMap_;  ///< map of unit dynamic model between two composed modelica models
-  std::vector< boost::shared_ptr<ModelDescription> > mappedModelDescriptions_;  ///< model descriptions already mapped
-  std::map< boost::shared_ptr<ModelDescription>,
-            boost::shared_ptr<ModelDescription> > modelicaModelReferenceMap_;  ///< map between a modelica model and its reference modelica model descriptions
-  std::vector< boost::shared_ptr<ModelDescription> > referenceModelicaModels_;  ///< reference modelica models descriptions list
-};  ///< Dynamic data class
+  std::map<boost::shared_ptr<dynamicdata::UnitDynamicModel>,
+           boost::shared_ptr<dynamicdata::UnitDynamicModel> >
+      unitDynamicModelsMap_;                                                   ///< map of unit dynamic model between two composed modelica models
+  std::vector<boost::shared_ptr<ModelDescription> > mappedModelDescriptions_;  ///< model descriptions already mapped
+  std::map<boost::shared_ptr<ModelDescription>,
+           boost::shared_ptr<ModelDescription> >
+      modelicaModelReferenceMap_;                                              ///< map between a modelica model and its reference modelica model descriptions
+  std::vector<boost::shared_ptr<ModelDescription> > referenceModelicaModels_;  ///< reference modelica models descriptions list
+};                                                                             ///< Dynamic data class
 
 }  // namespace DYN
 

@@ -17,38 +17,36 @@
  * @brief
  *
  */
-#include <cmath>
-#include <iostream>
-#include <cassert>
-
-#include <boost/algorithm/string/predicate.hpp>
-
-#include "PARParametersSet.h"
 #include "DYNModelBus.h"
-#include "DYNModelSwitch.h"
+
+#include "DYNBusInterface.h"
+#include "DYNCommonModeler.h"
+#include "DYNDerivative.h"
 #include "DYNModelConstants.h"
 #include "DYNModelNetwork.h"
-#include "DYNCommonModeler.h"
-#include "DYNTrace.h"
-#include "DYNSparseMatrix.h"
-#include "DYNDerivative.h"
-#include "DYNVariableForModel.h"
+#include "DYNModelSwitch.h"
 #include "DYNParameter.h"
-#include "DYNBusInterface.h"
+#include "DYNSparseMatrix.h"
+#include "DYNTrace.h"
+#include "DYNVariableForModel.h"
+#include "PARParametersSet.h"
 
+#include <boost/algorithm/string/predicate.hpp>
+#include <cassert>
+#include <cmath>
+#include <iostream>
 
-using std::vector;
 using boost::shared_ptr;
 using boost::weak_ptr;
 using std::map;
 using std::string;
+using std::vector;
 
 using parameters::ParametersSet;
 
 namespace DYN {
 
-ModelBusContainer::ModelBusContainer() {
-}
+ModelBusContainer::ModelBusContainer() {}
 
 void
 ModelBusContainer::add(const shared_ptr<ModelBus>& model) {
@@ -144,27 +142,27 @@ ModelBusContainer::initDerivatives() {
 }
 
 ModelBus::ModelBus(const shared_ptr<BusInterface>& bus) :
-NetworkComponent(bus->getID()),
-stateUmax_(false),
-stateUmin_(false),
-U2Pu_(0.0),
-UPu_(0.0),
-U_(0.0),
-connectionState_(CLOSED),
-topologyModified_(false),
-irConnection_(0.0),
-iiConnection_(0.0),
-refIslands_(0),
-ir0_(0.0),
-ii0_(0.0),
-urYNum_(0),
-uiYNum_(0),
-iiYNum_(0),
-irYNum_(0),
-busIndex_(bus->getBusIndex()),
-hasConnection_(bus->hasConnection()),
-hasDifferentialVoltages_(false),
-modelType_((boost::starts_with(bus->getID(), "calculatedBus_"))?"Bus":"Node") {
+    NetworkComponent(bus->getID()),
+    stateUmax_(false),
+    stateUmin_(false),
+    U2Pu_(0.0),
+    UPu_(0.0),
+    U_(0.0),
+    connectionState_(CLOSED),
+    topologyModified_(false),
+    irConnection_(0.0),
+    iiConnection_(0.0),
+    refIslands_(0),
+    ir0_(0.0),
+    ii0_(0.0),
+    urYNum_(0),
+    uiYNum_(0),
+    iiYNum_(0),
+    irYNum_(0),
+    busIndex_(bus->getBusIndex()),
+    hasConnection_(bus->hasConnection()),
+    hasDifferentialVoltages_(false),
+    modelType_((boost::starts_with(bus->getID(), "calculatedBus_")) ? "Bus" : "Node") {
   neighbors_.clear();
   busBarSectionNames_.clear();
   busBarSectionNames_ = bus->getBusBarSectionNames();
@@ -206,46 +204,46 @@ ModelBus::getCurrentU(UType_t currentURequested) {
   if (getSwitchOff())
     return 0;
   switch (currentURequested) {
-    case UType_:
-      if (currentUStatus_.getFlags(U)) {
-        return U_;
-      } else if (currentUStatus_.getFlags(UPu)) {
-        U_ = calculateU();
-        currentUStatus_.setFlags(U);
-        return U_;
-      } else if (currentUStatus_.getFlags(U2Pu)) {
-        UPu_ = sqrt(U2Pu_);
-        U_ = calculateU();
-        currentUStatus_.setFlags(UPu | U);
-        return U_;
-      } else {
-        U2Pu_ = calculateU2Pu();
-        UPu_ = sqrt(U2Pu_);
-        U_ = calculateU();
-        currentUStatus_.setFlags(U2Pu | UPu | U);
-        return U_;
-      }
-    case UPuType_:
-      if (currentUStatus_.getFlags(UPu)) {
-        return UPu_;
-      } else if (currentUStatus_.getFlags(U2Pu)) {
-        UPu_ = sqrt(U2Pu_);
-        currentUStatus_.setFlags(UPu);
-        return UPu_;
-      } else {
-        U2Pu_ = calculateU2Pu();
-        UPu_ = sqrt(U2Pu_);
-        currentUStatus_.setFlags(U2Pu | UPu);
-        return UPu_;
-      }
-    case U2PuType_:
-      if (currentUStatus_.getFlags(U2Pu)) {
-        return U2Pu_;
-      } else {
-        U2Pu_ = calculateU2Pu();
-        currentUStatus_.setFlags(U2Pu);
-        return U2Pu_;
-      }
+  case UType_:
+    if (currentUStatus_.getFlags(U)) {
+      return U_;
+    } else if (currentUStatus_.getFlags(UPu)) {
+      U_ = calculateU();
+      currentUStatus_.setFlags(U);
+      return U_;
+    } else if (currentUStatus_.getFlags(U2Pu)) {
+      UPu_ = sqrt(U2Pu_);
+      U_ = calculateU();
+      currentUStatus_.setFlags(UPu | U);
+      return U_;
+    } else {
+      U2Pu_ = calculateU2Pu();
+      UPu_ = sqrt(U2Pu_);
+      U_ = calculateU();
+      currentUStatus_.setFlags(U2Pu | UPu | U);
+      return U_;
+    }
+  case UPuType_:
+    if (currentUStatus_.getFlags(UPu)) {
+      return UPu_;
+    } else if (currentUStatus_.getFlags(U2Pu)) {
+      UPu_ = sqrt(U2Pu_);
+      currentUStatus_.setFlags(UPu);
+      return UPu_;
+    } else {
+      U2Pu_ = calculateU2Pu();
+      UPu_ = sqrt(U2Pu_);
+      currentUStatus_.setFlags(U2Pu | UPu);
+      return UPu_;
+    }
+  case U2PuType_:
+    if (currentUStatus_.getFlags(U2Pu)) {
+      return U2Pu_;
+    } else {
+      U2Pu_ = calculateU2Pu();
+      currentUStatus_.setFlags(U2Pu);
+      return U2Pu_;
+    }
   }
   return 0;
 }
@@ -305,7 +303,7 @@ ModelBus::ui() const {
 double
 ModelBus::urp() const {
   if (!getSwitchOff() && !network_->isInit()) {
-      return yp_[urNum_];
+    return yp_[urNum_];
   } else {
     return 0.;
   }
@@ -314,7 +312,7 @@ ModelBus::urp() const {
 double
 ModelBus::uip() const {
   if (!getSwitchOff() && !network_->isInit()) {
-      return yp_[uiNum_];
+    return yp_[uiNum_];
   } else {
     return 0.;
   }
@@ -403,7 +401,7 @@ ModelBus::setFequations(std::map<int, std::string>& fEquationIndex) {
     }
   }
 
-  assert(fEquationIndex.size() == (unsigned int) sizeF() && "ModelBus: fEquationIndex.size != f_.size()");
+  assert(fEquationIndex.size() == (unsigned int)sizeF() && "ModelBus: fEquationIndex.size != f_.size()");
 }
 
 void
@@ -476,7 +474,6 @@ ModelBus::collectSilentZ(bool* silentZTable) {
   silentZTable[numSubNetworkNum_] = true;
   silentZTable[connectionStateNum_] = true;
 }
-
 
 void
 ModelBus::evalCalculatedVars() {
@@ -704,13 +701,13 @@ ModelBus::evalZ(const double& /*t*/) {
     }
     connectionState_ = static_cast<State>(static_cast<int>(z_[connectionStateNum_]));
   }
-  return (topologyModified_)? NetworkComponent::TOPO_CHANGE: NetworkComponent::NO_CHANGE;
+  return (topologyModified_) ? NetworkComponent::TOPO_CHANGE : NetworkComponent::NO_CHANGE;
 }
 
 void
 ModelBus::evalG(const double& /*t*/) {
   double upu = getCurrentU(ModelBus::UPuType_);
-  g_[0] = (upu - uMax_ > 0) ? ROOT_UP : ROOT_DOWN;  // U > Umax
+  g_[0] = (upu - uMax_ > 0) ? ROOT_UP : ROOT_DOWN;                     // U > Umax
   g_[1] = (uMin_ - upu > 0 && !getSwitchOff()) ? ROOT_UP : ROOT_DOWN;  // U < Umin
 }
 
@@ -719,21 +716,21 @@ ModelBus::setGequations(std::map<int, std::string>& gEquationIndex) {
   gEquationIndex[0] = "U > UMax";
   gEquationIndex[1] = "U < UMin";
 
-  assert(gEquationIndex.size() == (unsigned int) sizeG() && "Model Bus: gEquationIndex.size() != g_.size()");
+  assert(gEquationIndex.size() == (unsigned int)sizeG() && "Model Bus: gEquationIndex.size() != g_.size()");
 }
 
 void
 ModelBus::getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, vector<int>& numVars) const {
   switch (numCalculatedVar) {
-    case upuNum_:
-    case phipuNum_:
-    case uNum_:
-    case phiNum_:
-      numVars.push_back(urYNum_);
-      numVars.push_back(uiYNum_);
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+  case upuNum_:
+  case phipuNum_:
+  case uNum_:
+  case phiNum_:
+    numVars.push_back(urYNum_);
+    numVars.push_back(uiYNum_);
+    break;
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
@@ -742,52 +739,52 @@ ModelBus::evalJCalculatedVarI(unsigned numCalculatedVar, vector<double>& res) co
   double ur = y_[urNum_];
   double ui = y_[uiNum_];
   switch (numCalculatedVar) {
-    case upuNum_: {
-      if (getSwitchOff()) {
-        res[0] = 0.0;
-        res[1] = 0.0;
-      } else {
-        res[0] = ur * 1 / sqrt(ur * ur + ui * ui);
-        res[1] = ui * 1 / sqrt(ur * ur + ui * ui);
-      }
-      break;
+  case upuNum_: {
+    if (getSwitchOff()) {
+      res[0] = 0.0;
+      res[1] = 0.0;
+    } else {
+      res[0] = ur * 1 / sqrt(ur * ur + ui * ui);
+      res[1] = ui * 1 / sqrt(ur * ur + ui * ui);
     }
-    case phipuNum_: {
-      if (getSwitchOff()) {
-        res[0] = 0.0;
-        res[1] = 0.0;
-      } else {
-        double v3 = 1 / ur;
-        double v2 = 1 / (1 + pow(ui / ur, 2));
-        res[0] = -ui * pow(ur, -2) * v2;
-        res[1] = v3*v2;
-      }
-      break;
+    break;
+  }
+  case phipuNum_: {
+    if (getSwitchOff()) {
+      res[0] = 0.0;
+      res[1] = 0.0;
+    } else {
+      double v3 = 1 / ur;
+      double v2 = 1 / (1 + pow(ui / ur, 2));
+      res[0] = -ui * pow(ur, -2) * v2;
+      res[1] = v3 * v2;
     }
-    case uNum_: {
-      if (getSwitchOff()) {
-        res[0] = 0.0;
-        res[1] = 0.0;
-      } else {
-        res[0] = ur * 1 / sqrt(ur * ur + ui * ui) * unom_;
-        res[1] = ui * 1 / sqrt(ur * ur + ui * ui) * unom_;
-      }
-      break;
+    break;
+  }
+  case uNum_: {
+    if (getSwitchOff()) {
+      res[0] = 0.0;
+      res[1] = 0.0;
+    } else {
+      res[0] = ur * 1 / sqrt(ur * ur + ui * ui) * unom_;
+      res[1] = ui * 1 / sqrt(ur * ur + ui * ui) * unom_;
     }
-    case phiNum_: {
-      if (getSwitchOff()) {
-        res[0] = 0.0;
-        res[1] = 0.0;
-      } else {
-        double v3 = 1 / ur;
-        double v2 = 1 / (1 + pow(ui / ur, 2));
-        res[0] = -ui * pow(ur, -2) * v2*RAD_TO_DEG;
-        res[1] = v3 * v2*RAD_TO_DEG;
-      }
-      break;
+    break;
+  }
+  case phiNum_: {
+    if (getSwitchOff()) {
+      res[0] = 0.0;
+      res[1] = 0.0;
+    } else {
+      double v3 = 1 / ur;
+      double v2 = 1 / (1 + pow(ui / ur, 2));
+      res[0] = -ui * pow(ur, -2) * v2 * RAD_TO_DEG;
+      res[1] = v3 * v2 * RAD_TO_DEG;
     }
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
@@ -797,32 +794,32 @@ ModelBus::evalCalculatedVarI(unsigned numCalculatedVar) const {
   double ur = y_[urNum_];
   double ui = y_[uiNum_];
   switch (numCalculatedVar) {
-    case upuNum_:
-      if (getSwitchOff())
-        output = 0.0;
-      else
-        output = sqrt(ur * ur + ui * ui);  // Voltage module in pu
-      break;
-    case phipuNum_:
-      if (getSwitchOff())
-        output = 0.0;
-      else
-        output = atan2(ui, ur);  // Voltage angle in pu
-      break;
-    case uNum_:
-      if (getSwitchOff())
-        output = 0.0;
-      else
-        output = sqrt(ur * ur + ui * ui) * unom_;  // Voltage module in kV
-      break;
-    case phiNum_:
-      if (getSwitchOff())
-        output = 0.0;
-      else
-        output = atan2(ui, ur) * RAD_TO_DEG;  // Voltage angle in degree
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
+  case upuNum_:
+    if (getSwitchOff())
+      output = 0.0;
+    else
+      output = sqrt(ur * ur + ui * ui);  // Voltage module in pu
+    break;
+  case phipuNum_:
+    if (getSwitchOff())
+      output = 0.0;
+    else
+      output = atan2(ui, ur);  // Voltage angle in pu
+    break;
+  case uNum_:
+    if (getSwitchOff())
+      output = 0.0;
+    else
+      output = sqrt(ur * ur + ui * ui) * unom_;  // Voltage module in kV
+    break;
+  case phiNum_:
+    if (getSwitchOff())
+      output = 0.0;
+    else
+      output = atan2(ui, ur) * RAD_TO_DEG;  // Voltage angle in degree
+    break;
+  default:
+    throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
   }
   return output;
 }
@@ -896,7 +893,7 @@ ModelBus::evalState(const double& /*time*/) {
 
 void
 ModelBus::switchOff() {
-  assert(z_!= NULL);
+  assert(z_ != NULL);
   z_[switchOffNum_] = fromNativeBool(true);
   // force Ur and Ui to be equals to zero (easier to solve)
   if (y_ != NULL) {
@@ -924,6 +921,5 @@ SubNetwork::turnOnNodes() {
     }
   }
 }
-
 
 }  // namespace DYN

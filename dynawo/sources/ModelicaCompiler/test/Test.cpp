@@ -16,16 +16,14 @@
  * @brief Unit tests for common Modeler methods
  *
  */
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string.hpp>
-#include <string>
-
 #include "DYNCommon.h"
 #include "DYNExecUtils.h"
 #include "DYNFileSystemUtils.h"
-
 #include "gtest_dynawo.h"
 
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <string>
 
 using boost::shared_ptr;
 
@@ -46,17 +44,17 @@ TEST(ModelicaCompilerTestSuite, BasicCompilationTest) {
   std::string result = ssPython.str();
   boost::erase_all(result, "\n");
   std::string res = "Executing command : " + varExtCommand +
-      "    [INFO]: Starting init model generation"
-      "    [INFO]: Variable generator.QGen0Pu is set as a calculated variable of level 1."
-      "    [INFO]: Variable generator.PGen0Pu is set as a calculated variable of level 1."
-      "    [INFO]: Starting dynamic model generation"
-      "    [INFO]: Discrete variable generator.state is defined as silent.";
+                    "    [INFO]: Starting init model generation"
+                    "    [INFO]: Variable generator.QGen0Pu is set as a calculated variable of level 1."
+                    "    [INFO]: Variable generator.PGen0Pu is set as a calculated variable of level 1."
+                    "    [INFO]: Starting dynamic model generation"
+                    "    [INFO]: Discrete variable generator.state is defined as silent.";
   std::string res2 = "Executing command : " + varExtCommand +
-      "    [INFO]: Starting init model generation"
-      "    [INFO]: Variable generator.PGen0Pu is set as a calculated variable of level 1."
-      "    [INFO]: Variable generator.QGen0Pu is set as a calculated variable of level 1."
-      "    [INFO]: Starting dynamic model generation"
-      "    [INFO]: Discrete variable generator.state is defined as silent.";
+                     "    [INFO]: Starting init model generation"
+                     "    [INFO]: Variable generator.PGen0Pu is set as a calculated variable of level 1."
+                     "    [INFO]: Variable generator.QGen0Pu is set as a calculated variable of level 1."
+                     "    [INFO]: Starting dynamic model generation"
+                     "    [INFO]: Discrete variable generator.state is defined as silent.";
   std::cout << result << std::endl;
   if (result != res && result != res2)
     assert(false);
@@ -71,7 +69,7 @@ TEST(ModelicaCompilerTestSuite, BasicCompilationTest) {
 
 TEST(ModelicaCompilerTestSuite, TestPackageOption) {
   std::string varExtCommand = "../compileModelicaModel --model Test --lib Test" + std::string(sharedLibraryExtension()) +
-      " --model-dir . --compilation-dir compilation --package-name Test";
+                              " --model-dir . --compilation-dir compilation --package-name Test";
 
   remove_all_in_directory("compilation");
   boost::filesystem::path fspath("compilation");
@@ -88,7 +86,7 @@ TEST(ModelicaCompilerTestSuite, TestPackageOption) {
 
 TEST(ModelicaCompilerTestSuite, TestPackageNoCalcVar) {
   std::string varExtCommand = "../compileModelicaModel --model Test --lib Test" + std::string(sharedLibraryExtension()) +
-      " --model-dir . --compilation-dir compilationNoCalcVar --package-name Test --generateCalculatedVariables false";
+                              " --model-dir . --compilation-dir compilationNoCalcVar --package-name Test --generateCalculatedVariables false";
 
   remove_all_in_directory("compilationNoCalcVar");
   boost::filesystem::path fspath("compilationNoCalcVar");
@@ -103,10 +101,9 @@ TEST(ModelicaCompilerTestSuite, TestPackageNoCalcVar) {
   ASSERT_EQ(ssDiff.str(), "Executing command : diff ModelicaModel/reference_Test/Test_DynNoCalcVar.cpp compilationNoCalcVar/Test_Dyn.cpp\n");
 }
 
-
 TEST(ModelicaCompilerTestSuite, TestPackageNoAlias) {
   std::string varExtCommand = "../compileModelicaModel --model Test --lib Test" + std::string(sharedLibraryExtension()) +
-      " --model-dir . --compilation-dir compilationNoAlias --package-name Test --useAliasing false";
+                              " --model-dir . --compilation-dir compilationNoAlias --package-name Test --useAliasing false";
 
   remove_all_in_directory("compilationNoAlias");
   boost::filesystem::path fspath("compilationNoAlias");
@@ -121,9 +118,9 @@ TEST(ModelicaCompilerTestSuite, TestPackageNoAlias) {
   ASSERT_EQ(ssDiff.str(), "Executing command : diff ModelicaModel/reference_Test/Test_DynNoAliasNoCalcVar.cpp compilationNoAlias/Test_Dyn.cpp\n");
 }
 
-
 TEST(ModelicaCompilerTestSuite, TestPackageNoAliasNoCalcVar) {
-  std::string varExtCommand = "../compileModelicaModel --model Test --lib Test" + std::string(sharedLibraryExtension()) +
+  std::string varExtCommand =
+      "../compileModelicaModel --model Test --lib Test" + std::string(sharedLibraryExtension()) +
       " --model-dir . --compilation-dir compilationNoAliasNoCalcVar --package-name Test --useAliasing false --generateCalculatedVariables false";
 
   remove_all_in_directory("compilationNoAliasNoCalcVar");
@@ -141,7 +138,7 @@ TEST(ModelicaCompilerTestSuite, TestPackageNoAliasNoCalcVar) {
 
 TEST(ModelicaCompilerTestSuite, TestCompilationSilentZ) {
   std::string varExtCommand = "../compileModelicaModel --model TestSilentZ --lib TestSilentZ" + std::string(sharedLibraryExtension()) +
-          " --model-dir . --compilation-dir compilationSilentZ --package-name TestSilentZ";
+                              " --model-dir . --compilation-dir compilationSilentZ --package-name TestSilentZ";
 
   remove_all_in_directory("compilationSilentZ");
   boost::filesystem::path fspath("compilationSilentZ");
@@ -155,6 +152,5 @@ TEST(ModelicaCompilerTestSuite, TestCompilationSilentZ) {
   std::cout << ssDiff.str() << std::endl;
   ASSERT_EQ(ssDiff.str(), "Executing command : diff ModelicaModel/reference_Test/Test_DynSilentZ.cpp compilationSilentZ/TestSilentZ_Dyn.cpp\n");
 }
-
 
 }  // namespace DYN

@@ -19,6 +19,7 @@
  */
 
 #include "CRTCriteriaCollectionFactory.h"
+
 #include "CRTCriteriaCollection.h"
 
 namespace criteria {

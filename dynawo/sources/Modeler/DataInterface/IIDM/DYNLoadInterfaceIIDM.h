@@ -22,10 +22,10 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNLOADINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNLOADINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
-#include "DYNLoadInterface.h"
 #include "DYNInjectorInterfaceIIDM.h"
+#include "DYNLoadInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class Load;
@@ -41,11 +41,7 @@ class LoadInterfaceIIDM : public LoadInterface, public InjectorInterfaceIIDM<IID
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_P = 0,
-    VAR_Q,
-    VAR_STATE
-  } indexVar_t;
+  typedef enum { VAR_P = 0, VAR_Q, VAR_STATE } indexVar_t;
 
  public:
   /**
@@ -142,10 +138,10 @@ class LoadInterfaceIIDM : public LoadInterface, public InjectorInterfaceIIDM<IID
 
  private:
   IIDM::Load& loadIIDM_;  ///< reference to the iidm load instance
-  double loadPUnderV_;  ///< load power value if voltage is under threshold
-  double v0_;  ///< initial voltage of the bus where the load is connected
-  double vNom_;  ///<  nominal voltage of the bus where the load is connected
-  std::string country_;  ///< country of the load
+  double loadPUnderV_;    ///< load power value if voltage is under threshold
+  double v0_;             ///< initial voltage of the bus where the load is connected
+  double vNom_;           ///<  nominal voltage of the bus where the load is connected
+  std::string country_;   ///< country of the load
 };
 }  // namespace DYN
 

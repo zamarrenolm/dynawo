@@ -11,30 +11,27 @@
 // simulation tool for power systems.
 //
 
-
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/GeneratorBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/Generator.h>
-
-#include "DYNVoltageLevelInterfaceIIDM.h"
 #include "DYNBusInterfaceIIDM.h"
 #include "DYNGeneratorInterfaceIIDM.h"
-#include "DYNModelGenerator.h"
 #include "DYNModelBus.h"
+#include "DYNModelGenerator.h"
 #include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
 #include "DYNModelVoltageLevel.h"
 #include "DYNSparseMatrix.h"
 #include "DYNVariable.h"
 #include "DYNVariableAlias.h"
-
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
+
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/GeneratorBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/Generator.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -114,7 +111,6 @@ TEST(ModelsModelNetwork, ModelNetworkGeneratorInitialization) {
   ASSERT_DOUBLE_EQUALS_DYNAWO(genOpened->QcPu(), -0.);
   ASSERT_TRUE(!genOpened->isConnected());
 }
-
 
 TEST(ModelsModelNetwork, ModelNetworkGeneratorCalculatedVariables) {
   std::pair<shared_ptr<ModelGenerator>, shared_ptr<ModelVoltageLevel> > p = createModelGenerator(false, false);
@@ -325,7 +321,6 @@ TEST(ModelsModelNetwork, ModelNetworkGeneratorDefineInstantiate) {
   ASSERT_EQ(nbAlias, 1);
   ASSERT_EQ(nbCalc, 3);
   ASSERT_EQ(nbVar, 3);
-
 
   std::vector<ParameterModeler> parameters;
   gen->defineNonGenericParameters(parameters);

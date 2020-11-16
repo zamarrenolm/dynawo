@@ -22,9 +22,10 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELSTATICVARCOMPENSATOR_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELSTATICVARCOMPENSATOR_H_
 
-#include <boost/shared_ptr.hpp>
 #include "DYNNetworkComponent.h"
 #include "DYNStaticVarCompensatorInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class ModelBus;
@@ -40,34 +41,22 @@ class ModelStaticVarCompensator : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelStaticVarCompensator() { }
+  ~ModelStaticVarCompensator() {}
 
   /**
    * @brief  calculated variables type
    */
-  typedef enum {
-    pNum_ = 0,
-    qNum_ = 1,
-    nbCalculatedVariables_ = 2
-  } CalculatedVariables_t;
+  typedef enum { pNum_ = 0, qNum_ = 1, nbCalculatedVariables_ = 2 } CalculatedVariables_t;
 
   /**
    * @brief  index variables type
    */
-  typedef enum {
-    piInNum_ = 0,
-    piOutNum_ = 1,
-    bSvcNum_ = 2,
-    feedBackNum_ = 3
-  } IndexVariables_t;
+  typedef enum { piInNum_ = 0, piOutNum_ = 1, bSvcNum_ = 2, feedBackNum_ = 3 } IndexVariables_t;
 
   /**
    * @brief index discrete variable
    */
-  typedef enum {
-    modeNum_ = 0,
-    connectionStateNum_ = 1
-  } IndexDiscreteVariable_t;
+  typedef enum { modeNum_ = 0, connectionStateNum_ = 1 } IndexDiscreteVariable_t;
 
   /**
    * @brief set connection status
@@ -100,7 +89,8 @@ class ModelStaticVarCompensator : public NetworkComponent {
   /**
    * @brief evaluate derivatives prim
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @brief define variables
@@ -187,7 +177,8 @@ class ModelStaticVarCompensator : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
@@ -197,7 +188,8 @@ class ModelStaticVarCompensator : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::collectSilentZ()
@@ -209,7 +201,7 @@ class ModelStaticVarCompensator : public NetworkComponent {
    */
   void evalYMat();
 
-   /**
+  /**
    * @copydoc NetworkComponent::init(int& yNum)
    */
   void init(int& yNum);
@@ -237,7 +229,8 @@ class ModelStaticVarCompensator : public NetworkComponent {
   /**
    * @brief addBusNeighbors
    */
-  void addBusNeighbors() { /* not needed */ }
+  void addBusNeighbors() { /* not needed */
+  }
 
   /**
    * @brief evaluate state
@@ -373,39 +366,39 @@ class ModelStaticVarCompensator : public NetworkComponent {
   double ii_dBSvc(const double& ur) const;
 
   boost::shared_ptr<ModelBus> modelBus_;  ///< model bus
-  double Statism_;  ///< statism
-  double kG_;  ///< global gain before the Proportional Integral
-  double kP_;  ///< gain in regulator PI
-  double Ti_;  ///< time constant Ti
-  double bMin_;  ///< minimum susceptance
-  double bMax_;  ///< maximum susceptance
-  double vSetPoint_;  ///< voltage set-point
-  double vNom_;  ///< nominal voltage
+  double Statism_;                        ///< statism
+  double kG_;                             ///< global gain before the Proportional Integral
+  double kP_;                             ///< gain in regulator PI
+  double Ti_;                             ///< time constant Ti
+  double bMin_;                           ///< minimum susceptance
+  double bMax_;                           ///< maximum susceptance
+  double vSetPoint_;                      ///< voltage set-point
+  double vNom_;                           ///< nominal voltage
   State connectionState_;  ///< "internal" compensator connection status, evaluated at the end of evalZ to detect if the state was modified by another component
-  bool stateModified_;  ///< true if the compensator connection state was modified
+  bool stateModified_;     ///< true if the compensator connection state was modified
   StaticVarCompensatorInterface::RegulationMode_t mode_;  ///< regulation mode
-  double uMinActivation_;  ///< lower voltage limit to activate running mode when in standby
-  double uMaxActivation_;  ///< higher voltage limit to activate running mode when in standby
-  double uSetPointMin_;  ///< new target when UMin has been reached
-  double uSetPointMax_;  ///< new target when UMax has been reached
-  double hasStandByAutomaton_;  ///< check if extension StandByAutomaton is loaded
-  bool isStandBy_;  ///< svc is standby or not
-  double bShunt_;  ///< constant susceptance
-  double bSvc0_;  ///< initial susceptance of the svc in pu (base SNREF)
-  double ir0_;  ///< initial current (real part)
-  double ii0_;  ///< initial current (imaginary part)
+  double uMinActivation_;                                 ///< lower voltage limit to activate running mode when in standby
+  double uMaxActivation_;                                 ///< higher voltage limit to activate running mode when in standby
+  double uSetPointMin_;                                   ///< new target when UMin has been reached
+  double uSetPointMax_;                                   ///< new target when UMax has been reached
+  double hasStandByAutomaton_;                            ///< check if extension StandByAutomaton is loaded
+  bool isStandBy_;                                        ///< svc is standby or not
+  double bShunt_;                                         ///< constant susceptance
+  double bSvc0_;                                          ///< initial susceptance of the svc in pu (base SNREF)
+  double ir0_;                                            ///< initial current (real part)
+  double ii0_;                                            ///< initial current (imaginary part)
 
   // variables
-  double piIn0_;  ///< input regulator PI
-  double piOut0_;  ///< before B limiter in regulator PI
-  double feedBack0_;  ///< output of simple-lag block
+  double piIn0_;          ///< input regulator PI
+  double piOut0_;         ///< before B limiter in regulator PI
+  double feedBack0_;      ///< output of simple-lag block
   double feedBackPrim0_;  ///< derivative of output of simple-lag block
-  int piInYNum_;  ///< piInYNum_
-  int piOutYNum_;  ///< piOutYNum_
-  int bSvcYNum_;  ///< bSvcYNum_
-  int feedBackYNum_;  ///< feedBackYNum_
-  bool isRunning_;  ///< svc is running or not
-};  ///< class for Static Var Compensator model in network
+  int piInYNum_;          ///< piInYNum_
+  int piOutYNum_;         ///< piOutYNum_
+  int bSvcYNum_;          ///< bSvcYNum_
+  int feedBackYNum_;      ///< feedBackYNum_
+  bool isRunning_;        ///< svc is running or not
+};                        ///< class for Static Var Compensator model in network
 
 }  // namespace DYN
 

@@ -17,20 +17,19 @@
  * @brief Dynawo native variable : implementation file
  *
  */
-#include "DYNMacrosMessage.h"
-
 #include "DYNVariableNative.h"
+
+#include "DYNMacrosMessage.h"
 
 using std::string;
 
 namespace DYN {
 
 VariableNative::VariableNative(const string& name, const typeVar_t& type, bool isState, bool negated) :
-Variable(name, false),
-type_(type),
-isState_(isState),
-negated_(negated) {
-}
+    Variable(name, false),
+    type_(type),
+    isState_(isState),
+    negated_(negated) {}
 
 void
 VariableNative::setIndex(const int& index) {

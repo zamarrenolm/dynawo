@@ -42,7 +42,7 @@ class XmlImporter : public Importer {
    */
   boost::shared_ptr<CriteriaCollection> importFromFile(const std::string& fileName) const;
 
-   /**
+  /**
    * @copydoc Importer::importFromStream()
    */
   boost::shared_ptr<CriteriaCollection> importFromStream(std::istream& stream) const;

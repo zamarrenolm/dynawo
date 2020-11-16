@@ -37,17 +37,17 @@ CurvesEntry::getExportMode() const {
 }
 
 void
-CurvesEntry::setInputFile(const std::string & inputFile) {
+CurvesEntry::setInputFile(const std::string& inputFile) {
   inputFile_ = inputFile;
 }
 
 void
-CurvesEntry::setOutputFile(const std::string & outputFile) {
+CurvesEntry::setOutputFile(const std::string& outputFile) {
   outputFile_ = outputFile;
 }
 
 void
-CurvesEntry::setExportMode(const std::string & exportMode) {
+CurvesEntry::setExportMode(const std::string& exportMode) {
   exportMode_ = exportMode;
 }
 

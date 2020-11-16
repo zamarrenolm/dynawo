@@ -17,15 +17,14 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYNCommon.h"
-#include "CRTCriteriaParamsFactory.h"
-#include "CRTCriteriaParams.h"
-#include "CRTCriteriaFactory.h"
 #include "CRTCriteria.h"
-#include "CRTCriteriaCollectionFactory.h"
 #include "CRTCriteriaCollection.h"
+#include "CRTCriteriaCollectionFactory.h"
+#include "CRTCriteriaFactory.h"
+#include "CRTCriteriaParams.h"
+#include "CRTCriteriaParamsFactory.h"
+#include "DYNCommon.h"
+#include "gtest_dynawo.h"
 
 using DYN::doubleEquals;
 namespace criteria {
@@ -36,7 +35,7 @@ namespace criteria {
 
 TEST(APICRTTest, CriteriaParams) {
   boost::shared_ptr<CriteriaParams> criteriap = CriteriaParamsFactory::newCriteriaParams();
-//
+  //
   // test default constructor attributes
   ASSERT_EQ(criteriap->getScope(), CriteriaParams::UNDEFINED_SCOPE);
   ASSERT_EQ(criteriap->getType(), CriteriaParams::UNDEFINED_TYPE);
@@ -104,8 +103,7 @@ TEST(APICRTTest, Criteria) {
   // test setted attributes
   ASSERT_EQ(criteria->getParams(), criteriap);
   size_t idx = 0;
-  for (Criteria::component_id_const_iterator it = criteria->begin(), itEnd = criteria->end();
-      it != itEnd; ++it, ++idx) {
+  for (Criteria::component_id_const_iterator it = criteria->begin(), itEnd = criteria->end(); it != itEnd; ++it, ++idx) {
     if (idx == 0)
       ASSERT_EQ(*it, "MyCompId1");
     else if (idx == 1)
@@ -123,7 +121,6 @@ TEST(APICRTTest, Criteria) {
   Criteria::component_id_const_iterator itCt2 = criteria->end();
   itCt2 = itCt;
   ASSERT_EQ(itCt == itCt2, true);
-
 
   ASSERT_TRUE(criteria->hasCountryFilter());
   ASSERT_TRUE(criteria->containsCountry("FR"));
@@ -159,9 +156,8 @@ TEST(APICRTTest, CriteriaCollection) {
 
   // test setted attributes
   size_t idx = 0;
-  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteriaCol->begin(CriteriaCollection::BUS),
-      itEnd = criteriaCol->end(CriteriaCollection::BUS);
-      it != itEnd; ++it, ++idx) {
+  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteriaCol->begin(CriteriaCollection::BUS), itEnd = criteriaCol->end(CriteriaCollection::BUS);
+       it != itEnd; ++it, ++idx) {
     boost::shared_ptr<Criteria> criteria = *it;
     if (idx == 0)
       ASSERT_EQ(*it, criteriaBus);
@@ -171,8 +167,8 @@ TEST(APICRTTest, CriteriaCollection) {
 
   idx = 0;
   for (CriteriaCollection::CriteriaCollectionConstIterator it = criteriaCol->begin(CriteriaCollection::LOAD),
-      itEnd = criteriaCol->end(CriteriaCollection::LOAD);
-      it != itEnd; ++it, ++idx) {
+                                                           itEnd = criteriaCol->end(CriteriaCollection::LOAD);
+       it != itEnd; ++it, ++idx) {
     boost::shared_ptr<Criteria> criteria = *it;
     if (idx == 0)
       ASSERT_EQ(*it, criteriaLoad);
@@ -187,14 +183,14 @@ TEST(APICRTTest, CriteriaCollection) {
   ASSERT_EQ(*(itCt++), criteriaLoad);
   ASSERT_EQ(*(itCt--), criteriaLoad2);
   ASSERT_EQ(*itCt, criteriaLoad);
-  CriteriaCollection::CriteriaCollectionConstIterator itCt2  = criteriaCol->end(CriteriaCollection::LOAD);
+  CriteriaCollection::CriteriaCollectionConstIterator itCt2 = criteriaCol->end(CriteriaCollection::LOAD);
   itCt2 = itCt;
   ASSERT_EQ(itCt == itCt2, true);
 
   idx = 0;
   for (CriteriaCollection::CriteriaCollectionConstIterator it = criteriaCol->begin(CriteriaCollection::GENERATOR),
-      itEnd = criteriaCol->end(CriteriaCollection::GENERATOR);
-      it != itEnd; ++it, ++idx) {
+                                                           itEnd = criteriaCol->end(CriteriaCollection::GENERATOR);
+       it != itEnd; ++it, ++idx) {
     boost::shared_ptr<Criteria> criteria = *it;
     if (idx == 0)
       ASSERT_EQ(*it, criteriaGen);

@@ -20,9 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_DYNSTATICPARAMETER_H_
 #define MODELER_DATAINTERFACE_DYNSTATICPARAMETER_H_
 
-#include <string>
 #include <boost/any.hpp>
 #include <boost/optional.hpp>
+#include <string>
 
 namespace DYN {
 
@@ -36,8 +36,8 @@ class StaticParameter {
    * @brief Definition of the type of the static parameter
    */
   enum StaticParameterType {
-    BOOL,  ///<  the static parameter is a boolean one
-    INT,  ///< the static parameter is an integer one
+    BOOL,   ///<  the static parameter is a boolean one
+    INT,    ///< the static parameter is an integer one
     DOUBLE  ///< the static parameter is a double one
   };
 
@@ -79,7 +79,8 @@ class StaticParameter {
    * @param value new value of the static parameter
    * @return instance of the staticParameter modified
    */
-  template<typename T> StaticParameter& setValue(const T& value);
+  template<typename T>
+  StaticParameter& setValue(const T& value);
 
   /**
    * @brief getter of the static parameter's name
@@ -91,7 +92,8 @@ class StaticParameter {
    * @brief get the value of the parameter variable
    * @return the value of the static parameter
    */
-  template<typename T> T getValue() const;
+  template<typename T>
+  T getValue() const;
 
   /**
    * @brief get the type of a static parameter
@@ -113,10 +115,10 @@ class StaticParameter {
   static std::string typeAsString(const StaticParameterType& type);
 
  private:
-  StaticParameterType type_;  ///< type of the static parameter
+  StaticParameterType type_;           ///< type of the static parameter
   boost::optional<boost::any> value_;  ///< value of the static parameter
-  std::string name_;  ///< name of the static parameter
-};  ///< class for static parameter
+  std::string name_;                   ///< name of the static parameter
+};                                     ///< class for static parameter
 }  // namespace DYN
 
 #include "DYNStaticParameter.hpp"

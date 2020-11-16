@@ -18,7 +18,7 @@ using boost::shared_ptr;
 namespace criteria {
 
 void
-CriteriaCollection::add(CriteriaCollectionType_t type, const boost::shared_ptr<Criteria> & criteria) {
+CriteriaCollection::add(CriteriaCollectionType_t type, const boost::shared_ptr<Criteria>& criteria) {
   switch (type) {
   case CriteriaCollection::BUS:
     busCriteria_.push_back(criteria);
@@ -33,9 +33,10 @@ CriteriaCollection::add(CriteriaCollectionType_t type, const boost::shared_ptr<C
 }
 
 void
-CriteriaCollection::merge(const boost::shared_ptr<CriteriaCollection> & other) {
+CriteriaCollection::merge(const boost::shared_ptr<CriteriaCollection>& other) {
   boost::shared_ptr<CriteriaCollection> otherImpl = boost::dynamic_pointer_cast<CriteriaCollection>(other);
-  if (!otherImpl) return;
+  if (!otherImpl)
+    return;
   busCriteria_.insert(busCriteria_.end(), otherImpl->busCriteria_.begin(), otherImpl->busCriteria_.end());
   loadCriteria_.insert(loadCriteria_.end(), otherImpl->loadCriteria_.begin(), otherImpl->loadCriteria_.end());
   generatorCriteria_.insert(generatorCriteria_.end(), otherImpl->generatorCriteria_.begin(), otherImpl->generatorCriteria_.end());
@@ -51,8 +52,8 @@ CriteriaCollection::end(CriteriaCollectionType_t type) const {
   return CriteriaCollection::CriteriaCollectionConstIterator(this, false, type);
 }
 
-CriteriaCollection::CriteriaCollectionConstIterator::CriteriaCollectionConstIterator(
-    const CriteriaCollection* iterated, bool begin, CriteriaCollectionType_t type) {
+CriteriaCollection::CriteriaCollectionConstIterator::CriteriaCollectionConstIterator(const CriteriaCollection* iterated, bool begin,
+                                                                                     CriteriaCollectionType_t type) {
   switch (type) {
   case CriteriaCollection::BUS:
     current_ = (begin ? iterated->busCriteria_.begin() : iterated->busCriteria_.end());
@@ -102,13 +103,11 @@ CriteriaCollection::CriteriaCollectionConstIterator::operator!=(const CriteriaCo
   return current_ != other.current_;
 }
 
-const shared_ptr<Criteria>&
-CriteriaCollection::CriteriaCollectionConstIterator::operator*() const {
+const shared_ptr<Criteria>& CriteriaCollection::CriteriaCollectionConstIterator::operator*() const {
   return *current_;
 }
 
-const shared_ptr<Criteria>*
-CriteriaCollection::CriteriaCollectionConstIterator::operator->() const {
+const shared_ptr<Criteria>* CriteriaCollection::CriteriaCollectionConstIterator::operator->() const {
   return &(*current_);
 }
 

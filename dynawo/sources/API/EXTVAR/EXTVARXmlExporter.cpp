@@ -16,21 +16,20 @@
  * @brief Dynawo external variables models collection XML exporter : implementation file
  *
  */
-#include <fstream>
-
-#include <xml/sax/parser/Attributes.h>
-#include <xml/sax/formatter/AttributeList.h>
-#include <xml/sax/formatter/Formatter.h>
+#include "EXTVARXmlExporter.h"
 
 #include "DYNMacrosMessage.h"
-
-#include "EXTVARVariablesCollection.h"
-#include "EXTVARXmlExporter.h"
 #include "EXTVARVariable.h"
+#include "EXTVARVariablesCollection.h"
+
+#include <fstream>
+#include <xml/sax/formatter/AttributeList.h>
+#include <xml/sax/formatter/Formatter.h>
+#include <xml/sax/parser/Attributes.h>
 
 using std::fstream;
-using std::ostream;
 using std::map;
+using std::ostream;
 using std::string;
 
 using boost::dynamic_pointer_cast;
@@ -61,8 +60,7 @@ XmlExporter::exportToStream(const VariablesCollection& collection, ostream& stre
   AttributeList attrs;
   formatter->startElement("external_variables", attrs);
 
-  for (variable_const_iterator itVariable = collection.cbeginVariable();
-          itVariable != collection.cendVariable(); ++itVariable) {
+  for (variable_const_iterator itVariable = collection.cbeginVariable(); itVariable != collection.cendVariable(); ++itVariable) {
     writeVariable(*itVariable, *formatter);
   }
 
@@ -76,21 +74,21 @@ XmlExporter::writeVariable(const shared_ptr<Variable>& variable, Formatter& form
   attrs.add("id", variable->getId());
   std::string type;
   switch (variable->getType()) {
-    case Variable::CONTINUOUS:
-      type = "continuous";
-      break;
-    case Variable::DISCRETE:
-      type = "discrete";
-      break;
-    case Variable::BOOLEAN:
-      type = "boolean";
-      break;
-    case Variable::CONTINUOUS_ARRAY:
-      type = "continuousArray";
-      break;
-    case Variable::DISCRETE_ARRAY:
-      type = "discreteArray";
-      break;
+  case Variable::CONTINUOUS:
+    type = "continuous";
+    break;
+  case Variable::DISCRETE:
+    type = "discrete";
+    break;
+  case Variable::BOOLEAN:
+    type = "boolean";
+    break;
+  case Variable::CONTINUOUS_ARRAY:
+    type = "continuousArray";
+    break;
+  case Variable::DISCRETE_ARRAY:
+    type = "discreteArray";
+    break;
   }
 
   attrs.add("type", type);

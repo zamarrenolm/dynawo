@@ -11,16 +11,16 @@
 // simulation tool for power systems.
 //
 
+#include "CSTRConstraint.h"
+#include "CSTRConstraintsCollection.h"
+#include "CSTRConstraintsCollectionFactory.h"
+#include "DYNModelCurrentLimits.h"
+#include "DYNModelNetwork.h"
+#include "TLTimelineFactory.h"
+#include "gtest_dynawo.h"
+
 #include <boost/shared_ptr.hpp>
 #include <vector>
-
-#include "DYNModelCurrentLimits.h"
-#include "CSTRConstraintsCollectionFactory.h"
-#include "CSTRConstraintsCollection.h"
-#include "TLTimelineFactory.h"
-#include "CSTRConstraint.h"
-#include "DYNModelNetwork.h"
-#include "gtest_dynawo.h"
 
 namespace DYN {
 
@@ -48,8 +48,7 @@ TEST(ModelsModelNetwork, ModelNetworkCurrentLimits) {
   mcl.setMaxTimeOperation(10.);
   mcl.setSide(ModelCurrentLimits::SIDE_2);
 
-  boost::shared_ptr<constraints::ConstraintsCollection> constraints =
-      constraints::ConstraintsCollectionFactory::newInstance("MyConstaintsCollection");
+  boost::shared_ptr<constraints::ConstraintsCollection> constraints = constraints::ConstraintsCollectionFactory::newInstance("MyConstaintsCollection");
   ModelNetwork network;
   network.setConstraints(constraints);
   network.setTimeline(timeline::TimelineFactory::newInstance("Test"));
@@ -84,8 +83,7 @@ TEST(ModelsModelNetwork, ModelNetworkCurrentLimits) {
   mcl.evalZ("MY COMP", t, &states[0], &network, desactivate, modelType);
 
   unsigned i = 0;
-  for (constraints::ConstraintsCollection::const_iterator it = constraints->cbegin(),
-      itEnd = constraints->cend(); it != itEnd; ++it) {
+  for (constraints::ConstraintsCollection::const_iterator it = constraints->cbegin(), itEnd = constraints->cend(); it != itEnd; ++it) {
     boost::shared_ptr<constraints::Constraint> constraint = (*it);
     if (i == 0) {
       ASSERT_EQ(constraint->getModelName(), "MY COMP");
@@ -120,8 +118,7 @@ TEST(ModelsModelNetwork, ModelNetworkCurrentLimits) {
   mcl.evalZ("MY COMP", t, &states[0], &network, desactivate, modelType);
 
   i = 0;
-  for (constraints::ConstraintsCollection::const_iterator it = constraints->cbegin(),
-      itEnd = constraints->cend(); it != itEnd; ++it) {
+  for (constraints::ConstraintsCollection::const_iterator it = constraints->cbegin(), itEnd = constraints->cend(); it != itEnd; ++it) {
     boost::shared_ptr<constraints::Constraint> constraint = (*it);
     if (i == 0) {
       ASSERT_EQ(constraint->getModelName(), "MY COMP");

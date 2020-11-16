@@ -20,10 +20,10 @@
 #ifndef API_CRV_CRVEXPORTER_H_
 #define API_CRV_CRVEXPORTER_H_
 
-#include <string>
-#include <boost/shared_ptr.hpp>
-
 #include "CRVCurvesCollection.h"
+
+#include <boost/shared_ptr.hpp>
+#include <string>
 
 namespace curves {
 /**
@@ -46,7 +46,7 @@ class Exporter {
    */
   virtual void exportToFile(const boost::shared_ptr<CurvesCollection>& curves, const std::string& filePath) const = 0;
 
-   /**
+  /**
    * @brief Export method for this exporter
    *
    * @param curves curves to export

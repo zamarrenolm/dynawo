@@ -17,25 +17,23 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYDDynamicModelsCollectionFactory.h"
-#include "DYDBlackBoxModelFactory.h"
 #include "DYDBlackBoxModel.h"
-#include "DYDModelTemplateFactory.h"
-#include "DYDModelTemplate.h"
-#include "DYDMacroConnectFactory.h"
-#include "DYDMacroConnect.h"
-#include "DYDMacroConnectorFactory.h"
-#include "DYDMacroConnector.h"
-#include "DYDMacroStaticReferenceFactory.h"
-#include "DYDMacroStaticReference.h"
-#include "DYDIterators.h"
+#include "DYDBlackBoxModelFactory.h"
 #include "DYDConnector.h"
-#include "DYDStaticRef.h"
+#include "DYDDynamicModelsCollectionFactory.h"
+#include "DYDIterators.h"
+#include "DYDMacroConnect.h"
+#include "DYDMacroConnectFactory.h"
+#include "DYDMacroConnector.h"
+#include "DYDMacroConnectorFactory.h"
 #include "DYDMacroStaticRef.h"
 #include "DYDMacroStaticRefFactory.h"
-
+#include "DYDMacroStaticReference.h"
+#include "DYDMacroStaticReferenceFactory.h"
+#include "DYDModelTemplate.h"
+#include "DYDModelTemplateFactory.h"
+#include "DYDStaticRef.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 
@@ -53,9 +51,7 @@ TEST(APIDYDTest, CollectionCreate) {
   collection->addModel(model);
   collection->addModel(model1);
   int nbModels = 0;
-  for (dynamicModel_iterator itModel = collection->beginModel();
-          itModel != collection->endModel();
-          ++itModel)
+  for (dynamicModel_iterator itModel = collection->beginModel(); itModel != collection->endModel(); ++itModel)
     ++nbModels;
 
   ASSERT_EQ(nbModels, 2);
@@ -80,17 +76,13 @@ TEST(APIDYDTest, CollectionCopy) {
   collection1 = DynamicModelsCollectionFactory::copyCollection(collection);
 
   int nbModels = 0;
-  for (dynamicModel_iterator itModel = collection1->beginModel();
-          itModel != collection1->endModel();
-          ++itModel)
+  for (dynamicModel_iterator itModel = collection1->beginModel(); itModel != collection1->endModel(); ++itModel)
     ++nbModels;
 
   ASSERT_EQ(nbModels, 2);
 
   nbModels = 0;
-  for (dynamicModel_const_iterator itModel = collection1->cbeginModel();
-      itModel != collection1->cendModel();
-      ++itModel)
+  for (dynamicModel_const_iterator itModel = collection1->cbeginModel(); itModel != collection1->cendModel(); ++itModel)
     ++nbModels;
 
   ASSERT_EQ(nbModels, 2);
@@ -115,9 +107,7 @@ TEST(APIDYDTest, CollectionAddConnect) {
   collection->addConnect("model1", "var2", "model2", "var1");
 
   int nbConnect = 0;
-  for (connector_iterator itC = collection->beginConnector();
-          itC != collection->endConnector();
-          ++itC)
+  for (connector_iterator itC = collection->beginConnector(); itC != collection->endConnector(); ++itC)
     ++nbConnect;
 
   ASSERT_EQ(nbConnect, 2);
@@ -128,9 +118,7 @@ TEST(APIDYDTest, CollectionAddConnect) {
   ASSERT_EQ((*itC--)->getSecondVariableId(), "var1");
 
   nbConnect = 0;
-  for (connector_const_iterator itC2 = collection->cbeginConnector();
-      itC2 != collection->cendConnector();
-      ++itC2)
+  for (connector_const_iterator itC2 = collection->cbeginConnector(); itC2 != collection->cendConnector(); ++itC2)
     ++nbConnect;
 
   ASSERT_EQ(nbConnect, 2);
@@ -147,9 +135,7 @@ TEST(APIDYDTest, CollectionAddMacroConnector) {
   collection->addMacroConnector(mc2);
 
   int nbMacroConnectors = 0;
-  for (macroConnector_iterator itMC = collection->beginMacroConnector();
-          itMC != collection->endMacroConnector();
-          ++itMC)
+  for (macroConnector_iterator itMC = collection->beginMacroConnector(); itMC != collection->endMacroConnector(); ++itMC)
     ++nbMacroConnectors;
 
   ASSERT_EQ(nbMacroConnectors, 2);
@@ -160,9 +146,7 @@ TEST(APIDYDTest, CollectionAddMacroConnector) {
   ASSERT_EQ((*itC--)->getId(), "mc2");
 
   nbMacroConnectors = 0;
-  for (macroConnector_const_iterator itMC = collection->cbeginMacroConnector();
-      itMC != collection->cendMacroConnector();
-      ++itMC)
+  for (macroConnector_const_iterator itMC = collection->cbeginMacroConnector(); itMC != collection->cendMacroConnector(); ++itMC)
     ++nbMacroConnectors;
 
   ASSERT_EQ(nbMacroConnectors, 2);
@@ -205,9 +189,7 @@ TEST(APIDYDTest, CollectionAddMacroConnect) {
   collection->addMacroConnect(mc2);
 
   int nbMacroConnects = 0;
-  for (macroConnect_iterator itMC = collection->beginMacroConnect();
-          itMC != collection->endMacroConnect();
-          ++itMC)
+  for (macroConnect_iterator itMC = collection->beginMacroConnect(); itMC != collection->endMacroConnect(); ++itMC)
     ++nbMacroConnects;
 
   ASSERT_EQ(nbMacroConnects, 2);
@@ -218,9 +200,7 @@ TEST(APIDYDTest, CollectionAddMacroConnect) {
   ASSERT_EQ((*itC--)->getConnector(), "mc2");
 
   nbMacroConnects = 0;
-  for (macroConnect_const_iterator itMC = collection->cbeginMacroConnect();
-      itMC != collection->cendMacroConnect();
-      ++itMC)
+  for (macroConnect_const_iterator itMC = collection->cbeginMacroConnect(); itMC != collection->cendMacroConnect(); ++itMC)
     ++nbMacroConnects;
 
   ASSERT_EQ(nbMacroConnects, 2);
@@ -242,9 +222,7 @@ TEST(APIDYDTest, CollectionMacroStaticReference) {
   ASSERT_THROW_DYNAWO(collection->addMacroStaticReference(mStRef11), DYN::Error::API, DYN::KeyError_t::MacroStaticReferenceNotUnique);
 
   int nbMacroStaticReferences = 0;
-  for (macroStaticReference_iterator itMStRef = collection->beginMacroStaticReference();
-      itMStRef != collection->endMacroStaticReference();
-      ++itMStRef)
+  for (macroStaticReference_iterator itMStRef = collection->beginMacroStaticReference(); itMStRef != collection->endMacroStaticReference(); ++itMStRef)
     ++nbMacroStaticReferences;
   ASSERT_EQ(nbMacroStaticReferences, 3);
   macroStaticReference_iterator itC(collection->beginMacroStaticReference());
@@ -254,9 +232,7 @@ TEST(APIDYDTest, CollectionMacroStaticReference) {
   ASSERT_EQ((*itC--)->getId(), mStRef2->getId());
 
   nbMacroStaticReferences = 0;
-  for (macroStaticReference_const_iterator itMStRef = collection->cbeginMacroStaticReference();
-          itMStRef != collection->cendMacroStaticReference();
-          ++itMStRef)
+  for (macroStaticReference_const_iterator itMStRef = collection->cbeginMacroStaticReference(); itMStRef != collection->cendMacroStaticReference(); ++itMStRef)
     ++nbMacroStaticReferences;
   ASSERT_EQ(nbMacroStaticReferences, 3);
 

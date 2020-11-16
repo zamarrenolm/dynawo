@@ -17,17 +17,16 @@
  *
  */
 
-#include <fstream>
-
-#include <boost/filesystem.hpp>
-#include <sunmatrix/sunmatrix_sparse.h>
-
-#include "gtest_dynawo.h"
+#include "DYNFileSystemUtils.h"
 #include "DYNParameterSolver.h"
+#include "DYNSolverCommon.h"
 #include "DYNSparseMatrix.h"
 #include "DYNTrace.h"
-#include "DYNSolverCommon.h"
-#include "DYNFileSystemUtils.h"
+#include "gtest_dynawo.h"
+
+#include <boost/filesystem.hpp>
+#include <fstream>
+#include <sunmatrix/sunmatrix_sparse.h>
 
 namespace DYN {
 
@@ -88,9 +87,9 @@ TEST(SimulationCommonTest, testSolverCommon) {
   ASSERT_EQ(row, 2);
   ASSERT_EQ(col, 1);
 
-  SM_INDEXPTRS_S(JJ) = reinterpret_cast<sunindextype*> (malloc(3 * sizeof (sunindextype)));
-  SM_INDEXVALS_S(JJ) = reinterpret_cast<sunindextype*> (malloc(SM_NNZ_S(JJ) * sizeof (sunindextype)));
-  SM_DATA_S(JJ) = reinterpret_cast<realtype*> (malloc(SM_NNZ_S(JJ) * sizeof (realtype)));
+  SM_INDEXPTRS_S(JJ) = reinterpret_cast<sunindextype*>(malloc(3 * sizeof(sunindextype)));
+  SM_INDEXVALS_S(JJ) = reinterpret_cast<sunindextype*>(malloc(SM_NNZ_S(JJ) * sizeof(sunindextype)));
+  SM_DATA_S(JJ) = reinterpret_cast<realtype*>(malloc(SM_NNZ_S(JJ) * sizeof(realtype)));
   for (unsigned i = 0; i < 3; ++i) {
     SM_INDEXPTRS_S(JJ)[i] = i;
   }

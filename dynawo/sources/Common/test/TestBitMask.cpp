@@ -11,8 +11,8 @@
 // simulation tool for power systems.
 //
 
-#include "gtest_dynawo.h"
 #include "DYNBitMask.h"
+#include "gtest_dynawo.h"
 
 namespace DYN {
 

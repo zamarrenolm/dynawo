@@ -16,32 +16,30 @@
  *
  */
 
+#include "DYNModelManager.h"
+
+#include "DYNCommon.h"
+#include "DYNElement.h"
+#include "DYNFileSystemUtils.h"
+#include "DYNMacrosMessage.h"
+#include "DYNModelManagerCommon.h"
+#include "DYNModelModelica.h"
+#include "DYNParameterModeler.h"
+#include "DYNSolverKINSubModel.h"
+#include "DYNSparseMatrix.h"
+#include "DYNTimer.h"
+#include "DYNTrace.h"
+#include "PARParameter.h"
+#include "PARParametersSetFactory.h"
+
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
 #include <cmath>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <vector>
-
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/serialization/vector.hpp>
-
-#include "PARParametersSetFactory.h"
-#include "PARParameter.h"
-
-#include "DYNCommon.h"
-#include "DYNMacrosMessage.h"
-#include "DYNElement.h"
-#include "DYNFileSystemUtils.h"
-#include "DYNModelManager.h"
-
-#include "DYNParameterModeler.h"
-#include "DYNModelManagerCommon.h"
-#include "DYNModelModelica.h"
-#include "DYNSolverKINSubModel.h"
-#include "DYNSparseMatrix.h"
-#include "DYNTimer.h"
-#include "DYNTrace.h"
 
 using std::ifstream;
 using std::map;
@@ -58,20 +56,14 @@ using parameters::ParametersSetFactory;
 
 namespace DYN {
 
-ModelManager::ModelManager() :
-SubModel(),
-modelInit_(NULL),
-modelDyn_(NULL),
-dataInit_(new DYNDATA),
-dataDyn_(new DYNDATA),
-modelInitUsed_(false) { }
+ModelManager::ModelManager() : SubModel(), modelInit_(NULL), modelDyn_(NULL), dataInit_(new DYNDATA), dataDyn_(new DYNDATA), modelInitUsed_(false) {}
 
 ModelManager::~ModelManager() {
   delete dataInit_;
   delete dataDyn_;
 }
 
-DYNDATA *
+DYNDATA*
 ModelManager::data() const {
   if (modelInitUsed_)
     return dataInit_;
@@ -79,17 +71,17 @@ ModelManager::data() const {
     return dataDyn_;
 }
 
-MODEL_DATA *
+MODEL_DATA*
 ModelManager::modelData() const {
   return data()->modelData;
 }
 
-SIMULATION_INFO *
+SIMULATION_INFO*
 ModelManager::simulationInfo() const {
   return data()->simulationInfo;
 }
 
-ModelModelica *
+ModelModelica*
 ModelManager::modelModelicaInit() const {
   if (hasInit())
     return modelInit_;
@@ -97,12 +89,12 @@ ModelManager::modelModelicaInit() const {
     throw DYNError(Error::MODELER, NoInitModel, modelType(), name());
 }
 
-ModelModelica *
+ModelModelica*
 ModelManager::modelModelicaDynamic() const {
   return modelDyn_;
 }
 
-ModelModelica *
+ModelModelica*
 ModelManager::modelModelica() const {
   if (hasInit() && modelInitUsed_)
     return modelModelicaInit();
@@ -126,26 +118,23 @@ ModelManager::createParametersValueSet(const boost::unordered_map<string, Parame
 
     if (parameter.hasValue()) {
       switch (parameter.getValueType()) {
-        case VAR_TYPE_DOUBLE: {
-          parametersSet->createParameter(parameterName, parameter.getValue<double>());
-          break;
-        }
-        case VAR_TYPE_INT: {
-          parametersSet->createParameter(parameterName, parameter.getValue<int>());
-          break;
-        }
-        case VAR_TYPE_BOOL: {
-          parametersSet->createParameter(parameterName, parameter.getValue<bool>());
-          break;
-        }
-        case VAR_TYPE_STRING: {
-          parametersSet->createParameter(parameterName, parameter.getValue<string>());
-          break;
-        }
-        default:
-        {
-          throw DYNError(Error::MODELER, ParameterBadType, name());
-        }
+      case VAR_TYPE_DOUBLE: {
+        parametersSet->createParameter(parameterName, parameter.getValue<double>());
+        break;
+      }
+      case VAR_TYPE_INT: {
+        parametersSet->createParameter(parameterName, parameter.getValue<int>());
+        break;
+      }
+      case VAR_TYPE_BOOL: {
+        parametersSet->createParameter(parameterName, parameter.getValue<bool>());
+        break;
+      }
+      case VAR_TYPE_STRING: {
+        parametersSet->createParameter(parameterName, parameter.getValue<string>());
+        break;
+      }
+      default: { throw DYNError(Error::MODELER, ParameterBadType, name()); }
       }
     }
   }
@@ -239,7 +228,7 @@ ModelManager::evalF(double t, propertyF_t type) {
 }
 
 void
-ModelManager::checkDataCoherence(const double & t) {
+ModelManager::checkDataCoherence(const double& t) {
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
   Timer timer("ModelManager::checkDataCoherence");
 #endif
@@ -276,12 +265,10 @@ ModelManager::setGequationsInit() {
     modelModelicaInit()->setGequations(gEquationInitIndex_);
 }
 
-
 #ifdef _ADEPT_
 
 void
-ModelManager::evalF(const double & t, const vector<adept::adouble> &y,
-        const vector<adept::adouble> &yp, vector<adept::adouble> &f) {
+ModelManager::evalF(const double& t, const vector<adept::adouble>& y, const vector<adept::adouble>& yp, vector<adept::adouble>& f) {
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
   Timer timer("ModelManager::evalF adept");
 #endif
@@ -292,21 +279,21 @@ ModelManager::evalF(const double & t, const vector<adept::adouble> &y,
   for (unsigned int i = 0; i < sizeF(); i++) {
     double term = f[i].value();
     if (isnan(term) || isinf(term)) {
-       throw DYNError(Error::MODELER, ResidualWithNanInf, name(), modelType(), staticId(), i, getFequationByLocalIndex(i));  // i is local index
+      throw DYNError(Error::MODELER, ResidualWithNanInf, name(), modelType(), staticId(), i, getFequationByLocalIndex(i));  // i is local index
     }
   }
 #endif
 }
 
 void
-ModelManager::evalJtAdept(const double& t, double *y, double * yp, const double & cj, SparseMatrix &Jt, const int& rowOffset, bool complete) {
+ModelManager::evalJtAdept(const double& t, double* y, double* yp, const double& cj, SparseMatrix& Jt, const int& rowOffset, bool complete) {
   if (sizeY() == 0)
     return;
 
   try {
     const int nbInput = sizeY() + sizeY();  // Y and Y '
     const int nbOutput = sizeY();
-    const int coeff = (complete) ? 1: 0;  // complete => jacobian @F/@y + cj.@F/@Y' else @F/@Y'
+    const int coeff = (complete) ? 1 : 0;  // complete => jacobian @F/@y + cj.@F/@Y' else @F/@Y'
     vector<double> jac(nbInput * nbOutput);
 
     adept::Stack stack;
@@ -324,7 +311,7 @@ ModelManager::evalJtAdept(const double& t, double *y, double * yp, const double 
     stack.independent(&xp[0], xp.size());
     stack.dependent(&output[0], nbOutput);
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
-    Timer * timer1 = new Timer("zzz reading");
+    Timer* timer1 = new Timer("zzz reading");
 #endif
     stack.jacobian(&jac[0]);
     stack.pause_recording();
@@ -334,7 +321,7 @@ ModelManager::evalJtAdept(const double& t, double *y, double * yp, const double 
 
     int offsetJPrim = sizeY() * sizeY();
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
-    Timer * timer3 = new Timer("zzz filling");
+    Timer* timer3 = new Timer("zzz filling");
 #endif
 
     for (unsigned int i = 0; i < sizeF(); ++i) {
@@ -344,7 +331,7 @@ ModelManager::evalJtAdept(const double& t, double *y, double * yp, const double 
         double term = coeff * jac[indice] + cj * jac[indice + offsetJPrim];
 #ifdef _DEBUG_
         if (isnan(term) || isinf(term)) {
-          throw DYNError(Error::MODELER, JacobianWithNanInf, name(), modelType(), staticId(), i, getFequationByLocalIndex(i), j);   // i is local index
+          throw DYNError(Error::MODELER, JacobianWithNanInf, name(), modelType(), staticId(), i, getFequationByLocalIndex(i), j);  // i is local index
         }
 #endif
         Jt.addTerm(j + rowOffset, term);
@@ -354,10 +341,10 @@ ModelManager::evalJtAdept(const double& t, double *y, double * yp, const double 
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
     delete timer3;
 #endif
-  } catch (adept::stack_already_active & e) {
+  } catch (adept::stack_already_active& e) {
     std::cerr << "Error :" << e.what() << std::endl;
     throw DYNError(DYN::Error::MODELER, AdeptFailure);
-  } catch (adept::autodiff_exception & e) {
+  } catch (adept::autodiff_exception& e) {
     std::cerr << "Error :" << e.what() << std::endl;
     throw DYNError(DYN::Error::MODELER, AdeptFailure);
   }
@@ -365,14 +352,14 @@ ModelManager::evalJtAdept(const double& t, double *y, double * yp, const double 
 #endif
 
 void
-ModelManager::evalG(const double & t) {
+ModelManager::evalG(const double& t) {
   setManagerTime(t);
 
   modelModelica()->setGomc(gLocal_);
 }
 
 void
-ModelManager::evalJt(const double &t, const double & cj, SparseMatrix& jt, const int& rowOffset) {
+ModelManager::evalJt(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset) {
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
   Timer timer("ModelManager::evalJ");
 #endif
@@ -386,7 +373,7 @@ ModelManager::evalJt(const double &t, const double & cj, SparseMatrix& jt, const
 }
 
 void
-ModelManager::evalJtPrim(const double &t, const double & cj, SparseMatrix& jt, const int& rowOffset) {
+ModelManager::evalJtPrim(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset) {
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
   Timer timer("ModelManager::evalJPrim");
 #endif
@@ -400,7 +387,7 @@ ModelManager::evalJtPrim(const double &t, const double & cj, SparseMatrix& jt, c
 }
 
 void
-ModelManager::evalZ(const double &t) {
+ModelManager::evalZ(const double& t) {
   if (sizeZ() > 0) {
     setManagerTime(t);
 
@@ -409,7 +396,7 @@ ModelManager::evalZ(const double &t) {
 }
 
 modeChangeType_t
-ModelManager::evalMode(const double & t) {
+ModelManager::evalMode(const double& t) {
   return modelModelica()->evalMode(t);
 }
 
@@ -436,7 +423,6 @@ ModelManager::evalFType() {
   modelModelica()->setFType_omc(fType_);
 }
 
-
 void
 ModelManager::collectSilentZ(bool* silentZTable) {
   modelModelica()->collectSilentZ(silentZTable);
@@ -444,7 +430,7 @@ ModelManager::collectSilentZ(bool* silentZTable) {
 
 void
 ModelManager::setSharedParametersDefaultValues(const bool isInit, const parameterOrigin_t& origin) {
-  ModelModelica * model = isInit ? modelModelicaInit() : modelModelicaDynamic();
+  ModelModelica* model = isInit ? modelModelicaInit() : modelModelicaDynamic();
   const shared_ptr<parameters::ParametersSet> sharedParametersInitialValues = model->setSharedParametersDefaultValues();
   const boost::unordered_map<string, ParameterModeler>& parameters = isInit ? getParametersInit() : getParametersDynamic();
 
@@ -454,26 +440,22 @@ ModelManager::setSharedParametersDefaultValues(const bool isInit, const paramete
 
     if (currentParameter.isUnitary() && sharedParametersInitialValues->hasParameter(paramName)) {
       switch (currentParameter.getValueType()) {
-      case VAR_TYPE_BOOL:
-      {
+      case VAR_TYPE_BOOL: {
         const bool value = sharedParametersInitialValues->getParameter(paramName)->getBool();
         setParameterValue(paramName, origin, value, isInit);
         break;
       }
-      case VAR_TYPE_INT:
-      {
+      case VAR_TYPE_INT: {
         const int value = sharedParametersInitialValues->getParameter(paramName)->getInt();
         setParameterValue(paramName, origin, value, isInit);
         break;
       }
-      case VAR_TYPE_DOUBLE:
-      {
+      case VAR_TYPE_DOUBLE: {
         const double& value = sharedParametersInitialValues->getParameter(paramName)->getDouble();
         setParameterValue(paramName, origin, value, isInit);
         break;
       }
-      case VAR_TYPE_STRING:
-      {
+      case VAR_TYPE_STRING: {
         const string& value = sharedParametersInitialValues->getParameter(paramName)->getString();
         setParameterValue(paramName, origin, value, isInit);
         break;
@@ -530,7 +512,7 @@ ModelManager::initParams() {
 }
 
 void
-ModelManager::dumpParameters(map< string, string > & mapParameters) {
+ModelManager::dumpParameters(map<string, string>& mapParameters) {
   stringstream parameters;
   boost::archive::binary_oarchive os(parameters);
 
@@ -572,10 +554,11 @@ ModelManager::dumpParameters(map< string, string > & mapParameters) {
   os << paramsInt;
   os << paramsString;
 
-  mapParameters[ parametersFileName() ] = parameters.str();
+  mapParameters[parametersFileName()] = parameters.str();
 }
 
-void ModelManager::writeParametersFinalValues() {
+void
+ModelManager::writeParametersFinalValues() {
   const boost::unordered_map<string, ParameterModeler>& parameters = getParametersDynamic();
   // in the OpenModelica-generated code
   // parameters are ordered as real first, then boolean, then integer
@@ -589,25 +572,21 @@ void ModelManager::writeParametersFinalValues() {
     if (i < nbParamsReal) {
       const unsigned int localRealIndex = i;
       switch (currentParameter.getValueType()) {
-        case VAR_TYPE_DOUBLE:
-        {
-          setFinalParameter(currentParameterName, simulationInfo()->realParameter[localRealIndex]);
-          break;
-        }
-        case VAR_TYPE_INT:
-        {
-          setFinalParameter(currentParameterName, static_cast<int> (simulationInfo()->realParameter[localRealIndex]));
-          break;
-        }
-        case VAR_TYPE_BOOL:
-        {
-          setFinalParameter(currentParameterName, toNativeBool(simulationInfo()->realParameter[localRealIndex]));
-          break;
-        }
-        case VAR_TYPE_STRING:
-        {
-          throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, currentParameter.getName(), typeVarC2Str(currentParameter.getValueType()), "DOUBLE");
-        }
+      case VAR_TYPE_DOUBLE: {
+        setFinalParameter(currentParameterName, simulationInfo()->realParameter[localRealIndex]);
+        break;
+      }
+      case VAR_TYPE_INT: {
+        setFinalParameter(currentParameterName, static_cast<int>(simulationInfo()->realParameter[localRealIndex]));
+        break;
+      }
+      case VAR_TYPE_BOOL: {
+        setFinalParameter(currentParameterName, toNativeBool(simulationInfo()->realParameter[localRealIndex]));
+        break;
+      }
+      case VAR_TYPE_STRING: {
+        throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, currentParameter.getName(), typeVarC2Str(currentParameter.getValueType()), "DOUBLE");
+      }
       }
     } else if (i < nbParamsReal + nbParamsBool) {
       const unsigned int localBooleanIndex = i - nbParamsReal;
@@ -627,7 +606,8 @@ void ModelManager::writeParametersFinalValues() {
   }
 }
 
-void ModelManager::getSubModelParameterValue(const string & nameParameter, double & value, bool & found) {
+void
+ModelManager::getSubModelParameterValue(const string& nameParameter, double& value, bool& found) {
   found = hasParameterDynamic(nameParameter);
   if (found) {
     const ParameterModeler& parameter = findParameterDynamic(nameParameter);
@@ -641,7 +621,7 @@ void ModelManager::getSubModelParameterValue(const string & nameParameter, doubl
 }
 
 void
-ModelManager::dumpVariables(map< string, string > & mapVariables) {
+ModelManager::dumpVariables(map<string, string>& mapVariables) {
   stringstream values;
   boost::archive::binary_oarchive os(values);
 
@@ -683,11 +663,11 @@ ModelManager::dumpVariables(map< string, string > & mapVariables) {
   os << valuesDerivatives;
   os << constCalcVars;
 
-  mapVariables[ variablesFileName() ] = values.str();
+  mapVariables[variablesFileName()] = values.str();
 }
 
 void
-ModelManager::loadVariables(const string &variables) {
+ModelManager::loadVariables(const string& variables) {
   setManagerTime(getCurrentTime());
   stringstream vars(variables);
 
@@ -745,7 +725,7 @@ ModelManager::loadVariables(const string &variables) {
 }
 
 void
-ModelManager::loadParameters(const string & parameters) {
+ModelManager::loadParameters(const string& parameters) {
   stringstream params(parameters);
 
   boost::archive::binary_iarchive is(params);
@@ -808,25 +788,21 @@ ModelManager::loadParameters(const string & parameters) {
   for (unsigned int i = 0; i < modelData()->nParametersReal; ++i) {
     const ParameterModeler& currentParameter = parametersList[i];
     switch (currentParameter.getValueType()) {
-      case VAR_TYPE_DOUBLE:
-      {
-        setLoadedParameter(currentParameter.getName(), parameterDoubleValues[i]);
-        break;
-      }
-      case VAR_TYPE_INT:
-      {
-        setLoadedParameter(currentParameter.getName(), static_cast<int> (parameterDoubleValues[i]));
-        break;
-      }
-      case VAR_TYPE_BOOL:
-      {
-        setLoadedParameter(currentParameter.getName(), toNativeBool(parameterDoubleValues[i]));
-        break;
-      }
-      case VAR_TYPE_STRING:
-      {
-        throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, currentParameter.getName(), typeVarC2Str(currentParameter.getValueType()), "DOUBLE");
-      }
+    case VAR_TYPE_DOUBLE: {
+      setLoadedParameter(currentParameter.getName(), parameterDoubleValues[i]);
+      break;
+    }
+    case VAR_TYPE_INT: {
+      setLoadedParameter(currentParameter.getName(), static_cast<int>(parameterDoubleValues[i]));
+      break;
+    }
+    case VAR_TYPE_BOOL: {
+      setLoadedParameter(currentParameter.getName(), toNativeBool(parameterDoubleValues[i]));
+      break;
+    }
+    case VAR_TYPE_STRING: {
+      throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, currentParameter.getName(), typeVarC2Str(currentParameter.getValueType()), "DOUBLE");
+    }
     }
   }
   unsigned int offset = modelData()->nParametersReal;
@@ -961,8 +937,8 @@ ModelManager::solveParameters() {
     zChange = (zSave != zLocalInit_);
 
     ++compteur;
-    if ( compteur >= 10)
-      throw  DYNError(Error::MODELER, UnstableRoots);
+    if (compteur >= 10)
+      throw DYNError(Error::MODELER, UnstableRoots);
   } while (!stableRoot || zChange);
   if (flag < 0)
     Trace::warn() << DYNLog(SolveParametersError, name()) << Trace::endline;
@@ -982,8 +958,7 @@ ModelManager::solveParameters() {
   if (fErr.size() > 0) {
     unsigned i = 0;
     for (map<double, int>::const_iterator it = fErr.begin(); it != fErr.end() && i < nbErr; ++it, ++i) {
-      Trace::debug() << DYNLog(SolveParametersFError, tolerance, it->second, it->first,
-                                 getFequationByLocalIndex(it->second)) << Trace::endline;
+      Trace::debug() << DYNLog(SolveParametersFError, tolerance, it->second, it->first, getFequationByLocalIndex(it->second)) << Trace::endline;
     }
   }
 #endif
@@ -1000,17 +975,15 @@ ModelManager::solveParameters() {
 void
 ModelManager::setCalculatedParameters(vector<double>& y, vector<double>& z, const vector<double>& calculatedVars) {
   // Creates reversed alias map
-  map<string, vector< shared_ptr <VariableAlias> > > reversedAlias;
-  for (map<string, shared_ptr<Variable> >::const_iterator it = variablesByNameInit_.begin();
-          it != variablesByNameInit_.end();
-          ++it) {
+  map<string, vector<shared_ptr<VariableAlias> > > reversedAlias;
+  for (map<string, shared_ptr<Variable> >::const_iterator it = variablesByNameInit_.begin(); it != variablesByNameInit_.end(); ++it) {
     // map of nativeVarName -> aliasNames
     if (it->second->isAlias()) {
-      const shared_ptr <VariableAlias> variable = dynamic_pointer_cast <VariableAlias> (it->second);
+      const shared_ptr<VariableAlias> variable = dynamic_pointer_cast<VariableAlias>(it->second);
       const string& referenceVariableName = variable->getReferenceVariableName();
       if (reversedAlias.find(referenceVariableName) == reversedAlias.end()) {
         // First time the alias name is seen
-        reversedAlias[referenceVariableName] = vector< shared_ptr <VariableAlias> >(1, variable);
+        reversedAlias[referenceVariableName] = vector<shared_ptr<VariableAlias> >(1, variable);
       } else {
         // Alias value already exists
         reversedAlias[referenceVariableName].push_back(variable);
@@ -1025,8 +998,7 @@ ModelManager::setCalculatedParameters(vector<double>& y, vector<double>& z, cons
 }
 
 void
-ModelManager::setYCalculatedParameters(vector<double>& y,
-    const map<string, vector< shared_ptr <VariableAlias> > >& reversedAlias) {
+ModelManager::setYCalculatedParameters(vector<double>& y, const map<string, vector<shared_ptr<VariableAlias> > >& reversedAlias) {
   const vector<string>& xNamesInitial = xNamesInit();
 
   assert(xNamesInitial.size() == y.size());
@@ -1034,10 +1006,8 @@ ModelManager::setYCalculatedParameters(vector<double>& y,
     setCalculatedParameter(xNamesInitial[i], y[i]);
     // Export alias
     if (reversedAlias.find(xNamesInitial[i]) != reversedAlias.end()) {
-      vector< shared_ptr <VariableAlias> > variables = reversedAlias.find(xNamesInitial[i])->second;
-      for (vector< shared_ptr <VariableAlias> >::const_iterator it = variables.begin();
-          it != variables.end();
-          ++it) {
+      vector<shared_ptr<VariableAlias> > variables = reversedAlias.find(xNamesInitial[i])->second;
+      for (vector<shared_ptr<VariableAlias> >::const_iterator it = variables.begin(); it != variables.end(); ++it) {
         if (!(*it)->getNegated()) {  // Usual alias
           setCalculatedParameter((*it)->getName(), y[i]);
         } else {  // Negated alias
@@ -1049,8 +1019,7 @@ ModelManager::setYCalculatedParameters(vector<double>& y,
 }
 
 void
-ModelManager::setZCalculatedParameters(vector<double>& z,
-    const map<string, vector< shared_ptr <VariableAlias> > >& reversedAlias) {
+ModelManager::setZCalculatedParameters(vector<double>& z, const map<string, vector<shared_ptr<VariableAlias> > >& reversedAlias) {
   const vector<string>& zNamesInitial = zNamesInit();
 
   const map<string, shared_ptr<Variable> >& initVariables = variablesByNameInit();
@@ -1058,16 +1027,14 @@ ModelManager::setZCalculatedParameters(vector<double>& z,
   assert(zNamesInitial.size() == z.size());
   for (unsigned int i = 0; i < zNamesInitial.size(); ++i) {
     bool toConvertToBool = false;  // whether the variable is a Modelica boolean (described through discrete Real) and should be converted back to C++ boolean
-    bool toConvertToInt = false;  // whether the variable is a Modelica integer
+    bool toConvertToInt = false;   // whether the variable is a Modelica integer
     const string& varName = zNamesInitial[i];
 
     // check whether the variable is an alias (in order to determine whether it is a boolean variable)
     string varNameForCheck = varName;
     if ((initVariables.find(varName) == initVariables.end()) && (reversedAlias.find(varName) != reversedAlias.end())) {
-      vector< shared_ptr <VariableAlias> > variables = reversedAlias.find(varName)->second;
-      for (vector< shared_ptr <VariableAlias> >::const_iterator it = variables.begin();
-          it != variables.end();
-          ++it) {
+      vector<shared_ptr<VariableAlias> > variables = reversedAlias.find(varName)->second;
+      for (vector<shared_ptr<VariableAlias> >::const_iterator it = variables.begin(); it != variables.end(); ++it) {
         const string& tmpVarName = (*it)->getName();
         if (initVariables.find(tmpVarName) != initVariables.end()) {
           varNameForCheck = tmpVarName;
@@ -1078,7 +1045,7 @@ ModelManager::setZCalculatedParameters(vector<double>& z,
 
     // Check whether there is a need to convert the variable to native boolean or to an integer
     if (initVariables.find(varNameForCheck) != initVariables.end()) {
-      const shared_ptr <Variable> var = initVariables.find(varNameForCheck)->second;
+      const shared_ptr<Variable> var = initVariables.find(varNameForCheck)->second;
       toConvertToBool = (var->getType() == BOOLEAN);
       toConvertToInt = (var->getType() == INTEGER);
     }
@@ -1088,23 +1055,20 @@ ModelManager::setZCalculatedParameters(vector<double>& z,
     if (toConvertToBool) {
       setCalculatedParameter(varName, toNativeBool(z[i]));
     } else if (toConvertToInt) {
-      setCalculatedParameter(varName, static_cast<int> (z[i]));
+      setCalculatedParameter(varName, static_cast<int>(z[i]));
     } else {
       setCalculatedParameter(varName, z[i]);
     }
 
-
     // Export alias
     if (reversedAlias.find(varName) != reversedAlias.end()) {
-      vector< shared_ptr <VariableAlias> > variables = reversedAlias.find(varName)->second;
-      for (vector< shared_ptr <VariableAlias> >::const_iterator it = variables.begin();
-          it != variables.end();
-          ++it) {
-        const double zVal = (*it)->getNegated() ? - z[i] : z[i];
+      vector<shared_ptr<VariableAlias> > variables = reversedAlias.find(varName)->second;
+      for (vector<shared_ptr<VariableAlias> >::const_iterator it = variables.begin(); it != variables.end(); ++it) {
+        const double zVal = (*it)->getNegated() ? -z[i] : z[i];
         if (toConvertToBool) {
           setCalculatedParameter((*it)->getName(), toNativeBool(zVal));
         } else if (toConvertToInt) {
-          setCalculatedParameter((*it)->getName(), static_cast<int> (zVal));
+          setCalculatedParameter((*it)->getName(), static_cast<int>(zVal));
         } else {
           setCalculatedParameter((*it)->getName(), zVal);
         }
@@ -1123,7 +1087,8 @@ ModelManager::setInitialCalculatedParameters() {
     parametersInitial[currentParameter.getIndex()] = currentParameter;
   }
   // Copy init parameters
-  assert(parametersInitial.size() == (unsigned int) (modelData()->nParametersReal + modelData()->nParametersBoolean + modelData()->nParametersInteger + modelData()->nParametersString));   // NOLINT(whitespace/line_length)
+  assert(parametersInitial.size() == (unsigned int)(modelData()->nParametersReal + modelData()->nParametersBoolean + modelData()->nParametersInteger +
+                                                    modelData()->nParametersString));  // NOLINT(whitespace/line_length)
   for (unsigned int i = 0; i < modelData()->nParametersReal; ++i) {
     const string& parName = parametersInitial[i].getName();
 
@@ -1132,23 +1097,19 @@ ModelManager::setInitialCalculatedParameters() {
       if (!parameter.isFullyInternal()) {
         // ternary operator does not work here (because the boolean would be implicitly converted to double, leading to a downstream parameter type error)
         switch (parameter.getValueType()) {
-        case VAR_TYPE_DOUBLE:
-        {
+        case VAR_TYPE_DOUBLE: {
           setCalculatedParameter(parName, simulationInfo()->realParameter[i]);
           break;
         }
-        case VAR_TYPE_INT:
-        {
-          setCalculatedParameter(parName, static_cast<int> (simulationInfo()->realParameter[i]));
+        case VAR_TYPE_INT: {
+          setCalculatedParameter(parName, static_cast<int>(simulationInfo()->realParameter[i]));
           break;
         }
-        case VAR_TYPE_BOOL:
-        {
+        case VAR_TYPE_BOOL: {
           setCalculatedParameter(parName, toNativeBool(simulationInfo()->realParameter[i]));
           break;
         }
-        case VAR_TYPE_STRING:
-        {
+        case VAR_TYPE_STRING: {
           throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, parName, typeVarC2Str(parameter.getValueType()), "DOUBLE");
         }
         }
@@ -1172,7 +1133,7 @@ ModelManager::setInitialCalculatedParameters() {
     if (hasParameterDynamic(parName)) {
       const ParameterModeler& parameter = findParameterDynamic(parName);
       if (!parameter.isFullyInternal()) {
-        setCalculatedParameter(parName, static_cast<int> (simulationInfo()->integerParameter[i]));
+        setCalculatedParameter(parName, static_cast<int>(simulationInfo()->integerParameter[i]));
       }
     }
   }
@@ -1191,7 +1152,7 @@ ModelManager::setInitialCalculatedParameters() {
 
 void
 ModelManager::createCalculatedParametersFromInitialCalculatedVariables(const vector<double>& calculatedVars,
-    const map<string, vector< shared_ptr <VariableAlias> > >& reversedAlias) {
+                                                                       const map<string, vector<shared_ptr<VariableAlias> > >& reversedAlias) {
   const vector<string>& calcVarInitial = getCalculatedVarNamesInit();
 
   assert(calcVarInitial.size() == calculatedVars.size());
@@ -1199,10 +1160,8 @@ ModelManager::createCalculatedParametersFromInitialCalculatedVariables(const vec
     setCalculatedParameter(calcVarInitial[i], calculatedVars[i]);
     // Export alias
     if (reversedAlias.find(calcVarInitial[i]) != reversedAlias.end()) {
-      vector< shared_ptr <VariableAlias> > variables = reversedAlias.find(calcVarInitial[i])->second;
-      for (vector< shared_ptr <VariableAlias> >::const_iterator it = variables.begin();
-          it != variables.end();
-          ++it) {
+      vector<shared_ptr<VariableAlias> > variables = reversedAlias.find(calcVarInitial[i])->second;
+      for (vector<shared_ptr<VariableAlias> >::const_iterator it = variables.begin(); it != variables.end(); ++it) {
         if (!(*it)->getNegated()) {  // Usual alias
           setCalculatedParameter((*it)->getName(), calculatedVars[i]);
         } else {  // Negated alias
@@ -1214,7 +1173,7 @@ ModelManager::createCalculatedParametersFromInitialCalculatedVariables(const vec
 }
 
 void
-ModelManager::printInitValues(const string & directory) {
+ModelManager::printInitValues(const string& directory) {
   const string& fileName = absolute("dumpInitValues-" + name() + ".txt", directory);
 
   std::ofstream file;
@@ -1222,21 +1181,20 @@ ModelManager::printInitValues(const string & directory) {
   file << " ====== INIT VARIABLES VALUES ======\n";
   const vector<string>& xNames = (*this).xNames();
   for (unsigned int i = 0; i < sizeY(); ++i)
-    file << std::setw(50) << std::left << xNames[i] << std::right << ": y =" << std::setw(15) << DYN::double2String(yLocal_[i])
-      << " yp =" << std::setw(15) << DYN::double2String(ypLocal_[i]) << "\n";
+    file << std::setw(50) << std::left << xNames[i] << std::right << ": y =" << std::setw(15) << DYN::double2String(yLocal_[i]) << " yp =" << std::setw(15)
+         << DYN::double2String(ypLocal_[i]) << "\n";
 
   const vector<std::pair<string, std::pair<string, bool> > >& xAliasesNames = (*this).xAliasesNames();
   for (unsigned int i = 0, iEnd = xAliasesNames.size(); i < iEnd; ++i)
-    file << std::setw(50) << std::left << xAliasesNames[i].first << std::right << ": " <<
-    ((xAliasesNames[i].second.second)?"negated ":"") << "alias of " << xAliasesNames[i].second.first << "\n";
+    file << std::setw(50) << std::left << xAliasesNames[i].first << std::right << ": " << ((xAliasesNames[i].second.second) ? "negated " : "") << "alias of "
+         << xAliasesNames[i].second.first << "\n";
 
   if (sizeCalculatedVar() > 0) {
     evalCalculatedVars();
     file << " ====== INIT CALCULATED VARIABLES VALUES ======\n";
     const vector<string>& calculatedVarNames = (*this).getCalculatedVarNames();
     for (unsigned int i = 0, iEnd = sizeCalculatedVar(); i < iEnd; ++i)
-      file << std::setw(50) << std::left << calculatedVarNames[i] << std::right << ": y ="
-        << std::setw(15) << DYN::double2String(getCalculatedVar(i)) << "\n";
+      file << std::setw(50) << std::left << calculatedVarNames[i] << std::right << ": y =" << std::setw(15) << DYN::double2String(getCalculatedVar(i)) << "\n";
   }
 
   const vector<string>& zNames = (*this).zNames();
@@ -1246,8 +1204,8 @@ ModelManager::printInitValues(const string & directory) {
 
   const vector<std::pair<string, std::pair<string, bool> > >& zAliasesNames = (*this).zAliasesNames();
   for (unsigned int i = 0, iEnd = zAliasesNames.size(); i < iEnd; ++i)
-    file << std::setw(50) << std::left << zAliasesNames[i].first << std::right << ": "<<
-    ((zAliasesNames[i].second.second)?"negated ":"") << "alias of " << zAliasesNames[i].second.first << "\n";
+    file << std::setw(50) << std::left << zAliasesNames[i].first << std::right << ": " << ((zAliasesNames[i].second.second) ? "negated " : "") << "alias of "
+         << zAliasesNames[i].second.first << "\n";
 
   file << " ====== PARAMETERS VALUES ======\n";
   const boost::unordered_map<string, ParameterModeler>& parametersMap = (*this).getParametersDynamic();
@@ -1261,28 +1219,29 @@ ModelManager::printInitValues(const string & directory) {
   // In Modelica models, parameters are ordered as follows : real, then boolean, integer and string
   for (unsigned int i = 0; i < modelData()->nParametersReal; ++i)
     file << std::setw(50) << std::left << parameters[i].getName() << std::right << " =" << std::setw(15)
-      << DYN::double2String(simulationInfo()->realParameter[i]) << "\n";
+         << DYN::double2String(simulationInfo()->realParameter[i]) << "\n";
 
   int offset = modelData()->nParametersReal;
 
   for (unsigned int i = 0; i < modelData()->nParametersBoolean; ++i)
-    file << std::setw(50) << std::left << parameters[i + offset].getName() << std::right << " =" << std::setw(15)
-    << std::boolalpha << static_cast<bool> (simulationInfo()->booleanParameter[i]) << "\n";
+    file << std::setw(50) << std::left << parameters[i + offset].getName() << std::right << " =" << std::setw(15) << std::boolalpha
+         << static_cast<bool>(simulationInfo()->booleanParameter[i]) << "\n";
 
   offset += modelData()->nParametersBoolean;
   for (unsigned int i = 0; i < modelData()->nParametersInteger; ++i)
-    file << std::setw(50) << std::left << parameters[i + offset].getName() << std::right << " =" << std::setw(15)
-    << (simulationInfo()->integerParameter[i]) << "\n";
+    file << std::setw(50) << std::left << parameters[i + offset].getName() << std::right << " =" << std::setw(15) << (simulationInfo()->integerParameter[i])
+         << "\n";
 
   offset += modelData()->nParametersInteger;
   for (unsigned int i = 0; i < modelData()->nParametersString; ++i)
-    file << std::setw(50) << std::left << parameters[i + offset].getName() << std::right << " =" << std::setw(15)
-    << (simulationInfo()->stringParameter[i]) << "\n";
+    file << std::setw(50) << std::left << parameters[i + offset].getName() << std::right << " =" << std::setw(15) << (simulationInfo()->stringParameter[i])
+         << "\n";
 
   file.close();
 }
 
-string ModelManager::modelType() const {
+string
+ModelManager::modelType() const {
   return modelType_;
 }
 
@@ -1290,22 +1249,22 @@ void
 ModelManager::rotateBuffers() {
   // copy data()->localData[0]->realVars -> simulationInfo()->realVarsPre
   if (modelData()->nVariablesReal > 0)
-    memcpy(simulationInfo()->realVarsPre, data()->localData[0]->realVars, sizeof (data()->localData[0]->realVars[0]) * modelData()->nVariablesReal);
+    memcpy(simulationInfo()->realVarsPre, data()->localData[0]->realVars, sizeof(data()->localData[0]->realVars[0]) * modelData()->nVariablesReal);
 
   // copy data()->localData[0]->booleanVars -> simulationInfo()->booleanVarsPre
-  if ( modelData()->nVariablesBoolean > 0)
-    memcpy(simulationInfo()->booleanVarsPre, data()->localData[0]->booleanVars, sizeof (data()->localData[0]->booleanVars[0]) * modelData()->nVariablesBoolean);
+  if (modelData()->nVariablesBoolean > 0)
+    memcpy(simulationInfo()->booleanVarsPre, data()->localData[0]->booleanVars, sizeof(data()->localData[0]->booleanVars[0]) * modelData()->nVariablesBoolean);
 
   // copy  data()->localData[0]->discreteVars -> simulationInfo()->discreteVarsPre
-  if ( data()->nbZ > 0)
-    memcpy(simulationInfo()->discreteVarsPre, data()->localData[0]->discreteVars, sizeof (data()->localData[0]->discreteVars[0]) * data()->nbZ);
+  if (data()->nbZ > 0)
+    memcpy(simulationInfo()->discreteVarsPre, data()->localData[0]->discreteVars, sizeof(data()->localData[0]->discreteVars[0]) * data()->nbZ);
 
-  if ( modelData()->nVariablesInteger > 0)
+  if (modelData()->nVariablesInteger > 0)
     memcpy(simulationInfo()->integerDoubleVarsPre, data()->localData[0]->integerDoubleVars,
-           sizeof (data()->localData[0]->integerDoubleVars[0]) * modelData()->nVariablesInteger);
+           sizeof(data()->localData[0]->integerDoubleVars[0]) * modelData()->nVariablesInteger);
 
   if (modelData()->nRelations > 0)
-    memcpy(simulationInfo()->relationsPre, simulationInfo()->relations, sizeof (simulationInfo()->relations[0]) * modelData()->nRelations);
+    memcpy(simulationInfo()->relationsPre, simulationInfo()->relations, sizeof(simulationInfo()->relations[0]) * modelData()->nRelations);
 }
 
 void
@@ -1334,16 +1293,17 @@ ModelManager::defineParameters(vector<ParameterModeler>& parameters) {
 }
 
 void
-ModelManager::defineElements(vector<Element> &elements, map<string, int>& mapElement) {
+ModelManager::defineElements(vector<Element>& elements, map<string, int>& mapElement) {
   modelDyn_->defineElements(elements, mapElement);
 }
 
 void
-ModelManager::setManagerTime(const double & st) {
+ModelManager::setManagerTime(const double& st) {
   data()->localData[0]->timeValue = st;
 }
 
-void ModelManager::notifyTimeStep() {
+void
+ModelManager::notifyTimeStep() {
   delayManager_.saveTimepoint();
 }
 
@@ -1384,10 +1344,10 @@ ModelManager::evalJCalculatedVarI(unsigned iCalculatedVar, std::vector<double>& 
       res[i] = x[i].get_gradient();
     }
     stack.pause_recording();
-  } catch (adept::stack_already_active & e) {
+  } catch (adept::stack_already_active& e) {
     std::cerr << "Error :" << e.what() << std::endl;
     throw DYNError(DYN::Error::MODELER, AdeptFailure);
-  } catch (adept::autodiff_exception & e) {
+  } catch (adept::autodiff_exception& e) {
     std::cerr << "Error :" << e.what() << std::endl;
     throw DYNError(DYN::Error::MODELER, AdeptFailure);
   }
@@ -1399,7 +1359,7 @@ ModelManager::evalJCalculatedVarI(unsigned iCalculatedVar, std::vector<double>& 
 
 void
 ModelManager::getIndexesOfVariablesUsedForCalculatedVarI(unsigned iCalculatedVar, std::vector<int>& indexes) const {
-  return  modelModelica()->getIndexesOfVariablesUsedForCalculatedVarI(iCalculatedVar, indexes);
+  return modelModelica()->getIndexesOfVariablesUsedForCalculatedVarI(iCalculatedVar, indexes);
 }
 
 void

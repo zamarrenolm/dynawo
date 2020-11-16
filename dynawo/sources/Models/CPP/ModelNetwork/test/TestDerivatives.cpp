@@ -10,8 +10,8 @@
 // This file is part of Dynawo, an hybrid C++/Modelica open source time domain
 // simulation tool for power systems.
 //
-#include "gtest_dynawo.h"
 #include "DYNDerivative.h"
+#include "gtest_dynawo.h"
 
 namespace DYN {
 
@@ -100,7 +100,6 @@ TEST(ModelsModelNetwork, ModelNetworkBusDerivative) {
   ASSERT_EQ(derivatives.getValues(IR_DERIVATIVE).size(), 0);
   ASSERT_EQ(derivatives.getValues(II_DERIVATIVE).size(), 0);
   ASSERT_EQ(derivatives.empty(), true);
-
 
   ASSERT_THROW_DYNAWO(derivatives.addDerivative((typeDerivative_t)42, 4, 8.), Error::MODELER, KeyError_t::InvalidDerivativeType);
   ASSERT_THROW_DYNAWO(derivatives.getValues((typeDerivative_t)42), Error::MODELER, KeyError_t::InvalidDerivativeType);

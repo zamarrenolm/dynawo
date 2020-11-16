@@ -18,17 +18,16 @@
  *
  */
 #include "FSFinalStateCollection.h"
+
 #include "FSIterators.h"
 #include "FSModel.h"
 
-using std::string;
 using boost::shared_ptr;
+using std::string;
 
 namespace finalState {
 
-FinalStateCollection::FinalStateCollection(const string& id) :
-id_(id) {
-}
+FinalStateCollection::FinalStateCollection(const string& id) : id_(id) {}
 
 void
 FinalStateCollection::addFinalStateModel(const shared_ptr<FinalStateModel>& model) {

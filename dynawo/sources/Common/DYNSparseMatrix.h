@@ -20,9 +20,9 @@
 #ifndef COMMON_DYNSPARSEMATRIX_H_
 #define COMMON_DYNSPARSEMATRIX_H_
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_set.hpp>
+#include <vector>
 
 namespace DYN {
 class Model;
@@ -38,7 +38,7 @@ class SparseMatrix {
    * @brief type of the matrix
    */
   typedef enum {
-    J = 1,  ///< "normal" matrix is stored
+    J = 1,   ///< "normal" matrix is stored
     Jt = -1  ///< transpose matrix is stored
   } SparseMatrixType;
 
@@ -105,7 +105,7 @@ class SparseMatrix {
    */
   double infinityNorm() const;
 
-   /**
+  /**
    * @brief print all the values stored in the matrix
    *
    */
@@ -125,7 +125,7 @@ class SparseMatrix {
    * @param columns columns to erase
    * @param M new matrix allocated
    */
-  void erase(const boost::unordered_set<int> & rows, const boost::unordered_set<int> & columns, SparseMatrix &M);
+  void erase(const boost::unordered_set<int>& rows, const boost::unordered_set<int>& columns, SparseMatrix& M);
 
   /**
    * @brief Get the row and colum indices from a position in the data array
@@ -192,7 +192,7 @@ class SparseMatrix {
    * @return a new matrix
    * @warning should not be used
    */
-  SparseMatrix & operator=(const SparseMatrix & M);
+  SparseMatrix& operator=(const SparseMatrix& M);
 
   /**
    * @brief constructor by copy
@@ -200,12 +200,12 @@ class SparseMatrix {
    * @param M matrix to copy
    * @warning should not be used
    */
-  SparseMatrix(const SparseMatrix & M);
+  SparseMatrix(const SparseMatrix& M);
 
  public:
   std::vector<unsigned> Ap_;  ///< for each column, first non null element index in Ai and Ax
   std::vector<unsigned> Ai_;  ///< row index for each non null element
-  std::vector<double> Ax_;  ///< non null element value;
+  std::vector<double> Ax_;    ///< non null element value;
 
  private:
   bool withoutNan_;  ///< @b true if there isn't any NaN value in the Sparse Matrix
@@ -214,10 +214,10 @@ class SparseMatrix {
   int nbRow_;  ///< number of row in the sparse Matrix structure
   int nbCol_;  ///< number of column in the sparse Matrix structure
 
-  int iAp_;  ///< current index in the Ap_ array
-  int iAi_;  ///< current index in the Ai_ array
-  int iAx_;  ///< current index in the Ax_ array
-  int nbTerm_;  ///< current number of values stored in the matrix
+  int iAp_;             ///< current index in the Ap_ array
+  int iAi_;             ///< current index in the Ai_ array
+  int iAx_;             ///< current index in the Ax_ array
+  int nbTerm_;          ///< current number of values stored in the matrix
   int currentMaxTerm_;  ///< current maximum number of term that could be stored in the matrix without increasing the size of arrays
 };
 

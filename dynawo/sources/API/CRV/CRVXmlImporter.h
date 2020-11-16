@@ -42,7 +42,7 @@ class XmlImporter : public Importer {
    */
   boost::shared_ptr<CurvesCollection> importFromFile(const std::string& fileName) const;
 
-   /**
+  /**
    * @copydoc Importer::importFromStream()
    */
   boost::shared_ptr<CurvesCollection> importFromStream(std::istream& stream) const;

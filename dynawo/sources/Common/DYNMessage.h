@@ -22,13 +22,13 @@
 
 #ifndef COMMON_DYNMESSAGE_H_
 #define COMMON_DYNMESSAGE_H_
-#include <sstream>
-#include <boost/format.hpp>
-
+#include "DYNConstraint_keys.h"
 #include "DYNError_keys.h"
 #include "DYNLog_keys.h"
 #include "DYNTimeline_keys.h"
-#include "DYNConstraint_keys.h"
+
+#include <boost/format.hpp>
+#include <sstream>
 
 namespace DYN {
 
@@ -77,7 +77,7 @@ class Message {
   /**
    * @brief destructor
    */
-  ~Message() { }
+  ~Message() {}
 
   /**
    * @brief Operator , overload for message
@@ -86,7 +86,8 @@ class Message {
    *
    * @return Reference to the message instance
    */
-  template <typename T> Message& operator,(T& x);
+  template<typename T>
+  Message& operator,(T& x);
 
   /**
    * @brief Operator , overload for message
@@ -95,7 +96,8 @@ class Message {
    *
    * @return Reference to the message instance
    */
-  template <typename T> Message& operator,(const T& x);
+  template<typename T>
+  Message& operator,(const T& x);
 
   /**
    * @brief Operator << overlaod for Message
@@ -145,10 +147,10 @@ class Message {
   void initialize(const std::string& dicoName, const std::string& key);
 
  protected:
-  boost::format fmt_;  ///< log message with the boost format convention
+  boost::format fmt_;        ///< log message with the boost format convention
   std::stringstream fmtss_;  ///< log message when boost format message does not exist
-  bool hasFmt_;  ///< @b true is there is a log message in the dictionnary, @b false otherwise
-  std::string key_;  ///< Key to access to the log message in the dictionnary
+  bool hasFmt_;              ///< @b true is there is a log message in the dictionnary, @b false otherwise
+  std::string key_;          ///< Key to access to the log message in the dictionnary
 };
 }  // namespace DYN
 

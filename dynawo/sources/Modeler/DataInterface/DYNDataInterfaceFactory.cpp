@@ -18,17 +18,17 @@
  *
  */
 
-
 #include "DYNDataInterfaceFactory.h"
+
 #include "DYNDataInterfaceIIDM.h"
 
-using std::string;
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 shared_ptr<DataInterface>
 DataInterfaceFactory::build(dataInterfaceType_t type, const string& filepath) {
-  switch(type) {
+  switch (type) {
   case DATAINTERFACE_IIDM1:
     return DataInterfaceIIDM::build(filepath);
   }

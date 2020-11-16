@@ -20,23 +20,22 @@
  *
  */
 
-#include <xml/sax/parser/Attributes.h>
-
-#include <boost/phoenix/core.hpp>
-#include <boost/phoenix/operator/self.hpp>
-#include <boost/phoenix/bind.hpp>
-#include <boost/lexical_cast.hpp>
-
 #include "PARXmlHandler.h"
+
 #include "PARParameter.h"
 #include "PARParameterFactory.h"
-#include "PARReference.h"
-#include "PARReferenceFactory.h"
 #include "PARParametersSet.h"
-#include "PARParametersSetFactory.h"
 #include "PARParametersSetCollection.h"
 #include "PARParametersSetCollectionFactory.h"
+#include "PARParametersSetFactory.h"
+#include "PARReference.h"
+#include "PARReferenceFactory.h"
 
+#include <boost/lexical_cast.hpp>
+#include <boost/phoenix/bind.hpp>
+#include <boost/phoenix/core.hpp>
+#include <boost/phoenix/operator/self.hpp>
+#include <xml/sax/parser/Attributes.h>
 
 using std::map;
 using std::string;
@@ -52,15 +51,12 @@ xml::sax::parser::namespace_uri par_ns("http://www.rte-france.com/dynawo");  ///
 
 namespace parameters {
 
-XmlHandler::XmlHandler() :
-setHandler_(parser::ElementName(par_ns, "set")),
-parametersSetCollection_(ParametersSetCollectionFactory::newCollection()) {
+XmlHandler::XmlHandler() : setHandler_(parser::ElementName(par_ns, "set")), parametersSetCollection_(ParametersSetCollectionFactory::newCollection()) {
   onElement(par_ns("parametersSet/set"), setHandler_);
   setHandler_.onEnd(lambda::bind(&XmlHandler::addSet, lambda::ref(*this)));
 }
 
-XmlHandler::~XmlHandler() {
-}
+XmlHandler::~XmlHandler() {}
 
 shared_ptr<ParametersSetCollection>
 XmlHandler::getParametersSetCollection() {
@@ -72,10 +68,10 @@ XmlHandler::addSet() {
   parametersSetCollection_->addParametersSet(setHandler_.get());
 }
 
-SetHandler::SetHandler(elementName_type const & root_element) :
-parHandler_(parser::ElementName(par_ns, "par")),
-parTableHandler_(parser::ElementName(par_ns, "parTable")),
-refHandler_(parser::ElementName(par_ns, "reference")) {
+SetHandler::SetHandler(elementName_type const& root_element) :
+    parHandler_(parser::ElementName(par_ns, "par")),
+    parTableHandler_(parser::ElementName(par_ns, "parTable")),
+    refHandler_(parser::ElementName(par_ns, "reference")) {
   onElement(root_element + par_ns("par"), parHandler_);
   onElement(root_element + par_ns("parTable"), parTableHandler_);
   onElement(root_element + par_ns("reference"), refHandler_);
@@ -88,7 +84,7 @@ refHandler_(parser::ElementName(par_ns, "reference")) {
 }
 
 void
-SetHandler::create(attributes_type const & attributes) {
+SetHandler::create(attributes_type const& attributes) {
   setRead_ = ParametersSetFactory::newInstance(attributes["id"].as_string());
 }
 
@@ -131,15 +127,14 @@ SetHandler::addTable() {
   }
 }
 
-ParTableHandler::ParTableHandler(elementName_type const & root_element) :
-parInTableHandler_(parser::ElementName(par_ns, "par")) {
+ParTableHandler::ParTableHandler(elementName_type const& root_element) : parInTableHandler_(parser::ElementName(par_ns, "par")) {
   onElement(root_element + par_ns("par"), parInTableHandler_);
   onStartElement(root_element, lambda::bind(&ParTableHandler::create, lambda::ref(*this), lambda_args::arg2));
   parInTableHandler_.onEnd(lambda::bind(&ParTableHandler::addPar, lambda::ref(*this)));
 }
 
 void
-ParTableHandler::create(attributes_type const & attributes) {
+ParTableHandler::create(attributes_type const& attributes) {
   pars_.clear();
   setType(attributes["type"]);
   setName(attributes["name"]);
@@ -155,12 +150,12 @@ ParTableHandler::getPars() const {
   return pars_;
 }
 
-ParInTableHandler::ParInTableHandler(elementName_type const & root_element) {
+ParInTableHandler::ParInTableHandler(elementName_type const& root_element) {
   onStartElement(root_element, lambda::bind(&ParInTableHandler::create, lambda::ref(*this), lambda_args::arg2));
 }
 
 void
-ParInTableHandler::create(attributes_type const & attributes) {
+ParInTableHandler::create(attributes_type const& attributes) {
   par_.value = attributes["value"].as_string();
   par_.row = attributes["row"].as_string();
   par_.column = attributes["column"].as_string();
@@ -171,12 +166,12 @@ ParInTableHandler::get() const {
   return par_;
 }
 
-ParHandler::ParHandler(elementName_type const & root_element) {
+ParHandler::ParHandler(elementName_type const& root_element) {
   onStartElement(root_element, lambda::bind(&ParHandler::create, lambda::ref(*this), lambda_args::arg2));
 }
 
 void
-ParHandler::create(attributes_type const & attributes) {
+ParHandler::create(attributes_type const& attributes) {
   string type = attributes["type"];
   string value = attributes["value"];
   string name = attributes["name"];
@@ -203,7 +198,8 @@ RefHandler::RefHandler(elementName_type const& root_element) {
   onStartElement(root_element, lambda::bind(&RefHandler::create, lambda::ref(*this), lambda_args::arg2));
 }
 
-void RefHandler::create(attributes_type const & attributes) {
+void
+RefHandler::create(attributes_type const& attributes) {
   referenceRead_ = ReferenceFactory::newReference(attributes["name"]);
   referenceRead_->setType(attributes["type"]);
   referenceRead_->setOrigData(attributes["origData"].as_string());

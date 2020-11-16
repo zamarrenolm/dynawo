@@ -11,29 +11,28 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/LoadBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/components/Load.h>
-#include <IIDM/components/CurrentLimit.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-
-#include "DYNLoadInterfaceIIDM.h"
-#include "DYNVoltageLevelInterfaceIIDM.h"
-#include "DYNCurrentLimitInterfaceIIDM.h"
 #include "DYNBusInterfaceIIDM.h"
-#include "DYNModelLoad.h"
-#include "DYNModelVoltageLevel.h"
+#include "DYNCurrentLimitInterfaceIIDM.h"
+#include "DYNLoadInterfaceIIDM.h"
 #include "DYNModelBus.h"
+#include "DYNModelLoad.h"
 #include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
+#include "DYNModelVoltageLevel.h"
 #include "DYNSparseMatrix.h"
 #include "DYNVariable.h"
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
+
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/LoadBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/CurrentLimit.h>
+#include <IIDM/components/Load.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -54,7 +53,6 @@ createModelLoad(bool open, bool initModel) {
   vlIIDM.add(bus1IIDM);
   vlIIDM.lowVoltageLimit(0.5);
   vlIIDM.highVoltageLimit(2.);
-
 
   IIDM::builders::LoadBuilder lb;
   lb.p(42.);
@@ -470,13 +468,11 @@ TEST(ModelsModelNetwork, ModelNetworkLoadDefineInstantiate) {
     ASSERT_EQ(definedVariables[i]->getType(), instantiatedVariables[i]->getType());
   }
 
-
   std::vector<ParameterModeler> parameters;
   load->defineNonGenericParameters(parameters);
 
   std::vector<ParameterModeler> genericParameters;
   load->defineParameters(genericParameters);
-
 
   ASSERT_EQ(parameters.size(), 10);
   for (size_t i = 0, iEnd = parameters.size(); i < iEnd; ++i) {
@@ -521,9 +517,9 @@ TEST(ModelsModelNetwork, ModelNetworkLoadJt) {
   ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[0], 22.155644370746373);
   ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[1], -153.29392144688848);
   ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[2], -87.596526541079143);
-  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[3],  8.4895038000592429);
-  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[4],  2.3388791341676249);
-  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[5],  1.3365023623815);
+  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[3], 8.4895038000592429);
+  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[4], 2.3388791341676249);
+  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[5], 1.3365023623815);
   ASSERT_EQ(smj.Ap_[0], 0);
   ASSERT_EQ(smj.Ap_[1], 3);
   ASSERT_EQ(smj.Ap_[2], 6);

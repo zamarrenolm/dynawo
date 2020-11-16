@@ -17,11 +17,10 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
+#include "TLEvent.h"
 #include "TLTimeline.h"
 #include "TLTimelineFactory.h"
-#include "TLEvent.h"
+#include "gtest_dynawo.h"
 
 using boost::shared_ptr;
 
@@ -56,15 +55,13 @@ TEST(APITLTest, TimelineAddEvent) {
 
   // add events to timeline
   timeline->addEvent(10, "model1", "event1 at 10s", priorityNone);
-  timeline->addEvent(10, "model1", "event2 at 10s", priority2);  // same time, same model, different message
-  timeline->addEvent(10, "model2", "event3 at 10s", priority4);  // same time, different model
+  timeline->addEvent(10, "model1", "event2 at 10s", priority2);     // same time, same model, different message
+  timeline->addEvent(10, "model2", "event3 at 10s", priority4);     // same time, different model
   timeline->addEvent(20, "model2", "event2 at 20s", priorityNone);  // different time
 
   // test const iterator
   int nbEvents = 0;
-  for (Timeline::event_const_iterator itEvent = timeline->cbeginEvent();
-          itEvent != timeline->cendEvent();
-          ++itEvent)
+  for (Timeline::event_const_iterator itEvent = timeline->cbeginEvent(); itEvent != timeline->cendEvent(); ++itEvent)
     ++nbEvents;
   ASSERT_EQ(nbEvents, timeline->getSizeEvents());
 
@@ -88,9 +85,9 @@ TEST(APITLTest, TimelineEraseEvents) {
 
   // add events to timeline
   timeline->addEvent(10, "model1", "event1 at 10s", priorityNone);
-  timeline->addEvent(10, "model1", "event2 at 10s", priority2);  // same time, same model, different message
-  timeline->addEvent(10, "model2", "event3 at 10s", priority4);  // same time, different model
-  timeline->addEvent(10, "model2", "event3 at 10s", priority4);  // same event
+  timeline->addEvent(10, "model1", "event2 at 10s", priority2);     // same time, same model, different message
+  timeline->addEvent(10, "model2", "event3 at 10s", priority4);     // same time, different model
+  timeline->addEvent(10, "model2", "event3 at 10s", priority4);     // same event
   timeline->addEvent(20, "model2", "event2 at 20s", priorityNone);  // different time
   Timeline::event_const_iterator endingEvent = timeline->cendEvent();
 

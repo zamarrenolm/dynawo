@@ -17,32 +17,28 @@
  * @brief Util : parameters dump of a solver
  *
  */
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <dlfcn.h>
+#include "DYNFileSystemUtils.h"
+#include "DYNParameterSolver.h"
+#include "DYNSolver.h"
+#include "DYNSolverCommon.h"
+#include "DYNSolverFactory.h"
 
+#include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <boost/program_options.hpp>
 #include <boost/shared_ptr.hpp>
-
+#include <dlfcn.h>
+#include <fstream>
+#include <iostream>
+#include <string>
 #include <xml/sax/formatter/AttributeList.h>
 #include <xml/sax/formatter/Formatter.h>
 
-#include "DYNParameterSolver.h"
-#include "DYNSolverCommon.h"
-#include "DYNSolver.h"
-#include "DYNSolver.h"
-#include "DYNSolverFactory.h"
-#include "DYNFileSystemUtils.h"
-
-
-using std::string;
-using std::map;
-using std::endl;
 using std::cerr;
 using std::cout;
+using std::endl;
+using std::map;
+using std::string;
 
 namespace po = boost::program_options;
 
@@ -56,7 +52,8 @@ using xml::sax::formatter::FormatterPtr;
  * @param solverName the solver name (for error messages)
  * @param parametersAttributes a map between (lower case) parameter name and XML attributes
  */
-int fillParameterDescription(const DYN::ParameterSolver& parameter, const std::string& solverName, std::map<std::string, AttributeList>& parametersAttributes) {
+int
+fillParameterDescription(const DYN::ParameterSolver& parameter, const std::string& solverName, std::map<std::string, AttributeList>& parametersAttributes) {
   AttributeList attributes;
   attributes.clear();
   attributes.add("name", parameter.getName());
@@ -65,27 +62,26 @@ int fillParameterDescription(const DYN::ParameterSolver& parameter, const std::s
 
   if (parameter.hasValue()) {
     switch (parameter.getValueType()) {
-      case DYN::VAR_TYPE_DOUBLE: {
-        attributes.add("defaultValue", parameter.getValue<double>());
-        break;
-      }
-      case DYN::VAR_TYPE_INT: {
-        attributes.add("defaultValue", parameter.getValue<int>());
-        break;
-      }
-      case DYN::VAR_TYPE_BOOL: {
-        attributes.add("defaultValue", parameter.getValue<bool>());
-        break;
-      }
-      case DYN::VAR_TYPE_STRING: {
-        attributes.add("defaultValue", parameter.getValue<std::string>());
-        break;
-      }
-      default:
-      {
-        cout << "bad parameter for model " << solverName << " : " << parameter.getName() << " has a bad type" << endl;
-        return 1;
-      }
+    case DYN::VAR_TYPE_DOUBLE: {
+      attributes.add("defaultValue", parameter.getValue<double>());
+      break;
+    }
+    case DYN::VAR_TYPE_INT: {
+      attributes.add("defaultValue", parameter.getValue<int>());
+      break;
+    }
+    case DYN::VAR_TYPE_BOOL: {
+      attributes.add("defaultValue", parameter.getValue<bool>());
+      break;
+    }
+    case DYN::VAR_TYPE_STRING: {
+      attributes.add("defaultValue", parameter.getValue<std::string>());
+      break;
+    }
+    default: {
+      cout << "bad parameter for model " << solverName << " : " << parameter.getName() << " has a bad type" << endl;
+      return 1;
+    }
     }
   }
 
@@ -104,15 +100,14 @@ int fillParameterDescription(const DYN::ParameterSolver& parameter, const std::s
 /**
  * @brief main for dump solver
  */
-int main(int argc, char ** argv) {
+int
+main(int argc, char** argv) {
   cout << " Solver dump main" << endl;
   string inputFileName = "";
   string outputFileName = "";
   po::options_description desc;
-  desc.add_options()
-          ("help,h", " produce help message")
-          ("solver-file,m", po::value<string>(&inputFileName), "REQUIRED: set solver file (path)")
-          ("output-file,o", po::value<string>(&outputFileName), "set output file (path)");
+  desc.add_options()("help,h", " produce help message")("solver-file,m", po::value<string>(&inputFileName), "REQUIRED: set solver file (path)")(
+      "output-file,o", po::value<string>(&outputFileName), "set output file (path)");
 
   po::positional_options_description positionalOptions;
   positionalOptions.add("solver-file", 1);
@@ -120,9 +115,7 @@ int main(int argc, char ** argv) {
 
   po::variables_map vm;
   // parse regular options
-  po::store(po::command_line_parser(argc, argv).options(desc)
-          .positional(positionalOptions).run(),
-          vm);
+  po::store(po::command_line_parser(argc, argv).options(desc).positional(positionalOptions).run(), vm);
   po::notify(vm);
 
   if (vm.count("help")) {
@@ -162,7 +155,7 @@ int main(int argc, char ** argv) {
   attrs.clear();
   formatter->startElement("name", attrs);
   formatter->characters(solver->solverType());
-  formatter->endElement();   // name
+  formatter->endElement();  // name
 
   attrs.clear();
   formatter->startElement("elements", attrs);
@@ -171,22 +164,22 @@ int main(int argc, char ** argv) {
   formatter->startElement("parameters", attrs);
 
   // add initial parameters
-  for (map<string, DYN::ParameterSolver>::const_iterator parameterIterator=parameters.begin(); parameterIterator != parameters.end(); ++parameterIterator) {
+  for (map<string, DYN::ParameterSolver>::const_iterator parameterIterator = parameters.begin(); parameterIterator != parameters.end(); ++parameterIterator) {
     const DYN::ParameterSolver& parameter = (*parameterIterator).second;
     if (solver->hasParameter(parameter.getName()) && fillParameterDescription(parameter, solver->solverType(), parametersAttributes) != 0) {
       return 1;
     }
   }
 
-  for (std::map<std::string, AttributeList>::const_iterator itAttributes = parametersAttributes.begin();
-       itAttributes != parametersAttributes.end(); ++itAttributes) {
+  for (std::map<std::string, AttributeList>::const_iterator itAttributes = parametersAttributes.begin(); itAttributes != parametersAttributes.end();
+       ++itAttributes) {
     formatter->startElement("parameter", itAttributes->second);
-    formatter->endElement();   // parameter
+    formatter->endElement();  // parameter
   }
 
-  formatter->endElement();   // parameters
-  formatter->endElement();   // elements
-  formatter->endElement();   // model
+  formatter->endElement();  // parameters
+  formatter->endElement();  // elements
+  formatter->endElement();  // model
   formatter->endDocument();
   file.close();
 }

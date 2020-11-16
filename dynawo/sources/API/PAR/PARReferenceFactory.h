@@ -20,9 +20,9 @@
 #ifndef API_PAR_PARREFERENCEFACTORY_H_
 #define API_PAR_PARREFERENCEFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "PARReference.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace parameters {
 

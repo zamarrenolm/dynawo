@@ -20,15 +20,13 @@
 #include "JOBIterators.h"
 
 #include "JOBJobsCollection.h"
-#include "JOBJobsCollection.h"
 
 using boost::shared_ptr;
 using std::vector;
 
 namespace job {
 
-job_const_iterator::job_const_iterator(const JobsCollection* iterated, bool begin) :
-    current_((begin ? iterated->jobs_.begin() : iterated->jobs_.end())) {}
+job_const_iterator::job_const_iterator(const JobsCollection* iterated, bool begin) : current_((begin ? iterated->jobs_.begin() : iterated->jobs_.end())) {}
 
 job_const_iterator&
 job_const_iterator::operator++() {

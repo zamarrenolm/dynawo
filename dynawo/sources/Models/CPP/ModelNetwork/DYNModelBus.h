@@ -21,12 +21,12 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELBUS_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELBUS_H_
 
+#include "DYNBitMask.h"
+#include "DYNNetworkComponent.h"
+
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-
-#include "DYNNetworkComponent.h"
-#include "DYNBitMask.h"
 
 namespace DYN {
 class SubNetwork;  ///< AC-connected network
@@ -49,56 +49,32 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
   /**
    * @brief destructor
    */
-  ~ModelBus() { }
+  ~ModelBus() {}
 
   /**
    * @brief calculated variables type
    */
-  typedef enum {
-    upuNum_ = 0,
-    phipuNum_ = 1,
-    uNum_ = 2,
-    phiNum_ = 3,
-    nbCalculatedVariables_ = 4
-  } CalculatedVariables_t;
+  typedef enum { upuNum_ = 0, phipuNum_ = 1, uNum_ = 2, phiNum_ = 3, nbCalculatedVariables_ = 4 } CalculatedVariables_t;
 
   /**
    * @brief index variable type
    */
-  typedef enum {
-    urNum_ = 0,
-    uiNum_ = 1,
-    irNum_ = 2,
-    iiNum_ = 3
-  } IndexVariable_t;
+  typedef enum { urNum_ = 0, uiNum_ = 1, irNum_ = 2, iiNum_ = 3 } IndexVariable_t;
 
   /**
    * @brief index discrete variable
    */
-  typedef enum {
-    numSubNetworkNum_ = 0,
-    switchOffNum_ = 1,
-    connectionStateNum_ = 2
-  } IndexDiscreteVariable_t;
+  typedef enum { numSubNetworkNum_ = 0, switchOffNum_ = 1, connectionStateNum_ = 2 } IndexDiscreteVariable_t;
 
   /**
    * @brief Flags of the U calculation status for the current time step
    */
-  typedef enum {
-    NoCalculation = 0x00,
-    U2Pu = 0x01,
-    UPu = 0x02,
-    U = 0x04
-  } UStatusFlags;
+  typedef enum { NoCalculation = 0x00, U2Pu = 0x01, UPu = 0x02, U = 0x04 } UStatusFlags;
 
   /**
    * @brief U calculation type requested (U², U in p.u. or U in S.I)
    */
-  typedef enum {
-    U2PuType_ = 0,
-    UPuType_ = 1,
-    UType_ = 2
-  } UType_t;
+  typedef enum { U2PuType_ = 0, UPuType_ = 1, UType_ = 2 } UType_t;
 
   /**
    * @brief add a bus to the neighbors
@@ -149,7 +125,8 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
    * @brief evaluate node injection
    *
    */
-  void evalNodeInjection() { /* not needed */ }
+  void evalNodeInjection() { /* not needed */
+  }
 
   /**
    * @brief reset node injection
@@ -165,7 +142,8 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
   /**
    * @brief evaluate derivatives for J'
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @brief evaluate F
@@ -243,12 +221,13 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
   /**
    * @copydoc NetworkComponent::evalYMat()
    */
-  void evalYMat() { /* not needed*/ }
+  void evalYMat() { /* not needed*/
+  }
 
   /**
    * @copydoc NetworkComponent::init(int& yNum)
    */
-  void init(int & yNum);
+  void init(int& yNum);
 
   /**
    * @copydoc NetworkComponent::getY0()
@@ -280,7 +259,8 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
   /**
    * @brief addBusNeighbors
    */
-  void addBusNeighbors() { /* not needed*/ }
+  void addBusNeighbors() { /* not needed*/
+  }
 
   /**
    * @brief init size
@@ -377,7 +357,7 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
    * @brief switch on the bus
    */
   inline void switchOn() {
-    assert(z_!= NULL);
+    assert(z_ != NULL);
     z_[switchOffNum_] = fromNativeBool(false);
   }
 
@@ -386,7 +366,8 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
    * @return @b true if the bus is switched off, @b false otherwise
    */
   inline bool getSwitchOff() const {
-    if (z_ == NULL) return false;  // Might happen when we initialize connection to calculated variables (done before model init)
+    if (z_ == NULL)
+      return false;  // Might happen when we initialize connection to calculated variables (done before model init)
     return toNativeBool(z_[switchOffNum_]);
   }  // get information about whether the bus is switched off
 
@@ -564,7 +545,7 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
    * @param elements vector of elements to fill with new elements defined
    * @param mapElement map of elements to fill with new elements
    */
-  void defineElementsById(const std::string& id, std::vector<Element> &elements, std::map<std::string, int>& mapElement);
+  void defineElementsById(const std::string& id, std::vector<Element>& elements, std::map<std::string, int>& mapElement);
 
   /**
    * @brief calculate the value of U² in p.u.
@@ -583,29 +564,28 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
  private:
   boost::weak_ptr<ModelVoltageLevel> modelVoltageLevel_;  ///< voltage level that contains the bus
 
-  double uMin_;  ///< minimum allowed voltage
-  double uMax_;  ///< maximum allowed voltage
+  double uMin_;     ///< minimum allowed voltage
+  double uMax_;     ///< maximum allowed voltage
   bool stateUmax_;  ///< whether U > UMax
   bool stateUmin_;  ///< whether U < UMin
 
-  double U2Pu_;  ///< current value of U² (= 0 if not yet calculated)
-  double UPu_;  ///< current value of U (=0 if not yet calculated)
-  double U_;  ///< current value of U in S.I. unit (=0 if not yet calculated)
+  double U2Pu_;             ///< current value of U² (= 0 if not yet calculated)
+  double UPu_;              ///< current value of U (=0 if not yet calculated)
+  double U_;                ///< current value of U in S.I. unit (=0 if not yet calculated)
   BitMask currentUStatus_;  ///< Bit mask value indicating which value of U have already been calculated for the current time step
-
 
   // equivalent to z_[switchOffNum_] but with discrete variable, to be able to switch off a node thanks to an outside event
   State connectionState_;  ///< "internal" bus connection status, evaluated at the end of evalZ to detect if the state was modified by another component
   bool topologyModified_;  ///< true if the bus connection state was modified
-  double irConnection_;  ///< real current injected
-  double iiConnection_;  ///< imaginary current injected
-  int refIslands_;  ///< island reference (used to compute switch loops)
-  boost::shared_ptr<BusDerivatives> derivatives_;  ///< derivatives
+  double irConnection_;    ///< real current injected
+  double iiConnection_;    ///< imaginary current injected
+  int refIslands_;         ///< island reference (used to compute switch loops)
+  boost::shared_ptr<BusDerivatives> derivatives_;      ///< derivatives
   boost::shared_ptr<BusDerivatives> derivativesPrim_;  ///< derivatives for JPrim
-  double ur0_;  ///< initial real voltage
-  double ui0_;  ///< initial imaginary voltage
-  double ir0_;  ///< initial real current
-  double ii0_;  ///< initial imaginary current
+  double ur0_;                                         ///< initial real voltage
+  double ui0_;                                         ///< initial imaginary voltage
+  double ir0_;                                         ///< initial real current
+  double ii0_;                                         ///< initial imaginary current
 
   // index inside the whole Jacobian
   int urYNum_;  ///< index ur
@@ -613,18 +593,18 @@ class ModelBus : public NetworkComponent {  ///< Generic AC network bus
   int iiYNum_;  ///< ii
   int irYNum_;  ///< ir
 
-  int busIndex_;  ///< index of bus in its voltage level
-  bool hasConnection_;  ///< whether has connection
+  int busIndex_;                  ///< index of bus in its voltage level
+  bool hasConnection_;            ///< whether has connection
   bool hasDifferentialVoltages_;  ///< whether the bus model has differential voltages
 
-  double unom_;  ///< nominal voltage
-  double u0_;  ///< initial voltage
-  double angle0_;  ///< initial angle
-  std::vector<std::string> busBarSectionNames_;  ///< name of bus bar sections on the same electrical node
+  double unom_;                                                     ///< nominal voltage
+  double u0_;                                                       ///< initial voltage
+  double angle0_;                                                   ///< initial angle
+  std::vector<std::string> busBarSectionNames_;                     ///< name of bus bar sections on the same electrical node
   std::vector<boost::weak_ptr<ModelSwitch> > connectableSwitches_;  ///< switch connected or connectable on the node
 
   const std::string modelType_;  ///< model Type
-  std::string constraintId_;  ///< id to use in constraints
+  std::string constraintId_;     ///< id to use in constraints
 };
 
 /**
@@ -635,20 +615,18 @@ class SubNetwork {  ///< sub-network gathering buses connected by AC components
   /**
    * @brief default constructor
    */
-  SubNetwork()
-  :num_(0) { }
+  SubNetwork() : num_(0) {}
 
   /**
    * @brief destructor
    */
-  ~SubNetwork() { }
+  ~SubNetwork() {}
 
   /**
    * @brief constructor
    * @param num
    */
-  explicit SubNetwork(const int& num)
-  :num_(num) { }
+  explicit SubNetwork(const int& num) : num_(num) {}
 
   /**
    * @brief set num
@@ -673,7 +651,7 @@ class SubNetwork {  ///< sub-network gathering buses connected by AC components
   inline void addBus(const boost::shared_ptr<ModelBus>& bus) {
     assert(bus && "Undefined bus");
     bus_.push_back(bus);
-  }   // add a bus to the sub-network
+  }  // add a bus to the sub-network
 
   /**
    * @brief  get the number of buses within the sub-network
@@ -681,7 +659,7 @@ class SubNetwork {  ///< sub-network gathering buses connected by AC components
    */
   inline unsigned int nbBus() const {
     return bus_.size();
-  }   // get the number of buses within the sub-network
+  }  // get the number of buses within the sub-network
 
   /**
    * @brief get bus
@@ -696,7 +674,7 @@ class SubNetwork {  ///< sub-network gathering buses connected by AC components
    * @brief  switch off all buses within the sub-network
    *
    */
-  void shutDownNodes();   // switch off all buses within the sub-network
+  void shutDownNodes();  // switch off all buses within the sub-network
   /**
    * @brief turn on all buses within the sub-network
    *
@@ -704,7 +682,7 @@ class SubNetwork {  ///< sub-network gathering buses connected by AC components
   void turnOnNodes();  // turn on all buses within the sub-network
 
  private:
-  int num_;  ///< number of bus
+  int num_;                                        ///< number of bus
   std::vector<boost::shared_ptr<ModelBus> > bus_;  ///< vector of ModelBus located within the sub-network
 };
 
@@ -721,7 +699,7 @@ class ModelBusContainer {
   /**
    * @brief destructor
    */
-  ~ModelBusContainer() { }
+  ~ModelBusContainer() {}
 
   /**
    * @brief add bus
@@ -733,7 +711,7 @@ class ModelBusContainer {
    * @brief remove all buses from the sub-network
    *
    */
-  void resetSubNetwork();   // remove all buses from the sub-network
+  void resetSubNetwork();  // remove all buses from the sub-network
 
   /**
    * @brief  reset node injection
@@ -771,7 +749,7 @@ class ModelBusContainer {
    */
   std::vector<boost::shared_ptr<SubNetwork> > getSubNetworks() const {
     return subNetworks_;
-  }   // get the list of sub-networks
+  }  // get the list of sub-networks
 
   /**
    * @brief evaluate Jacobian \f$( J = @F/@x + cj * @F/@x')\f$
@@ -794,7 +772,7 @@ class ModelBusContainer {
   void resetCurrentUStatus();
 
  private:
-  std::vector<boost::shared_ptr<ModelBus> > models_;  ///< model bus
+  std::vector<boost::shared_ptr<ModelBus> > models_;         ///< model bus
   std::vector<boost::shared_ptr<SubNetwork> > subNetworks_;  ///< sub network
 };
 }  // namespace DYN

@@ -24,7 +24,6 @@
 #define MODELER_DATAINTERFACE_IIDM_DYNINJECTORINTERFACEIIDM_H_
 
 #include <IIDM/components/Injection.h>
-
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
@@ -117,11 +116,11 @@ class InjectorInterfaceIIDM {
   std::string getID() const;
 
  protected:
-  IIDM::Injection<T>& injectorIIDM_;  ///< reference to the iidm injector instance
-  std::string injectorId_;  ///< injector's id
-  boost::shared_ptr<BusInterface> busInterface_;  ///< busInterface of the bus where the injector is connected
+  IIDM::Injection<T>& injectorIIDM_;                              ///< reference to the iidm injector instance
+  std::string injectorId_;                                        ///< injector's id
+  boost::shared_ptr<BusInterface> busInterface_;                  ///< busInterface of the bus where the injector is connected
   boost::weak_ptr<VoltageLevelInterface> voltageLevelInterface_;  ///< voltageLevel interface where the injector is connected
-  boost::optional<bool> initialConnected_;  ///< whether the injector is initially connected or not
+  boost::optional<bool> initialConnected_;                        ///< whether the injector is initially connected or not
 };
 
 }  // namespace DYN

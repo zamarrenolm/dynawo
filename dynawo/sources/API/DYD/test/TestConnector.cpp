@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYDConnectorFactory.h"
 #include "DYDConnector.h"
+#include "DYDConnectorFactory.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 
@@ -36,6 +35,5 @@ TEST(APIDYDTest, Connector) {
   ASSERT_EQ(connector->getFirstVariableId(), "var1");
   ASSERT_EQ(connector->getSecondVariableId(), "var2");
 }
-
 
 }  // namespace dynamicdata

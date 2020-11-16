@@ -17,19 +17,19 @@
  * @brief Dynawo final state XML exporter : implementation file
  *
  */
+#include "FSXmlExporter.h"
+
+#include "DYNCommon.h"
+#include "DYNMacrosMessage.h"
+#include "FSFinalStateCollection.h"
+#include "FSIterators.h"
+#include "FSModel.h"
+#include "FSVariable.h"
+
 #include <fstream>
 #include <sstream>
 #include <xml/sax/formatter/AttributeList.h>
 #include <xml/sax/formatter/Formatter.h>
-
-#include "DYNCommon.h"
-#include "DYNMacrosMessage.h"
-
-#include "FSXmlExporter.h"
-#include "FSFinalStateCollection.h"
-#include "FSModel.h"
-#include "FSVariable.h"
-#include "FSIterators.h"
 
 using std::fstream;
 using std::ostream;
@@ -45,19 +45,15 @@ void
 exportModel(FormatterPtr& formatter, finalStateModel_iterator& itModel) {
   AttributeList attrs;
 
-  for (finalStateModel_iterator itModel1 = (*itModel)->beginFinalStateModel();
-          itModel1 != (*itModel)->endFinalStateModel();
-          ++itModel1) {
+  for (finalStateModel_iterator itModel1 = (*itModel)->beginFinalStateModel(); itModel1 != (*itModel)->endFinalStateModel(); ++itModel1) {
     attrs.clear();
     attrs.add("id", (*itModel1)->getId());
     formatter->startElement("model", attrs);
     exportModel(formatter, itModel1);
-    formatter->endElement();   // model
+    formatter->endElement();  // model
   }
 
-  for (finalStateVariable_iterator itVariable = (*itModel)->beginVariable();
-          itVariable != (*itModel)->endVariable();
-          ++itVariable) {
+  for (finalStateVariable_iterator itVariable = (*itModel)->beginVariable(); itVariable != (*itModel)->endVariable(); ++itVariable) {
     attrs.clear();
     attrs.add("id", (*itVariable)->getId());
     if ((*itVariable)->getAvailable())
@@ -65,7 +61,7 @@ exportModel(FormatterPtr& formatter, finalStateModel_iterator& itModel) {
     else
       attrs.add("value", "UNVAILABLE");
     formatter->startElement("variable", attrs);
-    formatter->endElement();   // variable
+    formatter->endElement();  // variable
   }
 }
 
@@ -81,7 +77,6 @@ XmlExporter::exportToFile(const boost::shared_ptr<FinalStateCollection>& finalSt
   file.close();
 }
 
-
 void
 XmlExporter::exportToStream(const boost::shared_ptr<FinalStateCollection>& finalState, ostream& stream) const {
   FormatterPtr formatter = Formatter::createFormatter(stream, "http://www.rte-france.com/dynawo");
@@ -90,19 +85,15 @@ XmlExporter::exportToStream(const boost::shared_ptr<FinalStateCollection>& final
   AttributeList attrs;
   formatter->startElement("finalState", attrs);
 
-  for (finalStateModel_iterator itModel = finalState->beginFinalStateModel();
-          itModel != finalState->endFinalStateModel();
-          ++itModel) {
+  for (finalStateModel_iterator itModel = finalState->beginFinalStateModel(); itModel != finalState->endFinalStateModel(); ++itModel) {
     attrs.clear();
     attrs.add("id", (*itModel)->getId());
     formatter->startElement("model", attrs);
     exportModel(formatter, itModel);
-    formatter->endElement();   // model
+    formatter->endElement();  // model
   }
 
-  for (finalStateVariable_iterator itVariable = finalState->beginVariable();
-          itVariable != finalState->endVariable();
-          ++itVariable) {
+  for (finalStateVariable_iterator itVariable = finalState->beginVariable(); itVariable != finalState->endVariable(); ++itVariable) {
     attrs.clear();
     attrs.add("id", (*itVariable)->getId());
     if ((*itVariable)->getAvailable())
@@ -110,10 +101,10 @@ XmlExporter::exportToStream(const boost::shared_ptr<FinalStateCollection>& final
     else
       attrs.add("value", "UNVAILABLE");
     formatter->startElement("variable", attrs);
-    formatter->endElement();   // variable
+    formatter->endElement();  // variable
   }
 
-  formatter->endElement();   // finalState
+  formatter->endElement();  // finalState
   formatter->endDocument();
 }
 

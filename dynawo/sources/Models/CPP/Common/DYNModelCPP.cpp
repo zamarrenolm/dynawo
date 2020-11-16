@@ -17,32 +17,29 @@
  * @brief
  *
  */
-#include <sstream>
+#include "DYNModelCPP.h"
+
+#include "DYNMacrosMessage.h"
+#include "DYNTrace.h"
 
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#include <sstream>
 
-#include "DYNModelCPP.h"
-#include "DYNTrace.h"
-#include "DYNMacrosMessage.h"
-
+using std::map;
 using std::string;
 using std::stringstream;
-using std::map;
 using std::vector;
 
 namespace DYN {
 
-ModelCPP::ModelCPP() {
-}
+ModelCPP::ModelCPP() {}
 
-ModelCPP::ModelCPP(const std::string& modelType) :
-modelType_(modelType) {
-}
+ModelCPP::ModelCPP(const std::string& modelType) : modelType_(modelType) {}
 
 void
-ModelCPP::dumpParameters(map< string, string >& /*mapParameters*/) {
+ModelCPP::dumpParameters(map<string, string>& /*mapParameters*/) {
   // no parameters to dump for C++ models, they all come from the dyd file
 }
 
@@ -52,7 +49,7 @@ ModelCPP::loadParameters(const string& /*parameters*/) {
 }
 
 void
-ModelCPP::dumpVariables(map< string, string >& mapVariables) {
+ModelCPP::dumpVariables(map<string, string>& mapVariables) {
   stringstream values;
   boost::archive::binary_oarchive os(values);
   string cSum = getCheckSum();
@@ -66,7 +63,7 @@ ModelCPP::dumpVariables(map< string, string >& mapVariables) {
   os << yp;
   os << z;
 
-  mapVariables[ variablesFileName() ] = values.str();
+  mapVariables[variablesFileName()] = values.str();
 }
 
 void
@@ -88,7 +85,6 @@ ModelCPP::loadVariables(const string& variables) {
     Trace::warn() << DYNLog(WrongCheckSum, variablesFileName().c_str()) << Trace::endline;
     return;
   }
-
 
   if (yValues.size() != sizeY() || ypValues.size() != sizeY()) {
     Trace::warn() << DYNLog(WrongParameterNum, variablesFileName().c_str()) << Trace::endline;

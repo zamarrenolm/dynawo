@@ -20,8 +20,9 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELGENERATOR_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELGENERATOR_H_
 
-#include <boost/shared_ptr.hpp>
 #include "DYNNetworkComponent.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class ModelBus;
@@ -41,18 +42,13 @@ class ModelGenerator : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelGenerator() { }
+  ~ModelGenerator() {}
 
   /**
    * @brief  calculated variables type
    */
 
-  typedef enum {
-    pNum_ = 0,
-    qNum_ = 1,
-    genStateNum_ = 2,
-    nbCalculatedVariables_ = 3
-  } CalculatedVariables_t;
+  typedef enum { pNum_ = 0, qNum_ = 1, genStateNum_ = 2, nbCalculatedVariables_ = 3 } CalculatedVariables_t;
 
   /**
    * @brief set connection status of the generator
@@ -84,7 +80,8 @@ class ModelGenerator : public NetworkComponent {
   /**
    * @brief evaluate derivatives prim
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalF()
@@ -174,22 +171,26 @@ class ModelGenerator : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::evalYType()
    */
-  void evalYType() { /* not needed */ }
+  void evalYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
    */
-  void evalFType() { /* not needed */ }
+  void evalFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::collectSilentZ()
@@ -199,12 +200,13 @@ class ModelGenerator : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::evalYMat()
    */
-  void evalYMat() { /* not needed*/ }
+  void evalYMat() { /* not needed*/
+  }
 
   /**
    * @copydoc NetworkComponent::init(int& yNum)
    */
-  void init(int & yNum);
+  void init(int& yNum);
 
   /**
    * @copydoc NetworkComponent::getY0()
@@ -216,7 +218,7 @@ class ModelGenerator : public NetworkComponent {
    */
   void setSubModelParameters(const boost::unordered_map<std::string, ParameterModeler>& params);
 
-   /**
+  /**
    * @copydoc NetworkComponent::setFequations( std::map<int,std::string>& fEquationIndex )
    */
   void setFequations(std::map<int, std::string>& fEquationIndex);
@@ -236,7 +238,8 @@ class ModelGenerator : public NetworkComponent {
   /**
    * @brief addBusNeighbors
    */
-  void addBusNeighbors() { /* not needed */ }
+  void addBusNeighbors() { /* not needed */
+  }
   /**
    * @brief init size
    */
@@ -353,12 +356,12 @@ class ModelGenerator : public NetworkComponent {
     return (-Pc - 2 * ui * (-Pc * ui + Qc * ur) / U2) / U2;
   }
 
-  double Pc_;  ///< active power target in MW
-  double Qc_;  ///< reactive power target in Mvar
-  double ir0_;  ///< initial current real part
-  double ii0_;  ///< initial current imaginary part
+  double Pc_;              ///< active power target in MW
+  double Qc_;              ///< reactive power target in Mvar
+  double ir0_;             ///< initial current real part
+  double ii0_;             ///< initial current imaginary part
   State connectionState_;  ///< "internal" generator connection status, evaluated at the end of evalZ to detect if the state was modified by another component
-  bool stateModified_;  ///< true if the generator connection state was modified
+  bool stateModified_;     ///< true if the generator connection state was modified
   boost::shared_ptr<ModelBus> modelBus_;  ///< model bus
 };
 }  // namespace DYN

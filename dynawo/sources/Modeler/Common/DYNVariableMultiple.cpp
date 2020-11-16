@@ -17,18 +17,17 @@
  * @brief Dynawo multiple variable : implementation file
  *
  */
-#include "DYNMacrosMessage.h"
-
 #include "DYNVariableMultiple.h"
+
+#include "DYNMacrosMessage.h"
 
 using std::string;
 
 namespace DYN {
 
 VariableMultiple::VariableMultiple(const string& name, const string& cardinalityName, const typeVar_t& type, bool isState, bool negated) :
-VariableNative(name, type, isState, negated),
-cardinalityName_(cardinalityName) {
-}
+    VariableNative(name, type, isState, negated),
+    cardinalityName_(cardinalityName) {}
 
 void
 VariableMultiple::setCardinality(const unsigned int& cardinality) {

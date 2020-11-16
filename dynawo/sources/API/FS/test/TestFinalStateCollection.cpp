@@ -17,16 +17,15 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
 #include "FSFinalStateCollection.h"
 #include "FSFinalStateCollectionFactory.h"
-#include "FSVariable.h"
-#include "FSVariableFactory.h"
+#include "FSIterators.h"
 #include "FSModel.h"
 #include "FSModelFactory.h"
-#include "FSIterators.h"
+#include "FSVariable.h"
+#include "FSVariableFactory.h"
 #include "FSXmlExporter.h"
+#include "gtest_dynawo.h"
 
 namespace finalState {
 
@@ -62,17 +61,13 @@ TEST(APIFSTest, FinalStateCollectionAddVariable) {
 
   // test const iterator
   int nbVariables = 0;
-  for (finalStateVariable_const_iterator itVariable = collection->cbeginVariable();
-          itVariable != collection->cendVariable();
-          ++itVariable)
+  for (finalStateVariable_const_iterator itVariable = collection->cbeginVariable(); itVariable != collection->cendVariable(); ++itVariable)
     ++nbVariables;
   ASSERT_EQ(nbVariables, 2);
 
   // test iterator
   nbVariables = 0;
-  for (finalStateVariable_iterator itVariable = collection->beginVariable();
-          itVariable != collection->endVariable();
-          ++itVariable)
+  for (finalStateVariable_iterator itVariable = collection->beginVariable(); itVariable != collection->endVariable(); ++itVariable)
     ++nbVariables;
   ASSERT_EQ(nbVariables, 2);
 
@@ -117,17 +112,13 @@ TEST(APIFSTest, FinalStateCollectionAddModel) {
 
   // test const iterator
   int nbModels = 0;
-  for (finalStateModel_const_iterator itModel = collection->cbeginFinalStateModel();
-          itModel != collection->cendFinalStateModel();
-          ++itModel)
+  for (finalStateModel_const_iterator itModel = collection->cbeginFinalStateModel(); itModel != collection->cendFinalStateModel(); ++itModel)
     ++nbModels;
   ASSERT_EQ(nbModels, 2);
 
   // test iterator
   nbModels = 0;
-  for (finalStateModel_iterator itModel = collection->beginFinalStateModel();
-          itModel != collection->endFinalStateModel();
-          ++itModel)
+  for (finalStateModel_iterator itModel = collection->beginFinalStateModel(); itModel != collection->endFinalStateModel(); ++itModel)
     ++nbModels;
   ASSERT_EQ(nbModels, 2);
 

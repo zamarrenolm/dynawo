@@ -35,7 +35,7 @@ class LoadInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~LoadInterface() { }
+  virtual ~LoadInterface() {}
 
   /**
    * @brief Setter for the load's bus interface

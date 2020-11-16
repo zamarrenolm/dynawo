@@ -37,7 +37,7 @@ class TwoWTransformerInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~TwoWTransformerInterface() { }
+  virtual ~TwoWTransformerInterface() {}
 
   /**
    * @brief Setter for the tfo's bus interface side 1

@@ -31,7 +31,7 @@ class VscConverterInterface : public ConverterInterface {
   /**
    * @brief Destructor
    */
-  virtual ~VscConverterInterface() { }
+  virtual ~VscConverterInterface() {}
 
   /**
    * @brief Getter for the boolean indicating if the converter regulates the voltage (otherwise it regulates the reactive power)

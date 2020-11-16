@@ -24,26 +24,25 @@
 
 // included in DYNInjectorInterfaceIIDM.h
 
-#include <IIDM/components/Injection.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/VoltageLevel.h>
-
 #include "DYNBusInterface.h"
-#include "DYNVoltageLevelInterface.h"
-
 #include "DYNModelConstants.h"
 #include "DYNTrace.h"
+#include "DYNVoltageLevelInterface.h"
+
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/Injection.h>
+#include <IIDM/components/VoltageLevel.h>
 
 namespace DYN {
 
 template<class T>
-InjectorInterfaceIIDM<T>::~InjectorInterfaceIIDM() { }
+InjectorInterfaceIIDM<T>::~InjectorInterfaceIIDM() {}
 
 template<class T>
 InjectorInterfaceIIDM<T>::InjectorInterfaceIIDM(IIDM::Injection<T>& injector, std::string id) :
-injectorIIDM_(injector),
-injectorId_(id),
-initialConnected_(boost::none) { }
+    injectorIIDM_(injector),
+    injectorId_(id),
+    initialConnected_(boost::none) {}
 
 template<class T>
 void

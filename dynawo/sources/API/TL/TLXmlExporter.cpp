@@ -16,17 +16,16 @@
  * @brief Dynawo timeline xml exporter : implementation file
  *
  */
-#include <fstream>
-#include <sstream>
-
-#include <xml/sax/formatter/AttributeList.h>
-#include <xml/sax/formatter/Formatter.h>
+#include "TLXmlExporter.h"
 
 #include "DYNMacrosMessage.h"
-
-#include "TLXmlExporter.h"
-#include "TLTimeline.h"
 #include "TLEvent.h"
+#include "TLTimeline.h"
+
+#include <fstream>
+#include <sstream>
+#include <xml/sax/formatter/AttributeList.h>
+#include <xml/sax/formatter/Formatter.h>
 
 using std::fstream;
 using std::ostream;
@@ -57,9 +56,7 @@ XmlExporter::exportToStream(const boost::shared_ptr<Timeline>& timeline, ostream
   formatter->startDocument();
   AttributeList attrs;
   formatter->startElement("timeline", attrs);
-  for (Timeline::event_const_iterator itEvent = timeline->cbeginEvent();
-          itEvent != timeline->cendEvent();
-          ++itEvent) {
+  for (Timeline::event_const_iterator itEvent = timeline->cbeginEvent(); itEvent != timeline->cendEvent(); ++itEvent) {
     attrs.clear();
     attrs.add("time", (*itEvent)->getTime());
     attrs.add("modelName", (*itEvent)->getModelName());
@@ -73,7 +70,5 @@ XmlExporter::exportToStream(const boost::shared_ptr<Timeline>& timeline, ostream
   formatter->endElement();  // timeline
   formatter->endDocument();
 }
-
-
 
 }  // namespace timeline

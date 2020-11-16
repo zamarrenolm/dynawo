@@ -45,7 +45,7 @@ class TxtExporter : public Exporter {
    */
   void exportToFile(const boost::shared_ptr<ConstraintsCollection>& constraints, const std::string& filePath) const;
 
-   /**
+  /**
    * @brief Export method in txt format
    *
    * @param constraints Constraints to export

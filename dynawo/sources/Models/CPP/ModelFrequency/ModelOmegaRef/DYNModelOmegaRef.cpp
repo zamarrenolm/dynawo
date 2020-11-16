@@ -20,26 +20,26 @@
  * but only the generators with a weight gen > 0 participate to the calcul of the frequency reference
  *
  */
-#include <sstream>
-#include <vector>
-#include <algorithm>
-
-#include "PARParametersSet.h"
-
 #include "DYNModelOmegaRef.h"
-#include "DYNModelOmegaRef.hpp"
-#include "DYNSparseMatrix.h"
-#include "DYNMacrosMessage.h"
-#include "DYNElement.h"
+
 #include "DYNCommonModeler.h"
+#include "DYNElement.h"
+#include "DYNMacrosMessage.h"
+#include "DYNModelOmegaRef.hpp"
+#include "DYNParameter.h"
+#include "DYNSparseMatrix.h"
 #include "DYNTrace.h"
 #include "DYNVariableForModel.h"
-#include "DYNParameter.h"
+#include "PARParametersSet.h"
 
-using std::vector;
-using std::string;
+#include <algorithm>
+#include <sstream>
+#include <vector>
+
 using std::map;
+using std::string;
 using std::stringstream;
+using std::vector;
 
 using boost::shared_ptr;
 
@@ -50,14 +50,16 @@ using parameters::ParametersSet;
  *
  * @return A pointer to a new instance of ModelOmegaRefFactory
  */
-extern "C" DYN::SubModelFactory* getFactory() {
+extern "C" DYN::SubModelFactory*
+getFactory() {
   return (new DYN::ModelOmegaRefFactory());
 }
 
 /**
  * @brief ModelOmegaRefFactory destroy method
  */
-extern "C" void deleteFactory(DYN::SubModelFactory* factory) {
+extern "C" void
+deleteFactory(DYN::SubModelFactory* factory) {
   delete factory;
 }
 
@@ -66,7 +68,8 @@ extern "C" void deleteFactory(DYN::SubModelFactory* factory) {
  *
  * @return A pointer to a new instance of ModelOmegaRef
  */
-extern "C" DYN::SubModel* DYN::ModelOmegaRefFactory::create() const {
+extern "C" DYN::SubModel*
+DYN::ModelOmegaRefFactory::create() const {
   DYN::SubModel* model(new DYN::ModelOmegaRef());
   return model;
 }
@@ -74,7 +77,8 @@ extern "C" DYN::SubModel* DYN::ModelOmegaRefFactory::create() const {
 /**
  * @brief ModelOmegaRef destroy method
  */
-extern "C" void DYN::ModelOmegaRefFactory::destroy(DYN::SubModel* model) const {
+extern "C" void
+DYN::ModelOmegaRefFactory::destroy(DYN::SubModel* model) const {
   delete model;
 }
 
@@ -89,13 +93,7 @@ int ModelOmegaRef::col1stOmega_;
  *
  *
  */
-ModelOmegaRef::ModelOmegaRef() :
-ModelCPP("omegaRef"),
-firstState_(true),
-nbGen_(0),
-nbCC_(0),
-nbOmega_(0) {
-}
+ModelOmegaRef::ModelOmegaRef() : ModelCPP("omegaRef"), firstState_(true), nbGen_(0), nbCC_(0), nbOmega_(0) {}
 
 /**
  * @brief Reference frequency model initialization
@@ -126,9 +124,9 @@ ModelOmegaRef::initializeFromData(const boost::shared_ptr<DataInterface>& /*data
  */
 void
 ModelOmegaRef::getSize() {
-  sizeF_ = nbMaxCC + nbGen_;  // nbMaxCC eq (omegaref) + one equation by generator
+  sizeF_ = nbMaxCC + nbGen_;             // nbMaxCC eq (omegaref) + one equation by generator
   sizeY_ = nbMaxCC + nbGen_ + nbOmega_;  // (omegaref)*nbMaxCC + omegaRef by grp + omega_ for grp with weight > 0
-  sizeZ_ = nbGen_ * 2;   // num cc for each connection node of generators + stateOff of each generators
+  sizeZ_ = nbGen_ * 2;                   // num cc for each connection node of generators + stateOff of each generators
   sizeG_ = 0;
   sizeMode_ = 1;  // change of CC organisation
 
@@ -222,10 +220,10 @@ ModelOmegaRef::evalJt(const double& /*t*/, const double& /*cj*/, SparseMatrix& j
     map<int, double>::const_iterator iterWeight = sumWeightByCC_.find(i);
     if (iterGen == genByCC_.end() || iterWeight == sumWeightByCC_.end()) {
       // f=1-omegaRef[i]
-      jt.addTerm(col1stOmegaRef_ + i + rowOffset, dMOne);   // d(f)/d(omegaRef[i]) = -1;
+      jt.addTerm(col1stOmegaRef_ + i + rowOffset, dMOne);  // d(f)/d(omegaRef[i]) = -1;
     } else {
       // f = sum(omega[]*weight[]) - omegaRef[i]
-      jt.addTerm(col1stOmegaRef_ + i + rowOffset, dMOne);   // d(f)/d(omegaRef[i]) = -1;
+      jt.addTerm(col1stOmegaRef_ + i + rowOffset, dMOne);  // d(f)/d(omegaRef[i]) = -1;
       std::vector<int> numGen = iterGen->second;
       for (unsigned int j = 0; j < numGen.size(); ++j) {
         if (toNativeBool(runningGrp_[numGen[j]]) && weights_[numGen[j]] > 0) {
@@ -238,10 +236,10 @@ ModelOmegaRef::evalJt(const double& /*t*/, const double& /*cj*/, SparseMatrix& j
   for (int i = 0; i < nbGen_; ++i) {
     jt.changeCol();
     if (runningGrp_[i] > 0.5) {
-      jt.addTerm(col1stOmegaRef_ + numCCNode_[i] + rowOffset, dPOne);   // d(f)/d(omegaRef[0]) = 1:
-      jt.addTerm(i + col1stOmegaRefGrp_ + rowOffset, dMOne);   // d(f)/d(omegaRefGrp[i]) = -1
+      jt.addTerm(col1stOmegaRef_ + numCCNode_[i] + rowOffset, dPOne);  // d(f)/d(omegaRef[0]) = 1:
+      jt.addTerm(i + col1stOmegaRefGrp_ + rowOffset, dMOne);           // d(f)/d(omegaRefGrp[i]) = -1
     } else {
-      jt.addTerm(i + col1stOmegaRefGrp_ + rowOffset, dMOne);   // d(f)/d(omegaRefGrp[i]) = -1
+      jt.addTerm(i + col1stOmegaRefGrp_ + rowOffset, dMOne);  // d(f)/d(omegaRefGrp[i]) = -1
     }
   }
 }
@@ -398,8 +396,8 @@ ModelOmegaRef::getY0() {
 
 void
 ModelOmegaRef::evalYType() {
-  std::fill(yType_, yType_ + nbMaxCC, ALGEBRAIC);  // omegaRef[i] is an algebraic variable
-  std::fill(yType_+ nbMaxCC, yType_ + nbMaxCC + nbOmega_, EXTERNAL);  // omega[i] is an external variable
+  std::fill(yType_, yType_ + nbMaxCC, ALGEBRAIC);                      // omegaRef[i] is an algebraic variable
+  std::fill(yType_ + nbMaxCC, yType_ + nbMaxCC + nbOmega_, EXTERNAL);  // omega[i] is an external variable
   std::fill(yType_ + nbMaxCC + nbOmega_, yType_ + sizeY_, ALGEBRAIC);  // omegaRefGrp[i] is an algebraic variable
 }
 
@@ -491,7 +489,7 @@ ModelOmegaRef::setSubModelParameters() {
  * @param mapElement Map associating each element index in the elements vector to its name
  */
 void
-ModelOmegaRef::defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement) {
+ModelOmegaRef::defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement) {
   for (int i = 0; i < nbMaxCC; ++i) {
     std::stringstream name;
     name << "omegaRef_" << i;
@@ -529,7 +527,7 @@ ModelOmegaRef::setFequations() {
   for (int i = 0; i < nbMaxCC; ++i) {
     std::stringstream f;
     f << "Synchronous area " << i << " : 0 = sum_k (omega[k] * weight[k]) - omegaRef[i] * sum_k (weight[k])";
-    fEquationIndex_[i] =  f.str();
+    fEquationIndex_[i] = f.str();
   }
 
   for (int k = 0; k < nbGen_; ++k) {
@@ -538,7 +536,7 @@ ModelOmegaRef::setFequations() {
     fEquationIndex_[k + nbMaxCC] = f.str();
   }
 
-  assert(fEquationIndex_.size() == (unsigned int) sizeF() && "ModelOmegaRef:fEquationIndex_.size() != f_.size()");
+  assert(fEquationIndex_.size() == (unsigned int)sizeF() && "ModelOmegaRef:fEquationIndex_.size() != f_.size()");
 }
 
 }  // namespace DYN

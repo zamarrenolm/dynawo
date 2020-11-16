@@ -46,7 +46,7 @@ class HvdcLineInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~HvdcLineInterface() { }
+  virtual ~HvdcLineInterface() {}
 
   /**
    * @copydoc ComponentInterface::exportStateVariablesUnitComponent()

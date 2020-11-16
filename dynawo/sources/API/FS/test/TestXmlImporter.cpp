@@ -17,11 +17,10 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "FSXmlImporter.h"
-#include "FSXmlExporter.h"
 #include "FSFinalStateCollection.h"
+#include "FSXmlExporter.h"
+#include "FSXmlImporter.h"
+#include "gtest_dynawo.h"
 
 namespace finalState {
 
@@ -66,20 +65,20 @@ TEST(APIFSTest, testXmlWrongStream) {
 TEST(APIFSTest, testXmlStreamImporter) {
   XmlImporter importer;
   std::istringstream goodInputStream(
-    "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>"
-    "<dyn:finalStateInput xmlns:dyn=\"http://www.rte-france.com/dynawo\">"
-    "<dyn:model id=\"model1\">"
-    "<dyn:variable name=\"varModel1\"/>"
-    "<dyn:model id=\"subModel1\">"
-    "<dyn:variable name=\"varSubModel1\"/>"
-    "</dyn:model>"
-    "</dyn:model>"
-    "<dyn:model id=\"model2\">"
-    "<dyn:variable name=\"varModel2\"/>"
-    "</dyn:model>"
-    "<dyn:variable name=\"varGlobal1\"/>"
-    "<dyn:variable name=\"varGlobal2\"/>"
-    "</dyn:finalStateInput>");
+      "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"?>"
+      "<dyn:finalStateInput xmlns:dyn=\"http://www.rte-france.com/dynawo\">"
+      "<dyn:model id=\"model1\">"
+      "<dyn:variable name=\"varModel1\"/>"
+      "<dyn:model id=\"subModel1\">"
+      "<dyn:variable name=\"varSubModel1\"/>"
+      "</dyn:model>"
+      "</dyn:model>"
+      "<dyn:model id=\"model2\">"
+      "<dyn:variable name=\"varModel2\"/>"
+      "</dyn:model>"
+      "<dyn:variable name=\"varGlobal1\"/>"
+      "<dyn:variable name=\"varGlobal2\"/>"
+      "</dyn:finalStateInput>");
   std::istream goodStream(goodInputStream.rdbuf());
   ASSERT_NO_THROW(importer.importFromStream(goodStream));
 }

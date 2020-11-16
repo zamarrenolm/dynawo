@@ -17,30 +17,31 @@
  * @brief IoDico class implementation
  *
  */
-#include <limits.h>
-#include <stdlib.h>
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include <boost/algorithm/string/trim.hpp>
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/predicate.hpp>
-
 #include "DYNIoDico.h"
+
 #include "DYNExecUtils.h"
 #include "DYNMacrosMessage.h"
-using std::string;
-using std::ifstream;
+
+#include <boost/algorithm/string/predicate.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <fstream>
+#include <limits.h>
+#include <sstream>
+#include <stdlib.h>
+#include <vector>
 using boost::shared_ptr;
+using std::ifstream;
+using std::string;
 using std::stringstream;
 using std::vector;
-
 
 namespace DYN {
 
 static bool readLine(string& line, string& key, string& phrase);
 
-shared_ptr<IoDicos> IoDicos::getInstance() {
+shared_ptr<IoDicos>
+IoDicos::getInstance() {
   static shared_ptr<IoDicos> instance;
   if (instance)
     return instance;
@@ -49,15 +50,18 @@ shared_ptr<IoDicos> IoDicos::getInstance() {
   return instance;
 }
 
-void IoDicos::addPath(const string& path) {
+void
+IoDicos::addPath(const string& path) {
   paths_.push_back(path);
 }
 
-bool IoDicos::hasIoDico(const string& dicoName) {
-  return ( getInstance()->dicos_.find(dicoName) != getInstance()->dicos_.end());
+bool
+IoDicos::hasIoDico(const string& dicoName) {
+  return (getInstance()->dicos_.find(dicoName) != getInstance()->dicos_.end());
 }
 
-boost::shared_ptr<IoDico> IoDicos::getIoDico(const string& dicoName) {
+boost::shared_ptr<IoDico>
+IoDicos::getIoDico(const string& dicoName) {
   if (hasIoDico(dicoName)) {
     return getInstance()->dicos_[dicoName];
   } else {
@@ -65,11 +69,11 @@ boost::shared_ptr<IoDico> IoDicos::getIoDico(const string& dicoName) {
   }
 }
 
-vector<std::string> IoDicos::findFiles(const string& fileName) {
+vector<std::string>
+IoDicos::findFiles(const string& fileName) {
   vector<std::string> res;
   if (fileName.empty())
     return res;
-
 
   // Research file in paths
   vector<string> allPaths;
@@ -79,9 +83,7 @@ vector<std::string> IoDicos::findFiles(const string& fileName) {
     allPaths.insert(allPaths.begin(), paths.begin(), paths.end());
   }
 
-  for (vector<string>::const_iterator it = allPaths.begin();
-          it != allPaths.end();
-          ++it) {
+  for (vector<string>::const_iterator it = allPaths.begin(); it != allPaths.end(); ++it) {
     string fic = *it;
 
     if (fic.size() > 0 && fic[fic.size() - 1] != '/')
@@ -99,7 +101,8 @@ vector<std::string> IoDicos::findFiles(const string& fileName) {
   return res;
 }
 
-void IoDicos::addDico(const string& name, const string& baseName, const string& locale) {
+void
+IoDicos::addDico(const string& name, const string& baseName, const string& locale) {
   if (baseName.empty()) {
     throw MessageError("impossible to add the dictionary : empty name");
   }
@@ -133,7 +136,8 @@ void IoDicos::addDico(const string& name, const string& baseName, const string& 
   }
 }
 
-void IoDicos::addDicos(const string& dictionariesMappingFile, const string& locale) {
+void
+IoDicos::addDicos(const string& dictionariesMappingFile, const string& locale) {
   if (dictionariesMappingFile.empty()) {
     throw MessageError("impossible to add the dictionary mapping file : empty name");
   }
@@ -156,11 +160,10 @@ void IoDicos::addDicos(const string& dictionariesMappingFile, const string& loca
   }
 }
 
-IoDico::IoDico(const string& name) :
-name_(name) {
-}
+IoDico::IoDico(const string& name) : name_(name) {}
 
-void IoDico::readFile(const string& file) {
+void
+IoDico::readFile(const string& file) {
   // Open file
   ifstream in(file.c_str());
 
@@ -191,7 +194,8 @@ void IoDico::readFile(const string& file) {
   }
 }
 
-string IoDico::msg(const string& msgId) {
+string
+IoDico::msg(const string& msgId) {
   string phrase = "";
 
   if (map_.find(msgId) != map_.end()) {
@@ -202,11 +206,13 @@ string IoDico::msg(const string& msgId) {
   return phrase;
 }
 
-std::map<string, string>::const_iterator IoDico::begin() const {
+std::map<string, string>::const_iterator
+IoDico::begin() const {
   return map_.begin();
 }
 
-std::map<string, string>::const_iterator IoDico::end() const {
+std::map<string, string>::const_iterator
+IoDico::end() const {
   return map_.end();
 }
 
@@ -231,7 +237,7 @@ readLine(string& line, string& key, string& value) {
 
   boost::algorithm::trim(line1);
   if (line1.empty())  // line empty : it was a comment line
-    return true;  // it's not an error
+    return true;      // it's not an error
 
   // 2) cut the line in two parts : key and value with separator =
   found = line1.find("=");

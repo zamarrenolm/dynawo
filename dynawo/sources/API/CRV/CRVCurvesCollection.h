@@ -36,7 +36,7 @@ namespace curves {
  */
 class CurvesCollection {
  public:
-    /**
+  /**
    * @brief constructor
    *
    * @param id curvesCollection's id

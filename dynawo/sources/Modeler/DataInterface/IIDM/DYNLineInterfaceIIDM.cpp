@@ -17,18 +17,18 @@
  * @brief Line data interface : implementation file for IIDM interface
  *
  */
-#include <IIDM/components/Line.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/BasicTypes.h>
+#include "DYNLineInterfaceIIDM.h"
 
 #include "DYNCommon.h"
-#include "DYNLineInterfaceIIDM.h"
-#include "DYNVoltageLevelInterface.h"
-#include "DYNStateVariable.h"
 #include "DYNModelConstants.h"
-
+#include "DYNStateVariable.h"
 #include "DYNTrace.h"
+#include "DYNVoltageLevelInterface.h"
+
+#include <IIDM/BasicTypes.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/VoltageLevel.h>
 
 using boost::shared_ptr;
 using std::string;
@@ -36,21 +36,17 @@ using std::vector;
 
 namespace DYN {
 
-LineInterfaceIIDM::LineInterfaceIIDM(IIDM::Line& line) :
-lineIIDM_(line),
-initialConnected1_(boost::none),
-initialConnected2_(boost::none) {
+LineInterfaceIIDM::LineInterfaceIIDM(IIDM::Line& line) : lineIIDM_(line), initialConnected1_(boost::none), initialConnected2_(boost::none) {
   setType(ComponentInterface::LINE);
   stateVariables_.resize(5);
-  stateVariables_[VAR_P1] = StateVariable("p1", StateVariable::DOUBLE);  // P1
-  stateVariables_[VAR_P2] = StateVariable("p2", StateVariable::DOUBLE);  // P2
-  stateVariables_[VAR_Q1] = StateVariable("q1", StateVariable::DOUBLE);  // Q1
-  stateVariables_[VAR_Q2] = StateVariable("q2", StateVariable::DOUBLE);  // Q2
-  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);   // connectionState
+  stateVariables_[VAR_P1] = StateVariable("p1", StateVariable::DOUBLE);     // P1
+  stateVariables_[VAR_P2] = StateVariable("p2", StateVariable::DOUBLE);     // P2
+  stateVariables_[VAR_Q1] = StateVariable("q1", StateVariable::DOUBLE);     // Q1
+  stateVariables_[VAR_Q2] = StateVariable("q2", StateVariable::DOUBLE);     // Q2
+  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);  // connectionState
 }
 
-LineInterfaceIIDM::~LineInterfaceIIDM() {
-}
+LineInterfaceIIDM::~LineInterfaceIIDM() {}
 
 void
 LineInterfaceIIDM::setBusInterface1(const shared_ptr<BusInterface>& busInterface) {
@@ -242,15 +238,15 @@ LineInterfaceIIDM::getCurrentLimitInterfaces2() const {
 int
 LineInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "p1" )
+  if (varName == "p1")
     index = VAR_P1;
-  else if ( varName == "q1" )
+  else if (varName == "q1")
     index = VAR_Q1;
-  else if ( varName == "p2" )
+  else if (varName == "p2")
     index = VAR_P2;
-  else if ( varName == "q2" )
+  else if (varName == "q2")
     index = VAR_Q2;
-  else if ( varName == "state" )
+  else if (varName == "state")
     index = VAR_STATE;
   return index;
 }
@@ -288,7 +284,7 @@ LineInterfaceIIDM::exportStateVariablesUnitComponent() {
         lineIIDM_.connect(IIDM::side_2);
       else
         lineIIDM_.disconnect(IIDM::side_2);
-    } else {   // is_node()
+    } else {  // is_node()
       // should be removed once a solution has been found to propagate switches (de)connection
       // following component (de)connection (only Modelica models)
       if (connected2 && !getInitialConnected2())

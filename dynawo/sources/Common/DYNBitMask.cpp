@@ -15,11 +15,9 @@
 
 namespace DYN {
 
-BitMask::BitMask() : bitmask_(0)
-{}
+BitMask::BitMask() : bitmask_(0) {}
 
 BitMask::~BitMask() {}
-
 
 void
 BitMask::setFlags(const unsigned char& flag) {
@@ -38,9 +36,8 @@ BitMask::reset() {
 
 bool
 BitMask::getFlags(const unsigned char& flag) const {
-  return (bitmask_& flag) == flag;
+  return (bitmask_ & flag) == flag;
 }
-
 
 bool
 BitMask::noFlagSet() const {

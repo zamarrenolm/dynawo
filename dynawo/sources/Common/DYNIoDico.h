@@ -21,10 +21,9 @@
 #ifndef COMMON_DYNIODICO_H_
 #define COMMON_DYNIODICO_H_
 
+#include <boost/shared_ptr.hpp>
 #include <map>
 #include <vector>
-#include <boost/shared_ptr.hpp>
-
 
 namespace DYN {
 
@@ -48,8 +47,7 @@ class IoDico {
    *
    * @return message description of the message
    */
-  std::string msg(const std::string & msgId);
-
+  std::string msg(const std::string& msgId);
 
   /**
    * @brief iteration over the key/msg map
@@ -57,7 +55,6 @@ class IoDico {
    * @return the begin iterator of the dictionary
    */
   std::map<std::string, std::string>::const_iterator begin() const;
-
 
   /**
    * @brief iteration over the key/msg map
@@ -71,11 +68,11 @@ class IoDico {
    *
    * @param fileName  the full path name of the file to read
    */
-  void readFile(const std::string &fileName);
+  void readFile(const std::string& fileName);
 
  private:
   std::map<std::string, std::string> map_;  ///< map association bewteen key and message description
-  std::string name_;  ///< name of the dictionnary
+  std::string name_;                        ///< name of the dictionnary
 };
 
 /**
@@ -88,7 +85,7 @@ class IoDicos {
   /**
    * @brief destructor
    */
-  ~IoDicos() { }
+  ~IoDicos() {}
 
   /**
    * @brief add a dictionary to the IoDicos instance
@@ -99,7 +96,7 @@ class IoDicos {
    *
    * @note the full name of the file is: @b basename+"_"+locale+".dic"
    */
-  void addDico(const std::string & name, const std::string & baseName, const std::string& locale = "en_GB");
+  void addDico(const std::string& name, const std::string& baseName, const std::string& locale = "en_GB");
 
   /**
    * @brief add a list of dictionaries to the IoDicos instance
@@ -107,7 +104,7 @@ class IoDicos {
    * @param dictionariesMappingFile name of the dictionaries mapping file (format baseName = name)
    * @param locale locale of the dictionary
    */
-  void addDicos(const std::string & dictionariesMappingFile, const std::string& locale = "en_GB");
+  void addDicos(const std::string& dictionariesMappingFile, const std::string& locale = "en_GB");
 
   /**
    * @brief try to find a dictionary with the name @b dicoName
@@ -116,14 +113,14 @@ class IoDicos {
    *
    * @return return the dictionary with the desired name
    */
-  static boost::shared_ptr<IoDico> getIoDico(const std::string & dicoName);
+  static boost::shared_ptr<IoDico> getIoDico(const std::string& dicoName);
 
   /**
    * @brief check if a dictionary exist thanks to its name
    * @param dicoName name of the dictionary to find
    * @return @b true if the dictionary exists, @b false else
    */
-  static bool hasIoDico(const std::string & dicoName);
+  static bool hasIoDico(const std::string& dicoName);
 
   /**
    * @brief Initialize the IoDicos single instance if there is no instance, otherwise return the instance
@@ -137,13 +134,13 @@ class IoDicos {
    *
    * @param path path to add
    */
-  void addPath(const std::string & path);
+  void addPath(const std::string& path);
 
  private:
   /**
    * @brief default constructor
    */
-  IoDicos() { }
+  IoDicos() {}
 
   /**
    * @brief Copy constructor
@@ -166,7 +163,7 @@ class IoDicos {
   std::vector<std::string> findFiles(const std::string& fileName);
 
  private:
-  std::vector<std::string> paths_;  ///< path where dictionnaries are researched
+  std::vector<std::string> paths_;                           ///< path where dictionnaries are researched
   std::map<std::string, boost::shared_ptr<IoDico> > dicos_;  ///< map association between dictionary and their name
 };
 

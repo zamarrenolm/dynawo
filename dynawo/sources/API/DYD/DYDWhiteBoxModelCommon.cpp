@@ -12,17 +12,17 @@
 //
 
 #include "DYDWhiteBoxModelCommon.h"
+
 #include "DYNMacrosMessage.h"
 
-using std::string;
-using std::map;
 using boost::shared_ptr;
+using std::map;
+using std::string;
 
 namespace dynamicdata {
 string
-getConnectionId(const string& model1, const string& var1,
-    const string& model2, const string& var2,  const string& id,
-    const map<string, shared_ptr<UnitDynamicModel> >& unitDynamicModelsMap) {
+getConnectionId(const string& model1, const string& var1, const string& model2, const string& var2, const string& id,
+                const map<string, shared_ptr<UnitDynamicModel> >& unitDynamicModelsMap) {
   if (unitDynamicModelsMap.find(model1) == unitDynamicModelsMap.end())
     throw DYNError(DYN::Error::API, ConnectorNotPartofModel, model1, model2, id);
   if (unitDynamicModelsMap.find(model2) == unitDynamicModelsMap.end())
@@ -36,11 +36,8 @@ getConnectionId(const string& model1, const string& var1,
   return connectionSecond + '_' + connectionFirst;
 }
 
-
-
 string
-getMacroConnectionId(const string& model1, const string& model2, const string& id,
-    const map<string, shared_ptr<UnitDynamicModel> >& unitDynamicModelsMap) {
+getMacroConnectionId(const string& model1, const string& model2, const string& id, const map<string, shared_ptr<UnitDynamicModel> >& unitDynamicModelsMap) {
   if (unitDynamicModelsMap.find(model1) == unitDynamicModelsMap.end())
     throw DYNError(DYN::Error::API, MacroConnectNotPartofModel, model1, model2, id);
   if (unitDynamicModelsMap.find(model2) == unitDynamicModelsMap.end())

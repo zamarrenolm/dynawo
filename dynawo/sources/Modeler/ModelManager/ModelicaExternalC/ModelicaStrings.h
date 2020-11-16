@@ -78,22 +78,18 @@
 #define _Ret_z_
 #endif
 
-MODELICA_EXPORT MODELICA_RETURNNONNULLATTR const char* ModelicaStrings_substring(
-    _In_z_ const char* string, int startIndex, int endIndex) MODELICA_NONNULLATTR;
+MODELICA_EXPORT MODELICA_RETURNNONNULLATTR const char* ModelicaStrings_substring(_In_z_ const char* string, int startIndex, int endIndex) MODELICA_NONNULLATTR;
 MODELICA_EXPORT int ModelicaStrings_length(_In_z_ const char* string) MODELICA_NONNULLATTR;
-MODELICA_EXPORT int ModelicaStrings_compare(_In_z_ const char* string1,
-    _In_z_ const char* string2, int caseSensitive) MODELICA_NONNULLATTR;
-MODELICA_EXPORT int ModelicaStrings_skipWhiteSpace(_In_z_ const char* string,
-    int i) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaStrings_scanIdentifier(_In_z_ const char* string,
-    int startIndex, _Out_ int* nextIndex, _Out_ const char** identifier) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaStrings_scanInteger(_In_z_ const char* string,
-    int startIndex, int unsignedNumber, _Out_ int* nextIndex,
-    _Out_ int* integerNumber) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaStrings_scanReal(_In_z_ const char* string, int startIndex,
-    int unsignedNumber, _Out_ int* nextIndex, _Out_ double* number) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaStrings_scanString(_In_z_ const char* string, int startIndex,
-    _Out_ int* nextIndex, _Out_ const char** result) MODELICA_NONNULLATTR;
+MODELICA_EXPORT int ModelicaStrings_compare(_In_z_ const char* string1, _In_z_ const char* string2, int caseSensitive) MODELICA_NONNULLATTR;
+MODELICA_EXPORT int ModelicaStrings_skipWhiteSpace(_In_z_ const char* string, int i) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaStrings_scanIdentifier(_In_z_ const char* string, int startIndex, _Out_ int* nextIndex,
+                                                    _Out_ const char** identifier) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaStrings_scanInteger(_In_z_ const char* string, int startIndex, int unsignedNumber, _Out_ int* nextIndex,
+                                                 _Out_ int* integerNumber) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaStrings_scanReal(_In_z_ const char* string, int startIndex, int unsignedNumber, _Out_ int* nextIndex,
+                                              _Out_ double* number) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaStrings_scanString(_In_z_ const char* string, int startIndex, _Out_ int* nextIndex,
+                                                _Out_ const char** result) MODELICA_NONNULLATTR;
 MODELICA_EXPORT int ModelicaStrings_hashString(_In_z_ const char* str) MODELICA_NONNULLATTR;
 
 #endif

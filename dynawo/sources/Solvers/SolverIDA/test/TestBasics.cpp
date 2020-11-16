@@ -17,53 +17,52 @@
  *
  */
 
-#include <fstream>
-#include <cmath>
-
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/algorithm/string/split.hpp>
-
-#include <IIDM/xml/import.h>
-#include <IIDM/xml/export.h>
-#include <IIDM/Network.h>
-#include <IIDM/components/Connection.h>
-#include <IIDM/components/ConnectionPoint.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/components/Line.h>
-#include <IIDM/components/Load.h>
-#include <IIDM/components/Switch.h>
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
-#include <IIDM/builders/LineBuilder.h>
-#include <IIDM/builders/LoadBuilder.h>
-#include <IIDM/builders/SwitchBuilder.h>
-
-#include "gtest_dynawo.h"
+#include "DYNCompiler.h"
 #include "DYNDataInterfaceIIDM.h"
-#include "DYNFileSystemUtils.h"
+#include "DYNDynamicData.h"
 #include "DYNExecUtils.h"
-#include "DYNSolver.h"
-#include "DYNModeler.h"
+#include "DYNFileSystemUtils.h"
+#include "DYNMacrosMessage.h"
 #include "DYNModel.h"
 #include "DYNModelMulti.h"
-#include "DYNCompiler.h"
+#include "DYNModeler.h"
+#include "DYNSolver.h"
 #include "DYNSolverFactory.h"
-#include "DYNDynamicData.h"
-#include "PARParametersSet.h"
-#include "PARParameterFactory.h"
-#include "PARParametersSetFactory.h"
 #include "DYNTrace.h"
+#include "PARParameterFactory.h"
+#include "PARParametersSet.h"
+#include "PARParametersSetFactory.h"
 #include "TLTimelineFactory.h"
-#include "DYNMacrosMessage.h"
+#include "gtest_dynawo.h"
+
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/LineBuilder.h>
+#include <IIDM/builders/LoadBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/SwitchBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/Connection.h>
+#include <IIDM/components/ConnectionPoint.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/Load.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/Switch.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <IIDM/xml/export.h>
+#include <IIDM/xml/import.h>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/filesystem.hpp>
+#include <cmath>
+#include <fstream>
 
 namespace DYN {
 
-boost::shared_ptr<Solver> initSolver() {
+boost::shared_ptr<Solver>
+initSolver() {
   // Solver
   boost::shared_ptr<Solver> solver = SolverFactory::createSolverFromLib("../dynawo_SolverIDA" + std::string(sharedLibraryExtension()));
 
@@ -93,15 +92,16 @@ boost::shared_ptr<Solver> initSolver() {
   return solver;
 }
 
-void compile(boost::shared_ptr<DynamicData> dyd) {
+void
+compile(boost::shared_ptr<DynamicData> dyd) {
   bool preCompiledUseStandardModels = false;
-  std::vector <UserDefinedDirectory> precompiledModelsDirsAbsolute;
+  std::vector<UserDefinedDirectory> precompiledModelsDirsAbsolute;
   std::string preCompiledModelsExtension = sharedLibraryExtension();
   bool modelicaUseStandardModels = false;
 
-  std::vector <UserDefinedDirectory> modelicaModelsDirsAbsolute;
+  std::vector<UserDefinedDirectory> modelicaModelsDirsAbsolute;
   UserDefinedDirectory modelicaModel;
-  modelicaModel.path = getMandatoryEnvVar("PWD") +"/jobs/";
+  modelicaModel.path = getMandatoryEnvVar("PWD") + "/jobs/";
   modelicaModel.isRecursive = false;
   modelicaModelsDirsAbsolute.push_back(modelicaModel);
   std::string modelicaModelsExtension = ".mo";
@@ -114,22 +114,15 @@ void compile(boost::shared_ptr<DynamicData> dyd) {
 
   const bool rmModels = true;
   boost::unordered_set<boost::filesystem::path> pathsToIgnore;
-  Compiler cf = Compiler(dyd, preCompiledUseStandardModels,
-            precompiledModelsDirsAbsolute,
-            preCompiledModelsExtension,
-            modelicaUseStandardModels,
-            modelicaModelsDirsAbsolute,
-            modelicaModelsExtension,
-            pathsToIgnore,
-            additionalHeaderFiles,
-            rmModels,
-            getEnvVar("PWD") +"/jobs");
+  Compiler cf = Compiler(dyd, preCompiledUseStandardModels, precompiledModelsDirsAbsolute, preCompiledModelsExtension, modelicaUseStandardModels,
+                         modelicaModelsDirsAbsolute, modelicaModelsExtension, pathsToIgnore, additionalHeaderFiles, rmModels, getEnvVar("PWD") + "/jobs");
   cf.compile();  // modelOnly = false, compilation and parameter linking
   cf.concatConnects();
   cf.concatRefs();
 }
 
-boost::shared_ptr<Model> initModel(Modeler modeler, const double& tStart = 0) {
+boost::shared_ptr<Model>
+initModel(Modeler modeler, const double& tStart = 0) {
   boost::shared_ptr<Model> model = modeler.getModel();
   model->initBuffers();
   model->setIsInitProcess(true);
@@ -142,9 +135,8 @@ boost::shared_ptr<Model> initModel(Modeler modeler, const double& tStart = 0) {
   return model;
 }
 
-
-std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > initSolverAndModel(std::string dydFileName, std::string iidmFileName,
- std::string parFileName, const double& tStart, const double& tStop) {
+std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> >
+initSolverAndModel(std::string dydFileName, std::string iidmFileName, std::string parFileName, const double& tStart, const double& tStop) {
   boost::shared_ptr<Solver> solver = initSolver();
 
   // DYD
@@ -157,7 +149,7 @@ std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > initSolverAndMod
   dyd->setRootDirectory(getMandatoryEnvVar("PWD"));
   dyd->getNetworkParameters(parFileName, "0");
 
-  std::vector <std::string> fileNames;
+  std::vector<std::string> fileNames;
   fileNames.push_back(dydFileName);
   dyd->initFromDydFiles(fileNames);
 
@@ -184,10 +176,11 @@ std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > initSolverAndMod
   return std::make_pair(solver, model);
 }
 
-boost::shared_ptr<Model> initModelFromDyd(std::string dydFileName) {
-// DYD
+boost::shared_ptr<Model>
+initModelFromDyd(std::string dydFileName) {
+  // DYD
   boost::shared_ptr<DynamicData> dyd(new DynamicData());
-  std::vector <std::string> fileNames;
+  std::vector<std::string> fileNames;
   fileNames.push_back(dydFileName);
   dyd->initFromDydFiles(fileNames);
 
@@ -203,8 +196,8 @@ boost::shared_ptr<Model> initModelFromDyd(std::string dydFileName) {
   return model;
 }
 
-std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > initSolverAndModelWithDyd(std::string dydFileName,
- const double& tStart, const double& tStop) {
+std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> >
+initSolverAndModelWithDyd(std::string dydFileName, const double& tStart, const double& tStop) {
   boost::shared_ptr<Solver> solver = initSolver();
   boost::shared_ptr<Model> model = initModelFromDyd(dydFileName);
   solver->init(model, tStart, tStop);
@@ -344,8 +337,8 @@ TEST(SimulationTest, testSolverIDATestBeta) {
 TEST(SimulationTest, testSolverIDAAlgebraicMode) {
   const double tStart = 0.;
   const double tStop = 3.;
-  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModel("jobs/solverTestDelta.dyd",
-  "jobs/solverTestDelta.iidm", "jobs/solverTestDelta.par", tStart, tStop);
+  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p =
+      initSolverAndModel("jobs/solverTestDelta.dyd", "jobs/solverTestDelta.iidm", "jobs/solverTestDelta.par", tStart, tStop);
   boost::shared_ptr<Solver> solver = p.first;
   boost::shared_ptr<Model> model = p.second;
 
@@ -458,8 +451,7 @@ TEST(SimulationTest, testSolverIDAAlgebraicMode) {
 TEST(SimulationTest, testSolverIDASilentZ) {
   const double tStart = 0.;
   const double tStop = 10.;
-  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSilentZ.dyd",
-                                                                                                tStart, tStop);
+  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSilentZ.dyd", tStart, tStop);
   boost::shared_ptr<Solver> solver = p.first;
   boost::shared_ptr<Model> model = p.second;
 

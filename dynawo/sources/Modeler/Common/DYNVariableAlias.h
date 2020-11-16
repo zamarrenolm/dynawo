@@ -20,13 +20,12 @@
 #ifndef MODELER_COMMON_DYNVARIABLEALIAS_H_
 #define MODELER_COMMON_DYNVARIABLEALIAS_H_
 
-#include <string>
+#include "DYNEnumUtils.h"
+#include "DYNVariable.h"
 
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
-
-#include "DYNEnumUtils.h"
-#include "DYNVariable.h"
+#include <string>
 
 namespace DYN {
 class VariableNative;
@@ -139,8 +138,8 @@ class VariableAlias : public Variable {
   void checkTypeCompatibility() const;
 
   const std::string referenceName_;  ///< the name of the (native) variable towards which the variable points
-  const bool negated_;  ///< @b whether the variable is negated
-  typeVar_t type_;  ///< Type of the variable (might be different of the reference variable, e.g. CONTINUOUS AND FLOW are both real values)
+  const bool negated_;               ///< @b whether the variable is negated
+  typeVar_t type_;                   ///< Type of the variable (might be different of the reference variable, e.g. CONTINUOUS AND FLOW are both real values)
 
   boost::optional<boost::shared_ptr<VariableNative> > referenceVariable_;  ///< the native variable towards which the alias is pointing
 };

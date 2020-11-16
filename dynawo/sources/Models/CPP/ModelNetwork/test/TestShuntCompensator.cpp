@@ -11,30 +11,28 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/ShuntCompensatorBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/components/ShuntCompensator.h>
-#include <IIDM/components/CurrentLimit.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-
-#include "DYNShuntCompensatorInterfaceIIDM.h"
-#include "DYNVoltageLevelInterfaceIIDM.h"
-#include "DYNCurrentLimitInterfaceIIDM.h"
 #include "DYNBusInterfaceIIDM.h"
-#include "DYNModelShuntCompensator.h"
-#include "DYNModelVoltageLevel.h"
+#include "DYNCurrentLimitInterfaceIIDM.h"
 #include "DYNModelBus.h"
 #include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
+#include "DYNModelShuntCompensator.h"
+#include "DYNModelVoltageLevel.h"
+#include "DYNShuntCompensatorInterfaceIIDM.h"
 #include "DYNSparseMatrix.h"
 #include "DYNVariable.h"
-
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
+
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/ShuntCompensatorBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/CurrentLimit.h>
+#include <IIDM/components/ShuntCompensator.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -55,8 +53,6 @@ createModelShuntCompensator(bool open, bool capacitor, bool initModel) {
   vlIIDM.add(bus1IIDM);
   vlIIDM.lowVoltageLimit(0.5);
   vlIIDM.highVoltageLimit(2.);
-
-
 
   IIDM::builders::ShuntCompensatorBuilder scb;
   if (capacitor)
@@ -105,7 +101,6 @@ createModelShuntCompensator(bool open, bool capacitor, bool initModel) {
   bus1->init(offset);
   return std::make_pair(sc, vl);
 }
-
 
 static const bool capacitance = true;
 static const bool reactance = false;
@@ -320,7 +315,6 @@ TEST(ModelsModelNetwork, ModelNetworkShuntCompensatorDefineInstantiate) {
     ASSERT_EQ(definedVariables[i]->getName(), var);
     ASSERT_EQ(definedVariables[i]->getType(), instantiatedVariables[i]->getType());
   }
-
 
   std::vector<ParameterModeler> parameters;
   capa->defineNonGenericParameters(parameters);

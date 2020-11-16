@@ -21,9 +21,7 @@
 
 namespace job {
 
-TimetableEntry::TimetableEntry() :
-step_(1) {
-}
+TimetableEntry::TimetableEntry() : step_(1) {}
 
 void
 TimetableEntry::setStep(int step) {

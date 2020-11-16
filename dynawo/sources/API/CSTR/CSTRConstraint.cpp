@@ -23,10 +23,7 @@ using std::string;
 
 namespace constraints {
 
-Constraint::Constraint() :
-time_(0.),
-type_(CONSTRAINT_UNDEFINED) {
-}
+Constraint::Constraint() : time_(0.), type_(CONSTRAINT_UNDEFINED) {}
 
 void
 Constraint::setTime(const double& time) {

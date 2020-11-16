@@ -14,13 +14,11 @@
 
 // Not supposed to be here if regenerated
 
-namespace DYN
-{
+namespace DYN {
 
 std::string
-ModelOmegaRef::getCheckSum() const
-{
+ModelOmegaRef::getCheckSum() const {
   return "d487af82d96d7fae56828ed551f5fad2-d487af82d96d7fae56828ed551f5fad2";
 }
 
-}
+}  // namespace DYN

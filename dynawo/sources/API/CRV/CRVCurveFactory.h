@@ -21,9 +21,9 @@
 #ifndef API_CRV_CRVCURVEFACTORY_H_
 #define API_CRV_CRVCURVEFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "CRVCurve.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace curves {
 

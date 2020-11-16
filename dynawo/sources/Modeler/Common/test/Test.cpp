@@ -16,39 +16,34 @@
  * @brief Unit tests for common Modeler methods
  *
  */
-#include <vector>
-#include <map>
-#include <sstream>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/pointer_cast.hpp>
-
+#include "DYNCommonModeler.h"
+#include "DYNConnector.h"
+#include "DYNDynamicData.h"
+#include "DYNElement.h"
+#include "DYNError.h"
+#include "DYNErrorQueue.h"
+#include "DYNModelMulti.h"
 #include "DYNParameterModeler.h"
-#include "gtest_dynawo.h"
-
-#include "DYNVariableNative.h"
-#include "DYNVariableNativeFactory.h"
+#include "DYNStaticRefInterface.h"
+#include "DYNSubModel.h"
 #include "DYNVariableAlias.h"
 #include "DYNVariableAliasFactory.h"
 #include "DYNVariableMultiple.h"
 #include "DYNVariableMultipleFactory.h"
-
-#include "DYNConnector.h"
-
-#include "DYNElement.h"
-#include "DYNCommonModeler.h"
-#include "DYNModelMulti.h"
-#include "DYNSubModel.h"
+#include "DYNVariableNative.h"
+#include "DYNVariableNativeFactory.h"
 #include "PARParametersSet.h"
 #include "PARParametersSetFactory.h"
-#include "DYNDynamicData.h"
+#include "gtest_dynawo.h"
 
-#include "DYNError.h"
-#include "DYNErrorQueue.h"
-#include "DYNStaticRefInterface.h"
+#include <boost/pointer_cast.hpp>
+#include <boost/shared_ptr.hpp>
+#include <map>
+#include <sstream>
+#include <vector>
 
-using boost::shared_ptr;
 using boost::dynamic_pointer_cast;
+using boost::shared_ptr;
 
 using parameters::ParametersSet;
 using parameters::ParametersSetFactory;
@@ -73,23 +68,23 @@ class SubModelMockBase : public SubModel {
     return "";
   }
 
-  void dumpParameters(std::map< std::string, std::string > & mapParameters) {
+  void dumpParameters(std::map<std::string, std::string>& mapParameters) {
     // Dummy class used for testing
   }
 
-  void getSubModelParameterValue(const std::string & nameParameter, double & value, bool & found) {
+  void getSubModelParameterValue(const std::string& nameParameter, double& value, bool& found) {
     // Dummy class used for testing
   }
 
-  void dumpVariables(std::map< std::string, std::string > & mapVariables) {
+  void dumpVariables(std::map<std::string, std::string>& mapVariables) {
     // Dummy class used for testing
   }
 
-  void loadParameters(const std::string &parameters) {
+  void loadParameters(const std::string& parameters) {
     // Dummy class used for testing
   }
 
-  void loadVariables(const std::string &variables) {
+  void loadVariables(const std::string& variables) {
     // Dummy class used for testing
   }
 
@@ -97,11 +92,11 @@ class SubModelMockBase : public SubModel {
     // Dummy class used for testing
   }
 
-  void evalG(const double & t) {
+  void evalG(const double& t) {
     // Dummy class used for testing
   }
 
-  void evalZ(const double & t) {
+  void evalZ(const double& t) {
     // Dummy class used for testing
   }
 
@@ -109,17 +104,17 @@ class SubModelMockBase : public SubModel {
     // Dummy class used for testing
   }
 
-  void evalJt(const double & t, const double & cj, SparseMatrix& Jt, const int& rowOffset) {
+  void evalJt(const double& t, const double& cj, SparseMatrix& Jt, const int& rowOffset) {
     // Dummy class used for testing
   }
 
-  void evalJtPrim(const double & t, const double & cj, SparseMatrix& Jt, const int& rowOffset) {
+  void evalJtPrim(const double& t, const double& cj, SparseMatrix& Jt, const int& rowOffset) {
     // Dummy class used for testing
   }
 
-  virtual modeChangeType_t evalMode(const double & t) = 0;
+  virtual modeChangeType_t evalMode(const double& t) = 0;
 
-  void checkDataCoherence(const double & t) {
+  void checkDataCoherence(const double& t) {
     // Dummy class used for testing
   }
 
@@ -175,7 +170,7 @@ class SubModelMockBase : public SubModel {
     // Dummy class used for testing
   }
 
-  void defineElements(std::vector<Element> &elements, std::map<std::string, int >& mapElement) {
+  void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement) {
     // Dummy class used for testing
   }
 
@@ -187,7 +182,7 @@ class SubModelMockBase : public SubModel {
     // Dummy class used for testing
   }
 
-  void printInitValues(const std::string & directory) {
+  void printInitValues(const std::string& directory) {
     // Dummy class used for testing
   }
 
@@ -278,14 +273,14 @@ class SubModelMode : public SubModelMockBase {
       return DIFFERENTIAL_MODE;
     else if (doubleEquals(t, 4))
       return ALGEBRAIC_J_UPDATE_MODE;
-  return NO_MODE;
+    return NO_MODE;
   }
 };
 //-----------------------------------------------------
 // TEST DYNParameter
 //-----------------------------------------------------
 
-TEST(ModelerCommonTest, ParameterUnitary) {   // Test for unitary parameters
+TEST(ModelerCommonTest, ParameterUnitary) {  // Test for unitary parameters
   // Create a vector of parameters with no values
   std::vector<ParameterModeler> parameters;
   parameters.push_back(ParameterModeler("name_bool", VAR_TYPE_BOOL, EXTERNAL_PARAMETER));
@@ -402,7 +397,7 @@ TEST(ModelerCommonTest, ParameterUnitary) {   // Test for unitary parameters
   ASSERT_THROW_DYNAWO(parameters[0].setCardinalityInformator("nbGen"), Error::MODELER, KeyError_t::ParameterUnitary);
 }
 
-TEST(ModelerCommonTest, ParameterMultipleCardinality) {   // Test for parameters with multiple cardinality
+TEST(ModelerCommonTest, ParameterMultipleCardinality) {  // Test for parameters with multiple cardinality
   // Create parameter with multiple cardinality
   ParameterModeler paramMultiBool = ParameterModeler("name_bool", VAR_TYPE_BOOL, EXTERNAL_PARAMETER, "*");
   ParameterModeler paramMultiInt = ParameterModeler("name_int", VAR_TYPE_INT, EXTERNAL_PARAMETER, "*", "nbGen");
@@ -432,7 +427,6 @@ TEST(ModelerCommonTest, ParameterMultipleCardinality) {   // Test for parameters
   ASSERT_EQ(paramMultiBoolInstance.getIsNonUnitaryParameterInstance(), true);
   ASSERT_EQ(paramMultiBool.getIsNonUnitaryParameterInstance(), false);
 
-
   // Test impossibility to set a value for a non unitary parameter
   ASSERT_THROW_DYNAWO(paramMultiBool.setValue(true, PAR), Error::MODELER, KeyError_t::ParameterNotUnitary);
   ASSERT_THROW_DYNAWO(paramMultiInt.setValue(2, PAR), Error::MODELER, KeyError_t::ParameterNotUnitary);
@@ -451,10 +445,10 @@ TEST(ModelerCommonTest, SetParameterFromPARFile) {
   boost::shared_ptr<parameters::ParametersSet> parametersSet = ParametersSetFactory::newInstance("Parameterset");
   std::string string_value = "ok";
   parametersSet->createParameter("name_bool", false)
-          ->createParameter("name_int", 2)
-          ->createParameter("name_double", 1.12)
-          ->createParameter("name_string", string_value)
-          ->createParameter("wrong_type", true);
+      ->createParameter("name_int", 2)
+      ->createParameter("name_double", 1.12)
+      ->createParameter("name_string", string_value)
+      ->createParameter("wrong_type", true);
 
   // Create unitary parameters
   ParameterModeler paramBool = ParameterModeler("name_bool", VAR_TYPE_BOOL, EXTERNAL_PARAMETER);
@@ -517,13 +511,13 @@ TEST(ModelerCommonTest, SetParametersFromPARFile) {
   boost::shared_ptr<parameters::ParametersSet> parametersSet = ParametersSetFactory::newInstance("Parameterset");
   const std::string string_value = "ok";
   parametersSet->createParameter("name_bool", false)
-          ->createParameter("name_int", 2)
-          ->createParameter("name_double", 1.12)
-          ->createParameter("name_string", string_value)
-          ->createParameter("not_unitary_int_0", 5)
-          ->createParameter("not_unitary_int_1", 6)
-          ->createParameter("not_unitary_double_0", 5.12)
-          ->createParameter("not_unitary_double_1", 6.12);
+      ->createParameter("name_int", 2)
+      ->createParameter("name_double", 1.12)
+      ->createParameter("name_string", string_value)
+      ->createParameter("not_unitary_int_0", 5)
+      ->createParameter("not_unitary_int_1", 6)
+      ->createParameter("not_unitary_double_0", 5.12)
+      ->createParameter("not_unitary_double_1", 6.12);
 
   // Create unitary parameters
   ParameterModeler paramBool = ParameterModeler("name_bool", VAR_TYPE_BOOL, EXTERNAL_PARAMETER);
@@ -637,7 +631,6 @@ TEST(ModelerCommonTest, VariableNative) {
   ASSERT_EQ(variableContinuous->getNegated(), varIsNegated);
   ASSERT_EQ(variableContinuous->isAlias(), isAlias);
 
-
   const std::string varNameFlow = "testVarFlow";
   boost::shared_ptr<VariableNative> variableFlow;
   ASSERT_NO_THROW(variableFlow = VariableNativeFactory::createState(varNameFlow, FLOW, varIsNegated));
@@ -646,7 +639,6 @@ TEST(ModelerCommonTest, VariableNative) {
   ASSERT_EQ(variableFlow->getName(), varNameFlow);
   ASSERT_EQ(variableFlow->getNegated(), varIsNegated);
   ASSERT_EQ(variableFlow->isAlias(), isAlias);
-
 
   const std::string varNameCalculated = "testVarFlow";
   boost::shared_ptr<VariableNative> variableCalc;
@@ -686,9 +678,9 @@ TEST(ModelerCommonTest, VariableAlias) {
   const std::string aliasName2 = "alias2";
   const std::string aliasName3 = "alias3";
 
-  boost::shared_ptr <VariableAlias> variableAlias1;
-  boost::shared_ptr <VariableAlias> variableAlias2;
-  boost::shared_ptr <VariableAlias> variableAlias3;
+  boost::shared_ptr<VariableAlias> variableAlias1;
+  boost::shared_ptr<VariableAlias> variableAlias2;
+  boost::shared_ptr<VariableAlias> variableAlias3;
 
   ASSERT_NO_THROW(variableAlias1 = VariableAliasFactory::create(aliasName1, varNameInt));
   ASSERT_THROW_DYNAWO(variableAlias1->getIndex(), DYN::Error::MODELER, DYN::KeyError_t::VariableAliasRefNotSet);
@@ -721,7 +713,6 @@ TEST(ModelerCommonTest, VariableAlias) {
 
   ASSERT_NO_THROW(variableInt->setIndex(varIndex));
 
-
   ASSERT_NO_THROW(variableAlias1->getIndex());
   ASSERT_EQ(variableAlias1->getIndex(), varIndex);
 
@@ -737,7 +728,7 @@ TEST(ModelerCommonTest, VariableAlias) {
   ASSERT_EQ(variableAlias3->getIndex(), varIndex);
 
 #ifndef _MSC_VER
-  EXPECT_ASSERT_DYNAWO(VariableAliasFactory::create(aliasName3, dynamic_pointer_cast<VariableNative> (variableAlias2), DISCRETE));
+  EXPECT_ASSERT_DYNAWO(VariableAliasFactory::create(aliasName3, dynamic_pointer_cast<VariableNative>(variableAlias2), DISCRETE));
 #endif
 
   // Test types compatibility
@@ -861,7 +852,6 @@ TEST(ModelerCommonTest, ConnectorsY) {
   ASSERT_EQ(connectorContainer->nbFlowConnectors(), 0);
 }
 
-
 //-----------------------------------------------------
 // TEST Modeler Common utilities
 //-----------------------------------------------------
@@ -950,7 +940,7 @@ TEST(ModelerCommonTest, testModeHandling) {
   // Create a submodel
   boost::shared_ptr<SubModelMode> subModelMode(new SubModelMode());
   subModelMode->name("SubModelName");
-  boost::shared_ptr<SubModel> subModel = boost::dynamic_pointer_cast<SubModel> (subModelMode);
+  boost::shared_ptr<SubModel> subModel = boost::dynamic_pointer_cast<SubModel>(subModelMode);
   modelMulti->addSubModel(subModel, "SubModelMode");
 
   std::vector<double> y, yp, z;
@@ -1037,30 +1027,25 @@ TEST(ModelerCommonTest, testModeHandling) {
 TEST(ModelerCommonTest, SanityCheckOnSizeYZ) {
   // Create submodel
   boost::shared_ptr<SubModelMock> submodel = boost::shared_ptr<SubModelMock>(new SubModelMock(2, 1));
-  boost::dynamic_pointer_cast< SubModel >(submodel)->defineVariables();
+  boost::dynamic_pointer_cast<SubModel>(submodel)->defineVariables();
   submodel->defineNames();
   int sizeYGlob = 0;
   int sizeZGlob = 0;
   int sizeModeGlob = 0;
   int sizeFGlob = 0;
   int sizeGGlob = 0;
-  ASSERT_THROW_DYNAWO(submodel->initSize(sizeYGlob, sizeZGlob, sizeModeGlob, sizeFGlob, sizeGGlob),
-      Error::MODELER, KeyError_t::MismatchingVariableSizes);
-
+  ASSERT_THROW_DYNAWO(submodel->initSize(sizeYGlob, sizeZGlob, sizeModeGlob, sizeFGlob, sizeGGlob), Error::MODELER, KeyError_t::MismatchingVariableSizes);
 
   submodel = boost::shared_ptr<SubModelMock>(new SubModelMock(1, 2));
-  boost::dynamic_pointer_cast< SubModel >(submodel)->defineVariables();
+  boost::dynamic_pointer_cast<SubModel>(submodel)->defineVariables();
   submodel->defineNames();
-  ASSERT_THROW_DYNAWO(submodel->initSize(sizeYGlob, sizeZGlob, sizeModeGlob, sizeFGlob, sizeGGlob),
-      Error::MODELER, KeyError_t::MismatchingVariableSizes);
-
+  ASSERT_THROW_DYNAWO(submodel->initSize(sizeYGlob, sizeZGlob, sizeModeGlob, sizeFGlob, sizeGGlob), Error::MODELER, KeyError_t::MismatchingVariableSizes);
 
   submodel = boost::shared_ptr<SubModelMock>(new SubModelMock(1, 1));
-  boost::dynamic_pointer_cast< SubModel >(submodel)->defineVariables();
+  boost::dynamic_pointer_cast<SubModel>(submodel)->defineVariables();
   submodel->defineNames();
   ASSERT_NO_THROW(submodel->initSize(sizeYGlob, sizeZGlob, sizeModeGlob, sizeFGlob, sizeGGlob));
 }
-
 
 TEST(ModelerCommonTest, CommonModeler) {
   std::map<std::string, int> mapElement;
@@ -1086,10 +1071,8 @@ TEST(ModelerCommonTest, CommonModeler) {
   ASSERT_EQ(mapElement["MyElement_MySubElement"], 1);
 
   std::string var = "@NAME@_@INDEX@";
-  ASSERT_THROW_DYNAWO(replaceMacroInVariableId("", "MyName", "Model1", "Model2", "Connector", var),
-      Error::MODELER, KeyError_t::IncompleteMacroConnection);
-  ASSERT_THROW_DYNAWO(replaceMacroInVariableId("42", "", "Model1", "Model2", "Connector", var),
-      Error::MODELER, KeyError_t::IncompleteMacroConnection);
+  ASSERT_THROW_DYNAWO(replaceMacroInVariableId("", "MyName", "Model1", "Model2", "Connector", var), Error::MODELER, KeyError_t::IncompleteMacroConnection);
+  ASSERT_THROW_DYNAWO(replaceMacroInVariableId("42", "", "Model1", "Model2", "Connector", var), Error::MODELER, KeyError_t::IncompleteMacroConnection);
   replaceMacroInVariableId("42", "MyName", "Model1", "Model2", "Connector", var);
   ASSERT_EQ(var, "MyName_42");
 }

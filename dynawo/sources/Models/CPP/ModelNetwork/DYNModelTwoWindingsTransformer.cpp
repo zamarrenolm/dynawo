@@ -26,65 +26,66 @@
  *
  * b, g, r, x shall be specified at the side 2 voltage.
  */
-#include <cmath>
-#include <cassert>
-#include "PARParametersSet.h"
-
 #include "DYNModelTwoWindingsTransformer.h"
+
+#include "DYNBusInterface.h"
 #include "DYNCommon.h"
-#include "DYNModelRatioTapChanger.h"
-#include "DYNModelPhaseTapChanger.h"
-#include "DYNModelTapChanger.h"
-#include "DYNModelBus.h"
-#include "DYNModelCurrentLimits.h"
-#include "DYNMacrosMessage.h"
-#include "DYNTrace.h"
-#include "DYNVariableForModel.h"
-#include "DYNParameter.h"
-#include "DYNDerivative.h"
-#include "DYNTwoWTransformerInterface.h"
 #include "DYNCurrentLimitInterface.h"
-#include "DYNStepInterface.h"
+#include "DYNDerivative.h"
+#include "DYNMacrosMessage.h"
+#include "DYNMessageTimeline.h"
+#include "DYNModelBus.h"
+#include "DYNModelConstants.h"
+#include "DYNModelCurrentLimits.h"
+#include "DYNModelNetwork.h"
+#include "DYNModelPhaseTapChanger.h"
+#include "DYNModelRatioTapChanger.h"
+#include "DYNModelTapChanger.h"
+#include "DYNModelVoltageLevel.h"
+#include "DYNParameter.h"
 #include "DYNPhaseTapChangerInterface.h"
 #include "DYNRatioTapChangerInterface.h"
-#include "DYNBusInterface.h"
-#include "DYNModelConstants.h"
-#include "DYNModelNetwork.h"
-#include "DYNMessageTimeline.h"
-#include "DYNModelVoltageLevel.h"
+#include "DYNStepInterface.h"
+#include "DYNTrace.h"
+#include "DYNTwoWTransformerInterface.h"
+#include "DYNVariableForModel.h"
+#include "PARParametersSet.h"
+
+#include <cassert>
+#include <cmath>
 
 using parameters::ParametersSet;
 
-using std::vector;
-using std::string;
-using std::map;
 using boost::shared_ptr;
+using std::map;
+using std::string;
+using std::vector;
 
 namespace DYN {
 
 ModelTwoWindingsTransformer::ModelTwoWindingsTransformer(const shared_ptr<TwoWTransformerInterface>& tfo) :
-NetworkComponent(tfo->getID()),
-ir1_dUr1_(0.),
-ir1_dUi1_(0.),
-ir1_dUr2_(0.),
-ir1_dUi2_(0.),
-ii1_dUr1_(0.),
-ii1_dUi1_(0.),
-ii1_dUr2_(0.),
-ii1_dUi2_(0.),
-ir2_dUr1_(0.),
-ir2_dUi1_(0.),
-ir2_dUr2_(0.),
-ir2_dUi2_(0.),
-ii2_dUr1_(0.),
-ii2_dUi1_(0.),
-ii2_dUr2_(0.),
-ii2_dUi2_(0.),
-topologyModified_(false),
-stateIndexModified_(false),
-updateYMat_(true),
-tapChangerIndex_(0),
-modelType_("TwoWindingsTransformer") {
+    NetworkComponent(tfo->getID()),
+    ir1_dUr1_(0.),
+    ir1_dUi1_(0.),
+    ir1_dUr2_(0.),
+    ir1_dUi2_(0.),
+    ii1_dUr1_(0.),
+    ii1_dUi1_(0.),
+    ii1_dUr2_(0.),
+    ii1_dUi2_(0.),
+    ir2_dUr1_(0.),
+    ir2_dUi1_(0.),
+    ir2_dUr2_(0.),
+    ir2_dUi2_(0.),
+    ii2_dUr1_(0.),
+    ii2_dUi1_(0.),
+    ii2_dUr2_(0.),
+    ii2_dUi2_(0.),
+    topologyModified_(false),
+    stateIndexModified_(false),
+    updateYMat_(true),
+    tapChangerIndex_(0),
+    modelType_("TwoWindingsTransformer") {
   // init data
   // ---------
 
@@ -240,8 +241,8 @@ modelType_("TwoWindingsTransformer") {
       currentLimits1_->addLimit(limit, cLimit1[0]->getAcceptableDuration());
     }
     for (unsigned int i = 1; i < cLimit1.size(); ++i) {
-      if (cLimit1[i-1]->getLimit() < maximumValueCurrentLimit) {
-        double limit = cLimit1[i-1]->getLimit() / factorPuToASide1_;
+      if (cLimit1[i - 1]->getLimit() < maximumValueCurrentLimit) {
+        double limit = cLimit1[i - 1]->getLimit() / factorPuToASide1_;
         currentLimits1_->addLimit(limit, cLimit1[i]->getAcceptableDuration());
       }
     }
@@ -258,8 +259,8 @@ modelType_("TwoWindingsTransformer") {
       currentLimits2_->addLimit(limit, cLimit2[0]->getAcceptableDuration());
     }
     for (unsigned int i = 1; i < cLimit2.size(); ++i) {
-      if (cLimit2[i-1]->getLimit() < maximumValueCurrentLimit) {
-        double limit = cLimit2[i-1]->getLimit() / factorPuToASide2_;
+      if (cLimit2[i - 1]->getLimit() < maximumValueCurrentLimit) {
+        double limit = cLimit2[i - 1]->getLimit() / factorPuToASide2_;
         currentLimits2_->addLimit(limit, cLimit2[i]->getAcceptableDuration());
       }
     }
@@ -391,7 +392,7 @@ ModelTwoWindingsTransformer::setFequations(std::map<int, std::string>& /*fEquati
 
 void
 ModelTwoWindingsTransformer::evalNodeInjection() {
-  if ( network_->isInitModel() ) {
+  if (network_->isInitModel()) {
     if (modelBus1_) {
       modelBus1_->irAdd(ir01_);
       modelBus1_->iiAdd(ii01_);
@@ -559,7 +560,7 @@ ModelTwoWindingsTransformer::ir1_dUi1() const {
     double B1 = b - admittance * cos(lossAngle);
     ir1_dUi1 = -rho * rho * B1;
   } else if (getConnectionState() == CLOSED_1) {
-    ir1_dUi1 = -rho * rho*b;
+    ir1_dUi1 = -rho * rho * b;
   }
   return ir1_dUi1;
 }
@@ -591,7 +592,6 @@ ModelTwoWindingsTransformer::ir1_dUi2() const {
   double alpha = getAlpha();
   double r = getR();
   double x = getX();
-
 
   double admittance = 1. / sqrt(r * r + x * x);
   double lossAngle = atan2(r, x);
@@ -864,48 +864,48 @@ ModelTwoWindingsTransformer::evalF(propertyF_t /*type*/) {
 void
 ModelTwoWindingsTransformer::evalDerivatives(const double /*cj*/) {
   switch (knownBus_) {
-    case BUS1_BUS2: {
-      int ur1YNum = modelBus1_->urYNum();
-      int ui1YNum = modelBus1_->uiYNum();
-      int ur2YNum = modelBus2_->urYNum();
-      int ui2YNum = modelBus2_->uiYNum();
-      modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ur1YNum, ir1_dUr1_);
-      modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ui1YNum, ir1_dUi1_);
-      modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ur1YNum, ii1_dUr1_);
-      modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ui1YNum, ii1_dUi1_);
-      modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ur2YNum, ir1_dUr2_);
-      modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ui2YNum, ir1_dUi2_);
-      modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ur2YNum, ii1_dUr2_);
-      modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ui2YNum, ii1_dUi2_);
+  case BUS1_BUS2: {
+    int ur1YNum = modelBus1_->urYNum();
+    int ui1YNum = modelBus1_->uiYNum();
+    int ur2YNum = modelBus2_->urYNum();
+    int ui2YNum = modelBus2_->uiYNum();
+    modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ur1YNum, ir1_dUr1_);
+    modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ui1YNum, ir1_dUi1_);
+    modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ur1YNum, ii1_dUr1_);
+    modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ui1YNum, ii1_dUi1_);
+    modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ur2YNum, ir1_dUr2_);
+    modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ui2YNum, ir1_dUi2_);
+    modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ur2YNum, ii1_dUr2_);
+    modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ui2YNum, ii1_dUi2_);
 
-      modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ur2YNum, ir2_dUr2_);
-      modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ui2YNum, ir2_dUi2_);
-      modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ur2YNum, ii2_dUr2_);
-      modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ui2YNum, ii2_dUi2_);
-      modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ur1YNum, ir2_dUr1_);
-      modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ui1YNum, ir2_dUi1_);
-      modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ur1YNum, ii2_dUr1_);
-      modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ui1YNum, ii2_dUi1_);
-      break;
-    }
-    case BUS1: {
-      int ur1YNum = modelBus1_->urYNum();
-      int ui1YNum = modelBus1_->uiYNum();
-      modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ur1YNum, ir1_dUr1_);
-      modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ui1YNum, ir1_dUi1_);
-      modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ur1YNum, ii1_dUr1_);
-      modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ui1YNum, ii1_dUi1_);
-      break;
-    }
-    case BUS2: {
-      int ur2YNum = modelBus2_->urYNum();
-      int ui2YNum = modelBus2_->uiYNum();
-      modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ur2YNum, ir2_dUr2_);
-      modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ui2YNum, ir2_dUi2_);
-      modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ur2YNum, ii2_dUr2_);
-      modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ui2YNum, ii2_dUi2_);
-      break;
-    }
+    modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ur2YNum, ir2_dUr2_);
+    modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ui2YNum, ir2_dUi2_);
+    modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ur2YNum, ii2_dUr2_);
+    modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ui2YNum, ii2_dUi2_);
+    modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ur1YNum, ir2_dUr1_);
+    modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ui1YNum, ir2_dUi1_);
+    modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ur1YNum, ii2_dUr1_);
+    modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ui1YNum, ii2_dUi1_);
+    break;
+  }
+  case BUS1: {
+    int ur1YNum = modelBus1_->urYNum();
+    int ui1YNum = modelBus1_->uiYNum();
+    modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ur1YNum, ir1_dUr1_);
+    modelBus1_->derivatives()->addDerivative(IR_DERIVATIVE, ui1YNum, ir1_dUi1_);
+    modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ur1YNum, ii1_dUr1_);
+    modelBus1_->derivatives()->addDerivative(II_DERIVATIVE, ui1YNum, ii1_dUi1_);
+    break;
+  }
+  case BUS2: {
+    int ur2YNum = modelBus2_->urYNum();
+    int ui2YNum = modelBus2_->uiYNum();
+    modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ur2YNum, ir2_dUr2_);
+    modelBus2_->derivatives()->addDerivative(IR_DERIVATIVE, ui2YNum, ir2_dUi2_);
+    modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ur2YNum, ii2_dUr2_);
+    modelBus2_->derivatives()->addDerivative(II_DERIVATIVE, ui2YNum, ii2_dUi2_);
+    break;
+  }
   }
 }
 
@@ -945,122 +945,122 @@ ModelTwoWindingsTransformer::evalJCalculatedVarI(unsigned numCalculatedVar, vect
   double Ir2 = ir2(ur1, ui1, ur2, ui2);
   double Ii2 = ii2(ur1, ui1, ur2, ui2);
   switch (numCalculatedVar) {
-    case i1Num_:
-    case iS1ToS2Side1Num_:
-    case iS2ToS1Side1Num_:
-    case iSide1Num_: {
-      double I1 = sqrt(Ii1 * Ii1 + Ir1 * Ir1);
-      double factor = 1.;
-      if (numCalculatedVar == iS1ToS2Side1Num_) {
-        double P1 = Ir1 * ur1 + Ii1 * ui1;
-        factor = sign(P1) * factorPuToASide1_;
-      } else if (numCalculatedVar == iS2ToS1Side1Num_) {
-        double P1 = Ir1 * ur1 + Ii1 * ui1;
-        factor = sign(-1 * P1) * factorPuToASide1_;
-      } else if (numCalculatedVar == iSide1Num_) {
-        factor = factorPuToASide1_;
-      }
-      if (closed1 && !doubleIsZero(I1)) {
-        res[0] = factor * (ii1_dUr1_ * Ii1 + ir1_dUr1_ * Ir1) / I1;   // dI1/dUr1
-        res[1] = factor * (ii1_dUi1_ * Ii1 + ir1_dUi1_ * Ir1) / I1;   // dI1/dUi1
-        res[2] = factor * (ii1_dUr2_ * Ii1 + ir1_dUr2_ * Ir1) / I1;   // dI1/dUr2
-        res[3] = factor * (ii1_dUi2_ * Ii1 + ir1_dUi2_ * Ir1) / I1;   // dI1/dUi2
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+  case i1Num_:
+  case iS1ToS2Side1Num_:
+  case iS2ToS1Side1Num_:
+  case iSide1Num_: {
+    double I1 = sqrt(Ii1 * Ii1 + Ir1 * Ir1);
+    double factor = 1.;
+    if (numCalculatedVar == iS1ToS2Side1Num_) {
+      double P1 = Ir1 * ur1 + Ii1 * ui1;
+      factor = sign(P1) * factorPuToASide1_;
+    } else if (numCalculatedVar == iS2ToS1Side1Num_) {
+      double P1 = Ir1 * ur1 + Ii1 * ui1;
+      factor = sign(-1 * P1) * factorPuToASide1_;
+    } else if (numCalculatedVar == iSide1Num_) {
+      factor = factorPuToASide1_;
     }
-    case i2Num_:
-    case iS2ToS1Side2Num_:
-    case iS1ToS2Side2Num_:
-    case iSide2Num_: {
-      double I2 = sqrt(Ii2 * Ii2 + Ir2 * Ir2);
-      double factor = 1.;
-      if (numCalculatedVar == iS2ToS1Side2Num_) {
-        double P2 = ur2 * Ir2 + ui2 * Ii2;
-        factor = sign(P2) * factorPuToASide2_;
-      } else if (numCalculatedVar == iS1ToS2Side2Num_) {
-        double P2 = ur2 * Ir2 + ui2 * Ii2;
-        factor = sign(-1 * P2) * factorPuToASide2_;
-      } else if (numCalculatedVar == iSide2Num_) {
-        factor = factorPuToASide2_;
-      }
-      if (closed2 && !doubleIsZero(I2)) {
-        res[0] = factor * (ii2_dUr1_ * Ii2 + ir2_dUr1_ * Ir2) / I2;   // dI2/dUr1
-        res[1] = factor * (ii2_dUi1_ * Ii2 + ir2_dUi1_ * Ir2) / I2;   // dI2/dUi1
-        res[2] = factor * (ii2_dUr2_ * Ii2 + ir2_dUr2_ * Ir2) / I2;   // dI2/dUr2
-        res[3] = factor * (ii2_dUi2_ * Ii2 + ir2_dUi2_ * Ir2) / I2;   // dI2/dUi2
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+    if (closed1 && !doubleIsZero(I1)) {
+      res[0] = factor * (ii1_dUr1_ * Ii1 + ir1_dUr1_ * Ir1) / I1;  // dI1/dUr1
+      res[1] = factor * (ii1_dUi1_ * Ii1 + ir1_dUi1_ * Ir1) / I1;  // dI1/dUi1
+      res[2] = factor * (ii1_dUr2_ * Ii1 + ir1_dUr2_ * Ir1) / I1;  // dI1/dUr2
+      res[3] = factor * (ii1_dUi2_ * Ii1 + ir1_dUi2_ * Ir1) / I1;  // dI1/dUi2
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
     }
-    case p1Num_: {
-      if (closed1) {
-        res[0] = Ir1 + ur1 * ir1_dUr1_ + ui1*ii1_dUr1_;   // dP1/dUr1
-        res[1] = ur1 * ir1_dUi1_ + Ii1 + ui1*ii1_dUi1_;   // dP1/dUi1
-        res[2] = ur1 * ir1_dUr2_ + ui1*ii1_dUr2_;   // dP1/dUr2
-        res[3] = ur1 * ir1_dUi2_ + ui1*ii1_dUi2_;   // dP1/dUi2
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+    break;
+  }
+  case i2Num_:
+  case iS2ToS1Side2Num_:
+  case iS1ToS2Side2Num_:
+  case iSide2Num_: {
+    double I2 = sqrt(Ii2 * Ii2 + Ir2 * Ir2);
+    double factor = 1.;
+    if (numCalculatedVar == iS2ToS1Side2Num_) {
+      double P2 = ur2 * Ir2 + ui2 * Ii2;
+      factor = sign(P2) * factorPuToASide2_;
+    } else if (numCalculatedVar == iS1ToS2Side2Num_) {
+      double P2 = ur2 * Ir2 + ui2 * Ii2;
+      factor = sign(-1 * P2) * factorPuToASide2_;
+    } else if (numCalculatedVar == iSide2Num_) {
+      factor = factorPuToASide2_;
     }
-    case p2Num_: {
-      if (closed2) {
-        res[0] = ur2 * ir2_dUr1_ + ui2*ii2_dUr1_;   // dP2/dUr1
-        res[1] = ur2 * ir2_dUi1_ + ui2*ii2_dUi1_;   // dP2/dUi1
-        res[2] = Ir2 + ur2 * ir2_dUr2_ + ui2*ii2_dUr2_;   // dP2/dUr2
-        res[3] = ur2 * ir2_dUi2_ + Ii2 + ui2*ii2_dUi2_;   // dP2/dUi2
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+    if (closed2 && !doubleIsZero(I2)) {
+      res[0] = factor * (ii2_dUr1_ * Ii2 + ir2_dUr1_ * Ir2) / I2;  // dI2/dUr1
+      res[1] = factor * (ii2_dUi1_ * Ii2 + ir2_dUi1_ * Ir2) / I2;  // dI2/dUi1
+      res[2] = factor * (ii2_dUr2_ * Ii2 + ir2_dUr2_ * Ir2) / I2;  // dI2/dUr2
+      res[3] = factor * (ii2_dUi2_ * Ii2 + ir2_dUi2_ * Ir2) / I2;  // dI2/dUi2
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
     }
-    case q1Num_: {
-      if (closed1) {
-        res[0] = ui1 * ir1_dUr1_ - Ii1 - ur1*ii1_dUr1_;   // dQ1/dUr1
-        res[1] = Ir1 + ui1 * ir1_dUi1_ - ur1*ii1_dUi1_;   // dQ1/dUi1
-        res[2] = ui1 * ir1_dUr2_ - ur1*ii1_dUr2_;   // dQ1/dUr2
-        res[3] = ui1 * ir1_dUi2_ - ur1*ii1_dUi2_;   // dQ1/dUi2
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+    break;
+  }
+  case p1Num_: {
+    if (closed1) {
+      res[0] = Ir1 + ur1 * ir1_dUr1_ + ui1 * ii1_dUr1_;  // dP1/dUr1
+      res[1] = ur1 * ir1_dUi1_ + Ii1 + ui1 * ii1_dUi1_;  // dP1/dUi1
+      res[2] = ur1 * ir1_dUr2_ + ui1 * ii1_dUr2_;        // dP1/dUr2
+      res[3] = ur1 * ir1_dUi2_ + ui1 * ii1_dUi2_;        // dP1/dUi2
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
     }
-    case q2Num_: {
-      if (closed2) {
-        res[0] = ui2 * ir2_dUr1_ - ur2*ii2_dUr1_;   // dQ2/dUr1
-        res[1] = ui2 * ir2_dUi1_ - ur2*ii2_dUi1_;   // dQ2/dUi1
-        res[2] = ui2 * ir2_dUr2_ - Ii2 - ur2*ii2_dUr2_;   // dQ2/dUr2
-        res[3] = Ir2 + ui2 * ir2_dUi2_ - ur2*ii2_dUi2_;   // dQ2/dUi2
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+    break;
+  }
+  case p2Num_: {
+    if (closed2) {
+      res[0] = ur2 * ir2_dUr1_ + ui2 * ii2_dUr1_;        // dP2/dUr1
+      res[1] = ur2 * ir2_dUi1_ + ui2 * ii2_dUi1_;        // dP2/dUi1
+      res[2] = Ir2 + ur2 * ir2_dUr2_ + ui2 * ii2_dUr2_;  // dP2/dUr2
+      res[3] = ur2 * ir2_dUi2_ + Ii2 + ui2 * ii2_dUi2_;  // dP2/dUi2
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
     }
-    case twtStateNum_:
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  case q1Num_: {
+    if (closed1) {
+      res[0] = ui1 * ir1_dUr1_ - Ii1 - ur1 * ii1_dUr1_;  // dQ1/dUr1
+      res[1] = Ir1 + ui1 * ir1_dUi1_ - ur1 * ii1_dUi1_;  // dQ1/dUi1
+      res[2] = ui1 * ir1_dUr2_ - ur1 * ii1_dUr2_;        // dQ1/dUr2
+      res[3] = ui1 * ir1_dUi2_ - ur1 * ii1_dUi2_;        // dQ1/dUi2
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
+    }
+    break;
+  }
+  case q2Num_: {
+    if (closed2) {
+      res[0] = ui2 * ir2_dUr1_ - ur2 * ii2_dUr1_;        // dQ2/dUr1
+      res[1] = ui2 * ir2_dUi1_ - ur2 * ii2_dUi1_;        // dQ2/dUi1
+      res[2] = ui2 * ir2_dUr2_ - Ii2 - ur2 * ii2_dUr2_;  // dQ2/dUr2
+      res[3] = Ir2 + ui2 * ir2_dUi2_ - ur2 * ii2_dUi2_;  // dQ2/dUi2
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
+    }
+    break;
+  }
+  case twtStateNum_:
+    break;
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
@@ -1153,7 +1153,7 @@ ModelTwoWindingsTransformer::evalZ(const double& t) {
 
   if (modelRatioChanger_ && modelBusMonitored_) {
     modelRatioChanger_->evalZ(t, &(g_[offsetRoot]), network_, disableInternalTapChanger_, modelBusMonitored_->getSwitchOff(), tapChangerLocked_,
-        getConnectionState() == CLOSED);
+                              getConnectionState() == CLOSED);
     offsetRoot += modelRatioChanger_->sizeG();
   }
 
@@ -1209,79 +1209,79 @@ ModelTwoWindingsTransformer::evalZ(const double& t) {
           throw DYNError(Error::MODELER, UnsupportedComponentState, id_);
         }
         break;
-        case CLOSED:
-          switch (getConnectionState()) {
-          case OPEN:
-            network_->addEvent(id_, DYNTimeline(TwoWTFOClosed));
-            modelBus1_->getVoltageLevel()->connectNode(modelBus1_->getBusIndex());
-            modelBus2_->getVoltageLevel()->connectNode(modelBus2_->getBusIndex());
-            break;
-          case CLOSED:
-            break;
-          case CLOSED_1:
-            network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide2));
-            modelBus2_->getVoltageLevel()->connectNode(modelBus2_->getBusIndex());
-            break;
-          case CLOSED_2:
-            network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide1));
-            modelBus1_->getVoltageLevel()->connectNode(modelBus1_->getBusIndex());
-            break;
-          case CLOSED_3:
-            throw DYNError(Error::MODELER, NoThirdSide, id_);
-          case UNDEFINED_STATE:
-            throw DYNError(Error::MODELER, UnsupportedComponentState, id_);
-          }
+      case CLOSED:
+        switch (getConnectionState()) {
+        case OPEN:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOClosed));
+          modelBus1_->getVoltageLevel()->connectNode(modelBus1_->getBusIndex());
+          modelBus2_->getVoltageLevel()->connectNode(modelBus2_->getBusIndex());
           break;
-          case CLOSED_1:
-            switch (getConnectionState()) {
-            case OPEN:
-              network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide1));
-              modelBus1_->getVoltageLevel()->connectNode(modelBus1_->getBusIndex());
-              break;
-            case CLOSED:
-              network_->addEvent(id_, DYNTimeline(TwoWTFOOpenSide2));
-              modelBus2_->getVoltageLevel()->disconnectNode(modelBus2_->getBusIndex());
-              break;
-            case CLOSED_1:
-              break;
-            case CLOSED_2:
-              network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide1));
-              network_->addEvent(id_, DYNTimeline(TwoWTFOOpenSide2));
-              modelBus1_->getVoltageLevel()->connectNode(modelBus1_->getBusIndex());
-              modelBus2_->getVoltageLevel()->disconnectNode(modelBus2_->getBusIndex());
-              break;
-            case CLOSED_3:
-              throw DYNError(Error::MODELER, NoThirdSide, id_);
-            case UNDEFINED_STATE:
-              throw DYNError(Error::MODELER, UnsupportedComponentState, id_);
-            }
-            break;
-            case CLOSED_2:
-              switch (getConnectionState()) {
-              case OPEN:
-                network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide2));
-                modelBus2_->getVoltageLevel()->connectNode(modelBus2_->getBusIndex());
-                break;
-              case CLOSED:
-                network_->addEvent(id_, DYNTimeline(TwoWTFOOpenSide1));
-                modelBus1_->getVoltageLevel()->disconnectNode(modelBus1_->getBusIndex());
-                break;
-              case CLOSED_1:
-                network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide2));
-                network_->addEvent(id_, DYNTimeline(TwoWTFOOpenSide1));
-                modelBus1_->getVoltageLevel()->disconnectNode(modelBus1_->getBusIndex());
-                modelBus2_->getVoltageLevel()->connectNode(modelBus2_->getBusIndex());
-                break;
-              case CLOSED_2:
-                break;
-              case CLOSED_3:
-                throw DYNError(Error::MODELER, NoThirdSide, id_);
-              case UNDEFINED_STATE:
-                throw DYNError(Error::MODELER, UnsupportedComponentState, id_);
-              }
-              break;
-              case CLOSED_3:
-                throw DYNError(Error::MODELER, NoThirdSide, id_);
+        case CLOSED:
+          break;
+        case CLOSED_1:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide2));
+          modelBus2_->getVoltageLevel()->connectNode(modelBus2_->getBusIndex());
+          break;
+        case CLOSED_2:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide1));
+          modelBus1_->getVoltageLevel()->connectNode(modelBus1_->getBusIndex());
+          break;
+        case CLOSED_3:
+          throw DYNError(Error::MODELER, NoThirdSide, id_);
+        case UNDEFINED_STATE:
+          throw DYNError(Error::MODELER, UnsupportedComponentState, id_);
+        }
+        break;
+      case CLOSED_1:
+        switch (getConnectionState()) {
+        case OPEN:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide1));
+          modelBus1_->getVoltageLevel()->connectNode(modelBus1_->getBusIndex());
+          break;
+        case CLOSED:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOOpenSide2));
+          modelBus2_->getVoltageLevel()->disconnectNode(modelBus2_->getBusIndex());
+          break;
+        case CLOSED_1:
+          break;
+        case CLOSED_2:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide1));
+          network_->addEvent(id_, DYNTimeline(TwoWTFOOpenSide2));
+          modelBus1_->getVoltageLevel()->connectNode(modelBus1_->getBusIndex());
+          modelBus2_->getVoltageLevel()->disconnectNode(modelBus2_->getBusIndex());
+          break;
+        case CLOSED_3:
+          throw DYNError(Error::MODELER, NoThirdSide, id_);
+        case UNDEFINED_STATE:
+          throw DYNError(Error::MODELER, UnsupportedComponentState, id_);
+        }
+        break;
+      case CLOSED_2:
+        switch (getConnectionState()) {
+        case OPEN:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide2));
+          modelBus2_->getVoltageLevel()->connectNode(modelBus2_->getBusIndex());
+          break;
+        case CLOSED:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOOpenSide1));
+          modelBus1_->getVoltageLevel()->disconnectNode(modelBus1_->getBusIndex());
+          break;
+        case CLOSED_1:
+          network_->addEvent(id_, DYNTimeline(TwoWTFOCloseSide2));
+          network_->addEvent(id_, DYNTimeline(TwoWTFOOpenSide1));
+          modelBus1_->getVoltageLevel()->disconnectNode(modelBus1_->getBusIndex());
+          modelBus2_->getVoltageLevel()->connectNode(modelBus2_->getBusIndex());
+          break;
+        case CLOSED_2:
+          break;
+        case CLOSED_3:
+          throw DYNError(Error::MODELER, NoThirdSide, id_);
+        case UNDEFINED_STATE:
+          throw DYNError(Error::MODELER, UnsupportedComponentState, id_);
+        }
+        break;
+      case CLOSED_3:
+        throw DYNError(Error::MODELER, NoThirdSide, id_);
       }
       setConnectionState(static_cast<State>(static_cast<int>(z_[connectionStateNum_])));
     }
@@ -1453,8 +1453,7 @@ ModelTwoWindingsTransformer::setGequations(std::map<int, std::string>& gEquation
     }
   }
 
-
-  assert(gEquationIndex.size() == (unsigned int) sizeG_ && "Model TwoWindingsTransformer: gEquationIndex.size() != sizeG_");
+  assert(gEquationIndex.size() == (unsigned int)sizeG_ && "Model TwoWindingsTransformer: gEquationIndex.size() != sizeG_");
 }
 
 double
@@ -1481,17 +1480,17 @@ ModelTwoWindingsTransformer::evalCalculatedVars() {
   double iiBus1 = ii1(ur1Val, ui1Val, ur2Val, ui2Val);
   double irBus2 = ir2(ur1Val, ui1Val, ur2Val, ui2Val);
   double iiBus2 = ii2(ur1Val, ui1Val, ur2Val, ui2Val);
-  double P1 = ur1Val * irBus1 + ui1Val * iiBus1;   // in p.u., because u and iBus in p.u.
+  double P1 = ur1Val * irBus1 + ui1Val * iiBus1;  // in p.u., because u and iBus in p.u.
   double P2 = ur2Val * irBus2 + ui2Val * iiBus2;
   int signP1 = sign(P1);
   int signP2 = sign(P2);
 
   calculatedVars_[i1Num_] = sqrt(irBus1 * irBus1 + iiBus1 * iiBus1);  // Current side 1
   calculatedVars_[i2Num_] = sqrt(irBus2 * irBus2 + iiBus2 * iiBus2);  // Current side 2
-  calculatedVars_[p1Num_] = P1;  // Active power side 1
-  calculatedVars_[p2Num_] = P2;  // Active power side 2
-  calculatedVars_[q1Num_] = (irBus1 * ui1Val - iiBus1 * ur1Val);  // Reactive power side 1
-  calculatedVars_[q2Num_] = (irBus2 * ui2Val - iiBus2 * ur2Val);  // Reactive power side 2
+  calculatedVars_[p1Num_] = P1;                                       // Active power side 1
+  calculatedVars_[p2Num_] = P2;                                       // Active power side 2
+  calculatedVars_[q1Num_] = (irBus1 * ui1Val - iiBus1 * ur1Val);      // Reactive power side 1
+  calculatedVars_[q2Num_] = (irBus2 * ui2Val - iiBus2 * ur2Val);      // Reactive power side 2
 
   calculatedVars_[iS1ToS2Side1Num_] = signP1 * calculatedVars_[i1Num_] * factorPuToASide1_;
   calculatedVars_[iS2ToS1Side1Num_] = -1. * calculatedVars_[iS1ToS2Side1Num_];
@@ -1506,44 +1505,44 @@ ModelTwoWindingsTransformer::evalCalculatedVars() {
 void
 ModelTwoWindingsTransformer::getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, vector<int>& numVars) const {
   switch (numCalculatedVar) {
-    case i1Num_:
-    case i2Num_:
-    case p1Num_:
-    case p2Num_:
-    case q1Num_:
-    case q2Num_:
-    case iS1ToS2Side1Num_:
-    case iS2ToS1Side1Num_:
-    case iS1ToS2Side2Num_:
-    case iS2ToS1Side2Num_:
-    case iSide1Num_:
-    case iSide2Num_: {
-      switch (knownBus_) {
-        case BUS1_BUS2: {
-          numVars.push_back(modelBus1_->urYNum());
-          numVars.push_back(modelBus1_->uiYNum());
-          numVars.push_back(modelBus2_->urYNum());
-          numVars.push_back(modelBus2_->uiYNum());
-          break;
-        }
-        case BUS1: {
-          numVars.push_back(modelBus1_->urYNum());
-          numVars.push_back(modelBus1_->uiYNum());
-          break;
-        }
-        case BUS2: {
-          numVars.push_back(modelBus2_->urYNum());
-          numVars.push_back(modelBus2_->uiYNum());
-          break;
-        }
-      }
+  case i1Num_:
+  case i2Num_:
+  case p1Num_:
+  case p2Num_:
+  case q1Num_:
+  case q2Num_:
+  case iS1ToS2Side1Num_:
+  case iS2ToS1Side1Num_:
+  case iS1ToS2Side2Num_:
+  case iS2ToS1Side2Num_:
+  case iSide1Num_:
+  case iSide2Num_: {
+    switch (knownBus_) {
+    case BUS1_BUS2: {
+      numVars.push_back(modelBus1_->urYNum());
+      numVars.push_back(modelBus1_->uiYNum());
+      numVars.push_back(modelBus2_->urYNum());
+      numVars.push_back(modelBus2_->uiYNum());
       break;
     }
-    case twtStateNum_:
+    case BUS1: {
+      numVars.push_back(modelBus1_->urYNum());
+      numVars.push_back(modelBus1_->uiYNum());
       break;
+    }
+    case BUS2: {
+      numVars.push_back(modelBus2_->urYNum());
+      numVars.push_back(modelBus2_->uiYNum());
+      break;
+    }
+    }
+    break;
+  }
+  case twtStateNum_:
+    break;
 
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
@@ -1584,47 +1583,47 @@ ModelTwoWindingsTransformer::evalCalculatedVarI(unsigned numCalculatedVar) const
   int signP1 = sign(P1);
   int signP2 = sign(P2);
   switch (numCalculatedVar) {
-    case i1Num_:
-      output = sqrt(Ir1 * Ir1 + Ii1 * Ii1);
-      break;
-    case iS1ToS2Side1Num_:
-      output = signP1 * factorPuToASide1_ * sqrt(Ir1 * Ir1 + Ii1 * Ii1);
-      break;
-    case iS2ToS1Side1Num_:
-      output = -1 * signP1 * factorPuToASide1_ * sqrt(Ir1 * Ir1 + Ii1 * Ii1);
-      break;
-    case iSide1Num_:
-      output = factorPuToASide1_ * sqrt(Ir1 * Ir1 + Ii1 * Ii1);
-      break;
-    case i2Num_:
-      output = sqrt(Ir2 * Ir2 + Ii2 * Ii2);
-      break;
-    case iS2ToS1Side2Num_:
-      output = signP2 * factorPuToASide2_ * sqrt(Ir2 * Ir2 + Ii2 * Ii2);
-      break;
-    case iS1ToS2Side2Num_:
-      output = -1 * signP2 * factorPuToASide2_ * sqrt(Ir2 * Ir2 + Ii2 * Ii2);
-      break;
-    case iSide2Num_:
-      output = factorPuToASide2_ * sqrt(Ir2 * Ir2 + Ii2 * Ii2);
-      break;
-    case p1Num_:
-      output = (ur1 * Ir1 + ui1 * Ii1);
-      break;
-    case p2Num_:
-      output = (ur2 * Ir2 + ui2 * Ii2);
-      break;
-    case q1Num_:
-      output = (ui1 * Ir1 - ur1 * Ii1);
-      break;
-    case q2Num_:
-      output = (ui2 * Ir2 - ur2 * Ii2);
-      break;
-    case twtStateNum_:
-      output = getConnectionState();
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
+  case i1Num_:
+    output = sqrt(Ir1 * Ir1 + Ii1 * Ii1);
+    break;
+  case iS1ToS2Side1Num_:
+    output = signP1 * factorPuToASide1_ * sqrt(Ir1 * Ir1 + Ii1 * Ii1);
+    break;
+  case iS2ToS1Side1Num_:
+    output = -1 * signP1 * factorPuToASide1_ * sqrt(Ir1 * Ir1 + Ii1 * Ii1);
+    break;
+  case iSide1Num_:
+    output = factorPuToASide1_ * sqrt(Ir1 * Ir1 + Ii1 * Ii1);
+    break;
+  case i2Num_:
+    output = sqrt(Ir2 * Ir2 + Ii2 * Ii2);
+    break;
+  case iS2ToS1Side2Num_:
+    output = signP2 * factorPuToASide2_ * sqrt(Ir2 * Ir2 + Ii2 * Ii2);
+    break;
+  case iS1ToS2Side2Num_:
+    output = -1 * signP2 * factorPuToASide2_ * sqrt(Ir2 * Ir2 + Ii2 * Ii2);
+    break;
+  case iSide2Num_:
+    output = factorPuToASide2_ * sqrt(Ir2 * Ir2 + Ii2 * Ii2);
+    break;
+  case p1Num_:
+    output = (ur1 * Ir1 + ui1 * Ii1);
+    break;
+  case p2Num_:
+    output = (ur2 * Ir2 + ui2 * Ii2);
+    break;
+  case q1Num_:
+    output = (ui1 * Ir1 - ur1 * Ii1);
+    break;
+  case q2Num_:
+    output = (ui2 * Ir2 - ur2 * Ii2);
+    break;
+  case twtStateNum_:
+    output = getConnectionState();
+    break;
+  default:
+    throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
   }
   return output;
 }

@@ -20,12 +20,12 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELTAPCHANGER_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELTAPCHANGER_H_
 
-#include <vector>
-#include <string>
-
 #include "DYNEnumUtils.h"
 #include "DYNMacrosMessage.h"
 #include "DYNModelTapChangerStep.h"
+
+#include <string>
+#include <vector>
 
 namespace DYN {
 class ModelNetwork;
@@ -41,14 +41,14 @@ class ModelTapChanger {
    * @param id : name of the tap changer
    * @param lowIndex : index of first step being kept inside model
    */
-  inline explicit ModelTapChanger(const std::string& id, int lowIndex)
-      : id_(id),
-        currentStepIndex_(0),
-        regulating_(false),
-        lowStepIndex_(lowIndex),
-        highStepIndex_(0),
-        tFirst_(60),
-        tNext_(10) {}
+  inline explicit ModelTapChanger(const std::string& id, int lowIndex) :
+      id_(id),
+      currentStepIndex_(0),
+      regulating_(false),
+      lowStepIndex_(lowIndex),
+      highStepIndex_(0),
+      tFirst_(60),
+      tNext_(10) {}
 
   /**
    * @brief destructor
@@ -59,7 +59,9 @@ class ModelTapChanger {
    * @brief  return the name of the tap changer
    * @return name of the tap changer
    */
-  inline const std::string& id() const { return id_; }
+  inline const std::string& id() const {
+    return id_;
+  }
 
   /**
    * @brief return the step associated to the index
@@ -69,7 +71,7 @@ class ModelTapChanger {
   inline const TapChangerStep& getStep(int index) const {
     try {
       return steps_.at(index - getLowStepIndex());
-    } catch ( const std::out_of_range &) {
+    } catch (const std::out_of_range&) {
       throw DYNError(Error::MODELER, UndefinedStep, index, id_);
     }
   }
@@ -94,89 +96,112 @@ class ModelTapChanger {
    * @brief  return the name of the tap changer
    * @return name of the tap changer
    */
-  inline size_t size() const { return steps_.size(); }
+  inline size_t size() const {
+    return steps_.size();
+  }
 
   /**
    * @brief  set the current step to a new index
    * @param index
    */
-  inline void setCurrentStepIndex(int index) { currentStepIndex_ = index; }
+  inline void setCurrentStepIndex(int index) {
+    currentStepIndex_ = index;
+  }
 
   /**
    * @brief   get the current step index
    * @return current step index
    */
-  inline int getCurrentStepIndex() const { return currentStepIndex_; }
+  inline int getCurrentStepIndex() const {
+    return currentStepIndex_;
+  }
 
   /**
    * @brief   get the lowest step index
    * lowStepIndex_ is set by the ctor and cannot be changed
    * @return index
    */
-  inline int getLowStepIndex() const { return lowStepIndex_; }
+  inline int getLowStepIndex() const {
+    return lowStepIndex_;
+  }
 
   /**
    * @brief   get the highest step index
    * @return index
    */
-  inline int getHighStepIndex() const { return highStepIndex_; }
+  inline int getHighStepIndex() const {
+    return highStepIndex_;
+  }
 
   /**
    * @brief  set the highest step index
    * @param index
    */
-  inline void setHighStepIndex(int index) { highStepIndex_ = index; }
+  inline void setHighStepIndex(int index) {
+    highStepIndex_ = index;
+  }
 
   /**
    * @brief get if the tap changer is regulating
    * @return regulating
    */
-  inline bool getRegulating() const { return regulating_; }
+  inline bool getRegulating() const {
+    return regulating_;
+  }
 
   /**
    * @brief set if the tap changer is regulating
    * @param regulating
    */
-  inline void setRegulating(bool regulating) { regulating_ = regulating; }
+  inline void setRegulating(bool regulating) {
+    regulating_ = regulating;
+  }
 
   /**
    * @brief   get the time to wait before changing of step for the first time
    * @return time
    */
-  inline double getTFirst() const { return tFirst_; }
+  inline double getTFirst() const {
+    return tFirst_;
+  }
 
   /**
    * @brief   set the time to wait before changing of step for the first time
    * @param time
    */
-  inline void setTFirst(double time) { tFirst_ = time; }
+  inline void setTFirst(double time) {
+    tFirst_ = time;
+  }
 
   /**
    * @brief   get the time to wait before changing of step if it's not the first
    * time
    * @return time
    */
-  inline double getTNext() const { return tNext_; }
+  inline double getTNext() const {
+    return tNext_;
+  }
 
   /**
    * @brief  set the time to wait before changing of step if it's not the first
    * time
    * @param time
    */
-  inline void setTNext(double time) { tNext_ = time; }
+  inline void setTNext(double time) {
+    tNext_ = time;
+  }
 
  private:
-  std::string id_;  ///< id of the tap changer
-  std::vector<TapChangerStep>
-      steps_;             ///< vector of TapChangerStep
-  int currentStepIndex_;  ///< index of the current step
-  bool regulating_;       ///< is the tapChanger regulating ?
-  const int lowStepIndex_;      ///< Lowest step
-  int highStepIndex_;     ///< Highest step
-  double tFirst_;  ///< time to wait before changing of step for the first time
-  double tNext_;   ///< time to wait before changing of step if it's not the
-                   ///< first time
-};                 // class ModelTapChanger
+  std::string id_;                     ///< id of the tap changer
+  std::vector<TapChangerStep> steps_;  ///< vector of TapChangerStep
+  int currentStepIndex_;               ///< index of the current step
+  bool regulating_;                    ///< is the tapChanger regulating ?
+  const int lowStepIndex_;             ///< Lowest step
+  int highStepIndex_;                  ///< Highest step
+  double tFirst_;                      ///< time to wait before changing of step for the first time
+  double tNext_;                       ///< time to wait before changing of step if it's not the
+                                       ///< first time
+};                                     // class ModelTapChanger
 }  // namespace DYN
 
 #endif  // MODELS_CPP_MODELNETWORK_DYNMODELTAPCHANGER_H_

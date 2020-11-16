@@ -20,15 +20,15 @@
 #ifndef MODELER_MODELMANAGER_DYNMODELMANAGER_H_
 #define MODELER_MODELMANAGER_DYNMODELMANAGER_H_
 
-#include <vector>
-#include <set>
-#include <map>
-#include <boost/core/noncopyable.hpp>
-
 #include "DYNDelayManager.h"
-#include "DYNSubModel.h"
 #include "DYNModelManagerCommon.h"
+#include "DYNSubModel.h"
 #include "DYNVariableAlias.h"
+
+#include <boost/core/noncopyable.hpp>
+#include <map>
+#include <set>
+#include <vector>
 
 #ifdef _ADEPT_
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -79,39 +79,39 @@ class ModelManager : public SubModel, private boost::noncopyable {
   /**
    * @copydoc SubModel::evalG(const double &t)
    */
-  void evalG(const double &t);
+  void evalG(const double& t);
 
   /**
    * @copydoc SubModel::evalZ(const double &t)
    */
-  void evalZ(const double & t);
+  void evalZ(const double& t);
 
   /**
    * @copydoc SubModel::evalMode(const double &t);
    */
   //--------------------------------------------------------------------
-  modeChangeType_t evalMode(const double & t);
+  modeChangeType_t evalMode(const double& t);
 
   /**
    * @copydoc SubModel::evalJt(const double &t,const double & cj, SparseMatrix& Jt, const int& rowOffset)
    */
-  void evalJt(const double &t, const double & cj, SparseMatrix& Jt, const int& rowOffset);
+  void evalJt(const double& t, const double& cj, SparseMatrix& Jt, const int& rowOffset);
 
   /**
    * @copydoc SubModel::evalJtPrim(const double &t,const double & cj, SparseMatrix& Jt, const int& rowOffset)
    */
-  void evalJtPrim(const double &t, const double & cj, SparseMatrix& Jt, const int& rowOffset);
+  void evalJtPrim(const double& t, const double& cj, SparseMatrix& Jt, const int& rowOffset);
   /**
    * @brief copy Z to local data
    *
    * @param z discretes values to copy
    */
-  void evalZ(std::vector<double> &z);
+  void evalZ(std::vector<double>& z);
 
   /**
    * @copydoc SubModel::checkDataCoherence (const double & t)
    */
-  void checkDataCoherence(const double & t);
+  void checkDataCoherence(const double& t);
 
   /**
    * @copydoc SubModel::checkParametersCoherence() const
@@ -156,7 +156,8 @@ class ModelManager : public SubModel, private boost::noncopyable {
   /**
    * @copydoc SubModel::updateFType()
    */
-  void updateFType() { /* not yet supported for Modelica models */}
+  void updateFType() { /* not yet supported for Modelica models */
+  }
 
   /**
    * @copydoc SubModel::getY0()
@@ -171,17 +172,18 @@ class ModelManager : public SubModel, private boost::noncopyable {
   /**
    * @copydoc SubModel::updateYType()
    */
-  void updateYType() { /* not yet supported for Modelica models */}
+  void updateYType() { /* not yet supported for Modelica models */
+  }
 
   /**
    * @copydoc SubModel::dumpParameters(std::map< std::string, std::string > & mapParameters)
    */
-  void dumpParameters(std::map< std::string, std::string > & mapParameters);
+  void dumpParameters(std::map<std::string, std::string>& mapParameters);
 
   /**
    * @copydoc SubModel::dumpVariables(std::map< std::string, std::string > & mapVariables)
    */
-  void dumpVariables(std::map< std::string, std::string > & mapVariables);
+  void dumpVariables(std::map<std::string, std::string>& mapVariables);
 
   /**
    * @brief write the final parameters values (relying on low level Modelica data structures)
@@ -192,17 +194,17 @@ class ModelManager : public SubModel, private boost::noncopyable {
   /**
    * @copydoc SubModel::getSubModelParameterValue(const std::string & nameParameter, double & value, bool & found)
    */
-  void getSubModelParameterValue(const std::string & nameParameter, double & value, bool & found);
+  void getSubModelParameterValue(const std::string& nameParameter, double& value, bool& found);
 
   /**
    * @copydoc SubModel::loadParameters(const std::string & parameters)
    */
-  void loadParameters(const std::string & parameters);
+  void loadParameters(const std::string& parameters);
 
   /**
    * @copydoc SubModel::loadVariables(const std::string & variables)
    */
-  void loadVariables(const std::string & variables);
+  void loadVariables(const std::string& variables);
 
   /**
    * @copydoc SubModel::initParams();
@@ -212,7 +214,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
   /**
    * @copydoc SubModel::printInitValues(const std::string & directory)
    */
-  void printInitValues(const std::string & directory);
+  void printInitValues(const std::string& directory);
 
   /**
    * @copydoc SubModel::modelType() const
@@ -233,7 +235,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @copydoc SubModel::defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement)
    */
   //---------------------------------------------------------------------
-  void defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement);
+  void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement);
 
   /**
    * @brief evaluate the value of a calculated variable
@@ -249,7 +251,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @param iCalculatedVar index of the calculated variable
    * @param res values of the jacobian
    */
-  void evalJCalculatedVarI(unsigned iCalculatedVar, std::vector<double> & res) const;
+  void evalJCalculatedVarI(unsigned iCalculatedVar, std::vector<double>& res) const;
 
   /**
    * @brief get the global indexes of the variables used to compute a calculated variable
@@ -288,12 +290,13 @@ class ModelManager : public SubModel, private boost::noncopyable {
   /**
    * @copydoc SubModel::initializeFromData(const boost::shared_ptr<DataInterface> &data)
    */
-  void initializeFromData(const boost::shared_ptr<DataInterface> &data);
+  void initializeFromData(const boost::shared_ptr<DataInterface>& data);
 
   /**
    * @copydoc SubModel::setSubModelParameters()
    */
-  void setSubModelParameters() { /* no parameter */ }
+  void setSubModelParameters() { /* no parameter */
+  }
 
   /**
    * @brief set the submodel shared parameters value
@@ -313,7 +316,8 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @copydoc SubModel::setSharedParametersDefaultValuesInit()
    */
   inline void setSharedParametersDefaultValuesInit() {
-    if (hasInit()) setSharedParametersDefaultValues(true, MO);
+    if (hasInit())
+      setSharedParametersDefaultValues(true, MO);
   }
 
   /**
@@ -360,7 +364,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @param yp current values of the derivative of the continuous variables
    * @param f values of the residual functions
    */
-  void evalF(const double & t, const std::vector<adept::adouble> &y, const std::vector<adept::adouble> &yp, std::vector<adept::adouble> &f);
+  void evalF(const double& t, const std::vector<adept::adouble>& y, const std::vector<adept::adouble>& yp, std::vector<adept::adouble>& f);
 
   /**
    * @brief evaluate the jacobian with adept values
@@ -373,7 +377,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @param rowOffset offset to use when filling the jacobian structure
    * @param complete @b true if \f$( J=@F/@x + cj * @F/@x')\f$ else \f$( J = @F/@x')\f$
    */
-  void evalJtAdept(const double & t, double *y, double* yp, const double& cj, SparseMatrix &Jt, const int& rowOffset, bool complete = true);
+  void evalJtAdept(const double& t, double* y, double* yp, const double& cj, SparseMatrix& Jt, const int& rowOffset, bool complete = true);
 #endif
 
   /**
@@ -386,7 +390,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @brief set the current time
    * @param st time to set
    */
-  void setManagerTime(const double &st);
+  void setManagerTime(const double& st);
 
   /**
    * @brief calculate the values of the parameters
@@ -504,7 +508,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @param parametersSet the parameters' set to fill
    */
   void createParametersValueSet(const boost::unordered_map<std::string, ParameterModeler>& parameters,
-      boost::shared_ptr<parameters::ParametersSet> parametersSet);
+                                boost::shared_ptr<parameters::ParametersSet> parametersSet);
 
  protected:
   /**
@@ -514,11 +518,11 @@ class ModelManager : public SubModel, private boost::noncopyable {
   virtual bool hasInit() const = 0;
 
  protected:
-  ModelModelica * modelInit_;  ///< dynamic init model
-  ModelModelica * modelDyn_;  ///< dynamic model
-  DYNDATA * dataInit_;  ///< dynamic data for init model
-  DYNDATA * dataDyn_;  ///< dynamic data
-  std::string modelType_;  ///< model type
+  ModelModelica* modelInit_;   ///< dynamic init model
+  ModelModelica* modelDyn_;    ///< dynamic model
+  DYNDATA* dataInit_;          ///< dynamic data for init model
+  DYNDATA* dataDyn_;           ///< dynamic data
+  std::string modelType_;      ///< model type
   DelayManager delayManager_;  ///< manager of delayed values
 
  private:
@@ -529,7 +533,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * otherwise return the dynamic data for the standard model
    * @return an instance of DYNDATA
    */
-  DYNDATA * data() const;
+  DYNDATA* data() const;
 
   /**
    * @brief returns the relevant instance of MODEL_DATA
@@ -538,7 +542,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * otherwise return the model data for the standard model
    * @return an instance of MODEL_DATA
    */
-  MODEL_DATA * modelData() const;
+  MODEL_DATA* modelData() const;
 
   /**
    * @brief returns the relevant instance of SIMULATION_INFO
@@ -547,7 +551,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * otherwise return the simulation info for the standard model
    * @return an instance of SIMULATION_INFO
    */
-  SIMULATION_INFO * simulationInfo() const;
+  SIMULATION_INFO* simulationInfo() const;
 
   /**
    * @brief returns the initialisation Modelica model
@@ -555,14 +559,14 @@ class ModelManager : public SubModel, private boost::noncopyable {
    *
    * @return the initialisation Modelica model
    */
-  ModelModelica * modelModelicaInit() const;
+  ModelModelica* modelModelicaInit() const;
   /**
    * @brief returns the standard (not the initialisation) Modelica model
    *
    *
    * @return the standard Modelica model
    */
-  ModelModelica * modelModelicaDynamic() const;
+  ModelModelica* modelModelicaDynamic() const;
   /**
    * @brief returns the relevant Modelica model
    *
@@ -570,7 +574,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * otherwise return the standard model
    * @return a Modelica model
    */
-  ModelModelica * modelModelica() const;
+  ModelModelica* modelModelica() const;
 
   /**
    * @brief associate modelica buffers to subModel buffers
@@ -582,16 +586,14 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @param y continuous values to use
    * @param reversedAlias reference variable name to alias variables map
    */
-  void setYCalculatedParameters(std::vector<double>& y,
-      const std::map<std::string, std::vector< boost::shared_ptr <VariableAlias> > >& reversedAlias);
+  void setYCalculatedParameters(std::vector<double>& y, const std::map<std::string, std::vector<boost::shared_ptr<VariableAlias> > >& reversedAlias);
 
   /**
    * @brief set the values of z calculated parameters
    * @param z discrete values to use
    * @param reversedAlias reference variable name to alias variables map
    */
-  void setZCalculatedParameters(std::vector<double>& z,
-      const std::map<std::string, std::vector< boost::shared_ptr <VariableAlias> > >& reversedAlias);
+  void setZCalculatedParameters(std::vector<double>& z, const std::map<std::string, std::vector<boost::shared_ptr<VariableAlias> > >& reversedAlias);
 
   /**
    * @brief read calculated variables and create calculated parameters from them
@@ -599,7 +601,7 @@ class ModelManager : public SubModel, private boost::noncopyable {
    * @param reversedAlias reference variable name to alias variables map
    */
   void createCalculatedParametersFromInitialCalculatedVariables(const std::vector<double>& calculatedVars,
-      const std::map<std::string, std::vector< boost::shared_ptr <VariableAlias> > >& reversedAlias);
+                                                                const std::map<std::string, std::vector<boost::shared_ptr<VariableAlias> > >& reversedAlias);
 
   /**
    * @brief set the values of initial parameters

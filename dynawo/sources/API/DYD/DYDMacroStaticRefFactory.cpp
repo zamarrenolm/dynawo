@@ -18,6 +18,7 @@
  */
 
 #include "DYDMacroStaticRefFactory.h"
+
 #include "DYDMacroStaticRef.h"
 
 using std::string;

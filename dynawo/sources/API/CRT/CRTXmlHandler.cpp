@@ -20,24 +20,23 @@
  * criteria collection files.
  *
  */
-#include <xml/sax/parser/Attributes.h>
-
-#include <boost/phoenix/core.hpp>
-#include <boost/phoenix/operator/self.hpp>
-#include <boost/phoenix/bind.hpp>
-
 #include "CRTXmlHandler.h"
-#include "CRTCriteriaCollectionFactory.h"
-#include "CRTCriteriaCollection.h"
+
 #include "CRTCriteria.h"
+#include "CRTCriteriaCollection.h"
+#include "CRTCriteriaCollectionFactory.h"
 #include "CRTCriteriaFactory.h"
 #include "CRTCriteriaParams.h"
 #include "CRTCriteriaParamsFactory.h"
 
+#include <boost/phoenix/bind.hpp>
+#include <boost/phoenix/core.hpp>
+#include <boost/phoenix/operator/self.hpp>
+#include <xml/sax/parser/Attributes.h>
 
-using std::string;
-using std::map;
 using boost::shared_ptr;
+using std::map;
+using std::string;
 
 namespace lambda = boost::phoenix;
 namespace lambda_args = lambda::placeholders;
@@ -48,10 +47,10 @@ xml::sax::parser::namespace_uri crt_ns("http://www.rte-france.com/dynawo");  ///
 namespace criteria {
 
 XmlHandler::XmlHandler() :
-criteriaCollection_(CriteriaCollectionFactory::newInstance()),
-busCriteriaHandler_(parser::ElementName(crt_ns, "busCriteria")) ,
-loadCriteriaHandler_(parser::ElementName(crt_ns, "loadCriteria")),
-genCriteriaHandler_(parser::ElementName(crt_ns, "generatorCriteria")) {
+    criteriaCollection_(CriteriaCollectionFactory::newInstance()),
+    busCriteriaHandler_(parser::ElementName(crt_ns, "busCriteria")),
+    loadCriteriaHandler_(parser::ElementName(crt_ns, "loadCriteria")),
+    genCriteriaHandler_(parser::ElementName(crt_ns, "generatorCriteria")) {
   onElement(crt_ns("criteria/busCriteria"), busCriteriaHandler_);
   onElement(crt_ns("criteria/loadCriteria"), loadCriteriaHandler_);
   onElement(crt_ns("criteria/generatorCriteria"), genCriteriaHandler_);
@@ -60,8 +59,7 @@ genCriteriaHandler_(parser::ElementName(crt_ns, "generatorCriteria")) {
   genCriteriaHandler_.onEnd(lambda::bind(&XmlHandler::addGenCriteria, lambda::ref(*this)));
 }
 
-XmlHandler::~XmlHandler() {
-}
+XmlHandler::~XmlHandler() {}
 
 shared_ptr<CriteriaCollection>
 XmlHandler::getCriteriaCollection() {
@@ -84,9 +82,9 @@ XmlHandler::addGenCriteria() {
 }
 
 CriteriaHandler::CriteriaHandler(elementName_type const& root_element) :
-criteriaParamsHandler_(parser::ElementName(crt_ns, "parameters")),
-cmpHandler_(parser::ElementName(crt_ns, "component")),
-countryHandler_(parser::ElementName(crt_ns, "country")) {
+    criteriaParamsHandler_(parser::ElementName(crt_ns, "parameters")),
+    cmpHandler_(parser::ElementName(crt_ns, "component")),
+    countryHandler_(parser::ElementName(crt_ns, "country")) {
   onStartElement(root_element, lambda::bind(&CriteriaHandler::create, lambda::ref(*this), lambda_args::arg2));
   onElement(root_element + crt_ns("parameters"), criteriaParamsHandler_);
   onElement(root_element + crt_ns("component"), cmpHandler_);
@@ -96,7 +94,8 @@ countryHandler_(parser::ElementName(crt_ns, "country")) {
   countryHandler_.onEnd(lambda::bind(&CriteriaHandler::addCountry, lambda::ref(*this)));
 }
 
-void CriteriaHandler::create(attributes_type const & /*attributes*/) {
+void
+CriteriaHandler::create(attributes_type const& /*attributes*/) {
   criteriaRead_ = CriteriaFactory::newCriteria();
 }
 
@@ -120,12 +119,12 @@ CriteriaHandler::addCountry() {
   criteriaRead_->addCountry(countryHandler_.get());
 }
 
-
 CriteriaParamsHandler::CriteriaParamsHandler(elementName_type const& root_element) {
   onStartElement(root_element, lambda::bind(&CriteriaParamsHandler::create, lambda::ref(*this), lambda_args::arg2));
 }
 
-void CriteriaParamsHandler::create(attributes_type const & attributes) {
+void
+CriteriaParamsHandler::create(attributes_type const& attributes) {
   criteriaParamsRead_ = CriteriaParamsFactory::newCriteriaParams();
   criteriaParamsRead_->setScope(CriteriaParams::string2Scope(attributes["scope"]));
   criteriaParamsRead_->setType(CriteriaParams::string2Type(attributes["type"]));
@@ -149,12 +148,12 @@ CriteriaParamsHandler::get() const {
   return criteriaParamsRead_;
 }
 
-
 ElementWithIdHandler::ElementWithIdHandler(elementName_type const& root_element) {
   onStartElement(root_element, lambda::bind(&ElementWithIdHandler::create, lambda::ref(*this), lambda_args::arg2));
 }
 
-void ElementWithIdHandler::create(attributes_type const & attributes) {
+void
+ElementWithIdHandler::create(attributes_type const& attributes) {
   cmpRead_ = attributes["id"].as_string();
 }
 

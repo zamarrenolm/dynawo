@@ -36,25 +36,25 @@ class GeneratorInterface : public ComponentInterface {
    * Represents a point extracted from network file
    */
   struct ReactiveCurvePoint {
-      /**
+    /**
        * @brief Constructor
        *
        * @param p active power
        * @param qmin minimum reactive power
        * @param qmax maximum reactive power
        */
-      ReactiveCurvePoint(double p, double qmin, double qmax): p(p), qmin(qmin), qmax(qmax) {}
+    ReactiveCurvePoint(double p, double qmin, double qmax) : p(p), qmin(qmin), qmax(qmax) {}
 
-      double p;     ///< active power
-      double qmin;  ///< minimum reactive power
-      double qmax;  ///< maximum reactive power
+    double p;     ///< active power
+    double qmin;  ///< minimum reactive power
+    double qmax;  ///< maximum reactive power
   };
 
  public:
   /**
    * @brief Destructor
    */
-  virtual ~GeneratorInterface() { }
+  virtual ~GeneratorInterface() {}
 
   /**
    * @brief Setter for the generator's bus interface

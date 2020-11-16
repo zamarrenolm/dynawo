@@ -20,9 +20,9 @@
 #ifndef API_FS_FSMODELFACTORY_H_
 #define API_FS_FSMODELFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "FSModel.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace finalState {
 

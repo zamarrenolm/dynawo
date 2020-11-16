@@ -11,30 +11,28 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/DanglingLineBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/components/DanglingLine.h>
-#include <IIDM/components/CurrentLimit.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-
-#include "DYNDanglingLineInterfaceIIDM.h"
-#include "DYNVoltageLevelInterfaceIIDM.h"
-#include "DYNCurrentLimitInterfaceIIDM.h"
 #include "DYNBusInterfaceIIDM.h"
-#include "DYNModelDanglingLine.h"
-#include "DYNModelVoltageLevel.h"
+#include "DYNCurrentLimitInterfaceIIDM.h"
+#include "DYNDanglingLineInterfaceIIDM.h"
 #include "DYNModelBus.h"
+#include "DYNModelDanglingLine.h"
 #include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
+#include "DYNModelVoltageLevel.h"
 #include "DYNSparseMatrix.h"
 #include "DYNVariable.h"
-
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
+
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/DanglingLineBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/CurrentLimit.h>
+#include <IIDM/components/DanglingLine.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -55,7 +53,6 @@ createModelDanglingLine(bool open, bool initModel) {
   vlIIDM.add(bus1IIDM);
   vlIIDM.lowVoltageLimit(0.5);
   vlIIDM.highVoltageLimit(2.);
-
 
   IIDM::builders::DanglingLineBuilder dlb;
   dlb.r(3.);
@@ -114,7 +111,6 @@ createModelDanglingLine(bool open, bool initModel) {
   bus1->init(offset);
   return std::make_pair(dl, vl);
 }
-
 
 TEST(ModelsModelNetwork, ModelNetworkDanglingLineInitializationClosed) {
   shared_ptr<ModelDanglingLine> dl = createModelDanglingLine(false, false).first;
@@ -400,7 +396,6 @@ TEST(ModelsModelNetwork, ModelNetworkDanglingLineDefineInstantiate) {
     ASSERT_EQ(definedVariables[i]->getType(), instantiatedVariables[i]->getType());
   }
 
-
   std::vector<ParameterModeler> parameters;
   dl->defineNonGenericParameters(parameters);
   ASSERT_TRUE(parameters.empty());
@@ -436,11 +431,11 @@ TEST(ModelsModelNetwork, ModelNetworkDanglingLineJt) {
   ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[0], -0.041666666666666664);
   ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[1], -0.041666666666666671);
   ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[2], -0.034107399762306888);
-  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[3],  0.040991117783198847);
-  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[4],  0.041666666666666671);
+  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[3], 0.040991117783198847);
+  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[4], 0.041666666666666671);
   ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[5], -0.041666666666666664);
   ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[6], -0.042342215550134496);
-  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[7],  0.11744073309564021);
+  ASSERT_DOUBLE_EQUALS_DYNAWO(smj.Ax_[7], 0.11744073309564021);
   ASSERT_EQ(smj.Ap_[0], 0);
   ASSERT_EQ(smj.Ap_[1], 4);
   ASSERT_EQ(smj.Ap_[2], 8);
@@ -468,6 +463,5 @@ TEST(ModelsModelNetwork, ModelNetworkDanglingLineJt) {
   ASSERT_EQ(smjInit.nbElem(), 0);
   delete[] zConnected;
 }
-
 
 }  // namespace DYN

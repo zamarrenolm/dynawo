@@ -17,55 +17,48 @@
  * @brief Step data interface : implementation file for IIDM implementation
  *
  */
-#include <IIDM/components/TapChanger.h>
-
 #include "DYNStepInterfaceIIDM.h"
+
+#include <IIDM/components/TapChanger.h>
 
 using boost::shared_ptr;
 
 namespace DYN {
 
-  StepInterfaceIIDM::~StepInterfaceIIDM() {
-  }
+StepInterfaceIIDM::~StepInterfaceIIDM() {}
 
-  StepInterfaceIIDM::StepInterfaceIIDM(const IIDM::PhaseTapChangerStep& step) :
-  phaseStep_(step),
-  isPhaseStep_(true) {
-  }
+StepInterfaceIIDM::StepInterfaceIIDM(const IIDM::PhaseTapChangerStep& step) : phaseStep_(step), isPhaseStep_(true) {}
 
-  StepInterfaceIIDM::StepInterfaceIIDM(const IIDM::RatioTapChangerStep& step) :
-  ratioStep_(step),
-  isPhaseStep_(false) {
-  }
+StepInterfaceIIDM::StepInterfaceIIDM(const IIDM::RatioTapChangerStep& step) : ratioStep_(step), isPhaseStep_(false) {}
 
-  double
-  StepInterfaceIIDM::getR() const {
-    return isPhaseStep_ ? phaseStep_->r : ratioStep_->r;
-  }
+double
+StepInterfaceIIDM::getR() const {
+  return isPhaseStep_ ? phaseStep_->r : ratioStep_->r;
+}
 
-  double
-  StepInterfaceIIDM::getX() const {
-    return isPhaseStep_ ? phaseStep_->x : ratioStep_->x;
-  }
+double
+StepInterfaceIIDM::getX() const {
+  return isPhaseStep_ ? phaseStep_->x : ratioStep_->x;
+}
 
-  double
-  StepInterfaceIIDM::getG() const {
-    return isPhaseStep_ ? phaseStep_->g : ratioStep_->g;
-  }
+double
+StepInterfaceIIDM::getG() const {
+  return isPhaseStep_ ? phaseStep_->g : ratioStep_->g;
+}
 
-  double
-  StepInterfaceIIDM::getB() const {
-    return isPhaseStep_ ? phaseStep_->b : ratioStep_->b;
-  }
+double
+StepInterfaceIIDM::getB() const {
+  return isPhaseStep_ ? phaseStep_->b : ratioStep_->b;
+}
 
-  double
-  StepInterfaceIIDM::getRho() const {
-    return isPhaseStep_ ? phaseStep_->rho : ratioStep_->rho;
-  }
+double
+StepInterfaceIIDM::getRho() const {
+  return isPhaseStep_ ? phaseStep_->rho : ratioStep_->rho;
+}
 
-  double
-  StepInterfaceIIDM::getAlpha() const {
-    return isPhaseStep_ ? phaseStep_->alpha : 0;
-  }
+double
+StepInterfaceIIDM::getAlpha() const {
+  return isPhaseStep_ ? phaseStep_->alpha : 0;
+}
 
 }  // namespace DYN

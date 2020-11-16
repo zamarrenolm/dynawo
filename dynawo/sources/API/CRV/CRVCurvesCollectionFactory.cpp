@@ -19,6 +19,7 @@
  */
 
 #include "CRVCurvesCollectionFactory.h"
+
 #include "CRVCurvesCollection.h"
 
 using std::string;

@@ -19,21 +19,20 @@
  * Error use the message class to access to the description of the error
  * and access to the description where each error message are described
  */
-#include <sstream>
-#include <stdio.h>
+#include "DYNError.h"
+
 #include "DYNCommon.h"
 #include "DYNFileSystemUtils.h"
-#include "DYNError.h"
+
+#include <sstream>
+#include <stdio.h>
 
 namespace DYN {
 
-using std::stringstream;
 using std::string;
+using std::stringstream;
 
-Error::Error(TypeError_t type, const int& key, const std::string& file, const int& line, const Message& m) :
-std::exception(),
-key_(key),
-type_(type) {
+Error::Error(TypeError_t type, const int& key, const std::string& file, const int& line, const Message& m) : std::exception(), key_(key), type_(type) {
   stringstream msg;
   msg << m.str();
   if (file != "") {
@@ -43,40 +42,34 @@ type_(type) {
   msgToReturn_ = msg.str();
 }
 
-Error::Error(const Error & e) :
-std::exception(e),
-key_(e.key_),
-type_(e.type_),
-msgToReturn_(e.msgToReturn_) {
-}
+Error::Error(const Error& e) : std::exception(e), key_(e.key_), type_(e.type_), msgToReturn_(e.msgToReturn_) {}
 
-const char * Error::what() const throw() {
+const char*
+Error::what() const throw() {
   return (msgToReturn_.c_str());
 }
 
-Error::TypeError_t Error::type() const {
+Error::TypeError_t
+Error::type() const {
   return (type_);
 }
 
-int Error::key() const {
+int
+Error::key() const {
   return key_;
 }
 
-MessageError::MessageError(const MessageError& e) :
-std::exception(),
-msgToReturn_(e.msgToReturn_) {
-}
+MessageError::MessageError(const MessageError& e) : std::exception(), msgToReturn_(e.msgToReturn_) {}
 
-MessageError::MessageError(const std::string& message) :
-std::exception(),
-msgToReturn_(message) {
-}
+MessageError::MessageError(const std::string& message) : std::exception(), msgToReturn_(message) {}
 
-const char * MessageError::what() const throw() {
+const char*
+MessageError::what() const throw() {
   return (msgToReturn_.c_str());
 }
 
-std::string MessageError::message() const {
+std::string
+MessageError::message() const {
   return msgToReturn_;
 }
 

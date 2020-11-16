@@ -20,10 +20,10 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNBUSBARSECTIONINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNBUSBARSECTIONINTERFACEIIDM_H_
 
+#include "DYNBusBarSectionInterface.h"
+
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
-
-#include "DYNBusBarSectionInterface.h"
 
 namespace IIDM {
 class BusBarSection;
@@ -40,13 +40,13 @@ class BusBarSectionInterfaceIIDM : public BusBarSectionInterface {
   /**
    * @brief Destructor
    */
-  ~BusBarSectionInterfaceIIDM() { }
+  ~BusBarSectionInterfaceIIDM() {}
 
   /**
    * @brief Constructor
    * @param bbs : BusBarSection's iidm instance
    */
-  explicit BusBarSectionInterfaceIIDM(IIDM::BusBarSection& bbs) : bbs_(bbs) { }
+  explicit BusBarSectionInterfaceIIDM(IIDM::BusBarSection& bbs) : bbs_(bbs) {}
 
   /**
    * @copydoc BusBarSectionInterface::id() const
@@ -71,6 +71,6 @@ class BusBarSectionInterfaceIIDM : public BusBarSectionInterface {
 
  private:
   IIDM::BusBarSection& bbs_;  ///< instance of IIDM bus bar section
-};  ///< Interface class for BusBarSection
-}  ///< namespace DYN
+};                            ///< Interface class for BusBarSection
+}  // namespace DYN
 #endif  // MODELER_DATAINTERFACE_IIDM_DYNBUSBARSECTIONINTERFACEIIDM_H_

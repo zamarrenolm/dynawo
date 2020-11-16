@@ -20,22 +20,21 @@
  * curves collection files.
  *
  */
-#include <xml/sax/parser/Attributes.h>
+#include "CRVXmlHandler.h"
 
+#include "CRVCurve.h"
+#include "CRVCurveFactory.h"
+#include "CRVCurvesCollection.h"
+#include "CRVCurvesCollectionFactory.h"
+
+#include <boost/phoenix/bind.hpp>
 #include <boost/phoenix/core.hpp>
 #include <boost/phoenix/operator/self.hpp>
-#include <boost/phoenix/bind.hpp>
+#include <xml/sax/parser/Attributes.h>
 
-#include "CRVCurveFactory.h"
-#include "CRVCurvesCollectionFactory.h"
-#include "CRVCurvesCollection.h"
-#include "CRVXmlHandler.h"
-#include "CRVCurve.h"
-
-
-using std::string;
-using std::map;
 using boost::shared_ptr;
+using std::map;
+using std::string;
 
 namespace lambda = boost::phoenix;
 namespace lambda_args = lambda::placeholders;
@@ -45,15 +44,12 @@ xml::sax::parser::namespace_uri crv_ns("http://www.rte-france.com/dynawo");  ///
 
 namespace curves {
 
-XmlHandler::XmlHandler() :
-curvesCollection_(CurvesCollectionFactory::newInstance("")),
-curveHandler_(parser::ElementName(crv_ns, "curve")) {
+XmlHandler::XmlHandler() : curvesCollection_(CurvesCollectionFactory::newInstance("")), curveHandler_(parser::ElementName(crv_ns, "curve")) {
   onElement(crv_ns("curvesInput/curve"), curveHandler_);
   curveHandler_.onEnd(lambda::bind(&XmlHandler::addCurve, lambda::ref(*this)));
 }
 
-XmlHandler::~XmlHandler() {
-}
+XmlHandler::~XmlHandler() {}
 
 shared_ptr<CurvesCollection>
 XmlHandler::getCurvesCollection() {
@@ -69,7 +65,8 @@ CurveHandler::CurveHandler(elementName_type const& root_element) {
   onStartElement(root_element, lambda::bind(&CurveHandler::create, lambda::ref(*this), lambda_args::arg2));
 }
 
-void CurveHandler::create(attributes_type const & attributes) {
+void
+CurveHandler::create(attributes_type const& attributes) {
   curveRead_ = CurveFactory::newCurve();
   curveRead_->setModelName(attributes["model"]);
   curveRead_->setVariable(attributes["variable"]);

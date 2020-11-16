@@ -27,7 +27,6 @@
 #include <xml/sax/parser/ComposableDocumentHandler.h>
 #include <xml/sax/parser/ComposableElementHandler.h>
 
-
 namespace curves {
 class CurvesCollection;
 class Curve;
@@ -47,7 +46,7 @@ class CurveHandler : public xml::sax::parser::ComposableElementHandler {
   /**
    * @brief default destructor
    */
-  ~CurveHandler() { }
+  ~CurveHandler() {}
 
   /**
    * @brief return the curve read in xml file
@@ -99,9 +98,8 @@ class XmlHandler : public xml::sax::parser::ComposableDocumentHandler {
   void addCurve();
 
   boost::shared_ptr<CurvesCollection> curvesCollection_;  ///< Curves collection parsed
-  CurveHandler curveHandler_;  ///< handler used to read curve element
+  CurveHandler curveHandler_;                             ///< handler used to read curve element
 };
-
 
 }  // namespace curves
 

@@ -51,7 +51,6 @@ class PhaseTapChangerInterfaceIIDM : public PhaseTapChangerInterface {
    */
   void addStep(const boost::shared_ptr<StepInterface>& step);
 
-
   /**
    * @copydoc PhaseTapChangerInterface::getCurrentPosition() const
    */
@@ -61,7 +60,6 @@ class PhaseTapChangerInterfaceIIDM : public PhaseTapChangerInterface {
    * @copydoc PhaseTapChangerInterface::setCurrentPosition(const int& position)
    */
   void setCurrentPosition(const int& position);
-
 
   /**
    * @copydoc PhaseTapChangerInterface::getLowPosition() const
@@ -120,8 +118,8 @@ class PhaseTapChangerInterfaceIIDM : public PhaseTapChangerInterface {
 
  private:
   std::vector<boost::shared_ptr<StepInterface> > steps_;  ///< steps of the phase tap changer
-  IIDM::PhaseTapChanger& tapChangerIIDM_;  ///< reference to the iidm phaseTapChanger's instance
-};  ///< Interface calss for phase tap changer
+  IIDM::PhaseTapChanger& tapChangerIIDM_;                 ///< reference to the iidm phaseTapChanger's instance
+};                                                        ///< Interface calss for phase tap changer
 }  // namespace DYN
 
 #endif  // MODELER_DATAINTERFACE_IIDM_DYNPHASETAPCHANGERINTERFACEIIDM_H_

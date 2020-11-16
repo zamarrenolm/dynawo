@@ -20,59 +20,56 @@
 #ifndef COMMON_DYNGRAPH_H_
 #define COMMON_DYNGRAPH_H_
 
-#include <utility>
-
-#include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/adjacency_iterator.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/connected_components.hpp>
 #include <boost/graph/filtered_graph.hpp>
 #include <boost/graph/graph_traits.hpp>
-#include <boost/graph/connected_components.hpp>
-#include <boost/property_map/property_map.hpp>
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/graph/properties.hpp>
-#include <boost/graph/connected_components.hpp>
+#include <boost/property_map/property_map.hpp>
 #include <boost/unordered_map.hpp>
-
+#include <utility>
 
 // definitions of typedef alias to hide boost types
 typedef boost::property<boost::edge_weight_t, float, boost::property<boost::edge_name_t, std::string> > EdgeProperty;  ///< properties associated to an edge
-typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;  ///< property associated to a vertex
-typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, VertexProperty, EdgeProperty> BoostGraph;  ///< graph description
-typedef boost::graph_traits < BoostGraph >::vertex_descriptor Vertex;  ///< vertex description
-typedef BoostGraph::edge_descriptor Edge;  ///< edge description
-typedef std::vector<std::string> PathDescription;  ///< path description
+typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;                                             ///< property associated to a vertex
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VertexProperty, EdgeProperty> BoostGraph;  ///< graph description
+typedef boost::graph_traits<BoostGraph>::vertex_descriptor Vertex;                                                     ///< vertex description
+typedef BoostGraph::edge_descriptor Edge;                                                                              ///< edge description
+typedef std::vector<std::string> PathDescription;                                                                      ///< path description
 typedef boost::property_map<BoostGraph, boost::edge_weight_t>::type EdgeWeightMap;  ///< property map associated to the weight of each edge
-typedef boost::graph_traits < BoostGraph >::adjacency_iterator adjacency_iterator;  ///< iterator on adjacency_list
+typedef boost::graph_traits<BoostGraph>::adjacency_iterator adjacency_iterator;     ///< iterator on adjacency_list
 
 /**
  * @brief edge predicate to filter edge contained in a boost graph
  */
-template <typename EdgeWeightMap>
+template<typename EdgeWeightMap>
 struct positive_edge_weight {
   /**
    * @brief default constructor
    */
-  positive_edge_weight() { }
+  positive_edge_weight() {}
 
   /**
    * @brief copy constructor
    * @param weight weight to use for the predicate
    */
-  explicit positive_edge_weight(EdgeWeightMap weight) : m_weight(weight) { }
+  explicit positive_edge_weight(EdgeWeightMap weight) : m_weight(weight) {}
 
   /**
    * @brief edge predicate to filter edge
    * @param e edge to filter
    * @return @b true if the weight of the edge is positive, @b false otherwise
    */
-  template <typename Edge>
+  template<typename Edge>
   bool operator()(const Edge& e) const {
     return 0 < get(m_weight, e);
   }
   EdgeWeightMap m_weight;  ///< Property map associated to the weight of each edge
 };
-typedef boost::filtered_graph <BoostGraph, positive_edge_weight<EdgeWeightMap> > FilteredBoostGraph;  ///< filtered graph description
-typedef boost::graph_traits < FilteredBoostGraph >::adjacency_iterator adjacency_iterator_filtered;  ///< iterator on adjacency_list for filtered graph
+typedef boost::filtered_graph<BoostGraph, positive_edge_weight<EdgeWeightMap> > FilteredBoostGraph;  ///< filtered graph description
+typedef boost::graph_traits<FilteredBoostGraph>::adjacency_iterator adjacency_iterator_filtered;     ///< iterator on adjacency_list for filtered graph
 
 namespace DYN {
 
@@ -135,8 +132,8 @@ class Graph {
    * @param path a list of edge's id encountered between origin and extremity of the path
    * this list is empty if there is no path or if the vertexOrigin and extremity are the same
    */
-  void shortestPath(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity,
-      const boost::unordered_map<std::string, float>& edgeWeights, PathDescription& path);
+  void shortestPath(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, const boost::unordered_map<std::string, float>& edgeWeights,
+                    PathDescription& path);
 
   /**
    * @brief find all path between two vertices
@@ -147,9 +144,8 @@ class Graph {
    * @param paths resulting list of pathDescription
    * @param stopWhenExtremityReached : stop the research when the vertexExtremity is reached
    */
-  void findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity,
-      const boost::unordered_map<std::string, float>& edgeWeights,
-      std::list<PathDescription>& paths, bool stopWhenExtremityReached = false);
+  void findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, const boost::unordered_map<std::string, float>& edgeWeights,
+                    std::list<PathDescription>& paths, bool stopWhenExtremityReached = false);
 
   /**
    * @brief calculate connected components of a graph
@@ -179,9 +175,8 @@ class Graph {
    *
    * @return @b true if the vertexExtremity is reached
    */
-  bool findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity,
-      PathDescription &currentPath, std::vector<bool> &encountered, std::list<PathDescription> &paths, FilteredBoostGraph & filteredGraph,
-      bool stopWhenExtremityReached);
+  bool findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, PathDescription& currentPath, std::vector<bool>& encountered,
+                    std::list<PathDescription>& paths, FilteredBoostGraph& filteredGraph, bool stopWhenExtremityReached);
 
   /**
    * @brief find if the current edge reach the vertexExtremity
@@ -197,14 +192,13 @@ class Graph {
    *
    * @return @b true if the vertexExtremity is reached
    */
-  bool findAllPaths(const std::string& edgeId, const unsigned int& vertex, const unsigned int& vertexExtremity,
-      PathDescription &currentPath, std::vector<bool> &encountered, std::list<PathDescription> &paths, FilteredBoostGraph & filteredGraph,
-      bool stopWhenExtremityReached);
+  bool findAllPaths(const std::string& edgeId, const unsigned int& vertex, const unsigned int& vertexExtremity, PathDescription& currentPath,
+                    std::vector<bool>& encountered, std::list<PathDescription>& paths, FilteredBoostGraph& filteredGraph, bool stopWhenExtremityReached);
 
  private:
-  BoostGraph internalGraph_;  ///< graph description
+  BoostGraph internalGraph_;                         ///< graph description
   boost::unordered_map<unsigned, Vertex> vertices_;  ///< association between vertices and their index
-  boost::unordered_map<std::string, Edge> edges_;  ///< association between edges and their id
+  boost::unordered_map<std::string, Edge> edges_;    ///< association between edges and their id
 };
 
 }  // namespace DYN

@@ -17,44 +17,42 @@
  * @brief main program of dynawo
  *
  */
-#include <string>
-#include <fstream>
-#include <iostream>
-
-#include <boost/program_options.hpp>
-#include <boost/shared_ptr.hpp>
-
-#include <xml/sax/parser/ParserException.h>
-
+#include "DYNError.h"
+#include "DYNExecUtils.h"
+#include "DYNFileSystemUtils.h"
+#include "DYNIoDico.h"
+#include "DYNMacrosMessage.h"
+#include "DYNSimulationLauncher.h"
+#include "DYNTrace.h"
 #include "config.h"
 #include "gitversion.h"
 
-#include "DYNMacrosMessage.h"
-#include "DYNSimulationLauncher.h"
-#include "DYNError.h"
-#include "DYNIoDico.h"
-#include "DYNTrace.h"
-#include "DYNFileSystemUtils.h"
-#include "DYNExecUtils.h"
+#include <boost/program_options.hpp>
+#include <boost/shared_ptr.hpp>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <xml/sax/parser/ParserException.h>
 #define DYNTIMERS_INSTANCE  // this should be defined only once in main source before header inclusion
 #include "DYNTimer.h"
 
-using std::string;
-using std::exception;
-using std::endl;
 using std::cerr;
 using std::cout;
+using std::endl;
+using std::exception;
+using std::string;
 using std::vector;
 
 using DYN::Error;
-using DYN::Trace;
 using DYN::IoDico;
+using DYN::Trace;
 
 namespace po = boost::program_options;
 
 using boost::shared_ptr;
 
-void usage(const po::options_description& desc) {
+void
+usage(const po::options_description& desc) {
   cout << "Usage: dynawo <jobs-file>" << std::endl << std::endl;
   cout << desc << endl;
 }
@@ -68,19 +66,18 @@ void usage(const po::options_description& desc) {
  *
  * @return @b 0 if everything works fine, other value else
  */
-int main(int argc, char ** argv) {
+int
+main(int argc, char** argv) {
   string jobsFileName = "";
 
   // declarations of supported options
   // -----------------------------------
 
   po::options_description desc;
-  desc.add_options()
-    ("help,h", "produce help message")
-    ("version,v", "print dynawo version");
+  desc.add_options()("help,h", "produce help message")("version,v", "print dynawo version");
 
   po::options_description hidden("Hidden options");
-  hidden.add_options() ("jobs-file", po::value<string>(&jobsFileName), "set job file");
+  hidden.add_options()("jobs-file", po::value<string>(&jobsFileName), "set job file");
 
   po::positional_options_description positionalOptions;
   positionalOptions.add("jobs-file", 1);
@@ -91,9 +88,7 @@ int main(int argc, char ** argv) {
   try {
     po::variables_map vm;
     // parse regular options
-    po::store(po::command_line_parser(argc, argv).options(cmdlineOptions)
-            .positional(positionalOptions).run(),
-            vm);
+    po::store(po::command_line_parser(argc, argv).options(cmdlineOptions).positional(positionalOptions).run(), vm);
     po::notify(vm);
 
     if (vm.count("help")) {

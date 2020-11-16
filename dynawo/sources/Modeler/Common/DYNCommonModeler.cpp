@@ -19,16 +19,17 @@
  */
 
 #include "DYNCommonModeler.h"
+
 #include "DYNMacrosMessage.h"
 
+using std::map;
 using std::string;
 using std::vector;
-using std::map;
 
 namespace DYN {
 
 void
-addElement(const string& name, const Element::typeElement& type, vector<Element>& elements, map<string, int >& mapElement) {
+addElement(const string& name, const Element::typeElement& type, vector<Element>& elements, map<string, int>& mapElement) {
   Element element(name, name, type);
   elements.push_back(element);
   mapElement[name] = elements.size() - 1;
@@ -49,8 +50,7 @@ addSubElement(const string& name, const string& elementName, const Element::type
 }
 
 void
-replaceMacroInVariableId(const string& index, const string& name,
-    const string& model1, const string& model2, const string& connector, string& variableId) {
+replaceMacroInVariableId(const string& index, const string& name, const string& model1, const string& model2, const string& connector, string& variableId) {
   static const string indexLabel = "@INDEX@";
   static const string nameLabel = "@NAME@";
   // replace @INDEX@ in variableId

@@ -35,7 +35,7 @@ namespace finalState {
  */
 class FinalStateModel {
  public:
-   /**
+  /**
    * @brief Constructor
    *
    * @param id model's id

@@ -16,23 +16,22 @@
  * @brief Unit tests for API_PAR
  */
 
-#include <boost/shared_ptr.hpp>
-#include <vector>
-#include <map>
-
-#include "gtest_dynawo.h"
-
 #include "PARParameter.h"
 #include "PARParameterFactory.h"
-#include "PARReference.h"
-#include "PARReferenceFactory.h"
 #include "PARParametersSet.h"
 #include "PARParametersSetFactory.h"
+#include "PARReference.h"
+#include "PARReferenceFactory.h"
+#include "gtest_dynawo.h"
+
+#include <boost/shared_ptr.hpp>
+#include <map>
+#include <vector>
 
 using boost::shared_ptr;
+using std::map;
 using std::string;
 using std::vector;
-using std::map;
 using testing::ContainerEq;
 
 namespace parameters {
@@ -72,9 +71,7 @@ TEST(APIPARTest, ParametersSetCreate) {
 
   // Test size
   int nbParameters = 0;
-  for (ParametersSet::parameter_const_iterator itParam = parametersSet->cbeginParameter();
-        itParam != parametersSet->cendParameter();
-        ++itParam)
+  for (ParametersSet::parameter_const_iterator itParam = parametersSet->cbeginParameter(); itParam != parametersSet->cendParameter(); ++itParam)
     ++nbParameters;
   ASSERT_EQ(nbParameters, 4);
 
@@ -166,16 +163,14 @@ TEST(APIPARTest, ParametersSetGetParameters) {
 
   // Test size
   int nbParameters = 0;
-  for (ParametersSet::parameter_const_iterator itParam = parametersSet->cbeginParameter();
-        itParam != parametersSet->cendParameter();
-        ++itParam)
+  for (ParametersSet::parameter_const_iterator itParam = parametersSet->cbeginParameter(); itParam != parametersSet->cendParameter(); ++itParam)
     ++nbParameters;
   ASSERT_EQ(nbParameters, 4);
 
   // Get the vector of names
   string namesTab[] = {"param1", "param2", "param3", "param4"};
   vector<string> parametersNames;
-  parametersNames.insert(parametersNames.begin(), namesTab, namesTab+4);
+  parametersNames.insert(parametersNames.begin(), namesTab, namesTab + 4);
   EXPECT_THAT(parametersNames, ContainerEq(parametersSet->getParametersNames()));
 
   // Test the returned vector of unused parameter
@@ -183,7 +178,7 @@ TEST(APIPARTest, ParametersSetGetParameters) {
   param3->setUsed(true);
   string unusedTab[] = {"param1", "param4"};
   vector<string> paramsUnused;
-  paramsUnused.insert(paramsUnused.begin(), unusedTab, unusedTab+2);
+  paramsUnused.insert(paramsUnused.begin(), unusedTab, unusedTab + 2);
   EXPECT_THAT(paramsUnused, ContainerEq(parametersSet->getParamsUnused()));
 }
 
@@ -206,9 +201,7 @@ TEST(APIPARTest, ParametersSetGetReferences) {
 
   // Test size
   int nbReferences = 0;
-  for (ParametersSet::reference_const_iterator itRef = parametersSet->cbeginReference();
-        itRef != parametersSet->cendReference();
-        ++itRef)
+  for (ParametersSet::reference_const_iterator itRef = parametersSet->cbeginReference(); itRef != parametersSet->cendReference(); ++itRef)
     ++nbReferences;
   ASSERT_EQ(nbReferences, 3);
 
@@ -221,7 +214,7 @@ TEST(APIPARTest, ParametersSetGetReferences) {
   // Get the vector of names
   string namesTab[] = {"ref1", "ref2", "ref3"};
   vector<string> referencesNames;
-  referencesNames.insert(referencesNames.begin(), namesTab, namesTab+3);
+  referencesNames.insert(referencesNames.begin(), namesTab, namesTab + 3);
   EXPECT_THAT(referencesNames, ContainerEq(parametersSet->getReferencesNames()));
 }
 
@@ -251,12 +244,10 @@ TEST(APIPARTest, ParametersSetExtend) {
   ASSERT_EQ(parametersSet->getParametersNames().size(), 8);
 
   // Get the vector of names
-  string namesTab[] = {"BooleanParameter", "BooleanParameter2",
-                       "DoubleParameter", "DoubleParameter2",
-                       "IntegerParameter", "IntegerParameter2",
-                       "StringParameter", "StringParameter2"};
+  string namesTab[] = {"BooleanParameter", "BooleanParameter2", "DoubleParameter", "DoubleParameter2",
+                       "IntegerParameter", "IntegerParameter2", "StringParameter", "StringParameter2"};
   vector<string> parametersNames;
-  parametersNames.insert(parametersNames.begin(), namesTab, namesTab+8);
+  parametersNames.insert(parametersNames.begin(), namesTab, namesTab + 8);
   EXPECT_THAT(parametersNames, ContainerEq(parametersSet->getParametersNames()));
 }
 
@@ -281,7 +272,7 @@ TEST(APIPARTest, ParametersSetAliases) {
   // Get the vector of names
   string namesTab[] = {"paramDouble", "paramInt", "paramIntAlias"};
   vector<string> parametersNames;
-  parametersNames.insert(parametersNames.begin(), namesTab, namesTab+3);
+  parametersNames.insert(parametersNames.begin(), namesTab, namesTab + 3);
   EXPECT_THAT(parametersNames, ContainerEq(parametersSet->getParametersNames()));
 
   // Check values and names
@@ -308,10 +299,10 @@ TEST(APIPARTest, ParametersSetCreateTableOneLine) {
   ASSERT_NO_THROW(parametersSet->createParameter("paramTable", 6, "1", "4"));              // give names paramTable_4_ and paramTable_1_4_
 
   // Get the vector of names
-  string namesTab[] = {"paramTable_1_", "paramTable_1_1_", "paramTable_1_2_", "paramTable_1_3_", "paramTable_1_4_",
-                       "paramTable_2_", "paramTable_3_", "paramTable_4_"};
+  string namesTab[] = {"paramTable_1_",   "paramTable_1_1_", "paramTable_1_2_", "paramTable_1_3_",
+                       "paramTable_1_4_", "paramTable_2_",   "paramTable_3_",   "paramTable_4_"};
   vector<string> parametersNames;
-  parametersNames.insert(parametersNames.begin(), namesTab, namesTab+8);
+  parametersNames.insert(parametersNames.begin(), namesTab, namesTab + 8);
   EXPECT_THAT(parametersNames, ContainerEq(parametersSet->getParametersNames()));
 }
 
@@ -323,16 +314,15 @@ TEST(APIPARTest, ParametersSetCreateTableMatrix) {
   shared_ptr<ParametersSet> parametersSet = ParametersSetFactory::newInstance("parameters");
 
   // Create a parameters table (matrix 2x2) with all possible types (bool, int, double, string)
-  ASSERT_NO_THROW(parametersSet->createParameter("paramTable", string("red"), "1", "1"));   // give names paramTable_1_1_ and paramTable_1_
-  ASSERT_NO_THROW(parametersSet->createParameter("paramTable", 10.5, "1", "2"));            // give names paramTable_1_2_ and paramTable_2_
-  ASSERT_NO_THROW(parametersSet->createParameter("paramTable", true, "2", "1"));            // give names paramTable_2_1_
-  ASSERT_NO_THROW(parametersSet->createParameter("paramTable", 6, "2", "2"));               // give names paramTable_2_2_
+  ASSERT_NO_THROW(parametersSet->createParameter("paramTable", string("red"), "1", "1"));  // give names paramTable_1_1_ and paramTable_1_
+  ASSERT_NO_THROW(parametersSet->createParameter("paramTable", 10.5, "1", "2"));           // give names paramTable_1_2_ and paramTable_2_
+  ASSERT_NO_THROW(parametersSet->createParameter("paramTable", true, "2", "1"));           // give names paramTable_2_1_
+  ASSERT_NO_THROW(parametersSet->createParameter("paramTable", 6, "2", "2"));              // give names paramTable_2_2_
 
   // Get the vector of names
-  string namesTab[] = {"paramTable_1_", "paramTable_1_1_", "paramTable_1_2_",
-                       "paramTable_2_", "paramTable_2_1_", "paramTable_2_2_"};
+  string namesTab[] = {"paramTable_1_", "paramTable_1_1_", "paramTable_1_2_", "paramTable_2_", "paramTable_2_1_", "paramTable_2_2_"};
   vector<string> parametersNames;
-  parametersNames.insert(parametersNames.begin(), namesTab, namesTab+6);
+  parametersNames.insert(parametersNames.begin(), namesTab, namesTab + 6);
   EXPECT_THAT(parametersNames, ContainerEq(parametersSet->getParametersNames()));
 
   // Try to add new parameters at the same place (row and column): it should raise an error

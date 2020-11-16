@@ -18,19 +18,17 @@
 #ifndef MODELER_COMMON_DYNMODELDESCRIPTION_H_
 #define MODELER_COMMON_DYNMODELDESCRIPTION_H_
 
-#include <string>
-#include <vector>
+#include "DYDModel.h"
+#include "PARParametersSetFactory.h"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-
-#include "PARParametersSetFactory.h"
-#include "DYDModel.h"
+#include <string>
+#include <vector>
 
 namespace parameters {
 class ParametersSet;
 }  // namespace parameters
-
 
 namespace DYN {
 class SubModel;
@@ -45,21 +43,18 @@ class ModelDescription {
   /**
    * @brief default constructor.
    */
-  ModelDescription() :
-  hasCompiledModel_(false) { }
+  ModelDescription() : hasCompiledModel_(false) {}
 
   /**
    * @brief default constructor.
    * @param model
    */
-  explicit ModelDescription(const boost::shared_ptr<dynamicdata::Model>& model) :
-  model_(model),
-  hasCompiledModel_(false) { }
+  explicit ModelDescription(const boost::shared_ptr<dynamicdata::Model>& model) : model_(model), hasCompiledModel_(false) {}
 
   /**
    * @brief default destructor.
    */
-  ~ModelDescription() { }
+  ~ModelDescription() {}
 
   /**
    * @brief add static reference interface
@@ -205,19 +200,16 @@ class ModelDescription {
     subModel_ = subModel;
   }
 
-
  protected:
-  boost::shared_ptr<dynamicdata::Model> model_;  ///< dynamic model
-  boost::weak_ptr<SubModel> subModel_;  ///< submodel associated to the model description
-  boost::shared_ptr<parameters::ParametersSet> parameters_;  ///< set of parameters associated to the model
+  boost::shared_ptr<dynamicdata::Model> model_;                              ///< dynamic model
+  boost::weak_ptr<SubModel> subModel_;                                       ///< submodel associated to the model description
+  boost::shared_ptr<parameters::ParametersSet> parameters_;                  ///< set of parameters associated to the model
   std::vector<boost::shared_ptr<StaticRefInterface> > staticRefInterfaces_;  ///< Static reference
-  std::string compiledModelId_;  ///< Compiled Model ID
-  std::string lib_;  ///< compiled lib .so
-  bool hasCompiledModel_;  ///< @b true if the model has a compiled model, @b false else
-  std::string staticId_;  ///< static id of the model description
-};  ///< class of model description
-
-
+  std::string compiledModelId_;                                              ///< Compiled Model ID
+  std::string lib_;                                                          ///< compiled lib .so
+  bool hasCompiledModel_;                                                    ///< @b true if the model has a compiled model, @b false else
+  std::string staticId_;                                                     ///< static id of the model description
+};                                                                           ///< class of model description
 
 }  // namespace DYN
 

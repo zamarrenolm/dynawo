@@ -17,55 +17,55 @@
  *
  */
 
-#include <IIDM/Network.h>
-#include <IIDM/components/Connection.h>
-#include <IIDM/components/ConnectionPoint.h>
-#include <IIDM/components/TapChanger.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/ShuntCompensator.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/components/StaticVarCompensator.h>
-#include <IIDM/components/DanglingLine.h>
-#include <IIDM/components/Generator.h>
-#include <IIDM/components/LccConverterStation.h>
-#include <IIDM/components/HvdcLine.h>
-#include <IIDM/components/Line.h>
-#include <IIDM/components/Load.h>
-#include <IIDM/components/Switch.h>
-#include <IIDM/components/VscConverterStation.h>
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/Transformer2WindingsBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/ShuntCompensatorBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/builders/StaticVarCompensatorBuilder.h>
-#include <IIDM/builders/DanglingLineBuilder.h>
-#include <IIDM/builders/GeneratorBuilder.h>
-#include <IIDM/builders/LccConverterStationBuilder.h>
-#include <IIDM/builders/HvdcLineBuilder.h>
-#include <IIDM/builders/LineBuilder.h>
-#include <IIDM/builders/LoadBuilder.h>
-#include <IIDM/builders/SwitchBuilder.h>
-#include <IIDM/builders/VscConverterStationBuilder.h>
-
-#include "gtest_dynawo.h"
-#include "DYNStateVariable.h"
-#include "DYNVariableNative.h"
 #include "DYNDataInterfaceIIDM.h"
-#include "DYNSubModel.h"
 #include "DYNExecUtils.h"
-#include "DYNSubModelFactory.h"
 #include "DYNModelMulti.h"
-#include "PARParametersSetFactory.h"
 #include "DYNNetworkInterface.h"
-#include "DYNVoltageLevelInterface.h"
-#include "DYNShuntCompensatorInterface.h"
-#include "DYNStaticVarCompensatorInterface.h"
-#include "DYNTwoWTransformerInterface.h"
 #include "DYNPhaseTapChangerInterface.h"
 #include "DYNRatioTapChangerInterface.h"
+#include "DYNShuntCompensatorInterface.h"
+#include "DYNStateVariable.h"
+#include "DYNStaticVarCompensatorInterface.h"
+#include "DYNSubModel.h"
+#include "DYNSubModelFactory.h"
+#include "DYNTwoWTransformerInterface.h"
+#include "DYNVariableNative.h"
+#include "DYNVoltageLevelInterface.h"
+#include "PARParametersSetFactory.h"
+#include "gtest_dynawo.h"
+
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/DanglingLineBuilder.h>
+#include <IIDM/builders/GeneratorBuilder.h>
+#include <IIDM/builders/HvdcLineBuilder.h>
+#include <IIDM/builders/LccConverterStationBuilder.h>
+#include <IIDM/builders/LineBuilder.h>
+#include <IIDM/builders/LoadBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/ShuntCompensatorBuilder.h>
+#include <IIDM/builders/StaticVarCompensatorBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/SwitchBuilder.h>
+#include <IIDM/builders/Transformer2WindingsBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/builders/VscConverterStationBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/Connection.h>
+#include <IIDM/components/ConnectionPoint.h>
+#include <IIDM/components/DanglingLine.h>
+#include <IIDM/components/Generator.h>
+#include <IIDM/components/HvdcLine.h>
+#include <IIDM/components/LccConverterStation.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/Load.h>
+#include <IIDM/components/ShuntCompensator.h>
+#include <IIDM/components/StaticVarCompensator.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/Switch.h>
+#include <IIDM/components/TapChanger.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <IIDM/components/VscConverterStation.h>
 
 using boost::shared_ptr;
 
@@ -118,7 +118,6 @@ TEST(DataInterfaceTest, testStateVariable) {
   ASSERT_THROW_DYNAWO(doubleVariable.getValue<int>(), Error::MODELER, KeyError_t::StateVariableBadCast);
   ASSERT_THROW_DYNAWO(doubleVariable.getValue<bool>(), Error::MODELER, KeyError_t::StateVariableBadCast);
 
-
   // check for boolean type
   StateVariable boolVariable("boolVariable", StateVariable::BOOL);
   ASSERT_EQ(boolVariable.getType(), StateVariable::BOOL);
@@ -150,7 +149,6 @@ TEST(DataInterfaceTest, testStateVariable) {
   ASSERT_EQ(boolVariable.getModelId(), "ModelBoolVariable");
   ASSERT_EQ(boolVariable.getVariableId(), "variableBoolVariable");
   ASSERT_EQ(boolVariable.getVariable(), variableForBool);
-
 
   // check copy constructor
   StateVariable var2 = boolVariable;
@@ -191,8 +189,8 @@ struct NetworkProperty {
 
 shared_ptr<SubModel>
 initializeModelNetwork(shared_ptr<DataInterface> data) {
-  shared_ptr<SubModel> modelNetwork = SubModelFactory::createSubModelFromLib("../../../../Models/CPP/ModelNetwork/DYNModelNetwork" +
-                                              std::string(sharedLibraryExtension()));
+  shared_ptr<SubModel> modelNetwork =
+      SubModelFactory::createSubModelFromLib("../../../../Models/CPP/ModelNetwork/DYNModelNetwork" + std::string(sharedLibraryExtension()));
   modelNetwork->initFromData(data);
   data->setModelNetwork(modelNetwork);
   modelNetwork->name("NETWORK");
@@ -214,7 +212,7 @@ initializeModelNetwork(shared_ptr<DataInterface> data) {
   }
   if (hasRatioTapChanger) {
     parametersSet->createParameter("transformer_tolV", 13.);
-    }
+  }
   modelNetwork->setPARParameters(parametersSet);
   return modelNetwork;
 }
@@ -395,21 +393,21 @@ TEST(ModelsModelNetwork, TestNetworkCreation) {
   assert(modelNetwork.get() != NULL);
 
   shared_ptr<NetworkInterface> network = data->getNetwork();
-  const std::vector< shared_ptr<VoltageLevelInterface> >& voltageLevels = network->getVoltageLevels();
+  const std::vector<shared_ptr<VoltageLevelInterface> >& voltageLevels = network->getVoltageLevels();
   ASSERT_EQ(voltageLevels.size(), 1);
   for (unsigned i = 0, iEnd = voltageLevels.size(); i < iEnd; ++i) {
     shared_ptr<VoltageLevelInterface> voltageLevel = voltageLevels[i];
-    const std::vector< shared_ptr<LccConverterInterface> >&  lccConverters = voltageLevel->getLccConverters();
+    const std::vector<shared_ptr<LccConverterInterface> >& lccConverters = voltageLevel->getLccConverters();
     ASSERT_EQ(lccConverters.size(), 2);
 
-    const std::vector< shared_ptr<ShuntCompensatorInterface> >&  shuntCompensators = voltageLevel->getShuntCompensators();
+    const std::vector<shared_ptr<ShuntCompensatorInterface> >& shuntCompensators = voltageLevel->getShuntCompensators();
     ASSERT_EQ(shuntCompensators.size(), 1);
     for (unsigned j = 0, jEnd = shuntCompensators.size(); j < jEnd; ++j) {
       shared_ptr<ShuntCompensatorInterface> shuntCompensator = shuntCompensators[j];
       ASSERT_EQ(shuntCompensator->getCurrentSection(), 8);
     }
 
-    const std::vector< shared_ptr<StaticVarCompensatorInterface> >&  staticVarCompensators = voltageLevel->getStaticVarCompensators();
+    const std::vector<shared_ptr<StaticVarCompensatorInterface> >& staticVarCompensators = voltageLevel->getStaticVarCompensators();
     ASSERT_EQ(staticVarCompensators.size(), 1);
     for (unsigned j = 0, jEnd = staticVarCompensators.size(); j < jEnd; ++j) {
       shared_ptr<StaticVarCompensatorInterface> staticVarCompensator = staticVarCompensators[j];
@@ -423,7 +421,7 @@ TEST(ModelsModelNetwork, TestNetworkCreation) {
     ASSERT_EQ(voltageLevel->getLccConverters().size(), 2);
     ASSERT_EQ(voltageLevel->getVscConverters().size(), 2);
   }
-  const std::vector< shared_ptr<TwoWTransformerInterface> >& twoWTransformers = network->getTwoWTransformers();
+  const std::vector<shared_ptr<TwoWTransformerInterface> >& twoWTransformers = network->getTwoWTransformers();
   ASSERT_EQ(twoWTransformers.size(), 1);
   for (unsigned i = 0, iEnd = twoWTransformers.size(); i < iEnd; ++i) {
     shared_ptr<TwoWTransformerInterface> twoWTransformer = twoWTransformers[i];

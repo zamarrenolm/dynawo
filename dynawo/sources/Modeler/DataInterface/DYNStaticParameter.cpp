@@ -18,29 +18,21 @@
  *
  */
 #include "DYNStaticParameter.h"
+
 #include "DYNMacrosMessage.h"
 
 using std::string;
 
 namespace DYN {
 
-StaticParameter::StaticParameter():
-type_(StaticParameter::DOUBLE),  // most used type
-value_(boost::none),
-name_("") {
-}
+StaticParameter::StaticParameter() :
+    type_(StaticParameter::DOUBLE),  // most used type
+    value_(boost::none),
+    name_("") {}
 
-StaticParameter::StaticParameter(const string& name, const StaticParameterType& type) :
-type_(type),
-value_(boost::none),
-name_(name) {
-}
+StaticParameter::StaticParameter(const string& name, const StaticParameterType& type) : type_(type), value_(boost::none), name_(name) {}
 
-StaticParameter::StaticParameter(const StaticParameter& origin):
-type_(origin.type_),
-value_(origin.value_),
-name_(origin.name_) {
-}
+StaticParameter::StaticParameter(const StaticParameter& origin) : type_(origin.type_), value_(origin.value_), name_(origin.name_) {}
 
 StaticParameter&
 StaticParameter::operator=(const StaticParameter& origin) {
@@ -52,8 +44,7 @@ StaticParameter::operator=(const StaticParameter& origin) {
   return *this;
 }
 
-StaticParameter::~StaticParameter() {
-}
+StaticParameter::~StaticParameter() {}
 
 string
 StaticParameter::getName() const {
@@ -73,12 +64,12 @@ StaticParameter::valueAffected() const {
 string
 StaticParameter::typeAsString(const StaticParameterType& type) {
   switch (type) {
-    case INT:
-      return "INT";
-    case BOOL:
-      return "BOOL";
-    case DOUBLE:
-      return "DOUBLE";
+  case INT:
+    return "INT";
+  case BOOL:
+    return "BOOL";
+  case DOUBLE:
+    return "DOUBLE";
   }
   return "";  /// to avoid compiler warning
 }

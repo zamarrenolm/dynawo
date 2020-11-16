@@ -20,14 +20,15 @@
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-function"
-# endif  // __clang__
+#endif  // __clang__
 
-#include <cstdlib>
-#include <cstdarg>
-#include <cassert>
-#include <cstring>
-#include <cctype>
 #include "DYNModelManagerOwnFunctions.h"
+
+#include <cassert>
+#include <cctype>
+#include <cstdarg>
+#include <cstdlib>
+#include <cstring>
 
 #if defined(_LP64)
 #define MMC_LOG2_SIZE_INT 3
@@ -37,19 +38,19 @@
 #define MMC_LOG2_SIZE_INT 2
 #endif
 
-#define MMC_STRINGHDR(nbytes)     ((((mmc_uint_t)nbytes) << (3))+((1 << (3+MMC_LOG2_SIZE_INT))+5))
-#define MMC_HDRISSTRING(hdr)      (((hdr) & (7)) == 5)
-#define MMC_HDRSTRINGSLOTS(hdr)   ((hdr) >> (3+MMC_LOG2_SIZE_INT))
-#define MMC_HDRSLOTS(hdr)         ((MMC_HDRISSTRING(hdr)) ? (MMC_HDRSTRINGSLOTS(hdr)) : ((hdr) >> 10))
-#define MMC_TAGPTR(p)             (reinterpret_cast<void*>(reinterpret_cast<char*>(p) + 0))
+#define MMC_STRINGHDR(nbytes) ((((mmc_uint_t)nbytes) << (3)) + ((1 << (3 + MMC_LOG2_SIZE_INT)) + 5))
+#define MMC_HDRISSTRING(hdr) (((hdr) & (7)) == 5)
+#define MMC_HDRSTRINGSLOTS(hdr) ((hdr) >> (3 + MMC_LOG2_SIZE_INT))
+#define MMC_HDRSLOTS(hdr) ((MMC_HDRISSTRING(hdr)) ? (MMC_HDRSTRINGSLOTS(hdr)) : ((hdr) >> 10))
+#define MMC_TAGPTR(p) (reinterpret_cast<void *>(reinterpret_cast<char *>(p) + 0))
 #define MMC_REFSTRINGLIT(NAME) MMC_TAGPTR(&(NAME).header)
-#define MMC_DEFSTRINGLIT(NAME, LEN, VAL)  \
-    struct {        \
-      mmc_uint_t header;    \
-      const char data[(LEN)+1];    \
-    } NAME = { MMC_STRINGHDR(LEN), VAL }
+#define MMC_DEFSTRINGLIT(NAME, LEN, VAL) \
+  struct {                               \
+    mmc_uint_t header;                   \
+    const char data[(LEN) + 1];          \
+  } NAME = {MMC_STRINGHDR(LEN), VAL}
 static MMC_DEFSTRINGLIT(OMC_STRINGLIT_0, 0, "");
-void* mmc_emptystring = MMC_REFSTRINGLIT(OMC_STRINGLIT_0);
+void *mmc_emptystring = MMC_REFSTRINGLIT(OMC_STRINGLIT_0);
 static MMC_DEFSTRINGLIT(OMC_STRINGLIT_1_01, 1, "\x01");
 static MMC_DEFSTRINGLIT(OMC_STRINGLIT_1_02, 1, "\x02");
 static MMC_DEFSTRINGLIT(OMC_STRINGLIT_1_03, 1, "\x03");
@@ -305,288 +306,296 @@ static MMC_DEFSTRINGLIT(OMC_STRINGLIT_1_FC, 1, "\xFC");
 static MMC_DEFSTRINGLIT(OMC_STRINGLIT_1_FD, 1, "\xFD");
 static MMC_DEFSTRINGLIT(OMC_STRINGLIT_1_FE, 1, "\xFE");
 static MMC_DEFSTRINGLIT(OMC_STRINGLIT_1_FF, 1, "\xFF");
-void* mmc_strings_len1[256] = {
-NULL,
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_01),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_02),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_03),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_04),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_05),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_06),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_07),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_08),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_09),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_10),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_11),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_12),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_13),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_14),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_15),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_16),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_17),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_18),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_19),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_20),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_21),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_22),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_23),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_24),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_25),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_26),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_27),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_28),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_29),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_30),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_31),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_32),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_33),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_34),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_35),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_36),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_37),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_38),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_39),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_40),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_41),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_42),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_43),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_44),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_45),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_46),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_47),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_48),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_49),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_50),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_51),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_52),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_53),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_54),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_55),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_56),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_57),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_58),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_59),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_60),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_61),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_62),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_63),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_64),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_65),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_66),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_67),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_68),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_69),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_70),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_71),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_72),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_73),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_74),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_75),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_76),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_77),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_78),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_79),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_80),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_81),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_82),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_83),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_84),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_85),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_86),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_87),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_88),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_89),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_90),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_91),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_92),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_93),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_94),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_95),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_96),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_97),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_98),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_99),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9A),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9B),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9C),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9D),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9E),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9F),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A0),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A1),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A2),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A3),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A4),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A5),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A6),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A7),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A8),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A9),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AA),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AB),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AC),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AD),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AE),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AF),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B0),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B1),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B2),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B3),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B4),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B5),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B6),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B7),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B8),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B9),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BA),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BB),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BC),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BD),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BE),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BF),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C0),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C1),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C2),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C3),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C4),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C5),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C6),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C7),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C8),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C9),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CA),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CB),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CC),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CD),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CE),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CF),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D0),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D1),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D2),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D3),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D4),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D5),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D6),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D7),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D8),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D9),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DA),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DB),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DC),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DD),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DE),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DF),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E0),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E1),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E2),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E3),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E4),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E5),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E6),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E7),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E8),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E9),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EA),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EB),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EC),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_ED),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EE),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EF),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F0),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F1),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F2),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F3),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F4),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F5),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F6),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F7),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F8),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F9),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FA),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FB),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FC),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FD),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FE),
-MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FF),
+void *mmc_strings_len1[256] = {
+    NULL,
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_01),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_02),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_03),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_04),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_05),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_06),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_07),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_08),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_09),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_0F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_10),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_11),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_12),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_13),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_14),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_15),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_16),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_17),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_18),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_19),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_1F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_20),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_21),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_22),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_23),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_24),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_25),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_26),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_27),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_28),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_29),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_2F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_30),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_31),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_32),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_33),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_34),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_35),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_36),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_37),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_38),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_39),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_3F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_40),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_41),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_42),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_43),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_44),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_45),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_46),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_47),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_48),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_49),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_4F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_50),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_51),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_52),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_53),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_54),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_55),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_56),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_57),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_58),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_59),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_5F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_60),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_61),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_62),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_63),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_64),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_65),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_66),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_67),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_68),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_69),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_6F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_70),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_71),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_72),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_73),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_74),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_75),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_76),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_77),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_78),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_79),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_7F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_80),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_81),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_82),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_83),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_84),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_85),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_86),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_87),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_88),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_89),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_8F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_90),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_91),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_92),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_93),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_94),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_95),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_96),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_97),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_98),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_99),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9A),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9B),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9C),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9D),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9E),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_9F),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A0),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A1),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A2),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A3),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A4),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A5),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A6),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A7),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A8),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_A9),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AA),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AB),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AC),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AD),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AE),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_AF),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B0),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B1),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B2),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B3),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B4),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B5),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B6),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B7),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B8),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_B9),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BA),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BB),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BC),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BD),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BE),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_BF),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C0),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C1),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C2),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C3),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C4),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C5),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C6),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C7),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C8),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_C9),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CA),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CB),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CC),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CD),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CE),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_CF),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D0),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D1),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D2),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D3),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D4),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D5),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D6),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D7),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D8),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_D9),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DA),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DB),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DC),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DD),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DE),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_DF),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E0),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E1),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E2),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E3),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E4),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E5),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E6),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E7),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E8),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_E9),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EA),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EB),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EC),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_ED),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EE),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_EF),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F0),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F1),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F2),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F3),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F4),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F5),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F6),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F7),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F8),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_F9),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FA),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FB),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FC),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FD),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FE),
+    MMC_REFSTRINGLIT(OMC_STRINGLIT_1_FF),
 };
 
 /**
  * Method copied from <OpenModelica Sources>/SimulationRuntime/c/util/index_spec.h
  * It is needed for Dynawo models dynamic libraries compilation
  */
-int imax(int i, int j) { return ((i < j) ? j : i); }
-
-static inline void real_set_(real_array_t *a, size_t i, modelica_real r) {
-  (reinterpret_cast<modelica_real *> (a->data))[i] = r;
+int
+imax(int i, int j) {
+  return ((i < j) ? j : i);
 }
 
-static inline modelica_string *string_ptrget(const string_array_t *a, size_t i) {
-  return (reinterpret_cast<modelica_string *> (a->data)) + i;
+static inline void
+real_set_(real_array_t *a, size_t i, modelica_real r) {
+  (reinterpret_cast<modelica_real *>(a->data))[i] = r;
 }
 
-static inline void string_set(string_array_t *a, size_t i, modelica_string r) {
-  (reinterpret_cast<modelica_string *> (a->data))[i] = r;
+static inline modelica_string *
+string_ptrget(const string_array_t *a, size_t i) {
+  return (reinterpret_cast<modelica_string *>(a->data)) + i;
 }
 
-static modelica_string string_get(const string_array_t a, size_t i) {
-  return (reinterpret_cast<modelica_string *> (a.data))[i];
+static inline void
+string_set(string_array_t *a, size_t i, modelica_string r) {
+  (reinterpret_cast<modelica_string *>(a->data))[i] = r;
 }
 
-static inline size_t base_array_nr_of_elements(const base_array_t a) {
+static modelica_string
+string_get(const string_array_t a, size_t i) {
+  return (reinterpret_cast<modelica_string *>(a.data))[i];
+}
+
+static inline size_t
+base_array_nr_of_elements(const base_array_t a) {
   size_t nr_of_elements = 1;
   for (int i = 0; i < a.ndims; ++i) {
     nr_of_elements *= a.dim_size[i];
@@ -594,44 +603,50 @@ static inline size_t base_array_nr_of_elements(const base_array_t a) {
   return nr_of_elements;
 }
 
-const char** data_of_string_c89_array(const string_array_t *a) {
+const char **
+data_of_string_c89_array(const string_array_t *a) {
   size_t sz = base_array_nr_of_elements(*a);
-  const char **res = new const char*[sz]();
-  for (unsigned int i=0; i< sz; ++i) {
-    res[i] = (reinterpret_cast<modelica_string *> (a->data))[i];
+  const char **res = new const char *[sz]();
+  for (unsigned int i = 0; i < sz; ++i) {
+    res[i] = (reinterpret_cast<modelica_string *>(a->data))[i];
   }
   return res;
 }
 
-void* mmc_mk_scon(const char *s) {
-    size_t nbytes = strlen(s);
-    size_t header = MMC_STRINGHDR(nbytes);
-    size_t nwords = MMC_HDRSLOTS(header) + 1;
-    struct mmc_string *p;
-    void *res;
-    if (nbytes == 0) return mmc_emptystring;
-    if (nbytes == 1) {
-      unsigned char c = *s;
-      return mmc_strings_len1[(unsigned int)c];
-    }
-    p = (struct mmc_string *) malloc(nwords*sizeof(void*));
-    p->header = header;
-    memcpy(p->data, s, nbytes+1);  /* including terminating '\0' */
-    res = MMC_TAGPTR(p->data);
-    return res;
+void *
+mmc_mk_scon(const char *s) {
+  size_t nbytes = strlen(s);
+  size_t header = MMC_STRINGHDR(nbytes);
+  size_t nwords = MMC_HDRSLOTS(header) + 1;
+  struct mmc_string *p;
+  void *res;
+  if (nbytes == 0)
+    return mmc_emptystring;
+  if (nbytes == 1) {
+    unsigned char c = *s;
+    return mmc_strings_len1[(unsigned int)c];
+  }
+  p = (struct mmc_string *)malloc(nwords * sizeof(void *));
+  p->header = header;
+  memcpy(p->data, s, nbytes + 1); /* including terminating '\0' */
+  res = MMC_TAGPTR(p->data);
+  return res;
 }
 
-void put_real_element(modelica_real value, int i1, real_array_t *dest) {
+void
+put_real_element(modelica_real value, int i1, real_array_t *dest) {
   /* Assert that dest has correct dimension */
   /* Assert that i1 is a valid index */
   real_set_(dest, i1, value);
 }
 
-void simple_alloc_1d_real_array(real_array_t* dest, int n) {
+void
+simple_alloc_1d_real_array(real_array_t *dest, int n) {
   simple_alloc_1d_base_array(dest, n, new modelica_real[n]());
 }
 
-void array_alloc_scalar_string_array(string_array_t* dest, int n, modelica_string first, ...) {
+void
+array_alloc_scalar_string_array(string_array_t *dest, int n, modelica_string first, ...) {
   va_list ap;
   simple_alloc_1d_string_array(dest, n);
   va_start(ap, first);
@@ -642,21 +657,23 @@ void array_alloc_scalar_string_array(string_array_t* dest, int n, modelica_strin
   va_end(ap);
 }
 
-void simple_alloc_1d_string_array(string_array_t* dest, int n) {
+void
+simple_alloc_1d_string_array(string_array_t *dest, int n) {
   simple_alloc_1d_base_array(dest, n, new m_string[n]());
 }
 
-
-void put_string_element(modelica_string value, int i1, string_array_t *dest) {
+void
+put_string_element(modelica_string value, int i1, string_array_t *dest) {
   /* Assert that dest has correct dimension */
   /* Assert that i1 is a valid index */
   string_set(dest, i1, value);
 }
 
-void array_alloc_string_array(string_array_t* dest, int n, string_array_t first, ...) {
+void
+array_alloc_string_array(string_array_t *dest, int n, string_array_t first, ...) {
   va_list ap;
 
-  string_array_t *elts = reinterpret_cast<string_array_t*>(malloc(sizeof(string_array_t) * n));
+  string_array_t *elts = reinterpret_cast<string_array_t *>(malloc(sizeof(string_array_t) * n));
   assert(elts);
   /* collect all array ptrs to simplify traversal.*/
   va_start(ap, first);
@@ -691,7 +708,8 @@ void array_alloc_string_array(string_array_t* dest, int n, string_array_t first,
   free(elts);
 }
 
-void alloc_string_array(string_array_t *dest, int ndims, ...) {
+void
+alloc_string_array(string_array_t *dest, int ndims, ...) {
   size_t elements = 0;
   va_list ap;
   va_start(ap, ndims);
@@ -700,7 +718,8 @@ void alloc_string_array(string_array_t *dest, int ndims, ...) {
   dest->data = new m_string[elements]();
 }
 
-void check_base_array_dim_sizes(const base_array_t *elts, int n) {
+void
+check_base_array_dim_sizes(const base_array_t *elts, int n) {
   int ndims = elts[0].ndims;
   for (int i = 1; i < n; ++i) {
     assert(elts[i].ndims == ndims && "Not same number of dimensions");
@@ -708,21 +727,21 @@ void check_base_array_dim_sizes(const base_array_t *elts, int n) {
   for (int curdim = 0; curdim < ndims; ++curdim) {
     int dimsize = elts[0].dim_size[curdim];
     for (int i = 1; i < n; ++i) {
-      assert(dimsize == elts[i].dim_size[curdim]
-                                         && "Dimensions size not same");
+      assert(dimsize == elts[i].dim_size[curdim] && "Dimensions size not same");
     }
   }
 }
 
-void simple_alloc_1d_base_array(base_array_t *dest, int n, void *data) {
+void
+simple_alloc_1d_base_array(base_array_t *dest, int n, void *data) {
   dest->ndims = 1;
   dest->dim_size = new _index_t[1]();
   dest->dim_size[0] = n;
   dest->data = data;
 }
 
-
-void alloc_real_array(real_array_t *dest, int ndims, ...) {
+void
+alloc_real_array(real_array_t *dest, int ndims, ...) {
   va_list ap;
   va_start(ap, ndims);
   size_t elements = alloc_base_array(dest, ndims, ap);
@@ -730,7 +749,8 @@ void alloc_real_array(real_array_t *dest, int ndims, ...) {
   dest->data = new modelica_real[elements]();
 }
 
-size_t alloc_base_array(base_array_t *dest, int ndims, va_list ap) {
+size_t
+alloc_base_array(base_array_t *dest, int ndims, va_list ap) {
   size_t nr_of_elements = 1;
 
   dest->ndims = ndims;
@@ -744,7 +764,8 @@ size_t alloc_base_array(base_array_t *dest, int ndims, va_list ap) {
   return nr_of_elements;
 }
 
-void copy_real_array_data_mem(const real_array_t source, modelica_real *dest) {
+void
+copy_real_array_data_mem(const real_array_t source, modelica_real *dest) {
   size_t nr_of_elements = base_array_nr_of_elements(source);
 
   for (size_t i = 0; i < nr_of_elements; ++i) {
@@ -752,7 +773,8 @@ void copy_real_array_data_mem(const real_array_t source, modelica_real *dest) {
   }
 }
 
-void array_alloc_scalar_real_array(real_array_t* dest, int n, modelica_real first, ...) {
+void
+array_alloc_scalar_real_array(real_array_t *dest, int n, modelica_real first, ...) {
   va_list ap;
   simple_alloc_1d_real_array(dest, n);
   va_start(ap, first);
@@ -763,11 +785,13 @@ void array_alloc_scalar_real_array(real_array_t* dest, int n, modelica_real firs
   va_end(ap);
 }
 
-static inline void* generic_ptrget(const base_array_t *a, size_t sze, size_t i) {
-  return (reinterpret_cast<char*>(a->data)) + (i*sze);
+static inline void *
+generic_ptrget(const base_array_t *a, size_t sze, size_t i) {
+  return (reinterpret_cast<char *>(a->data)) + (i * sze);
 }
 
-size_t calc_base_index_va(const base_array_t *source, int ndims, va_list ap) {
+size_t
+calc_base_index_va(const base_array_t *source, int ndims, va_list ap) {
   int i;
   size_t index;
 
@@ -783,18 +807,20 @@ size_t calc_base_index_va(const base_array_t *source, int ndims, va_list ap) {
   return index;
 }
 
-void* generic_array_element_addr(const base_array_t* source, size_t sze, int ndims, ...) {
+void *
+generic_array_element_addr(const base_array_t *source, size_t sze, int ndims, ...) {
   va_list ap;
-  void* tmp;
+  void *tmp;
   va_start(ap, ndims);
   tmp = generic_ptrget(source, calc_base_index_va(source, ndims, ap), sze);
   va_end(ap);
   return tmp;
 }
 
-void pack_integer_array(integer_array_t *a) {
+void
+pack_integer_array(integer_array_t *a) {
   if (sizeof(int) != sizeof(modelica_integer)) {
-    int * int_data = reinterpret_cast<int*>(a->data);
+    int *int_data = reinterpret_cast<int *>(a->data);
     size_t n = base_array_nr_of_elements(*a);
 
     for (size_t i = 0; i < n; ++i) {
@@ -803,69 +829,77 @@ void pack_integer_array(integer_array_t *a) {
   }
 }
 
-void put_real_matrix_element(modelica_real value, int r, int c, real_array_t* dest) {
-    /* Assert that dest hast correct dimension */
-    /* Assert that r and c are valid indices */
-    real_set(dest, (r * dest->dim_size[1]) + c, value);
-    /* printf("Index %d\n",r*dest->dim_size[1]+c); */
+void
+put_real_matrix_element(modelica_real value, int r, int c, real_array_t *dest) {
+  /* Assert that dest hast correct dimension */
+  /* Assert that r and c are valid indices */
+  real_set(dest, (r * dest->dim_size[1]) + c, value);
+  /* printf("Index %d\n",r*dest->dim_size[1]+c); */
 }
 
-void array_alloc_scalar_integer_array(integer_array_t* dest, int n,
-                                      modelica_integer first, ...) {
-    int i;
-    va_list ap;
-    simple_alloc_1d_integer_array(dest, n);
-    va_start(ap, first);
-    put_integer_element(first, 0, dest);
-    for (i = 1; i < n; ++i) {
-        put_integer_element(va_arg(ap, m_integer), i, dest);
-    }
-    va_end(ap);
+void
+array_alloc_scalar_integer_array(integer_array_t *dest, int n, modelica_integer first, ...) {
+  int i;
+  va_list ap;
+  simple_alloc_1d_integer_array(dest, n);
+  va_start(ap, first);
+  put_integer_element(first, 0, dest);
+  for (i = 1; i < n; ++i) {
+    put_integer_element(va_arg(ap, m_integer), i, dest);
+  }
+  va_end(ap);
 }
 
-void simple_alloc_1d_integer_array(integer_array_t* dest, int n) {
-    simple_alloc_1d_base_array(dest, n, integer_alloc(n));
+void
+simple_alloc_1d_integer_array(integer_array_t *dest, int n) {
+  simple_alloc_1d_base_array(dest, n, integer_alloc(n));
 }
 
-void put_integer_element(modelica_integer value, int i1, integer_array_t* dest) {
-    /* Assert that dest has correct dimension */
-    /* Assert that i1 is a valid index */
-    integer_set(dest, i1, value);
+void
+put_integer_element(modelica_integer value, int i1, integer_array_t *dest) {
+  /* Assert that dest has correct dimension */
+  /* Assert that i1 is a valid index */
+  integer_set(dest, i1, value);
 }
 
-static inline modelica_real *real_ptrget(const real_array_t *a, size_t i) {
-    return reinterpret_cast<modelica_real *>(a->data) + i;
+static inline modelica_real *
+real_ptrget(const real_array_t *a, size_t i) {
+  return reinterpret_cast<modelica_real *>(a->data) + i;
 }
 
-modelica_real* real_array_element_addr1(const real_array_t * source, int /*ndims*/, int dim1) {
-    return real_ptrget(source, dim1 - 1);
+modelica_real *
+real_array_element_addr1(const real_array_t *source, int /*ndims*/, int dim1) {
+  return real_ptrget(source, dim1 - 1);
 }
 
-static modelica_integer integer_le(modelica_integer x, modelica_integer y) {
-    return (x <= y);
+static modelica_integer
+integer_le(modelica_integer x, modelica_integer y) {
+  return (x <= y);
 }
 
-static modelica_integer integer_ge(modelica_integer x, modelica_integer y) {
-    return (x >= y);
+static modelica_integer
+integer_ge(modelica_integer x, modelica_integer y) {
+  return (x >= y);
 }
 
 /* Creates an integer array from a range with a start, stop and step value.
  * Ex: 1:2:6 => {1,3,5} */
-void create_integer_array_from_range(integer_array_t *dest, modelica_integer start, modelica_integer step, modelica_integer stop) {
-    size_t elements;
-    size_t i;
-    modelica_integer (*comp_func)(modelica_integer, modelica_integer);
+void
+create_integer_array_from_range(integer_array_t *dest, modelica_integer start, modelica_integer step, modelica_integer stop) {
+  size_t elements;
+  size_t i;
+  modelica_integer (*comp_func)(modelica_integer, modelica_integer);
 
-    assert(step != 0);
+  assert(step != 0);
 
-    comp_func = (step > 0) ? &integer_le : &integer_ge;
-    elements = comp_func(start, stop) ? (((stop - start) / step) + 1) : 0;
+  comp_func = (step > 0) ? &integer_le : &integer_ge;
+  elements = comp_func(start, stop) ? (((stop - start) / step) + 1) : 0;
 
-    simple_alloc_1d_integer_array(dest, elements);
+  simple_alloc_1d_integer_array(dest, elements);
 
-    for (i = 0; i < elements; start += step, ++i) {
-        integer_set(dest, i, start);
-    }
+  for (i = 0; i < elements; start += step, ++i) {
+    integer_set(dest, i, start);
+  }
 }
 
 /* integer_array_make_index_array
@@ -874,189 +908,197 @@ void create_integer_array_from_range(integer_array_t *dest, modelica_integer sta
  ** create_index_spec defined in index_spec.c
  */
 
-_index_t* integer_array_make_index_array(const integer_array_t *arr) {
-    return reinterpret_cast<int*>(arr->data);
+_index_t *
+integer_array_make_index_array(const integer_array_t *arr) {
+  return reinterpret_cast<int *>(arr->data);
 }
 
 /* Fills an array with a value. */
-void fill_alloc_real_array(real_array_t* dest, modelica_real value, int ndims, ...) {
-    size_t i;
-    size_t elements = 0;
-    va_list ap;
-    va_start(ap, ndims);
-    elements = alloc_base_array(dest, ndims, ap);
-    va_end(ap);
-    dest->data = real_alloc(elements);
+void
+fill_alloc_real_array(real_array_t *dest, modelica_real value, int ndims, ...) {
+  size_t i;
+  size_t elements = 0;
+  va_list ap;
+  va_start(ap, ndims);
+  elements = alloc_base_array(dest, ndims, ap);
+  va_end(ap);
+  dest->data = real_alloc(elements);
 
-    for (i = 0; i < elements; ++i) {
-        real_set(dest, i, value);
-    }
+  for (i = 0; i < elements; ++i) {
+    real_set(dest, i, value);
+  }
 }
 
-real_array_t sub_alloc_real_array(const real_array_t a, const real_array_t b) {
-    real_array_t dest;
-    clone_real_array_spec(&a, &dest);
-    alloc_real_array_data(&dest);
-    sub_real_array(&a, &b, &dest);
-    return dest;
+real_array_t
+sub_alloc_real_array(const real_array_t a, const real_array_t b) {
+  real_array_t dest;
+  clone_real_array_spec(&a, &dest);
+  alloc_real_array_data(&dest);
+  sub_real_array(&a, &b, &dest);
+  return dest;
 }
 
 /* Copy real data*/
-void copy_real_array_data(const real_array_t source, real_array_t *dest) {
-    size_t i, nr_of_elements;
+void
+copy_real_array_data(const real_array_t source, real_array_t *dest) {
+  size_t i, nr_of_elements;
 
-    assert(base_array_ok(&source));
-    assert(base_array_ok(dest));
-    assert(base_array_shape_eq(&source, dest));
+  assert(base_array_ok(&source));
+  assert(base_array_ok(dest));
+  assert(base_array_shape_eq(&source, dest));
 
-    nr_of_elements = base_array_nr_of_elements(source);
+  nr_of_elements = base_array_nr_of_elements(source);
 
-    for (i = 0; i < nr_of_elements; ++i) {
-        real_set(dest, i, real_get(source, i));
-    }
+  for (i = 0; i < nr_of_elements; ++i) {
+    real_set(dest, i, real_get(source, i));
+  }
 }
 
 /* Allocation of real data */
-void alloc_real_array_data(real_array_t *a) {
-    a->data = real_alloc(base_array_nr_of_elements(*a));
+void
+alloc_real_array_data(real_array_t *a) {
+  a->data = real_alloc(base_array_nr_of_elements(*a));
 }
 
-void sub_real_array(const real_array_t * a, const real_array_t * b, real_array_t* dest) {
-    size_t nr_of_elements;
-    size_t i;
+void
+sub_real_array(const real_array_t *a, const real_array_t *b, real_array_t *dest) {
+  size_t nr_of_elements;
+  size_t i;
 
-    /* Assert a and b are of the same size */
-    /* Assert that dest are of correct size */
-    nr_of_elements = base_array_nr_of_elements(*a);
-    for (i = 0; i < nr_of_elements; ++i) {
-        real_set(dest, i, real_get(*a, i)-real_get(*b, i));
-    }
+  /* Assert a and b are of the same size */
+  /* Assert that dest are of correct size */
+  nr_of_elements = base_array_nr_of_elements(*a);
+  for (i = 0; i < nr_of_elements; ++i) {
+    real_set(dest, i, real_get(*a, i) - real_get(*b, i));
+  }
 }
 
-void clone_base_array_spec(const base_array_t *source, base_array_t *dest) {
-    int i;
-    assert(base_array_ok(source));
+void
+clone_base_array_spec(const base_array_t *source, base_array_t *dest) {
+  int i;
+  assert(base_array_ok(source));
 
-    dest->ndims = source->ndims;
-    dest->dim_size = size_alloc(dest->ndims);
-    assert(dest->dim_size);
+  dest->ndims = source->ndims;
+  dest->dim_size = size_alloc(dest->ndims);
+  assert(dest->dim_size);
 
-    for (i = 0; i < dest->ndims; ++i) {
-        dest->dim_size[i] = source->dim_size[i];
-    }
+  for (i = 0; i < dest->ndims; ++i) {
+    dest->dim_size[i] = source->dim_size[i];
+  }
 }
 
-int base_array_ok(const base_array_t *a) {
-    int i;
-    if (a == NULL) {
+int
+base_array_ok(const base_array_t *a) {
+  int i;
+  if (a == NULL) {
+    return 0;
+  }
+  if (a->ndims < 0) {
+    return 0;
+  }
+  if (a->dim_size == NULL) {
+    return 0;
+  }
+  for (i = 0; i < a->ndims; ++i) {
+    if (a->dim_size[i] < 0) {
       return 0;
     }
-    if (a->ndims < 0) {
+  }
+  return 1;
+}
+
+int
+base_array_shape_eq(const base_array_t *a, const base_array_t *b) {
+  int i;
+
+  if (a->ndims != b->ndims) {
+    return 0;
+  }
+
+  for (i = 0; i < a->ndims; ++i) {
+    if (a->dim_size[i] != b->dim_size[i]) {
       return 0;
     }
-    if (a->dim_size == NULL) {
-      return 0;
-    }
-    for (i = 0; i < a->ndims; ++i) {
-        if (a->dim_size[i] < 0) {
-          return 0;
-        }
-    }
-    return 1;
+  }
+
+  return 1;
 }
 
-int base_array_shape_eq(const base_array_t *a, const base_array_t *b) {
-    int i;
+void
+indexed_assign_real_array(const real_array_t source, real_array_t *dest, const index_spec_t *dest_spec) {
+  _index_t *idx_vec1, *idx_size;
+  size_t j;
+  indexed_assign_base_array_size_alloc(&source, dest, dest_spec, &idx_vec1, &idx_size);
 
-    if (a->ndims != b->ndims) {
-        return 0;
-    }
+  j = 0;
+  do {
+    real_set(dest, calc_base_index_spec(dest->ndims, idx_vec1, dest, dest_spec), real_get(source, j));
+    j++;
+  } while (0 == next_index(dest_spec->ndims, idx_vec1, idx_size));
 
-    for (i = 0; i < a->ndims; ++i) {
-        if (a->dim_size[i] != b->dim_size[i]) {
-            return 0;
-        }
-    }
-
-    return 1;
+  assert(j == base_array_nr_of_elements(source));
 }
 
-void indexed_assign_real_array(const real_array_t source, real_array_t* dest,
-                               const index_spec_t* dest_spec) {
-    _index_t *idx_vec1, *idx_size;
-    size_t j;
-    indexed_assign_base_array_size_alloc(&source, dest, dest_spec, &idx_vec1, &idx_size);
-
-    j = 0;
-    do {
-        real_set(dest,
-                 calc_base_index_spec(dest->ndims, idx_vec1, dest, dest_spec),
-                 real_get(source, j));
-        j++;
-    } while (0 == next_index(dest_spec->ndims, idx_vec1, idx_size));
-
-    assert(j == base_array_nr_of_elements(source));
-}
-
-void indexed_assign_base_array_size_alloc(const base_array_t *source, base_array_t *dest,
-    const index_spec_t *dest_spec, _index_t** _idx_vec1, _index_t** _idx_size) {
-    _index_t* idx_vec1;
-    _index_t* idx_size;
-    int i, j;
-    assert(base_array_ok(source));
-    assert(base_array_ok(dest));
-    assert(index_spec_ok(dest_spec));
-    assert(index_spec_fit_base_array(dest_spec, dest));
-    for (i = 0, j = 0; i < dest_spec->ndims; ++i) {
-        if (dest_spec->dim_size[i] != 0) {
-            ++j;
-        }
+void
+indexed_assign_base_array_size_alloc(const base_array_t *source, base_array_t *dest, const index_spec_t *dest_spec, _index_t **_idx_vec1,
+                                     _index_t **_idx_size) {
+  _index_t *idx_vec1;
+  _index_t *idx_size;
+  int i, j;
+  assert(base_array_ok(source));
+  assert(base_array_ok(dest));
+  assert(index_spec_ok(dest_spec));
+  assert(index_spec_fit_base_array(dest_spec, dest));
+  for (i = 0, j = 0; i < dest_spec->ndims; ++i) {
+    if (dest_spec->dim_size[i] != 0) {
+      ++j;
     }
-    assert(j == source->ndims);
+  }
+  assert(j == source->ndims);
 
-    idx_vec1 = size_alloc(dest->ndims);
-    idx_size = size_alloc(dest_spec->ndims);
+  idx_vec1 = size_alloc(dest->ndims);
+  idx_size = size_alloc(dest_spec->ndims);
 
-    for (i = 0; i < dest_spec->ndims; ++i) {
-        idx_vec1[i] = 0;
+  for (i = 0; i < dest_spec->ndims; ++i) {
+    idx_vec1[i] = 0;
 
-        if (dest_spec->index[i] != NULL) { /* is 'S' or 'A' */
-            idx_size[i] = imax(dest_spec->dim_size[i], 1);
-        } else { /* is 'W' */
-            idx_size[i] = dest->dim_size[i];
-        }
+    if (dest_spec->index[i] != NULL) { /* is 'S' or 'A' */
+      idx_size[i] = imax(dest_spec->dim_size[i], 1);
+    } else { /* is 'W' */
+      idx_size[i] = dest->dim_size[i];
     }
-    *_idx_vec1 = idx_vec1;
-    *_idx_size = idx_size;
+  }
+  *_idx_vec1 = idx_vec1;
+  *_idx_size = idx_size;
 }
 /*
  a[1:3] := b;
 */
-size_t calc_base_index_spec(int ndims, const _index_t *idx_vec,
-                            const base_array_t *arr, const index_spec_t *spec) {
-    /* idx_vec is zero based */
-    /* spec is one based */
-    int i;
-    int d2;
-    size_t index = 0;
+size_t
+calc_base_index_spec(int ndims, const _index_t *idx_vec, const base_array_t *arr, const index_spec_t *spec) {
+  /* idx_vec is zero based */
+  /* spec is one based */
+  int i;
+  int d2;
+  size_t index = 0;
 
-    assert(base_array_ok(arr));
-    assert(index_spec_ok(spec));
-    assert(index_spec_fit_base_array(spec, arr));
-    assert((ndims == arr->ndims) && (ndims == spec->ndims));
+  assert(base_array_ok(arr));
+  assert(index_spec_ok(spec));
+  assert(index_spec_fit_base_array(spec, arr));
+  assert((ndims == arr->ndims) && (ndims == spec->ndims));
 
-    index = 0;
-    for (i = 0; i < ndims; ++i) {
-        int d = idx_vec[i];
-        if (spec->index[i] != NULL) {
-            d2 = spec->index[i][d] - 1;
-        } else {
-            d2 = d;
-        }
-        index = (index * arr->dim_size[i]) + d2;
+  index = 0;
+  for (i = 0; i < ndims; ++i) {
+    int d = idx_vec[i];
+    if (spec->index[i] != NULL) {
+      d2 = spec->index[i][d] - 1;
+    } else {
+      d2 = d;
     }
+    index = (index * arr->dim_size[i]) + d2;
+  }
 
-    return index;
+  return index;
 }
 
 /* Calculates the next index for copying subscripted array.
@@ -1066,73 +1108,76 @@ size_t calc_base_index_spec(int ndims, const _index_t *idx_vec,
  * The function returns 0 if new index is calculated and 1 if no more indices
  * are available (all indices traversed).
   */
-int next_index(int ndims, _index_t* idx, const _index_t* size) {
-    int d = ndims - 1;
+int
+next_index(int ndims, _index_t *idx, const _index_t *size) {
+  int d = ndims - 1;
 
-    idx[d]++;
+  idx[d]++;
 
-    while (idx[d] >= size[d]) {
-        idx[d] = 0;
-        if (d == 0) {
-            return 1;
-        }
-        d--;
-        idx[d]++;
+  while (idx[d] >= size[d]) {
+    idx[d] = 0;
+    if (d == 0) {
+      return 1;
     }
+    d--;
+    idx[d]++;
+  }
 
-    return 0;
+  return 0;
 }
 
-int index_spec_ok(const index_spec_t* s) {
-    int i;
-    if (s == NULL) {
+int
+index_spec_ok(const index_spec_t *s) {
+  int i;
+  if (s == NULL) {
+    return 0;
+  }
+  if (s->ndims < 0) {
+    return 0;
+  }
+  if (s->dim_size == NULL) {
+    return 0;
+  }
+  if (s->index == NULL) {
+    return 0;
+  }
+  for (i = 0; i < s->ndims; ++i) {
+    if (s->dim_size[i] < 0) {
       return 0;
     }
-    if (s->ndims < 0) {
+    if ((s->index[i] == 0) && (s->dim_size[i] != 1)) {
       return 0;
     }
-    if (s->dim_size == NULL) {
-      return 0;
+  }
+  return 1;
+}
+
+int
+index_spec_fit_base_array(const index_spec_t *s, const base_array_t *a) {
+  int i, j;
+
+  if (s->ndims != a->ndims) {
+    return 0;
+  }
+  for (i = 0; i < s->ndims; ++i) {
+    if (s->dim_size[i] == 0) {
+      if ((s->index[i][0] <= 0) || (s->index[i][0] > a->dim_size[i])) {
+        return 0;
+      }
     }
-    if (s->index == NULL) {
-      return 0;
-    }
-    for (i = 0; i < s->ndims; ++i) {
-        if (s->dim_size[i] < 0) {
+
+    if (s->index[i] != NULL) {
+      for (j = 0; j < s->dim_size[i]; ++j) {
+        if ((s->index[i][j] <= 0) || (s->index[i][j] > a->dim_size[i])) {
           return 0;
         }
-        if ((s->index[i] == 0) && (s->dim_size[i] != 1)) {
-            return 0;
-        }
+      }
     }
-    return 1;
-}
+  }
 
-int index_spec_fit_base_array(const index_spec_t *s, const base_array_t *a) {
-    int i, j;
-
-    if (s->ndims != a->ndims) {
-        return 0;
-    }
-    for (i = 0; i < s->ndims; ++i) {
-        if (s->dim_size[i] == 0) {
-            if ((s->index[i][0] <= 0) || (s->index[i][0] > a->dim_size[i])) {
-                return 0;
-            }
-        }
-
-        if (s->index[i] != NULL) {
-            for (j = 0; j < s->dim_size[i]; ++j) {
-                if ((s->index[i][j] <= 0) || (s->index[i][j] > a->dim_size[i])) {
-                    return 0;
-                }
-            }
-        }
-    }
-
-    return 1;
+  return 1;
 }
 
 #ifdef __clang__
 #pragma clang diagnostic pop
-# endif  // __clang__
+#endif  // __clang__

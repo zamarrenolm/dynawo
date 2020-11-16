@@ -11,10 +11,9 @@
 // simulation tool for power systems.
 //
 
-#include "gtest_dynawo.h"
-
 #include "DYNErrorQueue.h"
 #include "DYNMacrosMessage.h"
+#include "gtest_dynawo.h"
 
 namespace DYN {
 
@@ -45,7 +44,7 @@ TEST(CommonTest, testErrorQueue) {
   ASSERT_THROW_DYNAWO(handler->flush(), Error::GENERAL, KeyError_t::MultipleAndHiddenErrors);
   ASSERT_NO_THROW(handler->flush());
 
-  for (unsigned int i = 0; i < 2*maxDisplayedError; ++i) {
+  for (unsigned int i = 0; i < 2 * maxDisplayedError; ++i) {
     handler->push(DYNError(DYN::Error::SIMULATION, KeyError_t::NoJobDefined));
   }
   ASSERT_THROW_DYNAWO(handler->flush(), Error::GENERAL, KeyError_t::MultipleAndHiddenErrors);

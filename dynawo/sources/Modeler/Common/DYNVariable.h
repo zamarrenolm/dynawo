@@ -20,8 +20,9 @@
 #ifndef MODELER_COMMON_DYNVARIABLE_H_
 #define MODELER_COMMON_DYNVARIABLE_H_
 
-#include <string>
 #include "DYNEnumUtils.h"
+
+#include <string>
 
 namespace DYN {
 
@@ -36,7 +37,7 @@ class Variable {
   /**
    * @brief Destructor
    */
-  virtual ~Variable() { }
+  virtual ~Variable() {}
 
   /**
    * @brief Getter for variable's name
@@ -98,7 +99,7 @@ class Variable {
   Variable();  ///< Private default constructor
 
   const std::string name_;  ///< name of the variable
-  const bool isAlias_;  ///< @b whether the variable is an alias pointing towards another variable, or a "native" variable
+  const bool isAlias_;      ///< @b whether the variable is an alias pointing towards another variable, or a "native" variable
 };
 }  // namespace DYN
 

@@ -23,7 +23,6 @@
 #include "DYNRingBuffer.h"
 
 #include <boost/optional.hpp>
-
 #include <cstddef>
 #include <utility>
 

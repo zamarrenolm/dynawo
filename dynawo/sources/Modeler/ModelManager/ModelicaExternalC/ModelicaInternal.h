@@ -83,33 +83,25 @@
 MODELICA_EXPORT void ModelicaInternal_mkdir(_In_z_ const char* directoryName) MODELICA_NONNULLATTR;
 MODELICA_EXPORT void ModelicaInternal_rmdir(_In_z_ const char* directoryName) MODELICA_NONNULLATTR;
 MODELICA_EXPORT int ModelicaInternal_stat(_In_z_ const char* name) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaInternal_rename(_In_z_ const char* oldName,
-    _In_z_ const char* newName) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaInternal_rename(_In_z_ const char* oldName, _In_z_ const char* newName) MODELICA_NONNULLATTR;
 MODELICA_EXPORT void ModelicaInternal_removeFile(_In_z_ const char* file) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaInternal_copyFile(_In_z_ const char* oldFile,
-    _In_z_ const char* newFile) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaInternal_readDirectory(_In_z_ const char* directory, int nFiles,
-    _Out_ const char** files) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaInternal_copyFile(_In_z_ const char* oldFile, _In_z_ const char* newFile) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaInternal_readDirectory(_In_z_ const char* directory, int nFiles, _Out_ const char** files) MODELICA_NONNULLATTR;
 MODELICA_EXPORT int ModelicaInternal_getNumberOfFiles(_In_z_ const char* directory) MODELICA_NONNULLATTR;
-MODELICA_EXPORT MODELICA_RETURNNONNULLATTR const char* ModelicaInternal_fullPathName(
-    _In_z_ const char* name) MODELICA_NONNULLATTR;
+MODELICA_EXPORT MODELICA_RETURNNONNULLATTR const char* ModelicaInternal_fullPathName(_In_z_ const char* name) MODELICA_NONNULLATTR;
 MODELICA_EXPORT MODELICA_RETURNNONNULLATTR const char* ModelicaInternal_temporaryFileName(void);
 MODELICA_EXPORT void ModelicaStreams_closeFile(_In_z_ const char* fileName) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaInternal_print(_In_z_ const char* string,
-    _In_z_ const char* fileName) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaInternal_print(_In_z_ const char* string, _In_z_ const char* fileName) MODELICA_NONNULLATTR;
 MODELICA_EXPORT int ModelicaInternal_countLines(_In_z_ const char* fileName) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaInternal_readFile(_In_z_ const char* fileName,
-    _Out_ const char** string, size_t nLines) MODELICA_NONNULLATTR;
-MODELICA_EXPORT MODELICA_RETURNNONNULLATTR const char* ModelicaInternal_readLine(_In_z_ const char* fileName,
-    int lineNumber, _Out_ int* endOfFile) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaInternal_readFile(_In_z_ const char* fileName, _Out_ const char** string, size_t nLines) MODELICA_NONNULLATTR;
+MODELICA_EXPORT MODELICA_RETURNNONNULLATTR const char* ModelicaInternal_readLine(_In_z_ const char* fileName, int lineNumber,
+                                                                                 _Out_ int* endOfFile) MODELICA_NONNULLATTR;
 MODELICA_EXPORT void ModelicaInternal_chdir(_In_z_ const char* directoryName) MODELICA_NONNULLATTR;
 MODELICA_EXPORT MODELICA_RETURNNONNULLATTR const char* ModelicaInternal_getcwd(int dummy);
-MODELICA_EXPORT void ModelicaInternal_getenv(_In_z_ const char* name, int convertToSlash,
-    _Out_ const char** content, _Out_ int* exist) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaInternal_setenv(_In_z_ const char* name,
-    _In_z_ const char* value, int convertFromSlash) MODELICA_NONNULLATTR;
-MODELICA_EXPORT void ModelicaInternal_getTime(_Out_ int* ms, _Out_ int* sec, _Out_ int* min, _Out_ int* hour,
-    _Out_ int* mday, _Out_ int* mon, _Out_ int* year) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaInternal_getenv(_In_z_ const char* name, int convertToSlash, _Out_ const char** content, _Out_ int* exist) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaInternal_setenv(_In_z_ const char* name, _In_z_ const char* value, int convertFromSlash) MODELICA_NONNULLATTR;
+MODELICA_EXPORT void ModelicaInternal_getTime(_Out_ int* ms, _Out_ int* sec, _Out_ int* min, _Out_ int* hour, _Out_ int* mday, _Out_ int* mon,
+                                              _Out_ int* year) MODELICA_NONNULLATTR;
 MODELICA_EXPORT int ModelicaInternal_getpid(void);
 
 #endif

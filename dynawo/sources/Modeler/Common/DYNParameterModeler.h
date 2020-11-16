@@ -20,15 +20,14 @@
 #ifndef MODELER_COMMON_DYNPARAMETERMODELER_H_
 #define MODELER_COMMON_DYNPARAMETERMODELER_H_
 
-#include <string>
-#include <vector>
-#include <map>
-
-#include <boost/optional.hpp>
-#include <boost/any.hpp>
-
 #include "DYNEnumUtils.h"
 #include "DYNParameter.h"
+
+#include <boost/any.hpp>
+#include <boost/optional.hpp>
+#include <map>
+#include <string>
+#include <vector>
 
 namespace DYN {
 
@@ -47,7 +46,7 @@ class ParameterModeler : public ParameterCommon {
    * @param cardinalityInformator of the parameter
    */
   ParameterModeler(const std::string& name, const typeVarC_t& valueType, const parameterScope_t& scope, const std::string& cardinality = "1",
-            const std::string& cardinalityInformator = "");
+                   const std::string& cardinalityInformator = "");
 
   /**
    * @brief Default copy Constructor
@@ -63,7 +62,7 @@ class ParameterModeler : public ParameterCommon {
   /**
    * @brief Destructor
    */
-  ~ParameterModeler() { }
+  ~ParameterModeler() {}
 
   /**
    * @brief checks whether a parameter value may be set
@@ -87,7 +86,8 @@ class ParameterModeler : public ParameterCommon {
    * @param value: parameter's value
    * @param origin: parameter's origin
    */
-  template<typename T> void setValue(const T& value, const parameterOrigin_t& origin);
+  template<typename T>
+  void setValue(const T& value, const parameterOrigin_t& origin);
 
   /**
    * @brief Setter for parameter's cardinality
@@ -242,13 +242,13 @@ class ParameterModeler : public ParameterCommon {
   ParameterModeler();  ///< private default constructor
 #endif
 
-  std::map<parameterOrigin_t, bool> writeRights_;  ///< whether it is allowed to write a given parameter value from a given origin
-  std::map <parameterOrigin_t, boost::any> values_;  ///< values of the parameter and its origin
-  boost::optional<parameterOrigin_t> origin_;  ///< priority origin of the parameter's value
-  parameterScope_t scope_;  ///< scope of the parameter (internal, external or shared)
-  std::string cardinality_;  ///< cardinality of the parameter, "1" by default
-  std::string cardinalityInformator_;  ///< name of the parameter that gives the value to cardinality
-  bool nonUnitaryParameterInstance_;  ///< whether the parameter is an instance of a non-unitary parameter
+  std::map<parameterOrigin_t, bool> writeRights_;   ///< whether it is allowed to write a given parameter value from a given origin
+  std::map<parameterOrigin_t, boost::any> values_;  ///< values of the parameter and its origin
+  boost::optional<parameterOrigin_t> origin_;       ///< priority origin of the parameter's value
+  parameterScope_t scope_;                          ///< scope of the parameter (internal, external or shared)
+  std::string cardinality_;                         ///< cardinality of the parameter, "1" by default
+  std::string cardinalityInformator_;               ///< name of the parameter that gives the value to cardinality
+  bool nonUnitaryParameterInstance_;                ///< whether the parameter is an instance of a non-unitary parameter
 };
 }  // namespace DYN
 

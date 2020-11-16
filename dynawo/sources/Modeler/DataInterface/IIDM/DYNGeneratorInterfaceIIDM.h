@@ -22,10 +22,10 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNGENERATORINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNGENERATORINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNGeneratorInterface.h"
 #include "DYNInjectorInterfaceIIDM.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class Generator;
@@ -41,11 +41,7 @@ class GeneratorInterfaceIIDM : public GeneratorInterface, public InjectorInterfa
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_P = 0,
-    VAR_Q,
-    VAR_STATE
-  } indexVar_t;
+  typedef enum { VAR_P = 0, VAR_Q, VAR_STATE } indexVar_t;
 
  public:
   /**
@@ -172,7 +168,7 @@ class GeneratorInterfaceIIDM : public GeneratorInterface, public InjectorInterfa
 
  private:
   IIDM::Generator& generatorIIDM_;  ///< reference to the iidm generator instance
-  std::string country_;  ///< country of the generator
+  std::string country_;             ///< country of the generator
 };
 }  // namespace DYN
 

@@ -20,9 +20,10 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNVOLTAGELEVELINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNVOLTAGELEVELINTERFACEIIDM_H_
 
-#include <vector>
-#include "DYNVoltageLevelInterface.h"
 #include "DYNGraph.h"
+#include "DYNVoltageLevelInterface.h"
+
+#include <vector>
 
 namespace IIDM {
 class VoltageLevel;
@@ -136,47 +137,47 @@ class VoltageLevelInterfaceIIDM : public VoltageLevelInterface {
   /**
    * @copydoc VoltageLevelInterface::getBuses()
    */
-  const std::vector< boost::shared_ptr<BusInterface> >& getBuses() const;
+  const std::vector<boost::shared_ptr<BusInterface> >& getBuses() const;
 
   /**
    * @copydoc VoltageLevelInterface::getSwitches()
    */
-  const std::vector< boost::shared_ptr<SwitchInterface> >& getSwitches() const;
+  const std::vector<boost::shared_ptr<SwitchInterface> >& getSwitches() const;
 
   /**
    * @copydoc VoltageLevelInterface::getLoads()
    */
-  const std::vector< boost::shared_ptr<LoadInterface> >& getLoads() const;
+  const std::vector<boost::shared_ptr<LoadInterface> >& getLoads() const;
 
   /**
    * @copydoc VoltageLevelInterface::getShuntCompensators()
    */
-  const std::vector< boost::shared_ptr<ShuntCompensatorInterface> >& getShuntCompensators() const;
+  const std::vector<boost::shared_ptr<ShuntCompensatorInterface> >& getShuntCompensators() const;
 
   /**
    * @copydoc VoltageLevelInterface::getStaticVarCompensators()
    */
-  const std::vector< boost::shared_ptr<StaticVarCompensatorInterface> >& getStaticVarCompensators() const;
+  const std::vector<boost::shared_ptr<StaticVarCompensatorInterface> >& getStaticVarCompensators() const;
 
   /**
    * @copydoc VoltageLevelInterface::getGenerators()
    */
-  const std::vector< boost::shared_ptr<GeneratorInterface> >& getGenerators() const;
+  const std::vector<boost::shared_ptr<GeneratorInterface> >& getGenerators() const;
 
   /**
    * @copydoc VoltageLevelInterface::getDanglingLines()
    */
-  const std::vector< boost::shared_ptr<DanglingLineInterface> >& getDanglingLines() const;
+  const std::vector<boost::shared_ptr<DanglingLineInterface> >& getDanglingLines() const;
 
   /**
    * @copydoc VoltageLevelInterface::getVscConverters()
    */
-  const std::vector< boost::shared_ptr<VscConverterInterface> >& getVscConverters() const;
+  const std::vector<boost::shared_ptr<VscConverterInterface> >& getVscConverters() const;
 
   /**
    * @copydoc VoltageLevelInterface::getLccConverters()
    */
-  const std::vector< boost::shared_ptr<LccConverterInterface> >& getLccConverters() const;
+  const std::vector<boost::shared_ptr<LccConverterInterface> >& getLccConverters() const;
 
   /**
    * @copydoc VoltageLevelInterface::mapConnections()
@@ -226,24 +227,24 @@ class VoltageLevelInterfaceIIDM : public VoltageLevelInterface {
   }
 
  private:
-  IIDM::VoltageLevel& voltageLevelIIDM_;  ///< reference to the iidm voltageLevel instance
-  bool isNodeBreakerTopology_;  ///< @b true if the topology of the voltageLevel is node breaker topology
-  std::map< std::string, boost::shared_ptr<SwitchInterface> > switchesById_;  ///< switch interface by Id
-  std::map< boost::shared_ptr<SwitchInterface>, double > switchState_;  ///< state to apply to switch (due to topology change)
-  Graph graph_;  ///< topology graph to find node connection
-  boost::unordered_map<std::string, float> weights1_;  ///< weight of 1 for each edge in the graph
-  std::vector<boost::shared_ptr<BusInterface> > buses_;  ///< bus interface created
-  std::vector<boost::shared_ptr<SwitchInterface> > switches_;  ///< switch interface created
+  IIDM::VoltageLevel& voltageLevelIIDM_;                                       ///< reference to the iidm voltageLevel instance
+  bool isNodeBreakerTopology_;                                                 ///< @b true if the topology of the voltageLevel is node breaker topology
+  std::map<std::string, boost::shared_ptr<SwitchInterface> > switchesById_;    ///< switch interface by Id
+  std::map<boost::shared_ptr<SwitchInterface>, double> switchState_;           ///< state to apply to switch (due to topology change)
+  Graph graph_;                                                                ///< topology graph to find node connection
+  boost::unordered_map<std::string, float> weights1_;                          ///< weight of 1 for each edge in the graph
+  std::vector<boost::shared_ptr<BusInterface> > buses_;                        ///< bus interface created
+  std::vector<boost::shared_ptr<SwitchInterface> > switches_;                  ///< switch interface created
   std::vector<boost::shared_ptr<CalculatedBusInterfaceIIDM> > calculatedBus_;  ///< vector of calculated bus created from the node view
-  std::vector<boost::shared_ptr<GeneratorInterface> > generators_;  ///< generator interface created
-  std::vector<boost::shared_ptr<LoadInterface> > loads_;  ///< load interface created
-  std::vector<boost::shared_ptr<ShuntCompensatorInterface> > shunts_;  ///< shunt compensator interface created
-  std::vector<boost::shared_ptr<DanglingLineInterface> > danglingLines_;  ///< dangling line interface created
+  std::vector<boost::shared_ptr<GeneratorInterface> > generators_;             ///< generator interface created
+  std::vector<boost::shared_ptr<LoadInterface> > loads_;                       ///< load interface created
+  std::vector<boost::shared_ptr<ShuntCompensatorInterface> > shunts_;          ///< shunt compensator interface created
+  std::vector<boost::shared_ptr<DanglingLineInterface> > danglingLines_;       ///< dangling line interface created
   std::vector<boost::shared_ptr<StaticVarCompensatorInterface> > staticVarCompensators_;  ///< staticVarCompensator interface created
-  std::vector<boost::shared_ptr<VscConverterInterface> > vscConverters_;  ///< vscConverter interface created
-  std::vector<boost::shared_ptr<LccConverterInterface> > lccConverters_;  ///< lccConverter interface created
-  std::string country_;  ///< country of the voltage level
-};  /// end of class declaration
+  std::vector<boost::shared_ptr<VscConverterInterface> > vscConverters_;                  ///< vscConverter interface created
+  std::vector<boost::shared_ptr<LccConverterInterface> > lccConverters_;                  ///< lccConverter interface created
+  std::string country_;                                                                   ///< country of the voltage level
+};                                                                                        /// end of class declaration
 
 }  // namespace DYN
 

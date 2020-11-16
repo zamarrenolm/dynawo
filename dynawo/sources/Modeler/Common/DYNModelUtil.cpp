@@ -18,17 +18,19 @@
  *
  */
 
+#include "DYNModelUtil.h"
+
+#include "DYNFileSystemUtils.h"
+
 #include <fstream>
 #include <sstream>
-
-#include "DYNModelUtil.h"
-#include "DYNFileSystemUtils.h"
 
 using std::stringstream;
 
 namespace DYN {
 
-void printStructureToFile(const boost::shared_ptr<Model>& model, const SparseMatrix& matrix) {
+void
+printStructureToFile(const boost::shared_ptr<Model>& model, const SparseMatrix& matrix) {
   static std::string base = "tmpMatStruct/mat-struct-";
   static int nbPrintStruct = 0;
   stringstream nomFichier;
@@ -55,7 +57,8 @@ void printStructureToFile(const boost::shared_ptr<Model>& model, const SparseMat
       unsigned iRow = matrix.Ai_[ind];
       model->getFInfos(jCol, subModelName, subModelIndexF, fEquation);
       file << "(" << iRow << ", " << jCol << ") ";
-      file << "F[" << jCol << "]" << " model:" << subModelName << " index: " << subModelIndexF << " equation: " << fEquation;
+      file << "F[" << jCol << "]"
+           << " model:" << subModelName << " index: " << subModelIndexF << " equation: " << fEquation;
       file << " | Y[" << iRow << "] " << model->getVariableName(iRow) << "\n";
     }
   }

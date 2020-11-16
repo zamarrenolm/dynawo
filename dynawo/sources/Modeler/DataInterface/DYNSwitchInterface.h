@@ -20,7 +20,6 @@
 #ifndef MODELER_DATAINTERFACE_DYNSWITCHINTERFACE_H_
 #define MODELER_DATAINTERFACE_DYNSWITCHINTERFACE_H_
 
-
 #include "DYNComponentInterface.hpp"
 
 namespace DYN {
@@ -34,7 +33,7 @@ class SwitchInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~SwitchInterface() { }
+  virtual ~SwitchInterface() {}
 
   /**
    * @brief Getter for the switch's state

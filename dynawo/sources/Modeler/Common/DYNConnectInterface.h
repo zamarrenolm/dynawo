@@ -31,7 +31,7 @@ class ConnectInterface {  ///< Generic class for connecting two dynamic models
   /**
    * @brief default destructor.
    */
-  virtual ~ConnectInterface() { }
+  virtual ~ConnectInterface() {}
 
   /**
    * @brief set first model
@@ -99,11 +99,10 @@ class ConnectInterface {  ///< Generic class for connecting two dynamic models
 
  private:
   std::string connectedModel1_;  ///< first model
-  std::string model1Var_;  ///< first model's variable
+  std::string model1Var_;        ///< first model's variable
   std::string connectedModel2_;  ///< second model
-  std::string model2Var_;  ///< second model's variable
-};  ///< interface class for dynamic connections
-
+  std::string model2Var_;        ///< second model's variable
+};                               ///< interface class for dynamic connections
 
 }  // namespace DYN
 

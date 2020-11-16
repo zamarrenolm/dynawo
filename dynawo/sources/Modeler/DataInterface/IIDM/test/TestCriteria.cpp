@@ -17,72 +17,69 @@
  *
  */
 
-
-#include <IIDM/Network.h>
-#include <IIDM/components/Connection.h>
-#include <IIDM/components/ConnectionPoint.h>
-#include <IIDM/components/TapChanger.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/BusBarSection.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/ShuntCompensator.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/components/StaticVarCompensator.h>
-#include <IIDM/components/DanglingLine.h>
-#include <IIDM/components/HvdcLine.h>
-#include <IIDM/components/Generator.h>
-#include <IIDM/components/LccConverterStation.h>
-#include <IIDM/components/HvdcLine.h>
-#include <IIDM/components/Line.h>
-#include <IIDM/components/Load.h>
-#include <IIDM/components/Switch.h>
-#include <IIDM/components/VscConverterStation.h>
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/Transformer2WindingsBuilder.h>
-#include <IIDM/builders/Transformer3WindingsBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/ShuntCompensatorBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/builders/BusBarSectionBuilder.h>
-#include <IIDM/builders/StaticVarCompensatorBuilder.h>
-#include <IIDM/builders/DanglingLineBuilder.h>
-#include <IIDM/builders/HvdcLineBuilder.h>
-#include <IIDM/builders/GeneratorBuilder.h>
-#include <IIDM/builders/LccConverterStationBuilder.h>
-#include <IIDM/builders/HvdcLineBuilder.h>
-#include <IIDM/builders/LineBuilder.h>
-#include <IIDM/builders/LoadBuilder.h>
-#include <IIDM/builders/SwitchBuilder.h>
-#include <IIDM/builders/VscConverterStationBuilder.h>
-#include <IIDM/extensions/standbyAutomaton/StandbyAutomaton.h>
-#include <IIDM/extensions/standbyAutomaton/StandbyAutomatonBuilder.h>
-
-#include "gtest_dynawo.h"
-#include "DYNDataInterfaceIIDM.h"
-#include "DYNSubModelFactory.h"
-#include "DYNSubModel.h"
-#include "PARParametersSetFactory.h"
-#include "DYNModelMulti.h"
-#include "DYNNetworkInterface.h"
-#include "DYNTwoWTransformerInterface.h"
-#include "DYNModelConstants.h"
-#include "DYNVoltageLevelInterface.h"
-#include "DYNLoadInterface.h"
-#include "DYNCriteria.h"
 #include "CRTCriteria.h"
+#include "CRTCriteriaCollection.h"
+#include "CRTCriteriaCollectionFactory.h"
 #include "CRTCriteriaFactory.h"
 #include "CRTCriteriaParams.h"
 #include "CRTCriteriaParamsFactory.h"
-#include "CRTCriteriaCollection.h"
-#include "CRTCriteriaCollectionFactory.h"
+#include "DYNCriteria.h"
+#include "DYNDataInterfaceIIDM.h"
+#include "DYNLoadInterface.h"
+#include "DYNModelConstants.h"
+#include "DYNModelMulti.h"
+#include "DYNNetworkInterface.h"
+#include "DYNSubModel.h"
+#include "DYNSubModelFactory.h"
+#include "DYNTwoWTransformerInterface.h"
+#include "DYNVoltageLevelInterface.h"
+#include "PARParametersSetFactory.h"
+#include "gtest_dynawo.h"
+
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBarSectionBuilder.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/DanglingLineBuilder.h>
+#include <IIDM/builders/GeneratorBuilder.h>
+#include <IIDM/builders/HvdcLineBuilder.h>
+#include <IIDM/builders/LccConverterStationBuilder.h>
+#include <IIDM/builders/LineBuilder.h>
+#include <IIDM/builders/LoadBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/ShuntCompensatorBuilder.h>
+#include <IIDM/builders/StaticVarCompensatorBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/SwitchBuilder.h>
+#include <IIDM/builders/Transformer2WindingsBuilder.h>
+#include <IIDM/builders/Transformer3WindingsBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/builders/VscConverterStationBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/BusBarSection.h>
+#include <IIDM/components/Connection.h>
+#include <IIDM/components/ConnectionPoint.h>
+#include <IIDM/components/DanglingLine.h>
+#include <IIDM/components/Generator.h>
+#include <IIDM/components/HvdcLine.h>
+#include <IIDM/components/LccConverterStation.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/Load.h>
+#include <IIDM/components/ShuntCompensator.h>
+#include <IIDM/components/StaticVarCompensator.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/Switch.h>
+#include <IIDM/components/TapChanger.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <IIDM/components/VscConverterStation.h>
+#include <IIDM/extensions/standbyAutomaton/StandbyAutomaton.h>
+#include <IIDM/extensions/standbyAutomaton/StandbyAutomatonBuilder.h>
 
 using boost::shared_ptr;
+using criteria::CriteriaCollection;
+using criteria::CriteriaCollectionFactory;
 using criteria::CriteriaFactory;
 using criteria::CriteriaParams;
 using criteria::CriteriaParamsFactory;
-using criteria::CriteriaCollection;
-using criteria::CriteriaCollectionFactory;
 
 namespace DYN {
 
@@ -208,8 +205,8 @@ createBusBreakerNetworkWithGenerators(double busV, double busVNom, double pow1, 
 
 shared_ptr<SubModel>
 initModel(shared_ptr<DataInterface> data) {
-  shared_ptr<SubModel> modelNetwork = SubModelFactory::createSubModelFromLib("../../../../Models/CPP/ModelNetwork/DYNModelNetwork" +
-                                                std::string(sharedLibraryExtension()));
+  shared_ptr<SubModel> modelNetwork =
+      SubModelFactory::createSubModelFromLib("../../../../Models/CPP/ModelNetwork/DYNModelNetwork" + std::string(sharedLibraryExtension()));
   modelNetwork->initFromData(data);
   data->setModelNetwork(modelNetwork);
   modelNetwork->name("NETWORK");
@@ -534,7 +531,7 @@ TEST(DataInterfaceIIDMTest, testLoadCriteriaLocalValue) {
 
   shared_ptr<DataInterface> data = createBusBreakerNetworkWithLoads(180, 190, 100, 100);
   exportStates(data);
-  std::vector< boost::shared_ptr<LoadInterface> > loads = data->getNetwork()->getVoltageLevels()[0]->getLoads();
+  std::vector<boost::shared_ptr<LoadInterface> > loads = data->getNetwork()->getVoltageLevels()[0]->getLoads();
   LoadCriteria criteria(criteriap);
   // VNom lower than min
   for (size_t i = 0; i < loads.size(); ++i)
@@ -624,7 +621,7 @@ TEST(DataInterfaceIIDMTest, testLoadCriteriaSum) {
 
   shared_ptr<DataInterface> data = createBusBreakerNetworkWithLoads(180, 190, 100, 100);
   exportStates(data);
-  std::vector< boost::shared_ptr<LoadInterface> > loads = data->getNetwork()->getVoltageLevels()[0]->getLoads();
+  std::vector<boost::shared_ptr<LoadInterface> > loads = data->getNetwork()->getVoltageLevels()[0]->getLoads();
   LoadCriteria criteria(criteriap);
   // VNom lower than min
   for (size_t i = 0; i < loads.size(); ++i)
@@ -1115,7 +1112,7 @@ TEST(DataInterfaceIIDMTest, testGeneratorCriteriaLocalValue) {
 
   shared_ptr<DataInterface> data = createBusBreakerNetworkWithGenerators(180, 190, 100, 100);
   exportStates(data);
-  std::vector< boost::shared_ptr<GeneratorInterface> > generators = data->getNetwork()->getVoltageLevels()[0]->getGenerators();
+  std::vector<boost::shared_ptr<GeneratorInterface> > generators = data->getNetwork()->getVoltageLevels()[0]->getGenerators();
   GeneratorCriteria criteria(criteriap);
   // VNom lower than min
   for (size_t i = 0; i < generators.size(); ++i)
@@ -1205,7 +1202,7 @@ TEST(DataInterfaceIIDMTest, testGeneratorCriteriaSum) {
 
   shared_ptr<DataInterface> data = createBusBreakerNetworkWithGenerators(180, 190, 100, 100);
   exportStates(data);
-  std::vector< boost::shared_ptr<GeneratorInterface> > generators = data->getNetwork()->getVoltageLevels()[0]->getGenerators();
+  std::vector<boost::shared_ptr<GeneratorInterface> > generators = data->getNetwork()->getVoltageLevels()[0]->getGenerators();
   GeneratorCriteria criteria(criteriap);
   // VNom lower than min
   for (size_t i = 0; i < generators.size(); ++i)

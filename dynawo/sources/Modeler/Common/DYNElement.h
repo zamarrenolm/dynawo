@@ -19,8 +19,8 @@
  */
 #ifndef MODELER_COMMON_DYNELEMENT_H_
 #define MODELER_COMMON_DYNELEMENT_H_
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace DYN {
 
@@ -36,24 +36,20 @@ class Element {
    * @brief structure for type of element
    *
    */
-  typedef enum {
-    STRUCTURE = 1,
-    TERMINAL = 2
-  } typeElement;
+  typedef enum { STRUCTURE = 1, TERMINAL = 2 } typeElement;
 
  public:
   /**
    * @brief default constructor
    *
    */
-  Element()
-  :type_(STRUCTURE) { }
+  Element() : type_(STRUCTURE) {}
 
   /**
    * @brief default destructor
    *
    */
-  ~Element() { }
+  ~Element() {}
 
   /**
    * @brief constructor
@@ -61,10 +57,7 @@ class Element {
    * @param id
    * @param type
    */
-  Element(const std::string& name, const std::string& id, typeElement type)
-  : type_(type)
-  , name_(name)
-  , id_(id) { }
+  Element(const std::string& name, const std::string& id, typeElement type) : type_(type), name_(name), id_(id) {}
 
   /**
    * @brief get type element
@@ -94,7 +87,7 @@ class Element {
    * @brief get list of sub elements number
    * @return list of sub elements number
    */
-  inline const std::vector<int> & subElementsNum() const {
+  inline const std::vector<int>& subElementsNum() const {
     return subElementsNum_;
   }
 
@@ -102,16 +95,16 @@ class Element {
    * @brief get list of sub elements number
    * @return list of sub elements number
    */
-  inline std::vector<int> & subElementsNum() {
+  inline std::vector<int>& subElementsNum() {
     return subElementsNum_;
   }
 
  private:
-  typeElement type_;  ///< type
-  std::string name_;  ///< name
-  std::string id_;  ///< id
+  typeElement type_;                 ///< type
+  std::string name_;                 ///< name
+  std::string id_;                   ///< id
   std::vector<int> subElementsNum_;  ///< list of sub elements' number
-};  ///< class Element
+};                                   ///< class Element
 }  // namespace DYN
 
 #endif  // MODELER_COMMON_DYNELEMENT_H_

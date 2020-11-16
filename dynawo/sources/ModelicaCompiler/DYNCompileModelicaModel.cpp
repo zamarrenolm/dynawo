@@ -11,64 +11,57 @@
 // simulation tool for power systems.
 //
 
-#include <string>
-#include <vector>
+#include "DYNExecUtils.h"
+#include "DYNFileSystemUtils.h"
+#include "DYNIoDico.h"
+#include "DYNMacrosMessage.h"
+#include "DYNTrace.h"
+
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/program_options.hpp>
+#include <dlfcn.h>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <fstream>
-#include <dlfcn.h>
+#include <string>
+#include <vector>
 
-#include <boost/program_options.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include "DYNIoDico.h"
-#include "DYNTrace.h"
-#include "DYNMacrosMessage.h"
-#include "DYNExecUtils.h"
-#include "DYNFileSystemUtils.h"
-
-using std::string;
-using std::vector;
-using std::ofstream;
+using DYN::Trace;
 using std::cout;
 using std::endl;
-using std::stringstream;
-using std::istringstream;
 using std::ios;
-using DYN::Trace;
+using std::istringstream;
+using std::ofstream;
+using std::string;
+using std::stringstream;
+using std::vector;
 
 namespace po = boost::program_options;
 
-static void modelicaCompile(const string& modelName, const string& compilationDir, const vector<string>& initFiles,
-                            const vector<string>& moFiles,
-                            bool& withInitFile,
-                            const string& packageName,
-                            bool noInit, bool useAliasing);  ///< Convert the whole (INIT when relevant + standard) Modelica model into a C++ model
-static void compileLib(const string& modelName, const string& compilationDir);  ///< Compile the C++ model
+static void modelicaCompile(const string& modelName, const string& compilationDir, const vector<string>& initFiles, const vector<string>& moFiles,
+                            bool& withInitFile, const string& packageName, bool noInit,
+                            bool useAliasing);  ///< Convert the whole (INIT when relevant + standard) Modelica model into a C++ model
+static void compileLib(const string& modelName, const string& compilationDir);                            ///< Compile the C++ model
 static string executeCommand(const string& command, const bool printLogs, const string& start_dir = "");  ///< Run a given command and return logs
-static string compileModelicaToC(const string& modelName, const string& fileToCompile, const vector<string>& libs,
-                               const string& compilationDir,
-                               const string& packageName, bool useAliasing);  ///< Convert one (INIT or standard) Modelica model into C code
-static string runOptions(bool useAliasing);  ///< Return modelica run options
-static void compileModelicaToXML(const string& modelName, const string& fileToCompile, const vector<string>& libs,
-                                 const string& compilationDir,
+static string compileModelicaToC(const string& modelName, const string& fileToCompile, const vector<string>& libs, const string& compilationDir,
+                                 const string& packageName, bool useAliasing);  ///< Convert one (INIT or standard) Modelica model into C code
+static string runOptions(bool useAliasing);                                     ///< Return modelica run options
+static void compileModelicaToXML(const string& modelName, const string& fileToCompile, const vector<string>& libs, const string& compilationDir,
                                  const string& packageName, bool useAliasing);  ///< Generate the .xml file describing the model parameters and variables
-static void generateModelFile(const string& modelName, const string& compilationDir,
-                              bool& withInitFile,
-                              const string& additionalHeaderList,
+static void generateModelFile(const string& modelName, const string& compilationDir, bool& withInitFile, const string& additionalHeaderList,
                               const string& packageName,
-                              bool genCalcVars);  ///< Rewrite parts of one whole Modelica model C/C++ code to fit Dynawo C/C++ requirements
+                              bool genCalcVars);        ///< Rewrite parts of one whole Modelica model C/C++ code to fit Dynawo C/C++ requirements
 static bool verifySharedObject(const string& library);  ///< Ensure that the generated compiled library can actually run
 
 static void mosAddHeader(const string& mosFilePath, ofstream& mosFile);  ///< Add a header to the .mos file
 static void mosAddFilesImport(const bool importModelicaPackage, const vector<string>& filesToImport,
-                              ofstream& mosFile);  ///< Add files import commands to a .mos file
+                              ofstream& mosFile);                         ///< Add files import commands to a .mos file
 static string mosRunFile(const string& mosFilePath, const string& path);  ///< Run a given .mos file
-static bool copyFile(const string& fileName,
-    const string& modelDir,
-    const string& compilationDir);  ///< copy file from input folder into output folder, return true if input file is equal to output file
-int main(int argc, char ** argv) {
+static bool copyFile(const string& fileName, const string& modelDir,
+                     const string& compilationDir);  ///< copy file from input folder into output folder, return true if input file is equal to output file
+int
+main(int argc, char** argv) {
   Trace::init();
 
   string libName = "";
@@ -84,20 +77,18 @@ int main(int argc, char ** argv) {
   bool useAliasing = true;
   bool genCalcVars = true;
 
-  desc.add_options()
-          ("help,h", "produce help message")
-          ("model", po::value<string>(&modelName), "set the model name of the file to compile (model.mo needs to be in model-dir)")
-          ("model-dir", po::value<string>(&modelDir), "set model directory (default: current directory)")
-          ("compilation-dir", po::value<string>(&compilationDir), "set compilation directory (default: model subdirectory in model directory)")
-          ("moFiles", po::value< vector<string> >(&moFiles)->multitoken(), "modelica files to use for expansion")
-          ("initFiles", po::value< vector<string> >(&initFiles)->multitoken(), "init files to use for expansion")
-          ("lib", po::value<string>(&libName), "set the name of the output lib")
-          ("additionalHeaderList", po::value< string >(&additionalHeaderList),
-              "list of headers that should be included in the dynamic model files")
-          ("package-name", po::value<string>(&packageName), "set the model name package")
-          ("no-init", po::value<bool>(&noInit)->implicit_value(true), "avoid building init problem for model")
-          ("useAliasing", po::value<bool>(&useAliasing), "use aliasing")
-          ("generateCalculatedVariables", po::value<bool>(&genCalcVars), "use automatic generation of calculated variables");
+  desc.add_options()("help,h", "produce help message")("model", po::value<string>(&modelName),
+                                                       "set the model name of the file to compile (model.mo needs to be in model-dir)")(
+      "model-dir", po::value<string>(&modelDir), "set model directory (default: current directory)")(
+      "compilation-dir", po::value<string>(&compilationDir), "set compilation directory (default: model subdirectory in model directory)")(
+      "moFiles", po::value<vector<string> >(&moFiles)->multitoken(), "modelica files to use for expansion")(
+      "initFiles", po::value<vector<string> >(&initFiles)->multitoken(), "init files to use for expansion")(
+      "lib", po::value<string>(&libName), "set the name of the output lib")("additionalHeaderList", po::value<string>(&additionalHeaderList),
+                                                                            "list of headers that should be included in the dynamic model files")(
+      "package-name", po::value<string>(&packageName), "set the model name package")("no-init", po::value<bool>(&noInit)->implicit_value(true),
+                                                                                     "avoid building init problem for model")(
+      "useAliasing", po::value<bool>(&useAliasing), "use aliasing")("generateCalculatedVariables", po::value<bool>(&genCalcVars),
+                                                                    "use automatic generation of calculated variables");
 
   po::variables_map vm;
   // parse regular options
@@ -122,10 +113,10 @@ int main(int argc, char ** argv) {
     packageName += ".";
   }
   if (!useAliasing) {
-    std::cout << " [INFO] Aliasing and automatic generation of calculated variables are disabled for " << modelName <<  std::endl;
+    std::cout << " [INFO] Aliasing and automatic generation of calculated variables are disabled for " << modelName << std::endl;
     genCalcVars = false;
   } else if (!genCalcVars) {
-    std::cout << " [INFO] Automatic generation of calculated variables is disabled for " << modelName <<  std::endl;
+    std::cout << " [INFO] Automatic generation of calculated variables is disabled for " << modelName << std::endl;
   }
 
   // Prepare workspace
@@ -182,7 +173,7 @@ int main(int argc, char ** argv) {
   } catch (const string& s) {
     std::cerr << " Compilation of " << modelName << " failed :" << s << std::endl;
     return -1;
-  } catch (const char *s) {
+  } catch (const char* s) {
     std::cerr << " Compilation of " << modelName << " failed :" << s << std::endl;
     return -1;
   } catch (const DYN::Error& e) {
@@ -194,7 +185,6 @@ int main(int argc, char ** argv) {
   }
   return 0;
 }
-
 
 bool
 copyFile(const string& fileName, const string& modelDir, const string& compilationDir) {
@@ -211,8 +201,8 @@ copyFile(const string& fileName, const string& modelDir, const string& compilati
 }
 
 void
-modelicaCompile(const string& modelName, const string& compilationDir,
-        const vector<string>&  initFiles, const vector<string>& moFiles, bool& withInitFile, const string& packageName, bool noInit, bool useAliasing) {
+modelicaCompile(const string& modelName, const string& compilationDir, const vector<string>& initFiles, const vector<string>& moFiles, bool& withInitFile,
+                const string& packageName, bool noInit, bool useAliasing) {
   string compilationDir1 = prettyPath(compilationDir);
   string scriptsDir1 = getMandatoryEnvVar("DYNAWO_SCRIPTS_DIR");
   string pythonCmd = "python";
@@ -223,7 +213,7 @@ modelicaCompile(const string& modelName, const string& compilationDir,
   string moFile = absolute(modelName + ".mo", compilationDir1);
   string extVarFile = absolute(modelName + ".extvar", compilationDir1);
   string initFile = absolute(modelName + "_INIT.mo", compilationDir1);
-  string modelTmpFile = absolute(modelName + "-tmp.mo", compilationDir1);   // output file of varExt.py script in mode --pre
+  string modelTmpFile = absolute(modelName + "-tmp.mo", compilationDir1);  // output file of varExt.py script in mode --pre
   string cFile = absolute(packageName + modelName + ".c", compilationDir1);
   string cInitFile = absolute(packageName + modelName + "_INIT.c", compilationDir1);
 
@@ -258,7 +248,7 @@ modelicaCompile(const string& modelName, const string& compilationDir,
       error = compileModelicaToC(modelName + "_INIT", initFile, libs1, compilationDir, packageName, useAliasing);
 
       if (!exists(cInitFile))
-        throw DYNError(DYN::Error::MODELER, OMCompilationFailed, modelName+ "_INIT", error);
+        throw DYNError(DYN::Error::MODELER, OMCompilationFailed, modelName + "_INIT", error);
     }
   }
 
@@ -266,10 +256,10 @@ modelicaCompile(const string& modelName, const string& compilationDir,
   compileModelicaToXML(modelName, modelTmpFile, libs, compilationDir, packageName, useAliasing);
 }
 
-
 ///< Add a header to a .mos file
 
-void mosAddHeader(const string& mosFilePath, ofstream& mosFile) {
+void
+mosAddHeader(const string& mosFilePath, ofstream& mosFile) {
   mosFile << "// File automatically generated by Dynawo (private RTE software)" << std::endl;
   mosFile << "// In order to run this file, run the following command" << std::endl;
   mosFile << "// (PATH_TO)omcDynawo " << mosFilePath;
@@ -278,10 +268,10 @@ void mosAddHeader(const string& mosFilePath, ofstream& mosFile) {
   mosFile << std::endl;
 }
 
-
 ///< Add files import to a .mos file
 
-void mosAddFilesImport(const bool importModelicaPackage, const vector<string>& filesToImport, ofstream& mosFile) {
+void
+mosAddFilesImport(const bool importModelicaPackage, const vector<string>& filesToImport, ofstream& mosFile) {
   if (importModelicaPackage) {
     mosFile << "// .. Load Modelica package" << std::endl;
     mosFile << "loadModel(Modelica); getErrorString();" << std::endl;
@@ -296,7 +286,6 @@ void mosAddFilesImport(const bool importModelicaPackage, const vector<string>& f
   }
   mosFile << std::endl;
 }
-
 
 ///< Run a given .mos file
 
@@ -314,8 +303,8 @@ mosRunFile(const string& mosFilePath, const string& path) {
   istringstream stream(result);
   string line;
   while (std::getline(stream, line)) {
-    if (line.find("{\"Error: ")!= string::npos || (line.find("Error:") != string::npos && line.find(".mo") != string::npos &&
-        line.find("Function parameter im was not given by the function call") == string::npos))
+    if (line.find("{\"Error: ") != string::npos || (line.find("Error:") != string::npos && line.find(".mo") != string::npos &&
+                                                    line.find("Function parameter im was not given by the function call") == string::npos))
       error += line + "\n";
   }
   return error;
@@ -323,14 +312,15 @@ mosRunFile(const string& mosFilePath, const string& path) {
 
 string
 runOptions(bool useAliasing) {
-  return string("simCodeTarget=C +showErrorMessages -g=Modelica "
-      "-d=visxml,infoXmlOperations,initialization,disableSingleFlowEq,failtrace,dumpSimCode --postOptmodules-=wrapFunctionCalls")
-      + ((useAliasing)?string():string(" --preOptModules-=comSubExp,removeSimpleEquations")) +string(" +numProcs=1 +daeMode ");
+  return string(
+             "simCodeTarget=C +showErrorMessages -g=Modelica "
+             "-d=visxml,infoXmlOperations,initialization,disableSingleFlowEq,failtrace,dumpSimCode --postOptmodules-=wrapFunctionCalls") +
+         ((useAliasing) ? string() : string(" --preOptModules-=comSubExp,removeSimpleEquations")) + string(" +numProcs=1 +daeMode ");
 }
 
 string
-compileModelicaToC(const string& modelName, const string& fileToCompile, const vector<string>& libs,
-    const string& compilationDir, const string& packageName, bool useAliasing) {
+compileModelicaToC(const string& modelName, const string& fileToCompile, const vector<string>& libs, const string& compilationDir, const string& packageName,
+                   bool useAliasing) {
   // Create a .mos file
   string mosFileName = "compileModelicaToC-" + modelName + ".mos";
   ofstream mosFile(absolute(mosFileName, compilationDir).c_str(), ios::out | ios::trunc);
@@ -340,7 +330,7 @@ compileModelicaToC(const string& modelName, const string& fileToCompile, const v
 
   // add Modelica and library files import
   bool importModelicaPackage = true;
-  vector <string> allFilesToImport = libs;
+  vector<string> allFilesToImport = libs;
   allFilesToImport.push_back(fileToCompile);
   mosAddFilesImport(importModelicaPackage, allFilesToImport, mosFile);
 
@@ -357,8 +347,8 @@ compileModelicaToC(const string& modelName, const string& fileToCompile, const v
 }
 
 void
-compileModelicaToXML(const string& modelName, const string& fileToCompile, const vector<string>& libs, const string& compilationDir,
-        const string& packageName, bool useAliasing) {
+compileModelicaToXML(const string& modelName, const string& fileToCompile, const vector<string>& libs, const string& compilationDir, const string& packageName,
+                     bool useAliasing) {
   // Create a .mos file
   string mosFileName = "createStructure-" + modelName + ".mos";
   ofstream mosFile(absolute(mosFileName, compilationDir).c_str(), ios::out | ios::trunc);
@@ -369,7 +359,7 @@ compileModelicaToXML(const string& modelName, const string& fileToCompile, const
 
   // add Modelica and library files import
   bool importModelicaPackage = true;
-  vector <string> allFilesToImport = libs;
+  vector<string> allFilesToImport = libs;
   allFilesToImport.push_back(fileToCompile);
   mosAddFilesImport(importModelicaPackage, allFilesToImport, mosFile);
 
@@ -383,15 +373,15 @@ compileModelicaToXML(const string& modelName, const string& fileToCompile, const
 }
 
 void
-generateModelFile(const string& modelName, const string& compilationDir, bool& withInitFile,
-    const string& additionalHeaderList, const string& packageName, bool genCalcVars) {
+generateModelFile(const string& modelName, const string& compilationDir, bool& withInitFile, const string& additionalHeaderList, const string& packageName,
+                  bool genCalcVars) {
   string scriptsDir1 = getMandatoryEnvVar("DYNAWO_SCRIPTS_DIR");
   string pythonCmd = "python";
   if (hasEnvVar("DYNAWO_PYTHON_COMMAND"))
     pythonCmd = getEnvVar("DYNAWO_PYTHON_COMMAND");
   string varExtCommand = pythonCmd + " " + scriptsDir1 + "/writeModel.py -m " + packageName + modelName + " -i " + compilationDir + " -o " + compilationDir;
   if (!genCalcVars)
-    varExtCommand+=" -c";
+    varExtCommand += " -c";
   if (!additionalHeaderList.empty())
     varExtCommand += " -a " + additionalHeaderList;
   if (withInitFile)
@@ -439,9 +429,9 @@ compileLib(const string& modelName, const string& compilationDir) {
 
   string compileLibCommand = "cmake -B" + compilationDir + " -H" + compilationDir + " -C" + absolute("PreloadCache.cmake", scriptsDir)
 #if __linux__
-                           + " -DMODEL_NAME=" + modelName + " -DCMAKE_SKIP_BUILD_RPATH=True && cmake --build " + compilationDir;
+                             + " -DMODEL_NAME=" + modelName + " -DCMAKE_SKIP_BUILD_RPATH=True && cmake --build " + compilationDir;
 #else
-                           + " -DMODEL_NAME=" + modelName + " && cmake --build " + compilationDir;
+                             + " -DMODEL_NAME=" + modelName + " && cmake --build " + compilationDir;
 #endif
   bool doPrintLogs = true;
   string result = executeCommand(compileLibCommand, doPrintLogs);
@@ -449,10 +439,11 @@ compileLib(const string& modelName, const string& compilationDir) {
   return;
 }
 
-bool verifySharedObject(const string& library) {
+bool
+verifySharedObject(const string& library) {
   // dlopen include <dlfcn.h>: to see if a shared object file
   const char* filename = library.c_str();
-  void *handle;
+  void* handle;
   handle = dlopen(filename, RTLD_NOW);
   if (!handle) {
     fprintf(stderr, "%s\n", dlerror());
@@ -473,7 +464,8 @@ bool verifySharedObject(const string& library) {
   return valid;
 }
 
-string executeCommand(const string& command, const bool printLogs, const string& start_dir) {
+string
+executeCommand(const string& command, const bool printLogs, const string& start_dir) {
   stringstream ss;
   executeCommand(command, ss, start_dir);
   if (printLogs) {

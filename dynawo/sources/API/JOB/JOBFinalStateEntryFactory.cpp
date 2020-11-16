@@ -12,6 +12,7 @@
 //
 
 #include "JOBFinalStateEntryFactory.h"
+
 #include "JOBFinalStateEntry.h"
 
 namespace job {

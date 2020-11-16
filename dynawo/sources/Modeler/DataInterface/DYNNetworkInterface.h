@@ -20,8 +20,8 @@
 #ifndef MODELER_DATAINTERFACE_DYNNETWORKINTERFACE_H_
 #define MODELER_DATAINTERFACE_DYNNETWORKINTERFACE_H_
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
+#include <vector>
 
 namespace DYN {
 class LineInterface;
@@ -35,7 +35,7 @@ class NetworkInterface {
   /**
    * @brief Destructor
    */
-  virtual ~NetworkInterface() { }
+  virtual ~NetworkInterface() {}
 
   /**
    * @brief Add a new instance of line interface to the network interface
@@ -71,31 +71,31 @@ class NetworkInterface {
    * @brief Getter for the vector of line interface
    * @return vector of line interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<LineInterface> >& getLines() const = 0;
+  virtual const std::vector<boost::shared_ptr<LineInterface> >& getLines() const = 0;
 
   /**
    * @brief Getter for the vector of two windings transformer interface
    * @return vector of two windings transformer interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<TwoWTransformerInterface> >& getTwoWTransformers() const = 0;
+  virtual const std::vector<boost::shared_ptr<TwoWTransformerInterface> >& getTwoWTransformers() const = 0;
 
   /**
    * @brief Getter for the vector of three windings transformer interface
    * @return vector of three windings transformer interface of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<ThreeWTransformerInterface> >& getThreeWTransformers() const = 0;
+  virtual const std::vector<boost::shared_ptr<ThreeWTransformerInterface> >& getThreeWTransformers() const = 0;
 
   /**
    * @brief Getter for the vector of voltageLevel interface
    * @return vector of voltageLevel of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<VoltageLevelInterface> >& getVoltageLevels() const = 0;
+  virtual const std::vector<boost::shared_ptr<VoltageLevelInterface> >& getVoltageLevels() const = 0;
 
   /**
    * @brief Getter for the vector of hvdc line interface
    * @return vector of hvdc line of the newtork interface
    */
-  virtual const std::vector< boost::shared_ptr<HvdcLineInterface> >& getHvdcLines() const = 0;
+  virtual const std::vector<boost::shared_ptr<HvdcLineInterface> >& getHvdcLines() const = 0;
 };  ///< class for network data interface
 
 }  // namespace DYN

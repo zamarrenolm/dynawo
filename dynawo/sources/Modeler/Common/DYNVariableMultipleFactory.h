@@ -19,9 +19,9 @@
 #ifndef MODELER_COMMON_DYNVARIABLEMULTIPLEFACTORY_H_
 #define MODELER_COMMON_DYNVARIABLEMULTIPLEFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNEnumUtils.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class VariableMultiple;
@@ -45,8 +45,8 @@ class VariableMultipleFactory {
    * @param[in] negated @b whether the variable is negated
    * @returns Shared pointer to a new @p VariableMultiple with given name, type, and negated attributes
    */
-  static boost::shared_ptr<VariableMultiple> create(const std::string& name, const std::string& cardinalityName, const typeVar_t& type,
-                                                    bool isState, bool negated = false);
+  static boost::shared_ptr<VariableMultiple> create(const std::string& name, const std::string& cardinalityName, const typeVar_t& type, bool isState,
+                                                    bool negated = false);
 
   /**
    * @brief Create new (state) VariableMultiple instance
@@ -57,8 +57,8 @@ class VariableMultipleFactory {
    * @param[in] negated @b whether the variable is negated
    * @returns Shared pointer to a new @p VariableMultiple with given name, type, and negated attributes
    */
-  inline static boost::shared_ptr<VariableMultiple> createState(const std::string& name, const std::string& cardinalityName,
-                                                                const typeVar_t& type, bool negated = false) {
+  inline static boost::shared_ptr<VariableMultiple> createState(const std::string& name, const std::string& cardinalityName, const typeVar_t& type,
+                                                                bool negated = false) {
     return create(name, cardinalityName, type, true, negated);
   }
 

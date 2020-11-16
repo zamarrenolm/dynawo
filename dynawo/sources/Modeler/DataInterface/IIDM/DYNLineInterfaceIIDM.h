@@ -20,9 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNLINEINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNLINEINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNLineInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class Line;
@@ -35,13 +35,7 @@ class LineInterfaceIIDM : public LineInterface {
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_P1 = 0,
-    VAR_P2,
-    VAR_Q1,
-    VAR_Q2,
-    VAR_STATE
-  } indexVar_t;
+  typedef enum { VAR_P1 = 0, VAR_P2, VAR_Q1, VAR_Q2, VAR_STATE } indexVar_t;
 
  public:
   /**
@@ -54,7 +48,6 @@ class LineInterfaceIIDM : public LineInterface {
    * @param line line's iidm instance
    */
   explicit LineInterfaceIIDM(IIDM::Line& line);
-
 
   /**
    * @copydoc LineInterface::getVNom1() const
@@ -196,17 +189,17 @@ class LineInterfaceIIDM : public LineInterface {
   int getComponentVarIndex(const std::string& varName) const;
 
  private:
-  IIDM::Line& lineIIDM_;  ///< reference to the iidm line instance
-  boost::shared_ptr<BusInterface> busInterface1_;  ///< busInterface of the bus where the side 1 of the line is connected
-  boost::shared_ptr<BusInterface> busInterface2_;  ///< busInterface of the bus where the side 2 of the line is connected
+  IIDM::Line& lineIIDM_;                                             ///< reference to the iidm line instance
+  boost::shared_ptr<BusInterface> busInterface1_;                    ///< busInterface of the bus where the side 1 of the line is connected
+  boost::shared_ptr<BusInterface> busInterface2_;                    ///< busInterface of the bus where the side 2 of the line is connected
   boost::shared_ptr<VoltageLevelInterface> voltageLevelInterface1_;  ///< voltageLevel interface where the side 1 of the line is connected
   boost::shared_ptr<VoltageLevelInterface> voltageLevelInterface2_;  ///< voltageLevel interface where the side 2 of the line is connected
 
   std::vector<boost::shared_ptr<CurrentLimitInterface> > currentLimitInterfaces1_;  ///< current limit interfaces for side 1
   std::vector<boost::shared_ptr<CurrentLimitInterface> > currentLimitInterfaces2_;  ///< current limit interfaces for side 2
-  boost::optional<bool> initialConnected1_;  ///< side 1 initially connected
-  boost::optional<bool> initialConnected2_;  ///< side 2 initially connected
-};  ///< Interface class for Line model
+  boost::optional<bool> initialConnected1_;                                         ///< side 1 initially connected
+  boost::optional<bool> initialConnected2_;                                         ///< side 2 initially connected
+};                                                                                  ///< Interface class for Line model
 }  // namespace DYN
 
 #endif  // MODELER_DATAINTERFACE_IIDM_DYNLINEINTERFACEIIDM_H_

@@ -17,9 +17,9 @@
  * @brief
  *
  */
-#include "DYNMacrosMessage.h"
-
 #include "DYNDerivative.h"
+
+#include "DYNMacrosMessage.h"
 
 using std::map;
 
@@ -44,14 +44,14 @@ BusDerivatives::reset() {
 void
 BusDerivatives::addDerivative(typeDerivative_t type, const int& numVar, const double& value) {
   switch (type) {
-    case IR_DERIVATIVE:
-      irDerivatives_.addValue(numVar, value);
-      break;
-    case II_DERIVATIVE:
-      iiDerivatives_.addValue(numVar, value);
-      break;
-    default:
-      throw DYNError(Error::MODELER, InvalidDerivativeType, type);
+  case IR_DERIVATIVE:
+    irDerivatives_.addValue(numVar, value);
+    break;
+  case II_DERIVATIVE:
+    iiDerivatives_.addValue(numVar, value);
+    break;
+  default:
+    throw DYNError(Error::MODELER, InvalidDerivativeType, type);
   }
 }
 

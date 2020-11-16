@@ -20,9 +20,9 @@
 #ifndef API_FS_FSVARIABLEFACTORY_H_
 #define API_FS_FSVARIABLEFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "FSVariable.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace finalState {
 /**

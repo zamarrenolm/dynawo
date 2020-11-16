@@ -22,36 +22,35 @@
  */
 
 #include "DYNModelVoltageLevel.h"
+
+#include "DYNDerivative.h"
 #include "DYNModelBus.h"
-#include "DYNModelSwitch.h"
-#include "DYNModelLoad.h"
+#include "DYNModelDanglingLine.h"
 #include "DYNModelGenerator.h"
+#include "DYNModelLoad.h"
+#include "DYNModelNetwork.h"
 #include "DYNModelShuntCompensator.h"
 #include "DYNModelStaticVarCompensator.h"
-#include "DYNModelDanglingLine.h"
-#include "DYNModelNetwork.h"
-
+#include "DYNModelSwitch.h"
+#include "DYNSparseMatrix.h"
 #include "DYNVoltageLevelInterface.h"
 
-#include "DYNSparseMatrix.h"
-#include "DYNDerivative.h"
-
-using std::vector;
-using boost::shared_ptr;
 using boost::dynamic_pointer_cast;
+using boost::shared_ptr;
 using boost::weak_ptr;
-using std::map;
-using std::string;
-using std::pair;
-using std::make_pair;
 using std::list;
+using std::make_pair;
+using std::map;
+using std::pair;
+using std::string;
+using std::vector;
 
 namespace DYN {
 
 ModelVoltageLevel::ModelVoltageLevel(const shared_ptr<VoltageLevelInterface>& voltageLevel) :
-NetworkComponent(voltageLevel->getID()),
-graph_(boost::none),
-topologyKind_(voltageLevel->getVoltageLevelTopologyKind()) { }
+    NetworkComponent(voltageLevel->getID()),
+    graph_(boost::none),
+    topologyKind_(voltageLevel->getVoltageLevelTopologyKind()) {}
 
 void
 ModelVoltageLevel::addComponent(const shared_ptr<NetworkComponent>& component) {
@@ -79,7 +78,7 @@ ModelVoltageLevel::defineGraph() {
   weights1_.clear();
 
   // add vertex to voltage level graph
-  for (map<int, shared_ptr<ModelBus> >::const_iterator  itBus = busesByIndex_.begin(); itBus != busesByIndex_.end(); ++itBus) {
+  for (map<int, shared_ptr<ModelBus> >::const_iterator itBus = busesByIndex_.begin(); itBus != busesByIndex_.end(); ++itBus) {
     graph_->addVertex(itBus->first);
   }
 
@@ -101,23 +100,23 @@ ModelVoltageLevel::setInitialSwitchCurrents() {
 
 void
 ModelVoltageLevel::computeLoops() {
-//  We are searching for switch loops within a substation
-//  Example: we have a loop if all four switches are closed in the representation below
-//
-//  -------------sw-------------- busbar1
-//     |                     |
-//     |                     |
-//    sw                    sw
-//     |                     |
-//     |                     |
-//  -------------sw-------------- busbar2
-//
-//  To do so we introduce islands (groups) of switches nodes with different indexes
-//  If switches are found to form a loop, all their nodes will have the same island index
-//
+  //  We are searching for switch loops within a substation
+  //  Example: we have a loop if all four switches are closed in the representation below
+  //
+  //  -------------sw-------------- busbar1
+  //     |                     |
+  //     |                     |
+  //    sw                    sw
+  //     |                     |
+  //     |                     |
+  //  -------------sw-------------- busbar2
+  //
+  //  To do so we introduce islands (groups) of switches nodes with different indexes
+  //  If switches are found to form a loop, all their nodes will have the same island index
+  //
 
   int islandIndex = 1;
-  map< int, vector< shared_ptr<ModelBus> > > busByRefIslands;
+  map<int, vector<shared_ptr<ModelBus> > > busByRefIslands;
 
   // iterate on all the voltage levels switches
   for (vector<shared_ptr<ModelSwitch> >::const_iterator itSwitch = switches_.begin(); itSwitch != switches_.end(); ++itSwitch) {
@@ -127,14 +126,14 @@ ModelVoltageLevel::computeLoops() {
     if ((*itSwitch)->getConnectionState() == CLOSED) {
       int ref1 = (*itSwitch)->getModelBus1()->getRefIslands();
       int ref2 = (*itSwitch)->getModelBus2()->getRefIslands();
-      if (ref1 == ref2) {      // 1) node 1 and node 2 indexes are the same: two cases
-        if (ref1 == 0) {             // a) ref1 = ref2 = 0 (default) : we set the island index to islandIndex
+      if (ref1 == ref2) {  // 1) node 1 and node 2 indexes are the same: two cases
+        if (ref1 == 0) {   // a) ref1 = ref2 = 0 (default) : we set the island index to islandIndex
           (*itSwitch)->getModelBus1()->setRefIslands(islandIndex);
           (*itSwitch)->getModelBus2()->setRefIslands(islandIndex);
           busByRefIslands[islandIndex].push_back((*itSwitch)->getModelBus1());
           busByRefIslands[islandIndex].push_back((*itSwitch)->getModelBus2());
           ++islandIndex;
-        } else {                     // b) ref1 = ref2 != 0 (a loop has been found) : we update the switch attribute
+        } else {  // b) ref1 = ref2 != 0 (a loop has been found) : we update the switch attribute
           (*itSwitch)->inLoop(true);
         }
       } else if (ref1 == 0) {  // 2) node 1 index has not been set : we set node 1 index equals to node 2 index
@@ -143,16 +142,16 @@ ModelVoltageLevel::computeLoops() {
       } else if (ref2 == 0) {  // 3) node 2 index has not been set : we set node 2 index equals to node 1 index
         (*itSwitch)->getModelBus2()->setRefIslands(ref1);
         busByRefIslands[ref1].push_back((*itSwitch)->getModelBus2());
-      } else {                 // 4) node 1 and node 2 indexes have been set but are different : we set node 2 index equals to node 1 index
-                               //    and propagate the index value
-        map< int, vector< shared_ptr<ModelBus> > >::iterator iter = busByRefIslands.find(ref2);
+      } else {  // 4) node 1 and node 2 indexes have been set but are different : we set node 2 index equals to node 1 index
+                //    and propagate the index value
+        map<int, vector<shared_ptr<ModelBus> > >::iterator iter = busByRefIslands.find(ref2);
         if (iter != busByRefIslands.end()) {
-          vector< shared_ptr<ModelBus> > vectBus = iter->second;
+          vector<shared_ptr<ModelBus> > vectBus = iter->second;
           for (unsigned int i = 0; i < vectBus.size(); ++i) {
             vectBus[i]->setRefIslands(ref1);
             busByRefIslands[ref1].push_back(vectBus[i]);
           }
-          busByRefIslands.erase(iter);  // erase old reference
+          busByRefIslands.erase(iter);                       // erase old reference
           (*itSwitch)->getModelBus2()->setRefIslands(ref1);  // update node 2
           busByRefIslands[ref1].push_back((*itSwitch)->getModelBus2());
         }
@@ -202,11 +201,11 @@ ModelVoltageLevel::isClosestBBSSwitchedOff(const shared_ptr<ModelBus>& bus) {
   if (topologyKind_ == VoltageLevelInterface::BUS_BREAKER) {
     return bus->getSwitchOff();
 
-  // If in node breaker topology, look if the closest bus bar section is switched off
+    // If in node breaker topology, look if the closest bus bar section is switched off
   } else if (topologyKind_ == VoltageLevelInterface::NODE_BREAKER) {
     if (bus->hasBBS()) {  // if the bus has a bus bar section, directly check if it is switched off
       return bus->getSwitchOff();
-    } else {              // if the bus has no bus bar section, find the closest one and check if it is switched off
+    } else {  // if the bus has no bus bar section, find the closest one and check if it is switched off
       const unsigned int node = bus->getBusIndex();
       vector<string> shortestPath;
       const unsigned int nodeBBS = findClosestBBS(node, shortestPath);
@@ -224,8 +223,8 @@ ModelVoltageLevel::isClosestBBSSwitchedOff(const shared_ptr<ModelBus>& bus) {
 
 void
 ModelVoltageLevel::connectNode(const unsigned int nodeToConnect) {
-//  This method is used to close all switches between the node to connect and the closest bus bar section
-//  This method should do nothing if not in node breaker topology
+  //  This method is used to close all switches between the node to connect and the closest bus bar section
+  //  This method should do nothing if not in node breaker topology
   if (topologyKind_ == VoltageLevelInterface::NODE_BREAKER) {
     // find the shortest path between the node to connect and the bus bar section
     vector<string> shortestPath;
@@ -241,8 +240,8 @@ ModelVoltageLevel::connectNode(const unsigned int nodeToConnect) {
 
 void
 ModelVoltageLevel::disconnectNode(const unsigned int nodeToDisconnect) {
-//  This method is used to open the first switch found between a node to disconnect and its closest bus bar section
-//  This method should do nothing if not in node breaker topology
+  //  This method is used to open the first switch found between a node to disconnect and its closest bus bar section
+  //  This method should do nothing if not in node breaker topology
   if (topologyKind_ == VoltageLevelInterface::NODE_BREAKER) {
     // define the voltage level graph if it hasn't been defined yet
     if (graph_ == boost::none)
@@ -312,8 +311,7 @@ ModelVoltageLevel::getY0() {
 
 void
 ModelVoltageLevel::evalF(propertyF_t type) {
-  for (vector<shared_ptr<NetworkComponent> >::const_iterator itComponent = components_.begin();
-      itComponent != components_.end(); ++itComponent)
+  for (vector<shared_ptr<NetworkComponent> >::const_iterator itComponent = components_.begin(); itComponent != components_.end(); ++itComponent)
     (*itComponent)->evalF(type);
 }
 
@@ -337,8 +335,6 @@ ModelVoltageLevel::setFequations(map<int, string>& fEquationIndex) {
   }
 }
 
-
-
 void
 ModelVoltageLevel::evalFType() {
   unsigned int offsetComponent = 0;
@@ -360,12 +356,11 @@ ModelVoltageLevel::updateFType() {
   }
 }
 
-
 void
 ModelVoltageLevel::collectSilentZ(bool* silentZTable) {
   unsigned int offsetComponent = 0;
-  for (vector<shared_ptr<NetworkComponent> >::const_iterator itComponent = components_.begin(), itEnd = components_.end();
-      itComponent != itEnd; ++itComponent) {
+  for (vector<shared_ptr<NetworkComponent> >::const_iterator itComponent = components_.begin(), itEnd = components_.end(); itComponent != itEnd;
+       ++itComponent) {
     if ((*itComponent)->sizeZ() != 0) {
       (*itComponent)->collectSilentZ(&silentZTable[offsetComponent]);
       offsetComponent += (*itComponent)->sizeZ();
@@ -432,8 +427,8 @@ NetworkComponent::StateChange_t
 ModelVoltageLevel::evalZ(const double& t) {
   bool topoChange = false;
   bool stateChange = false;
-  for (vector<shared_ptr<NetworkComponent> >::const_iterator itComponent = components_.begin(), itEnd = components_.end();
-      itComponent != itEnd; ++itComponent) {
+  for (vector<shared_ptr<NetworkComponent> >::const_iterator itComponent = components_.begin(), itEnd = components_.end(); itComponent != itEnd;
+       ++itComponent) {
     switch ((*itComponent)->evalZ(t)) {
     case NetworkComponent::TOPO_CHANGE:
       topoChange = true;
@@ -593,7 +588,7 @@ ModelVoltageLevel::defineNonGenericParameters(vector<ParameterModeler>& paramete
 }
 
 void
-ModelVoltageLevel::defineElements(vector<Element> &elements, map<string, int>& mapElement) {
+ModelVoltageLevel::defineElements(vector<Element>& elements, map<string, int>& mapElement) {
   vector<shared_ptr<NetworkComponent> >::const_iterator itComponent;
   for (itComponent = components_.begin(); itComponent != components_.end(); ++itComponent)
     (*itComponent)->defineElements(elements, mapElement);
@@ -607,7 +602,7 @@ ModelVoltageLevel::addBusNeighbors() {
 }
 
 void
-ModelVoltageLevel::setReferenceY(double* y, double* yp, double* f, const int & offsetY, const int & offsetF) {
+ModelVoltageLevel::setReferenceY(double* y, double* yp, double* f, const int& offsetY, const int& offsetF) {
   int offsetYComponent = offsetY;
   int offsetFComponent = offsetF;
   vector<shared_ptr<NetworkComponent> >::const_iterator itComponent;

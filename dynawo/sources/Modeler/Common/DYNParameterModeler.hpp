@@ -28,7 +28,8 @@ namespace DYN {
  * template specialization for boolean type
  */
 template<>
-inline void ParameterModeler::setValue(const bool& value, const parameterOrigin_t& origin) {
+inline void
+ParameterModeler::setValue(const bool& value, const parameterOrigin_t& origin) {
   if (getValueType() != VAR_TYPE_BOOL)
     throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "BOOL");
 
@@ -43,13 +44,14 @@ inline void ParameterModeler::setValue(const bool& value, const parameterOrigin_
  * template specialization for integer type
  */
 template<>
-inline void ParameterModeler::setValue(const int& value, const parameterOrigin_t& origin) {
+inline void
+ParameterModeler::setValue(const int& value, const parameterOrigin_t& origin) {
   if (getValueType() != VAR_TYPE_INT)
     throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "INT");
 
   writeChecks(origin);
 
-  values_[origin]= value;
+  values_[origin] = value;
   updateOrigin(origin);
 }
 
@@ -58,7 +60,8 @@ inline void ParameterModeler::setValue(const int& value, const parameterOrigin_t
  * template specialization for double type
  */
 template<>
-inline void ParameterModeler::setValue(const double& value, const parameterOrigin_t& origin) {
+inline void
+ParameterModeler::setValue(const double& value, const parameterOrigin_t& origin) {
   if (getValueType() != VAR_TYPE_DOUBLE)
     throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "DOUBLE");
 
@@ -73,7 +76,8 @@ inline void ParameterModeler::setValue(const double& value, const parameterOrigi
  * template specialization for string type
  */
 template<>
-inline void ParameterModeler::setValue(const std::string& value, const parameterOrigin_t& origin) {
+inline void
+ParameterModeler::setValue(const std::string& value, const parameterOrigin_t& origin) {
   if (getValueType() != VAR_TYPE_STRING)
     throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "STRING");
 

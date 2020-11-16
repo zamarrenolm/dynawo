@@ -20,14 +20,13 @@
 #ifndef SOLVERS_COMMON_DYNPARAMETERSOLVER_H_
 #define SOLVERS_COMMON_DYNPARAMETERSOLVER_H_
 
-#include <string>
-#include <vector>
-
-#include <boost/optional.hpp>
-#include <boost/any.hpp>
-
 #include "DYNCommon.h"
 #include "DYNParameter.h"
+
+#include <boost/any.hpp>
+#include <boost/optional.hpp>
+#include <string>
+#include <vector>
 
 namespace DYN {
 
@@ -59,7 +58,7 @@ class ParameterSolver : public ParameterCommon {
   /**
    * @brief Destructor
    */
-  ~ParameterSolver() { }
+  ~ParameterSolver() {}
 
   /**
     * @brief check whether the parameter's value is set
@@ -73,7 +72,8 @@ class ParameterSolver : public ParameterCommon {
    * @brief parameter's value setter
    * @param value: parameter's value
    */
-  template<typename T> void setValue(const T& value);
+  template<typename T>
+  void setValue(const T& value);
 
   /**
    * @brief parameter's value intermediary getter

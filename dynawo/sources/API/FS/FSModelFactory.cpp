@@ -19,6 +19,7 @@
  */
 
 #include "FSModelFactory.h"
+
 #include "FSModel.h"
 
 using std::string;

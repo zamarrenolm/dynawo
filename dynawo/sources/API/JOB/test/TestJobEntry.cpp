@@ -17,12 +17,12 @@
  *
  */
 
-#include "gtest_dynawo.h"
 #include "JOBJobEntry.h"
 #include "JOBModelerEntry.h"
-#include "JOBSolverEntry.h"
-#include "JOBSimulationEntry.h"
 #include "JOBOutputsEntry.h"
+#include "JOBSimulationEntry.h"
+#include "JOBSolverEntry.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 
@@ -35,12 +35,10 @@ TEST(APIJOBTest, testJobEntry) {
   ASSERT_EQ(job->getSimulationEntry(), boost::shared_ptr<SimulationEntry>());
   ASSERT_EQ(job->getOutputsEntry(), boost::shared_ptr<OutputsEntry>());
 
-
   boost::shared_ptr<ModelerEntry> modeler = boost::shared_ptr<ModelerEntry>(new ModelerEntry());
   boost::shared_ptr<SolverEntry> solver = boost::shared_ptr<SolverEntry>(new SolverEntry());
   boost::shared_ptr<SimulationEntry> simulation = boost::shared_ptr<SimulationEntry>(new SimulationEntry());
   boost::shared_ptr<OutputsEntry> outputs = boost::shared_ptr<OutputsEntry>(new OutputsEntry());
-
 
   job->setName("job1");
   job->setModelerEntry(modeler);

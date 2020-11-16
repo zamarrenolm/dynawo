@@ -42,7 +42,7 @@ class MacroConnect {
    *
    * @returns New MacroConnect::Impl instance with given attributes
    */
-  MacroConnect(const std::string & connector, const std::string & model1, const std::string & model2);
+  MacroConnect(const std::string& connector, const std::string& model1, const std::string& model2);
 
   /**
    * @brief First model getter

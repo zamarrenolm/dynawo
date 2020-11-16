@@ -17,12 +17,13 @@
  * @brief Three windings transformer data interface : implementation file for IIDM implementation
  *
  */
-#include <IIDM/components/Transformer3Windings.h>
-
 #include "DYNThreeWTransformerInterfaceIIDM.h"
+
 #include "DYNBusInterface.h"
 #include "DYNStateVariable.h"
 #include "DYNVoltageLevelInterface.h"
+
+#include <IIDM/components/Transformer3Windings.h>
 
 using boost::shared_ptr;
 using std::string;
@@ -30,13 +31,11 @@ using std::vector;
 
 namespace DYN {
 
-ThreeWTransformerInterfaceIIDM::ThreeWTransformerInterfaceIIDM(IIDM::Transformer3Windings& tfo) :
-tfoIIDM_(tfo) {
+ThreeWTransformerInterfaceIIDM::ThreeWTransformerInterfaceIIDM(IIDM::Transformer3Windings& tfo) : tfoIIDM_(tfo) {
   setType(ComponentInterface::THREE_WTFO);
 }
 
-ThreeWTransformerInterfaceIIDM::~ThreeWTransformerInterfaceIIDM() {
-}
+ThreeWTransformerInterfaceIIDM::~ThreeWTransformerInterfaceIIDM() {}
 
 void
 ThreeWTransformerInterfaceIIDM::setBusInterface1(const shared_ptr<BusInterface>& busInterface) {

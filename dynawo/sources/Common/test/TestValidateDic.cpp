@@ -11,11 +11,11 @@
 // simulation tool for power systems.
 //
 
-#include <boost/algorithm/string.hpp>
-
 #include "DYNExecUtils.h"
 #include "DYNFileSystemUtils.h"
 #include "gtest_dynawo.h"
+
+#include <boost/algorithm/string.hpp>
 
 namespace DYN {
 
@@ -28,44 +28,48 @@ TEST(Models, TestBuildCheckSum) {
   executeCommand(cmd, ssPython);
   std::string result = ssPython.str();
   boost::erase_all(result, "\n");
-  ASSERT_EQ(result, "Executing command : "+cmd+"Usage:  usage: validateDictionaries.py "
-      "--inputDir=<directories> --outputDir=<directory> --modelicaDir=<directory> --modelicaPackage=<packageName>    "
-      "Script generates keys.h and keys.cpp of inputDir files in outputDir    Generates keys.mo files in modelicaDir    "
-      "If everything is ok, generates header associated with all kind of dictionary    validateDictionaries.py: "
-      "error: Input directory should be informed");
+  ASSERT_EQ(result, "Executing command : " + cmd +
+                        "Usage:  usage: validateDictionaries.py "
+                        "--inputDir=<directories> --outputDir=<directory> --modelicaDir=<directory> --modelicaPackage=<packageName>    "
+                        "Script generates keys.h and keys.cpp of inputDir files in outputDir    Generates keys.mo files in modelicaDir    "
+                        "If everything is ok, generates header associated with all kind of dictionary    validateDictionaries.py: "
+                        "error: Input directory should be informed");
   ssPython.str(std::string());
 
   cmd = pythonCmd + " validateDictionaries.py --inputDir dic/";
   executeCommand(cmd, ssPython);
   result = ssPython.str();
   boost::erase_all(result, "\n");
-  ASSERT_EQ(result, "Executing command : "+cmd+"Usage:  usage: validateDictionaries.py "
-      "--inputDir=<directories> --outputDir=<directory> --modelicaDir=<directory> --modelicaPackage=<packageName>    "
-      "Script generates keys.h and keys.cpp of inputDir files in outputDir    Generates keys.mo files in modelicaDir    "
-      "If everything is ok, generates header associated with all kind of dictionary    validateDictionaries.py: "
-      "error: Output directory should be informed");
+  ASSERT_EQ(result, "Executing command : " + cmd +
+                        "Usage:  usage: validateDictionaries.py "
+                        "--inputDir=<directories> --outputDir=<directory> --modelicaDir=<directory> --modelicaPackage=<packageName>    "
+                        "Script generates keys.h and keys.cpp of inputDir files in outputDir    Generates keys.mo files in modelicaDir    "
+                        "If everything is ok, generates header associated with all kind of dictionary    validateDictionaries.py: "
+                        "error: Output directory should be informed");
   ssPython.str(std::string());
 
   cmd = pythonCmd + " validateDictionaries.py --inputDir dic/ --outputDir dic/";
   executeCommand(cmd, ssPython);
   result = ssPython.str();
   boost::erase_all(result, "\n");
-  ASSERT_EQ(result, "Executing command : "+cmd+"Usage:  usage: validateDictionaries.py "
-      "--inputDir=<directories> --outputDir=<directory> --modelicaDir=<directory> --modelicaPackage=<packageName>    "
-      "Script generates keys.h and keys.cpp of inputDir files in outputDir    Generates keys.mo files in modelicaDir    "
-      "If everything is ok, generates header associated with all kind of dictionary    validateDictionaries.py: "
-      "error: Output directory for modelica files should be informed");
+  ASSERT_EQ(result, "Executing command : " + cmd +
+                        "Usage:  usage: validateDictionaries.py "
+                        "--inputDir=<directories> --outputDir=<directory> --modelicaDir=<directory> --modelicaPackage=<packageName>    "
+                        "Script generates keys.h and keys.cpp of inputDir files in outputDir    Generates keys.mo files in modelicaDir    "
+                        "If everything is ok, generates header associated with all kind of dictionary    validateDictionaries.py: "
+                        "error: Output directory for modelica files should be informed");
   ssPython.str(std::string());
 
   cmd = pythonCmd + " validateDictionaries.py --inputDir dic/ --outputDir dic/ --modelicaDir dic/";
   executeCommand(cmd, ssPython);
   result = ssPython.str();
   boost::erase_all(result, "\n");
-  ASSERT_EQ(result, "Executing command : "+cmd+"Usage:  usage: validateDictionaries.py "
-      "--inputDir=<directories> --outputDir=<directory> --modelicaDir=<directory> --modelicaPackage=<packageName>    "
-      "Script generates keys.h and keys.cpp of inputDir files in outputDir    Generates keys.mo files in modelicaDir    "
-      "If everything is ok, generates header associated with all kind of dictionary    validateDictionaries.py: "
-      "error: Parent package of modelica keys files should be informed");
+  ASSERT_EQ(result, "Executing command : " + cmd +
+                        "Usage:  usage: validateDictionaries.py "
+                        "--inputDir=<directories> --outputDir=<directory> --modelicaDir=<directory> --modelicaPackage=<packageName>    "
+                        "Script generates keys.h and keys.cpp of inputDir files in outputDir    Generates keys.mo files in modelicaDir    "
+                        "If everything is ok, generates header associated with all kind of dictionary    validateDictionaries.py: "
+                        "error: Parent package of modelica keys files should be informed");
   ssPython.str(std::string());
 
   cmd = pythonCmd + " validateDictionaries.py --inputDir dic/ --outputDir dic/ --modelicaDir dic/ --modelicaPackage myPackage";
@@ -88,6 +92,5 @@ TEST(Models, TestBuildCheckSum) {
   ASSERT_EQ(ssDiff.str(), "Executing command : diff dic/icKeys.mo dic/icKeys_ref.mo\n");
   ssDiff.str(std::string());
 }
-
 
 }  // namespace DYN

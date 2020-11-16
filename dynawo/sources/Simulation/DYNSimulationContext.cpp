@@ -22,8 +22,7 @@
 
 namespace DYN {
 
-SimulationContext::~SimulationContext() {
-}
+SimulationContext::~SimulationContext() {}
 
 void
 SimulationContext::setWorkingDirectory(const std::string& directory) {

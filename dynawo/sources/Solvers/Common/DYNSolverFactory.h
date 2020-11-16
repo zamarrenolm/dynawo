@@ -22,9 +22,9 @@
 
 #include "DYNSolver.h"
 
-#include <map>
 #include <boost/core/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <map>
 
 namespace DYN {
 class SolverFactories;
@@ -39,12 +39,12 @@ class SolverFactory {
   /**
    * @brief Constructor
    */
-  SolverFactory() { }
+  SolverFactory() {}
 
   /**
    * @brief Destructor
    */
-  virtual ~SolverFactory() { }
+  virtual ~SolverFactory() {}
 
   /**
    * @brief create a new instance of a solver
@@ -53,7 +53,7 @@ class SolverFactory {
    */
   virtual Solver* create() const = 0;
 
-    /**
+  /**
    * @brief destroy an instance of a solver
    *
    */
@@ -108,7 +108,7 @@ class SolverFactories : private boost::noncopyable {
    * @return A map iterator whose key is the library name and whose value
    * is a pointer to the SolverFactory.
    */
-  SolverFactoryIterator find(const std::string & lib);
+  SolverFactoryIterator find(const std::string& lib);
 
   /**
    * @brief Test if a map iterator is the end operator of factories map
@@ -127,7 +127,7 @@ class SolverFactories : private boost::noncopyable {
    * @param factory : Pointer to the SolverFactory.to add - value in the
    * map
    */
-  void add(const std::string & lib, SolverFactory * factory);
+  void add(const std::string& lib, SolverFactory* factory);
 
   /**
    * @brief Add a factory associated to its destruction method
@@ -139,7 +139,7 @@ class SolverFactories : private boost::noncopyable {
   void add(const std::string& lib, destroy_solver_t* deleteFactory);
 
  private:
-  std::map<std::string, SolverFactory* > factoryMap_;  ///< associate a library factory with the name of the library
+  std::map<std::string, SolverFactory*> factoryMap_;            ///< associate a library factory with the name of the library
   std::map<std::string, destroy_solver_t*> factoryMapDestroy_;  ///< associate a library factory with its destruction method
 };
 
@@ -160,7 +160,7 @@ class SolverDelete {
   /**
    * @brief destructor
    */
-  ~SolverDelete() { }
+  ~SolverDelete() {}
 
   /**
    * @brief Function to use this class as a Functor

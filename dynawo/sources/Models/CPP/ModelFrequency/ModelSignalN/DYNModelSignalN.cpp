@@ -29,45 +29,49 @@
  * and the way the frequency is modeled (explicitly for DYNModelOmegaRef, implicitly for DYNModelSignalN).
  *
  */
-#include <sstream>
-#include <vector>
-#include <algorithm>
-
-#include "PARParametersSet.h"
-
 #include "DYNModelSignalN.h"
-#include "DYNModelSignalN.hpp"
-#include "DYNSparseMatrix.h"
-#include "DYNMacrosMessage.h"
-#include "DYNElement.h"
+
 #include "DYNCommonModeler.h"
+#include "DYNElement.h"
+#include "DYNMacrosMessage.h"
+#include "DYNModelSignalN.hpp"
+#include "DYNParameter.h"
+#include "DYNSparseMatrix.h"
 #include "DYNTrace.h"
 #include "DYNVariableForModel.h"
-#include "DYNParameter.h"
+#include "PARParametersSet.h"
 
-using std::vector;
-using std::string;
+#include <algorithm>
+#include <sstream>
+#include <vector>
+
 using std::map;
+using std::string;
 using std::stringstream;
+using std::vector;
 
 using boost::shared_ptr;
 
 using parameters::ParametersSet;
 
-extern "C" DYN::SubModelFactory* getFactory() {
+extern "C" DYN::SubModelFactory*
+getFactory() {
   return (new DYN::ModelSignalNFactory());
 }
 
-extern "C" void deleteFactory(DYN::SubModelFactory* factory) {
+extern "C" void
+deleteFactory(DYN::SubModelFactory* factory) {
   delete factory;
 }
 
-extern "C" DYN::SubModel* DYN::ModelSignalNFactory::create() const {
+extern "C" DYN::SubModel*
+DYN::ModelSignalNFactory::create() const {
   DYN::SubModel* model(new DYN::ModelSignalN());
   return model;
 }
 
-extern "C" void DYN::ModelSignalNFactory::destroy(DYN::SubModel* model) const {
+extern "C" void
+DYN::ModelSignalNFactory::destroy(DYN::SubModel* model) const {
   delete model;
 }
 
@@ -81,12 +85,7 @@ int ModelSignalN::col1stAlphaSum_;
 int ModelSignalN::col1stAlpha_;
 int ModelSignalN::col1stAlphaSumGrp_;
 
-ModelSignalN::ModelSignalN() :
-ModelCPP("alphaSum"),
-firstState_(true),
-nbGen_(0),
-nbCC_(0) {
-}
+ModelSignalN::ModelSignalN() : ModelCPP("alphaSum"), firstState_(true), nbGen_(0), nbCC_(0) {}
 
 void
 ModelSignalN::init(const double& /*t0*/) {
@@ -230,7 +229,8 @@ ModelSignalN::evalMode(const double& /*t*/) {
     numCCNodeOld_.assign(numCCNode_.begin(), numCCNode_.end());
     sortGenByCC();
     return ALGEBRAIC_J_UPDATE_MODE;
-  } return NO_MODE;
+  }
+  return NO_MODE;
 }
 
 void
@@ -294,9 +294,9 @@ ModelSignalN::getY0() {
 
 void
 ModelSignalN::evalYType() {
-  std::fill(yType_, yType_ + nbMaxCC, ALGEBRAIC);  // n[i] is an algebraic variable
-  std::fill(yType_ + nbMaxCC, yType_ + nbMaxCC + nbGen_, ALGEBRAIC);   // nGrp[i] is an algebraic variable
-  std::fill(yType_+ nbMaxCC + nbGen_, yType_+ 2 * nbMaxCC + nbGen_, ALGEBRAIC);  // tetaRef[i] is an algebraic variable
+  std::fill(yType_, yType_ + nbMaxCC, ALGEBRAIC);                                  // n[i] is an algebraic variable
+  std::fill(yType_ + nbMaxCC, yType_ + nbMaxCC + nbGen_, ALGEBRAIC);               // nGrp[i] is an algebraic variable
+  std::fill(yType_ + nbMaxCC + nbGen_, yType_ + 2 * nbMaxCC + nbGen_, ALGEBRAIC);  // tetaRef[i] is an algebraic variable
 }
 
 void
@@ -355,7 +355,7 @@ ModelSignalN::setSubModelParameters() {
 }
 
 void
-ModelSignalN::defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement) {
+ModelSignalN::defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement) {
   for (int i = 0; i < nbMaxCC; ++i) {
     std::stringstream name;
     name << "alphaSum_" << i;
@@ -396,7 +396,8 @@ ModelSignalN::defineElements(std::vector<Element> &elements, std::map<std::strin
   }
 }
 
-void ModelSignalN::setFequations() {
+void
+ModelSignalN::setFequations() {
   for (int i = 0; i < nbMaxCC; ++i) {
     fEquationIndex_[i] = "0=tetaRef[i]";
   }

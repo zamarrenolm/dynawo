@@ -20,9 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNNETWORKINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNNETWORKINTERFACEIIDM_H_
 
-#include <vector>
-
 #include "DYNNetworkInterface.h"
+
+#include <vector>
 
 namespace IIDM {
 class Network;
@@ -74,27 +74,27 @@ class NetworkInterfaceIIDM : public NetworkInterface {
   /**
    * @copydoc NetworkInterface::getLines() const
    */
-  const std::vector< boost::shared_ptr<LineInterface> >& getLines() const;
+  const std::vector<boost::shared_ptr<LineInterface> >& getLines() const;
 
   /**
    * @copydoc NetworkInterface::getTwoWTransformers() const
    */
-  const std::vector< boost::shared_ptr<TwoWTransformerInterface> >& getTwoWTransformers() const;
+  const std::vector<boost::shared_ptr<TwoWTransformerInterface> >& getTwoWTransformers() const;
 
   /**
    * @copydoc NetworkInterface::getThreeWTransformers() const
    */
-  const std::vector< boost::shared_ptr<ThreeWTransformerInterface> >& getThreeWTransformers() const;
+  const std::vector<boost::shared_ptr<ThreeWTransformerInterface> >& getThreeWTransformers() const;
 
   /**
    * @copydoc NetworkInterface::getVoltageLevels() const
    */
-  const std::vector< boost::shared_ptr<VoltageLevelInterface> >& getVoltageLevels() const;
+  const std::vector<boost::shared_ptr<VoltageLevelInterface> >& getVoltageLevels() const;
 
   /**
    * @copydoc NetworkInterface::getHvdcLines() const
    */
-  const std::vector< boost::shared_ptr<HvdcLineInterface> >& getHvdcLines() const;
+  const std::vector<boost::shared_ptr<HvdcLineInterface> >& getHvdcLines() const;
 
  private:
   /**
@@ -102,12 +102,12 @@ class NetworkInterfaceIIDM : public NetworkInterface {
    */
   NetworkInterfaceIIDM();
 
-  IIDM::Network& networkIIDM_;  ///< reference to the iidm network instance
-  std::vector< boost::shared_ptr<LineInterface> > lines_;  ///< vector of line interface of the network
-  std::vector< boost::shared_ptr<TwoWTransformerInterface> > twoWTransformers_;  ///< vector of two windings transformer interface of the network
-  std::vector< boost::shared_ptr<ThreeWTransformerInterface> > threeWTransformers_;  ///< vector of three windings transformer interface of the network
-  std::vector< boost::shared_ptr<VoltageLevelInterface> > voltageLevels_;  ///< vector of voltage level interface of the network
-  std::vector< boost::shared_ptr<HvdcLineInterface> > hvdcs_;  ///< vector of hvdc line interface of the network
+  IIDM::Network& networkIIDM_;                                                      ///< reference to the iidm network instance
+  std::vector<boost::shared_ptr<LineInterface> > lines_;                            ///< vector of line interface of the network
+  std::vector<boost::shared_ptr<TwoWTransformerInterface> > twoWTransformers_;      ///< vector of two windings transformer interface of the network
+  std::vector<boost::shared_ptr<ThreeWTransformerInterface> > threeWTransformers_;  ///< vector of three windings transformer interface of the network
+  std::vector<boost::shared_ptr<VoltageLevelInterface> > voltageLevels_;            ///< vector of voltage level interface of the network
+  std::vector<boost::shared_ptr<HvdcLineInterface> > hvdcs_;                        ///< vector of hvdc line interface of the network
 };
 }  // namespace DYN
 

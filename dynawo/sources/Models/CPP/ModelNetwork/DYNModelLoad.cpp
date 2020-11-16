@@ -17,25 +17,24 @@
  * @brief
  *
  */
-#include <cmath>
-#include <cassert>
-
-#include "PARParametersSet.h"
-
 #include "DYNModelLoad.h"
+
+#include "DYNBusInterface.h"
 #include "DYNCommon.h"
-#include "DYNMacrosMessage.h"
-#include "DYNTrace.h"
-#include "DYNSparseMatrix.h"
-#include "DYNVariableForModel.h"
-#include "DYNParameter.h"
 #include "DYNDerivative.h"
 #include "DYNLoadInterface.h"
-#include "DYNBusInterface.h"
+#include "DYNMacrosMessage.h"
 #include "DYNModelConstants.h"
 #include "DYNModelNetwork.h"
 #include "DYNModelVoltageLevel.h"
+#include "DYNParameter.h"
+#include "DYNSparseMatrix.h"
+#include "DYNTrace.h"
+#include "DYNVariableForModel.h"
+#include "PARParametersSet.h"
 
+#include <cassert>
+#include <cmath>
 
 using std::map;
 using std::string;
@@ -45,38 +44,37 @@ using boost::shared_ptr;
 
 using parameters::ParametersSet;
 
-
 namespace DYN {
 
 ModelLoad::ModelLoad(const shared_ptr<LoadInterface>& load) :
-NetworkComponent(load->getID()),
-stateModified_(false),
-kp_(0.),
-kq_(0.),
-alpha_(1.),
-beta_(1.),
-isRestorative_(false),
-isControllable_(false),
-Tp_(0.),
-TpIsZero_(true),
-Tq_(0.),
-TqIsZero_(true),
-zPMax_(0.),
-zQMax_(0.),
-alphaLong_(0.),
-betaLong_(0.),
-u0_(0.),
-DeltaPc0_(0),
-DeltaQc0_(0),
-zP0_(1),
-zQ0_(1),
-zPprim0_(0),
-zQprim0_(0),
-yOffset_(0),
-DeltaPcYNum_(0),
-DeltaQcYNum_(0),
-zPYNum_(0),
-zQYNum_(0) {
+    NetworkComponent(load->getID()),
+    stateModified_(false),
+    kp_(0.),
+    kq_(0.),
+    alpha_(1.),
+    beta_(1.),
+    isRestorative_(false),
+    isControllable_(false),
+    Tp_(0.),
+    TpIsZero_(true),
+    Tq_(0.),
+    TqIsZero_(true),
+    zPMax_(0.),
+    zQMax_(0.),
+    alphaLong_(0.),
+    betaLong_(0.),
+    u0_(0.),
+    DeltaPc0_(0),
+    DeltaQc0_(0),
+    zP0_(1),
+    zQ0_(1),
+    zPprim0_(0),
+    zQprim0_(0),
+    yOffset_(0),
+    DeltaPcYNum_(0),
+    DeltaQcYNum_(0),
+    zPYNum_(0),
+    zQYNum_(0) {
   // init data
   P0_ = load->getP() / SNREF;
   Q0_ = load->getQ() / SNREF;
@@ -117,7 +115,8 @@ ModelLoad::initSize() {
   }
 }
 
-void ModelLoad::evalYType() {
+void
+ModelLoad::evalYType() {
   unsigned int yTypeIndex = 0;
   if (isControllable_) {
     yType_[yTypeIndex] = EXTERNAL;  // DeltaPc
@@ -134,7 +133,8 @@ void ModelLoad::evalYType() {
   }
 }
 
-void ModelLoad::evalFType() {
+void
+ModelLoad::evalFType() {
   if (isRestorative_) {
     fType_[0] = DIFFERENTIAL_EQ;  // differential equations
     fType_[1] = DIFFERENTIAL_EQ;
@@ -170,7 +170,7 @@ ModelLoad::evalF(propertyF_t type) {
       double zq = zQ();
       double zQdiff = (pow(U / u0_, betaLong_) - zq * pow(U, beta_) * kq_);
       if ((zq > 0. && zQ() < zQMax_) || (zq <= 0. && zQdiff > 0.) || (zq >= zQMax_ && zQdiff < 0.))
-          zQprimValue = zQdiff;
+        zQprimValue = zQdiff;
       f_[1] = Tq_ * zQPrim() - zQprimValue;
     }
   }
@@ -190,7 +190,6 @@ ModelLoad::setFequations(std::map<int, std::string>& fEquationIndex) {
       fEquationIndex[index] = std::string("zPPrim() localModel:").append(id());  // z is constant
     ++index;
 
-
     if (!TqIsZero_ && isRunning())
       fEquationIndex[index] = std::string("Tq_*zQPrim() - zQprimValue localModel:").append(id());
     else
@@ -198,7 +197,7 @@ ModelLoad::setFequations(std::map<int, std::string>& fEquationIndex) {
     ++index;
   }
 
-  assert(fEquationIndex.size() == (unsigned int) sizeF() && "ModelLoad:fEquationIndex.size() != f_.size()");
+  assert(fEquationIndex.size() == (unsigned int)sizeF() && "ModelLoad:fEquationIndex.size() != f_.size()");
 }
 
 void
@@ -265,8 +264,8 @@ ModelLoad::evalJt(SparseMatrix& jt, const double& cj, const int& rowOffset) {
         double powUAlphaLongMinus2 = pow(U, alphaLong_ - 2.);
         double powU0AlphaLong = pow(u0_, alphaLong_);
         double powUAlphaMinus2 = pow(U, alpha_ - 2.);
-        double termUr = alphaLong_ * ur *  powUAlphaLongMinus2 / powU0AlphaLong - zp * alpha_ * ur * powUAlphaMinus2 * kp_;
-        double termUi = alphaLong_ * ui *  powUAlphaLongMinus2 / powU0AlphaLong - zp * alpha_ * ui * powUAlphaMinus2 * kp_;
+        double termUr = alphaLong_ * ur * powUAlphaLongMinus2 / powU0AlphaLong - zp * alpha_ * ur * powUAlphaMinus2 * kp_;
+        double termUi = alphaLong_ * ui * powUAlphaLongMinus2 / powU0AlphaLong - zp * alpha_ * ui * powUAlphaMinus2 * kp_;
         jt.addTerm(globalYIndex(zPYNum_) + rowOffset, -termZp + cj * Tp_);
         jt.addTerm(urYNum + rowOffset, -termUr);
         jt.addTerm(uiYNum + rowOffset, -termUi);
@@ -289,7 +288,7 @@ ModelLoad::evalJt(SparseMatrix& jt, const double& cj, const int& rowOffset) {
         double powUBetaMinus2 = pow(U, beta_ - 2.);
         double termUr = betaLong_ * ur * powUBetaLongMinus2 / powU0BetaLong - zq * beta_ * ur * powUBetaMinus2 * kq_;
         double termUi = betaLong_ * ui * powUBetaLongMinus2 / powU0BetaLong - zq * beta_ * ui * powUBetaMinus2 * kq_;
-        jt.addTerm(globalYIndex(zQYNum_) + rowOffset, - termZq + cj * Tq_);
+        jt.addTerm(globalYIndex(zQYNum_) + rowOffset, -termZq + cj * Tq_);
         jt.addTerm(urYNum + rowOffset, -termUr);
         jt.addTerm(uiYNum + rowOffset, -termUi);
       } else {
@@ -582,7 +581,7 @@ ModelLoad::evalZ(const double& /*t*/) {
     stateModified_ = true;
     setConnected(currState);
   }
-  return (stateModified_)?NetworkComponent::STATE_CHANGE:NetworkComponent::NO_CHANGE;
+  return (stateModified_) ? NetworkComponent::STATE_CHANGE : NetworkComponent::NO_CHANGE;
 }
 
 void
@@ -723,124 +722,116 @@ ModelLoad::evalCalculatedVars() {
 void
 ModelLoad::getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, vector<int>& numVars) const {
   switch (numCalculatedVar) {
-    case pNum_: {
-      if (isRunning()) {
-        numVars.push_back(modelBus_->urYNum());
-        numVars.push_back(modelBus_->uiYNum());
-        if (isControllable_)
-          numVars.push_back(DeltaPcYNum_ + yOffset_);
-        if (isRestorative_)
-          numVars.push_back(zPYNum_ + yOffset_);
-      }
-    }
-    break;
-    case qNum_: {
-      if (isRunning()) {
-        numVars.push_back(modelBus_->urYNum());
-        numVars.push_back(modelBus_->uiYNum());
-        if (isControllable_)
-          numVars.push_back(DeltaQcYNum_ + yOffset_);
-        if (isRestorative_)
-          numVars.push_back(zQYNum_ + yOffset_);
-      }
-    }
-    break;
-    case pcNum_: {
-      if (isRunning() && isControllable_) {
+  case pNum_: {
+    if (isRunning()) {
+      numVars.push_back(modelBus_->urYNum());
+      numVars.push_back(modelBus_->uiYNum());
+      if (isControllable_)
         numVars.push_back(DeltaPcYNum_ + yOffset_);
-      }
+      if (isRestorative_)
+        numVars.push_back(zPYNum_ + yOffset_);
     }
-    break;
-    case qcNum_: {
-      if (isRunning() && isControllable_) {
+  } break;
+  case qNum_: {
+    if (isRunning()) {
+      numVars.push_back(modelBus_->urYNum());
+      numVars.push_back(modelBus_->uiYNum());
+      if (isControllable_)
         numVars.push_back(DeltaQcYNum_ + yOffset_);
-      }
+      if (isRestorative_)
+        numVars.push_back(zQYNum_ + yOffset_);
     }
+  } break;
+  case pcNum_: {
+    if (isRunning() && isControllable_) {
+      numVars.push_back(DeltaPcYNum_ + yOffset_);
+    }
+  } break;
+  case qcNum_: {
+    if (isRunning() && isControllable_) {
+      numVars.push_back(DeltaQcYNum_ + yOffset_);
+    }
+  } break;
+  case loadStateNum_:
     break;
-    case loadStateNum_:
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
 void
 ModelLoad::evalJCalculatedVarI(unsigned numCalculatedVar, vector<double>& res) const {
   switch (numCalculatedVar) {
-    case pNum_: {
-      if (isRunning()) {
-        double ur = modelBus_->ur();
-        double ui = modelBus_->ui();
-        double deltaPcVal = 0.;
-        double zPVal = 1.;
-        if (isControllable_) {
-          deltaPcVal = deltaPc();
-        }
-        if (isRestorative_) {
-          zPVal = zP();
-        }
-        double U = sqrt(ur * ur + ui * ui);
+  case pNum_: {
+    if (isRunning()) {
+      double ur = modelBus_->ur();
+      double ui = modelBus_->ui();
+      double deltaPcVal = 0.;
+      double zPVal = 1.;
+      if (isControllable_) {
+        deltaPcVal = deltaPc();
+      }
+      if (isRestorative_) {
+        zPVal = zP();
+      }
+      double U = sqrt(ur * ur + ui * ui);
 
-        unsigned int indexRes = 0;
-        res[indexRes] =  zPVal * P0_ * (1. + deltaPcVal) * kp_ * alpha_ * ur * pow(U, alpha_ - 2.);  // dP/dUr
+      unsigned int indexRes = 0;
+      res[indexRes] = zPVal * P0_ * (1. + deltaPcVal) * kp_ * alpha_ * ur * pow(U, alpha_ - 2.);  // dP/dUr
+      ++indexRes;
+      res[indexRes] = zPVal * P0_ * (1. + deltaPcVal) * kp_ * alpha_ * ui * pow(U, alpha_ - 2.);  // dP/dUi
+      ++indexRes;
+      if (isControllable_) {
+        res[indexRes] = zPVal * P0_ * pow(U, alpha_) * kp_;  // dP/d(deltaPc)
         ++indexRes;
-        res[indexRes] =  zPVal * P0_ * (1. + deltaPcVal) * kp_ * alpha_ * ui * pow(U, alpha_ - 2.);  // dP/dUi
-        ++indexRes;
-        if (isControllable_) {
-          res[indexRes] = zPVal * P0_ * pow(U, alpha_) * kp_;  // dP/d(deltaPc)
-          ++indexRes;
-        }
-        if (isRestorative_) {
-          res[indexRes] = P0_ * (1. + deltaPcVal) * pow(U, alpha_) * kp_;  // dP/d(zP)
-        }
+      }
+      if (isRestorative_) {
+        res[indexRes] = P0_ * (1. + deltaPcVal) * pow(U, alpha_) * kp_;  // dP/d(zP)
       }
     }
-    break;
-    case qNum_: {
-      if (isRunning()) {
-        double ur = modelBus_->ur();
-        double ui = modelBus_->ui();
-        double deltaQcVal = 0.;
-        double zQVal = 1.;
-        if (isControllable_) {
-          deltaQcVal = deltaQc();
-        }
-        if (isRestorative_) {
-          zQVal = zQ();
-        }
-        double U = sqrt(ur * ur + ui * ui);
+  } break;
+  case qNum_: {
+    if (isRunning()) {
+      double ur = modelBus_->ur();
+      double ui = modelBus_->ui();
+      double deltaQcVal = 0.;
+      double zQVal = 1.;
+      if (isControllable_) {
+        deltaQcVal = deltaQc();
+      }
+      if (isRestorative_) {
+        zQVal = zQ();
+      }
+      double U = sqrt(ur * ur + ui * ui);
 
-        unsigned int indexRes = 0;
-        res[indexRes] = zQVal * Q0_ * (1. + deltaQcVal) * kq_ * beta_ * ur * pow(U, beta_ - 2.);  // dQ/dUr
+      unsigned int indexRes = 0;
+      res[indexRes] = zQVal * Q0_ * (1. + deltaQcVal) * kq_ * beta_ * ur * pow(U, beta_ - 2.);  // dQ/dUr
+      ++indexRes;
+      res[indexRes] = zQVal * Q0_ * (1. + deltaQcVal) * kq_ * beta_ * ui * pow(U, beta_ - 2.);  // dQ/dUi
+      ++indexRes;
+      if (isControllable_) {
+        res[indexRes] = zQVal * Q0_ * pow(U, beta_) * kq_;  // dQ/d(deltaQc)
         ++indexRes;
-        res[indexRes] = zQVal * Q0_ * (1. + deltaQcVal) * kq_ * beta_ * ui * pow(U, beta_ - 2.);  // dQ/dUi
-        ++indexRes;
-        if (isControllable_) {
-          res[indexRes] = zQVal * Q0_ * pow(U, beta_) * kq_;  // dQ/d(deltaQc)
-          ++indexRes;
-        }
-        if (isRestorative_) {
-          res[indexRes] = Q0_ * (1. + deltaQcVal) * pow(U, beta_) * kq_;  // dQ/d(zQ)
-        }
+      }
+      if (isRestorative_) {
+        res[indexRes] = Q0_ * (1. + deltaQcVal) * pow(U, beta_) * kq_;  // dQ/d(zQ)
       }
     }
-    break;
-    case pcNum_: {
-       if (isRunning() && isControllable_) {
-         res[0] = P0_ * kp_;  // dPc / d(deltaPc)
-       }
+  } break;
+  case pcNum_: {
+    if (isRunning() && isControllable_) {
+      res[0] = P0_ * kp_;  // dPc / d(deltaPc)
     }
-    break;
-    case qcNum_: {
-      if (isRunning() && isControllable_) {
-         res[0] = Q0_ * kq_;  // dQc / d(deltaQc)
-       }
+  } break;
+  case qcNum_: {
+    if (isRunning() && isControllable_) {
+      res[0] = Q0_ * kq_;  // dQc / d(deltaQc)
     }
+  } break;
+  case loadStateNum_:
     break;
-    case loadStateNum_:
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
@@ -848,55 +839,51 @@ double
 ModelLoad::evalCalculatedVarI(unsigned numCalculatedVar) const {
   double output = 0.;
   switch (numCalculatedVar) {
-    case pNum_: {
-      if (isRunning()) {
-        double U = modelBus_->getCurrentU(ModelBus::UPuType_);
-        double deltaPcVal = 0.;
-        double zPVal = 1.;
-        if (isControllable_) {
-          deltaPcVal = deltaPc();
-        }
-        if (isRestorative_) {
-          zPVal = zP();
-        }
-        output = zPVal * P0_ * (1. + deltaPcVal) * pow(U, alpha_) * kp_;
+  case pNum_: {
+    if (isRunning()) {
+      double U = modelBus_->getCurrentU(ModelBus::UPuType_);
+      double deltaPcVal = 0.;
+      double zPVal = 1.;
+      if (isControllable_) {
+        deltaPcVal = deltaPc();
       }
-    }
-    break;
-    case qNum_: {
-      if (isRunning()) {
-        double U = modelBus_->getCurrentU(ModelBus::UPuType_);
-        double deltaQcVal = 0.;
-        double zQVal = 1.;
-        if (isControllable_) {
-          deltaQcVal = deltaQc();
-        }
-        if (isRestorative_) {
-          zQVal = zQ();
-        }
-        output = zQVal * Q0_ * (1. + deltaQcVal) * pow(U, beta_) * kq_;
+      if (isRestorative_) {
+        zPVal = zP();
       }
+      output = zPVal * P0_ * (1. + deltaPcVal) * pow(U, alpha_) * kp_;
     }
-    break;
-    case pcNum_: {
-      if (isRunning()) {
-        double deltaPcVal = (isControllable_) ? deltaPc() : 0.;
-        output = P0_ * (1. + deltaPcVal) * kp_;
+  } break;
+  case qNum_: {
+    if (isRunning()) {
+      double U = modelBus_->getCurrentU(ModelBus::UPuType_);
+      double deltaQcVal = 0.;
+      double zQVal = 1.;
+      if (isControllable_) {
+        deltaQcVal = deltaQc();
       }
-    }
-    break;
-    case qcNum_: {
-      if (isRunning()) {
-        double deltaQcVal = (isControllable_) ? deltaQc() : 0.;
-        output = Q0_ * (1. + deltaQcVal) * kq_;
+      if (isRestorative_) {
+        zQVal = zQ();
       }
+      output = zQVal * Q0_ * (1. + deltaQcVal) * pow(U, beta_) * kq_;
     }
+  } break;
+  case pcNum_: {
+    if (isRunning()) {
+      double deltaPcVal = (isControllable_) ? deltaPc() : 0.;
+      output = P0_ * (1. + deltaPcVal) * kp_;
+    }
+  } break;
+  case qcNum_: {
+    if (isRunning()) {
+      double deltaQcVal = (isControllable_) ? deltaQc() : 0.;
+      output = Q0_ * (1. + deltaQcVal) * kq_;
+    }
+  } break;
+  case loadStateNum_:
+    output = connectionState_;
     break;
-    case loadStateNum_:
-      output = connectionState_;
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
+  default:
+    throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
   }
   return (output);
 }

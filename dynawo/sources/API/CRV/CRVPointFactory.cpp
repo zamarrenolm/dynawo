@@ -19,6 +19,7 @@
  */
 
 #include "CRVPointFactory.h"
+
 #include "CRVPoint.h"
 
 using boost::shared_ptr;

@@ -16,46 +16,42 @@
  * @brief Unit tests for common Modeler methods
  *
  */
-#include <vector>
+#include "DYNDataInterfaceIIDM.h"
+#include "DYNElement.h"
+#include "DYNExecUtils.h"
+#include "DYNSubModel.h"
+#include "DYNSubModelFactory.h"
+#include "gtest_dynawo.h"
+
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/DanglingLineBuilder.h>
+#include <IIDM/builders/LineBuilder.h>
+#include <IIDM/builders/LoadBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/ShuntCompensatorBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/SwitchBuilder.h>
+#include <IIDM/builders/Transformer2WindingsBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/Connection.h>
+#include <IIDM/components/ConnectionPoint.h>
+#include <IIDM/components/DanglingLine.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/Load.h>
+#include <IIDM/components/ShuntCompensator.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/Switch.h>
+#include <IIDM/components/TapChanger.h>
+#include <IIDM/components/Transformer2Windings.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <boost/pointer_cast.hpp>
+#include <boost/shared_ptr.hpp>
 #include <map>
 #include <sstream>
 #include <string>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/pointer_cast.hpp>
-
-#include <IIDM/Network.h>
-#include <IIDM/components/Connection.h>
-#include <IIDM/components/ConnectionPoint.h>
-#include <IIDM/components/TapChanger.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Transformer2Windings.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/components/Line.h>
-#include <IIDM/components/DanglingLine.h>
-#include <IIDM/components/Load.h>
-#include <IIDM/components/ShuntCompensator.h>
-#include <IIDM/components/Switch.h>
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/Transformer2WindingsBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
-#include <IIDM/builders/LineBuilder.h>
-#include <IIDM/builders/DanglingLineBuilder.h>
-#include <IIDM/builders/LoadBuilder.h>
-#include <IIDM/builders/ShuntCompensatorBuilder.h>
-#include <IIDM/builders/SwitchBuilder.h>
-
-
-#include "gtest_dynawo.h"
-#include "DYNDataInterfaceIIDM.h"
-#include "DYNSubModel.h"
-#include "DYNExecUtils.h"
-#include "DYNSubModelFactory.h"
-#include "DYNElement.h"
-
+#include <vector>
 
 using boost::shared_ptr;
 

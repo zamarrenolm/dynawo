@@ -69,7 +69,7 @@ class Terminate : public std::exception {
    * @brief default destructor
    *
    */
-  virtual ~Terminate() throw() { }
+  virtual ~Terminate() throw() {}
 
   /**
    * @brief Operator << overload for error
@@ -81,7 +81,7 @@ class Terminate : public std::exception {
    * @return reference to the stream instance
    *
    */
-  friend std::ostream & operator<<(std::ostream& os, const Terminate& t) {
+  friend std::ostream& operator<<(std::ostream& os, const Terminate& t) {
     os << t.msgToReturn_;
     return os;
   }
@@ -96,6 +96,5 @@ class Terminate : public std::exception {
   std::string msgToReturn_;  ///< string message to return when terminate is called
 };
 }  // namespace DYN
-
 
 #endif  // COMMON_DYNTERMINATE_H_

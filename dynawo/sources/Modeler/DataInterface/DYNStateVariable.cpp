@@ -30,38 +30,35 @@ using std::string;
 
 namespace DYN {
 StateVariable::StateVariable() :
-type_(StateVariable::DOUBLE),  // most used type
-value_(boost::none),
-name_(""),
-modelId_(""),
-variableId_(""),
-valueAffected_(false),
-rawValue_(0.),
-neededForCriteriaCheck_(false) {
-}
+    type_(StateVariable::DOUBLE),  // most used type
+    value_(boost::none),
+    name_(""),
+    modelId_(""),
+    variableId_(""),
+    valueAffected_(false),
+    rawValue_(0.),
+    neededForCriteriaCheck_(false) {}
 
 StateVariable::StateVariable(const string& name, const StateVariableType& type, bool neededForCriteriaCheck) :
-type_(type),
-value_(boost::none),
-name_(name),
-modelId_(""),
-variableId_(""),
-valueAffected_(false),
-rawValue_(0.),
-neededForCriteriaCheck_(neededForCriteriaCheck) {
-}
+    type_(type),
+    value_(boost::none),
+    name_(name),
+    modelId_(""),
+    variableId_(""),
+    valueAffected_(false),
+    rawValue_(0.),
+    neededForCriteriaCheck_(neededForCriteriaCheck) {}
 
-StateVariable::StateVariable(const StateVariable& origin):
-type_(origin.type_),
-value_(origin.value_),
-name_(origin.name_),
-modelId_(origin.modelId_),
-variableId_(origin.variableId_),
-variable_(origin.variable_),
-valueAffected_(origin.valueAffected_),
-rawValue_(origin.rawValue_),
-neededForCriteriaCheck_(origin.neededForCriteriaCheck_)  {
-}
+StateVariable::StateVariable(const StateVariable& origin) :
+    type_(origin.type_),
+    value_(origin.value_),
+    name_(origin.name_),
+    modelId_(origin.modelId_),
+    variableId_(origin.variableId_),
+    variable_(origin.variable_),
+    valueAffected_(origin.valueAffected_),
+    rawValue_(origin.rawValue_),
+    neededForCriteriaCheck_(origin.neededForCriteriaCheck_) {}
 
 StateVariable&
 StateVariable::operator=(const StateVariable& origin) {
@@ -79,8 +76,7 @@ StateVariable::operator=(const StateVariable& origin) {
   return *this;
 }
 
-StateVariable::~StateVariable() {
-}
+StateVariable::~StateVariable() {}
 
 string
 StateVariable::getName() const {
@@ -119,35 +115,34 @@ StateVariable::setVariable(const boost::shared_ptr<Variable>& variable) {
 #ifdef _DEBUG_
   // Sanity check
   switch (variable->getType()) {
-    case CONTINUOUS:
-    case FLOW: {
-      if (getType() != DOUBLE) {
-        throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "double");
-      }
-      break;
+  case CONTINUOUS:
+  case FLOW: {
+    if (getType() != DOUBLE) {
+      throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "double");
     }
-    case DISCRETE: {
-      if (getType() != DOUBLE && getType() != INT) {
-        throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "double or int");
-      }
-      break;
+    break;
+  }
+  case DISCRETE: {
+    if (getType() != DOUBLE && getType() != INT) {
+      throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "double or int");
     }
-    case INTEGER: {
-      if (getType() != INT) {
-        throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "int");
-      }
-      break;
+    break;
+  }
+  case INTEGER: {
+    if (getType() != INT) {
+      throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "int");
     }
-    case BOOLEAN: {
-      if (getType() != BOOL) {
-        throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "bool");
-      }
-      break;
+    break;
+  }
+  case BOOLEAN: {
+    if (getType() != BOOL) {
+      throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "bool");
     }
-    case UNDEFINED_TYPE:
-    {
-      throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
-    }
+    break;
+  }
+  case UNDEFINED_TYPE: {
+    throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
+  }
   }
 #endif
 }
@@ -156,7 +151,6 @@ boost::shared_ptr<Variable>
 StateVariable::getVariable() const {
   return variable_;
 }
-
 
 bool
 StateVariable::valueAffected() const {
@@ -184,23 +178,23 @@ StateVariable::setValue(const double& value) {
   valueAffected_ = true;
   rawValue_ = value;
   switch (type_) {
-  case BOOL :
+  case BOOL:
 #ifdef _DEBUG_
     if (!doubleEquals(value, 0.) && !doubleEquals(value, 1.) && !doubleEquals(value, -1.))
       throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "bool");
 #endif
     value_ = (value > 0);
     break;
-  case DOUBLE :
+  case DOUBLE:
     value_ = value;
     break;
-  case INT :
+  case INT:
 #ifdef _DEBUG_
     if (!doubleEquals(((value > 0) ? std::floor(value) : std::ceil(value)), value)) {  // Test to check if this is an integer
       throw DYNError(Error::MODELER, StateVariableWrongType, name_, typeAsString(type_), "double");
     }
 #endif
-    value_ = static_cast<int> (value);
+    value_ = static_cast<int>(value);
     break;
   }
 }
@@ -209,15 +203,15 @@ string
 StateVariable::typeAsString(const StateVariableType& type) {
   string stringType = "";
   switch (type) {
-    case INT:
-      stringType = "INT";
-      break;
-    case BOOL:
-      stringType = "BOOL";
-      break;
-    case DOUBLE:
-      stringType = "DOUBLE";
-      break;
+  case INT:
+    stringType = "INT";
+    break;
+  case BOOL:
+    stringType = "BOOL";
+    break;
+  case DOUBLE:
+    stringType = "DOUBLE";
+    break;
   }
   return stringType;
 }

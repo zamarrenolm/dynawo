@@ -16,12 +16,11 @@
  * @brief Unit tests for API_PAR
  */
 
-#include <boost/shared_ptr.hpp>
-
-#include "gtest_dynawo.h"
-
 #include "PARParameter.h"
 #include "PARParameterFactory.h"
+#include "gtest_dynawo.h"
+
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 using std::string;

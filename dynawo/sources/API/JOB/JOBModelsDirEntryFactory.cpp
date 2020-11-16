@@ -12,6 +12,7 @@
 //
 
 #include "JOBModelsDirEntryFactory.h"
+
 #include "JOBModelsDirEntry.h"
 
 namespace job {

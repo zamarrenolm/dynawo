@@ -11,28 +11,25 @@
 // simulation tool for power systems.
 //
 
-
-#include <boost/shared_ptr.hpp>
-
-#include "gtest_dynawo.h"
+#include "CSTRConstraintsCollection.h"
+#include "CSTRConstraintsCollectionFactory.h"
 #include "DYNMacrosMessage.h"
 #include "DYNModelManager.h"
-#include "TLTimelineFactory.h"
-#include "TLTimeline.h"
-#include "CSTRConstraintsCollectionFactory.h"
-#include "CSTRConstraintsCollection.h"
 #include "DYNModelManagerCommon.h"
+#include "TLTimeline.h"
+#include "TLTimelineFactory.h"
+#include "gtest_dynawo.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 
 class MyEmptyModelManager : public ModelManager {
  public:
-  MyEmptyModelManager() :
-    ModelManager() {
-  }
+  MyEmptyModelManager() : ModelManager() {}
 
-  virtual ~MyEmptyModelManager() {
-  }
+  virtual ~MyEmptyModelManager() {}
+
  protected:
   bool hasInit() const {
     return false;
@@ -79,7 +76,7 @@ TEST(TestModelManager, TestModelManagerCommonLogs) {
 
   ASSERT_THROW(assert_(&mm, mess), MessageError);
   ASSERT_THROW(throw_(&mm, mess), MessageError);
-  ASSERT_THROW(terminate_(&mm, mess),  DYN::Terminate);
+  ASSERT_THROW(terminate_(&mm, mess), DYN::Terminate);
   ASSERT_EQ(timeline->getSizeEvents(), 6);
 }
 
@@ -90,7 +87,7 @@ TEST(TestModelManager, TestModelManagerCommonStrings) {
   ASSERT_EQ(std::string(cat_modelica_string(std::string("hello"), std::string(" world").c_str())), "hello world");
   ASSERT_EQ(std::string(stringAppend(std::string("hello").c_str(), std::string(" world").c_str())), "hello world");
   ASSERT_EQ(std::string(stringAppend(std::string("hello").c_str(), std::string(" world"))), "hello world");
-  ASSERT_EQ(std::string(stringAppend(std::string("hello"),  std::string(" world").c_str())), "hello world");
+  ASSERT_EQ(std::string(stringAppend(std::string("hello"), std::string(" world").c_str())), "hello world");
   ASSERT_EQ(mmc_strings_len1(3), std::string(3, '\0'));
   ASSERT_EQ(std::string(modelica_real_to_modelica_string_format(1., "")), "1.000");
   ASSERT_EQ(std::string(modelica_integer_to_modelica_string_format(1, "")), "1");
@@ -132,15 +129,13 @@ TEST(TestModelManager, TestModelManagerCommonAutomaton) {
   outputsName[0] = "d";
   outputsName[1] = "e";
 
-  ASSERT_THROW_DYNAWO(callExternalAutomatonModel("MyAutomaton", command.c_str(), 1., inputs, inputsName, 3, 2,
-      outputs, outputsName, 2, 3, "res"), Error::GENERAL, KeyError_t::AutomatonMaximumInputSizeReached);
+  ASSERT_THROW_DYNAWO(callExternalAutomatonModel("MyAutomaton", command.c_str(), 1., inputs, inputsName, 3, 2, outputs, outputsName, 2, 3, "res"),
+                      Error::GENERAL, KeyError_t::AutomatonMaximumInputSizeReached);
 
+  ASSERT_THROW_DYNAWO(callExternalAutomatonModel("MyAutomaton", command.c_str(), 1., inputs, inputsName, 3, 4, outputs, outputsName, 2, 2, "res"),
+                      Error::GENERAL, KeyError_t::AutomatonMaximumOutputSizeReached);
 
-  ASSERT_THROW_DYNAWO(callExternalAutomatonModel("MyAutomaton", command.c_str(), 1., inputs, inputsName, 3, 4,
-      outputs, outputsName, 2, 2, "res"), Error::GENERAL, KeyError_t::AutomatonMaximumOutputSizeReached);
-
-  callExternalAutomatonModel("MyAutomaton", command.c_str(), 1., inputs, inputsName, 3, 4,
-      outputs, outputsName, 2, 3, "res");
+  callExternalAutomatonModel("MyAutomaton", command.c_str(), 1., inputs, inputsName, 3, 4, outputs, outputsName, 2, 3, "res");
 
   ASSERT_DOUBLE_EQUALS_DYNAWO(outputs[0], 4.);
   ASSERT_DOUBLE_EQUALS_DYNAWO(outputs[1], 5.);

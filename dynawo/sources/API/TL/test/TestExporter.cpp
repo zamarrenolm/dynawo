@@ -17,16 +17,15 @@
  *
  */
 
+#include "TLCsvExporter.h"
+#include "TLTimeline.h"
+#include "TLTimelineFactory.h"
+#include "TLTxtExporter.h"
+#include "TLXmlExporter.h"
+#include "TestUtil.h"
 #include "gtest_dynawo.h"
 
 #include <boost/optional.hpp>
-
-#include "TLTimeline.h"
-#include "TLTimelineFactory.h"
-#include "TLXmlExporter.h"
-#include "TLCsvExporter.h"
-#include "TLTxtExporter.h"
-#include "TestUtil.h"
 
 using boost::shared_ptr;
 

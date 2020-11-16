@@ -17,100 +17,98 @@
  * @brief implementation file
  *
  */
+#include <algorithm>  // std::find, std::copy
+#include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <fstream>
-#include <algorithm>  // std::find, std::copy
 #include <set>
 #ifdef _DEBUG_
 #include <assert.h>
 #endif
-#include <boost/pointer_cast.hpp>
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string.hpp>
-
-#include "TLTimeline.h"
-#include "CSTRConstraintsCollection.h"
 #include "CRVCurve.h"
-#include "PARParameter.h"
-
-#include "DYNSubModel.h"
-#include "DYNVariableNative.h"
-#include "DYNVariableAlias.h"
+#include "CSTRConstraintsCollection.h"
+#include "DYNDataInterface.h"
+#include "DYNElement.h"
+#include "DYNMacrosMessage.h"
 #include "DYNModel.h"
 #include "DYNSparseMatrix.h"
+#include "DYNSubModel.h"
 #include "DYNSubModelFactory.h"
-#include "DYNTrace.h"
-#include "DYNMacrosMessage.h"
-#include "DYNElement.h"
 #include "DYNTimer.h"
-#include "DYNDataInterface.h"
+#include "DYNTrace.h"
+#include "DYNVariableAlias.h"
+#include "DYNVariableNative.h"
+#include "PARParameter.h"
+#include "TLTimeline.h"
 
-using std::ofstream;
-using std::stringstream;
-using std::vector;
-using std::map;
-using std::set;
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/pointer_cast.hpp>
+
+using boost::dynamic_pointer_cast;
+using boost::shared_ptr;
 using boost::unordered_map;
 using boost::unordered_set;
+using std::map;
+using std::ofstream;
+using std::set;
 using std::string;
-using boost::shared_ptr;
-using boost::dynamic_pointer_cast;
+using std::stringstream;
+using std::vector;
 
-using timeline::Timeline;
 using constraints::ConstraintsCollection;
 using curves::Curve;
+using timeline::Timeline;
 
 namespace DYN {
 
 SubModel::SubModel() :
-sizeF_(0),
-sizeZ_(0),
-sizeG_(0),
-sizeMode_(0),
-sizeY_(0),
-sizeCalculatedVar_(0),
-fLocal_(NULL),
-gLocal_(NULL),
-yLocal_(NULL),
-offsetY_(-1),
-ypLocal_(NULL),
-zLocal_(NULL),
-zLocalConnected_(NULL),
-yType_(NULL),
-fType_(NULL),
-yDeb_(0),
-zDeb_(0),
-modeDeb_(0),
-fDeb_(0),
-gDeb_(0),
-withLoadedParameters_(false),
-withLoadedVariables_(false),
-sizeFSave_(0),
-sizeZSave_(0),
-sizeGSave_(0),
-sizeModeSave_(0),
-sizeYSave_(0),
-sizeCalculatedVarSave_(0),
-fLocalSave_(NULL),
-gLocalSave_(NULL),
-yLocalSave_(NULL),
-ypLocalSave_(NULL),
-zLocalSave_(NULL),
-offsetYSave_(-1),
-modeChange_(false),
-modeChangeType_(NO_MODE) ,
-initialized_(false),
-currentTime_(0.),
-isInitProcess_(false) {
+    sizeF_(0),
+    sizeZ_(0),
+    sizeG_(0),
+    sizeMode_(0),
+    sizeY_(0),
+    sizeCalculatedVar_(0),
+    fLocal_(NULL),
+    gLocal_(NULL),
+    yLocal_(NULL),
+    offsetY_(-1),
+    ypLocal_(NULL),
+    zLocal_(NULL),
+    zLocalConnected_(NULL),
+    yType_(NULL),
+    fType_(NULL),
+    yDeb_(0),
+    zDeb_(0),
+    modeDeb_(0),
+    fDeb_(0),
+    gDeb_(0),
+    withLoadedParameters_(false),
+    withLoadedVariables_(false),
+    sizeFSave_(0),
+    sizeZSave_(0),
+    sizeGSave_(0),
+    sizeModeSave_(0),
+    sizeYSave_(0),
+    sizeCalculatedVarSave_(0),
+    fLocalSave_(NULL),
+    gLocalSave_(NULL),
+    yLocalSave_(NULL),
+    ypLocalSave_(NULL),
+    zLocalSave_(NULL),
+    offsetYSave_(-1),
+    modeChange_(false),
+    modeChangeType_(NO_MODE),
+    initialized_(false),
+    currentTime_(0.),
+    isInitProcess_(false) {
   variables_.clear();
   parametersDynamic_.clear();
   variablesInit_.clear();
   parametersInit_.clear();
 }
 
-SubModel::~SubModel() {
-}
+SubModel::~SubModel() {}
 
 void
 SubModel::initStaticData() {
@@ -184,9 +182,7 @@ SubModel::initSub(const double& t0) {
 #ifdef _DEBUG_
   if (readPARParameters_) {
     vector<string> unusedParamNameList = readPARParameters_->getParamsUnused();
-    for (vector<string>::iterator it = unusedParamNameList.begin();
-            it != unusedParamNameList.end();
-            ++it) {
+    for (vector<string>::iterator it = unusedParamNameList.begin(); it != unusedParamNameList.end(); ++it) {
       Trace::warn() << DYNLog(ParamUnused, *it, name()) << Trace::endline;
     }
   }
@@ -199,8 +195,8 @@ SubModel::setPARParameters(const shared_ptr<parameters::ParametersSet>& params) 
 }
 
 void
-SubModel::loadParameters(const map< string, string > & mapParameters) {
-  map<string, string >::const_iterator iter = mapParameters.find(parametersFileName());
+SubModel::loadParameters(const map<string, string>& mapParameters) {
+  map<string, string>::const_iterator iter = mapParameters.find(parametersFileName());
 
   if (iter != mapParameters.end()) {
     withLoadedParameters_ = true;
@@ -210,7 +206,7 @@ SubModel::loadParameters(const map< string, string > & mapParameters) {
 
 void
 SubModel::loadVariables(const map<string, string>& mapVariables) {
-  map<string, string >::const_iterator iter = mapVariables.find(variablesFileName());
+  map<string, string>::const_iterator iter = mapVariables.find(variablesFileName());
 
   if (iter != mapVariables.end()) {
     withLoadedVariables_ = true;
@@ -219,14 +215,13 @@ SubModel::loadVariables(const map<string, string>& mapVariables) {
 }
 
 void
-SubModel::initSize(int &sizeYGlob, int &sizeZGlob, int& sizeModeGlob, int & sizeFGlob, int & sizeGGlob) {
+SubModel::initSize(int& sizeYGlob, int& sizeZGlob, int& sizeModeGlob, int& sizeFGlob, int& sizeGGlob) {
   getSize();
 
   if (sizeY_ != xNames_.size())
-      throw DYNError(Error::MODELER, MismatchingVariableSizes, "Y", name(), sizeY_, xNames_.size());
+    throw DYNError(Error::MODELER, MismatchingVariableSizes, "Y", name(), sizeY_, xNames_.size());
   if (sizeZ_ != zNames_.size())
-      throw DYNError(Error::MODELER, MismatchingVariableSizes, "Z", name(), sizeZ_, zNames_.size());
-
+    throw DYNError(Error::MODELER, MismatchingVariableSizes, "Z", name(), sizeZ_, zNames_.size());
 
   yDeb_ = sizeYGlob;
   zDeb_ = sizeZGlob;
@@ -250,12 +245,12 @@ SubModel::defineElements() {
 
 void
 SubModel::releaseElements() {
-  vector<Element >().swap(elements_);  /// clear erase elements, but do not reduce size
+  vector<Element>().swap(elements_);  /// clear erase elements, but do not reduce size
   mapElement_.clear();
 }
 
 vector<Element>
-SubModel::getElements(const string &nameElement) {
+SubModel::getElements(const string& nameElement) {
   map<string, int>::iterator iter = mapElement_.find(nameElement);
   if (iter == mapElement_.end()) {
     throw DYNError(Error::MODELER, SubModelUnknownElement, name(), modelType(), nameElement);
@@ -289,16 +284,16 @@ SubModel::getSubElements(const Element& element) {
 
 bool
 SubModel::hasVariable(const string& nameVariable) const {
-  return ( variablesByName_.find(nameVariable) != variablesByName_.end());
+  return (variablesByName_.find(nameVariable) != variablesByName_.end());
 }
 
 bool
 SubModel::hasVariableInit(const string& nameVariable) const {
-  return ( variablesByNameInit_.find(nameVariable) != variablesByNameInit_.end());
+  return (variablesByNameInit_.find(nameVariable) != variablesByNameInit_.end());
 }
 
-shared_ptr <Variable>
-SubModel::getVariable(const string & variableName) const {
+shared_ptr<Variable>
+SubModel::getVariable(const string& variableName) const {
   map<string, shared_ptr<Variable> >::const_iterator iter = variablesByName_.find(variableName);
   if (iter == variablesByName_.end()) {
     throw DYNError(Error::MODELER, SubModelUnknownElement, name(), modelType(), variableName);
@@ -307,7 +302,7 @@ SubModel::getVariable(const string & variableName) const {
 }
 
 double
-SubModel::getVariableValue(const shared_ptr <Variable> variable) const {
+SubModel::getVariableValue(const shared_ptr<Variable> variable) const {
 #ifdef _DEBUG_
   assert(variable && "SubModel::getVariableValue variable not found");
 #endif
@@ -321,29 +316,27 @@ SubModel::getVariableValue(const shared_ptr <Variable> variable) const {
     value = calculatedVars_[varNum];
   } else {
     switch (typeVar) {
-      case CONTINUOUS:
-      case FLOW: {
-        value = yLocal_[varNum];
-        break;
-      }
-      case DISCRETE:
-      case INTEGER: {  // Z vector contains DISCRETE variables and then INTEGER variables
-        value = zLocal_[varNum];
-        break;
-      }
-      case BOOLEAN: {
-        if (toNativeBool(zLocal_[varNum]))
-          value = 1;
-        else
-          value = 0;
-        break;
-      }
-      case UNDEFINED_TYPE: {
-        throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
-      }
-      default: {
-        throw DYNError(Error::MODELER, SubModelUnknownVariable, name(), modelType(), variable->getName());
-      }
+    case CONTINUOUS:
+    case FLOW: {
+      value = yLocal_[varNum];
+      break;
+    }
+    case DISCRETE:
+    case INTEGER: {  // Z vector contains DISCRETE variables and then INTEGER variables
+      value = zLocal_[varNum];
+      break;
+    }
+    case BOOLEAN: {
+      if (toNativeBool(zLocal_[varNum]))
+        value = 1;
+      else
+        value = 0;
+      break;
+    }
+    case UNDEFINED_TYPE: {
+      throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
+    }
+    default: { throw DYNError(Error::MODELER, SubModelUnknownVariable, name(), modelType(), variable->getName()); }
     }
   }
 
@@ -354,7 +347,7 @@ SubModel::getVariableValue(const shared_ptr <Variable> variable) const {
 }
 
 int
-SubModel::getVariableIndexGlobal(const shared_ptr <Variable> variable) const {
+SubModel::getVariableIndexGlobal(const shared_ptr<Variable> variable) const {
   const int varNum = variable->getIndex();
   const typeVar_t typeVar = variable->getType();
   const bool isState = variable->isState();
@@ -365,19 +358,18 @@ SubModel::getVariableIndexGlobal(const shared_ptr <Variable> variable) const {
   }
 
   switch (typeVar) {
-    case CONTINUOUS:
-    case FLOW: {
-      return yDeb() + varNum;
-    }
-    case DISCRETE:
-    case BOOLEAN:
-    case INTEGER: {  // Z vector contains DISCRETE variables and then INTEGER variables
-      return zDeb() + varNum;
-    }
-    case UNDEFINED_TYPE:
-    {
-      throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
-    }
+  case CONTINUOUS:
+  case FLOW: {
+    return yDeb() + varNum;
+  }
+  case DISCRETE:
+  case BOOLEAN:
+  case INTEGER: {  // Z vector contains DISCRETE variables and then INTEGER variables
+    return zDeb() + varNum;
+  }
+  case UNDEFINED_TYPE: {
+    throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
+  }
   }
   throw DYNError(Error::MODELER, SubModelBadVariableTypeForVariableIndex, name(), modelType(), variable->getName());
 }
@@ -388,7 +380,7 @@ SubModel::getVariableValue(const string& nameVariable) const {
 }
 
 bool
-SubModel::hasParameter(const string & nameParameter, const bool isInitParam) {
+SubModel::hasParameter(const string& nameParameter, const bool isInitParam) {
   const unordered_map<string, ParameterModeler>& parameters = getParameters(isInitParam);
   return (parameters.find(nameParameter) != parameters.end());
 }
@@ -406,13 +398,13 @@ SubModel::defineVariables() {
   // define alias
   for (unsigned int i = 0; i < variables_.size(); ++i) {
     if (variables_[i]->isAlias()) {
-      shared_ptr <VariableAlias> variable = dynamic_pointer_cast<VariableAlias> (variables_[i]);
+      shared_ptr<VariableAlias> variable = dynamic_pointer_cast<VariableAlias>(variables_[i]);
       if (!variable->referenceVariableSet()) {
         map<string, shared_ptr<Variable> >::const_iterator iter = variablesByName_.find(variable->getReferenceVariableName());
         if (iter == variablesByName_.end()) {
           throw DYNError(Error::MODELER, AliasNotFound, name(), variable->getReferenceVariableName());
         } else {
-          variable->setReferenceVariable(dynamic_pointer_cast<VariableNative> (iter->second));
+          variable->setReferenceVariable(dynamic_pointer_cast<VariableNative>(iter->second));
           if (iter->second->isState() && (iter->second->getType() == DISCRETE || iter->second->getType() == BOOLEAN))
             zAliasesNames_.push_back(std::make_pair(variable->getName(), std::make_pair(iter->first, variable->getNegated())));
           else if (iter->second->isState() && (iter->second->getType() == CONTINUOUS || iter->second->getType() == FLOW))
@@ -424,9 +416,8 @@ SubModel::defineVariables() {
 }
 
 void
-SubModel::instantiateNonUnitaryParameters(const bool isInitParam,
-    const std::map<string, ParameterModeler>& nonUnitaryParameters,
-    unordered_set<string>& addedParameter) {
+SubModel::instantiateNonUnitaryParameters(const bool isInitParam, const std::map<string, ParameterModeler>& nonUnitaryParameters,
+                                          unordered_set<string>& addedParameter) {
   typedef std::map<string, ParameterModeler>::const_iterator ParamIterator;
   for (ParamIterator it = nonUnitaryParameters.begin(), itEnd = nonUnitaryParameters.end(); it != itEnd; ++it) {
     const ParameterModeler& parameter = it->second;
@@ -458,42 +449,38 @@ SubModel::instantiateNonUnitaryParameters(const bool isInitParam,
 }
 
 void
-SubModel::setParameterFromSet(ParameterModeler& parameter, const shared_ptr<parameters::ParametersSet> parametersSet,
-                              const parameterOrigin_t& origin) {
+SubModel::setParameterFromSet(ParameterModeler& parameter, const shared_ptr<parameters::ParametersSet> parametersSet, const parameterOrigin_t& origin) {
   if (parametersSet) {
     const string& parName = parameter.getName();
-     // Check that parameter cardinality is unitary
+    // Check that parameter cardinality is unitary
     if (!parameter.isUnitary())
       throw DYNError(Error::MODELER, ParameterNotUnitary, parName);
 
-     // Check if parameter is present in set
+    // Check if parameter is present in set
     if (parametersSet->hasParameter(parName)) {
       // Set the parameter value with the information given in PAR file
       switch (parameter.getValueType()) {
-        case VAR_TYPE_BOOL: {
-          const bool value = parametersSet->getParameter(parName)->getBool();
-          parameter.setValue<bool>(value, origin);
-          break;
-        }
-        case VAR_TYPE_INT: {
-          const int value = parametersSet->getParameter(parName)->getInt();
-          parameter.setValue<int>(value, origin);
-          break;
-        }
-        case VAR_TYPE_DOUBLE: {
-          const double& value = parametersSet->getParameter(parName)->getDouble();
-          parameter.setValue<double>(value, origin);
-          break;
-        }
-        case VAR_TYPE_STRING: {
-          const string& value = parametersSet->getParameter(parName)->getString();
-          parameter.setValue<string>(value, origin);
-          break;
-        }
-        default:
-        {
-          throw DYNError(Error::MODELER, ParameterNoTypeDetected, parName);
-        }
+      case VAR_TYPE_BOOL: {
+        const bool value = parametersSet->getParameter(parName)->getBool();
+        parameter.setValue<bool>(value, origin);
+        break;
+      }
+      case VAR_TYPE_INT: {
+        const int value = parametersSet->getParameter(parName)->getInt();
+        parameter.setValue<int>(value, origin);
+        break;
+      }
+      case VAR_TYPE_DOUBLE: {
+        const double& value = parametersSet->getParameter(parName)->getDouble();
+        parameter.setValue<double>(value, origin);
+        break;
+      }
+      case VAR_TYPE_STRING: {
+        const string& value = parametersSet->getParameter(parName)->getString();
+        parameter.setValue<string>(value, origin);
+        break;
+      }
+      default: { throw DYNError(Error::MODELER, ParameterNoTypeDetected, parName); }
       }
     }
   }
@@ -526,7 +513,7 @@ SubModel::setParametersFromPARFile(const bool isInitParam) {
   instantiateNonUnitaryParameters(isInitParam, nonUnitaryParameters, addedParameter);
 
   // set the unitary parameters coming from not-unitary parameters instantiation
-  for (ParamNameIterator  it = addedParameter.begin(), itEnd = addedParameter.end(); it != itEnd; ++it) {
+  for (ParamNameIterator it = addedParameter.begin(), itEnd = addedParameter.end(); it != itEnd; ++it) {
     ParameterModeler& currentParameter = findParameterReference(*it, isInitParam);
     if (!currentParameter.isFullyInternal()) {
       setParameterFromPARFile(currentParameter);
@@ -620,13 +607,13 @@ SubModel::defineVariablesInit() {
   // define alias
   for (unsigned int i = 0; i < variablesInit_.size(); ++i) {
     if (variablesInit_[i]->isAlias()) {
-      shared_ptr <VariableAlias> variableInit = dynamic_pointer_cast<VariableAlias> (variablesInit_[i]);
+      shared_ptr<VariableAlias> variableInit = dynamic_pointer_cast<VariableAlias>(variablesInit_[i]);
       if (!variableInit->referenceVariableSet()) {
         map<string, shared_ptr<Variable> >::const_iterator iter = variablesByNameInit_.find(variableInit->getReferenceVariableName());
         if (iter == variablesByNameInit_.end())
           throw DYNError(Error::MODELER, AliasNotFound, name(), variableInit->getReferenceVariableName());
         else
-          variableInit->setReferenceVariable(dynamic_pointer_cast<VariableNative> (iter->second));
+          variableInit->setReferenceVariable(dynamic_pointer_cast<VariableNative>(iter->second));
       }
     }
   }
@@ -646,16 +633,16 @@ SubModel::defineParameters(const bool isInitParam) {
   addParameters(parameters, isInitParam);
 }
 
-void SubModel::defineNamesImpl(vector<shared_ptr<Variable> >& variables, vector<string>& zNames,
-                               vector<string>& xNames, vector<string>& calculatedVarNames) {
+void
+SubModel::defineNamesImpl(vector<shared_ptr<Variable> >& variables, vector<string>& zNames, vector<string>& xNames, vector<string>& calculatedVarNames) {
   zNames.clear();
   xNames.clear();
   calculatedVarNames.clear();
-  vector <std::pair <string, int> > integer_variables;  // integer variables have to be dealt with last
+  vector<std::pair<string, int> > integer_variables;  // integer variables have to be dealt with last
 
 #ifdef _DEBUG_
   // sanity check : integer variables should always be stored after all other discrete variables
-  int minIntegerIndex = 99999;  // minimum index of integer variables
+  int minIntegerIndex = 99999;        // minimum index of integer variables
   int maxOtherDiscreteVarIndex = -1;  // maximum index of other discrete variables
 #endif
 
@@ -669,36 +656,35 @@ void SubModel::defineNamesImpl(vector<shared_ptr<Variable> >& variables, vector<
     if (currentVariable->isAlias())  // no alias in names vector
       continue;
 
-    shared_ptr <VariableNative> nativeVariable = dynamic_pointer_cast<VariableNative> (currentVariable);
+    shared_ptr<VariableNative> nativeVariable = dynamic_pointer_cast<VariableNative>(currentVariable);
     if (!isState) {
       index = calculatedVarNames.size();
       calculatedVarNames.push_back(name);
       nativeVariable->setIndex(index);
     } else {
       switch (type) {
-        case CONTINUOUS:
-        case FLOW: {
-          index = xNames.size();
-          xNames.push_back(name);
-          break;
-        }
-        case DISCRETE:
-        case BOOLEAN: {
-          index = zNames.size();
-          zNames.push_back(name);
+      case CONTINUOUS:
+      case FLOW: {
+        index = xNames.size();
+        xNames.push_back(name);
+        break;
+      }
+      case DISCRETE:
+      case BOOLEAN: {
+        index = zNames.size();
+        zNames.push_back(name);
 #ifdef _DEBUG_
-          maxOtherDiscreteVarIndex = std::max(maxOtherDiscreteVarIndex, index);
+        maxOtherDiscreteVarIndex = std::max(maxOtherDiscreteVarIndex, index);
 #endif
-          break;
-        }
-        case INTEGER: {  // Z vector contains DISCRETE variables and then INTEGER variables
-          integer_variables.push_back(make_pair(name, i));
-          break;
-        }
-        case UNDEFINED_TYPE:
-        {
-          throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
-        }
+        break;
+      }
+      case INTEGER: {  // Z vector contains DISCRETE variables and then INTEGER variables
+        integer_variables.push_back(make_pair(name, i));
+        break;
+      }
+      case UNDEFINED_TYPE: {
+        throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
+      }
       }
       // only set non-integer variables (integer variables will be set later on)
       if (type != INTEGER)
@@ -710,10 +696,10 @@ void SubModel::defineNamesImpl(vector<shared_ptr<Variable> >& variables, vector<
   for (unsigned int i = 0; i < integer_variables.size(); ++i) {
     int equation_index = zNames.size();  // variable index within equations
     const string& name = integer_variables[i].first;
-    const int& var_index = integer_variables[i].second;   // variable index within the variables_ table
+    const int& var_index = integer_variables[i].second;  // variable index within the variables_ table
 
     zNames.push_back(name);
-    shared_ptr <VariableNative> nativeVariable = dynamic_pointer_cast<VariableNative> (variables[var_index]);
+    shared_ptr<VariableNative> nativeVariable = dynamic_pointer_cast<VariableNative>(variables[var_index]);
     nativeVariable->setIndex(equation_index);
 
 #ifdef _DEBUG_
@@ -729,7 +715,7 @@ void SubModel::defineNamesImpl(vector<shared_ptr<Variable> >& variables, vector<
 }
 
 void
-SubModel::evalZSub(const double & t) {
+SubModel::evalZSub(const double& t) {
   setCurrentTime(t);
   if (sizeZ() > 0) {
     // compute each sub-model Z
@@ -738,35 +724,35 @@ SubModel::evalZSub(const double & t) {
 }
 
 void
-SubModel::setBufferFType(propertyF_t* fType, const int & offsetFType) {
+SubModel::setBufferFType(propertyF_t* fType, const int& offsetFType) {
   fType_ = static_cast<propertyF_t*>(0);
   if (fType)
     fType_ = &(fType[offsetFType]);
 }
 
 void
-SubModel::setBufferYType(propertyContinuousVar_t* yType, const int & offsetYType) {
+SubModel::setBufferYType(propertyContinuousVar_t* yType, const int& offsetYType) {
   yType_ = static_cast<propertyContinuousVar_t*>(0);
   if (yType)
     yType_ = &(yType[offsetYType]);
 }
 
 void
-SubModel::setBufferF(double* f, const int & offsetF) {
+SubModel::setBufferF(double* f, const int& offsetF) {
   fLocal_ = static_cast<double*>(0);
   if (f)
     fLocal_ = &(f[offsetF]);
 }
 
 void
-SubModel::setBufferG(state_g* g, const int & offsetG) {
+SubModel::setBufferG(state_g* g, const int& offsetG) {
   gLocal_ = static_cast<state_g*>(0);
   if (g)
     gLocal_ = &(g[offsetG]);
 }
 
 void
-SubModel::setBufferY(double* y, double* yp, const int & offsetY) {
+SubModel::setBufferY(double* y, double* yp, const int& offsetY) {
   yLocal_ = static_cast<double*>(0);
   if (y)
     yLocal_ = &(y[offsetY]);
@@ -787,7 +773,7 @@ SubModel::setBufferZ(double* z, bool* zConnected, int offsetZ) {
 }
 
 void
-SubModel::evalFSub(const double & t) {
+SubModel::evalFSub(const double& t) {
   setCurrentTime(t);
   // computing f for the sub-model
   evalF(t, UNDEFINED_EQ);
@@ -803,7 +789,7 @@ SubModel::evalFSub(const double & t) {
 }
 
 void
-SubModel::evalFDiffSub(const double & t) {
+SubModel::evalFDiffSub(const double& t) {
   setCurrentTime(t);
   evalF(t, DIFFERENTIAL_EQ);
 
@@ -818,14 +804,14 @@ SubModel::evalFDiffSub(const double & t) {
 }
 
 void
-SubModel::evalGSub(const double & t) {
+SubModel::evalGSub(const double& t) {
   setCurrentTime(t);
   // evaluation of the submodel g functions
   evalG(t);
 }
 
 void
-SubModel::evalCalculatedVariablesSub(const double & t) {
+SubModel::evalCalculatedVariablesSub(const double& t) {
   setCurrentTime(t);
   // evaluation of the submodel calculated variables
   evalCalculatedVars();
@@ -837,21 +823,21 @@ SubModel::getCalculatedVar(int indexCalculatedVar) {
 }
 
 void
-SubModel::evalJtSub(const double & t, const double & cj, SparseMatrix& Jt, int& rowOffset) {
+SubModel::evalJtSub(const double& t, const double& cj, SparseMatrix& Jt, int& rowOffset) {
   setCurrentTime(t);
   evalJt(t, cj, Jt, rowOffset);
   rowOffset += sizeY();
 }
 
 void
-SubModel::evalJtPrimSub(const double & t, const double & cj, SparseMatrix& Jt, int& rowOffset) {
+SubModel::evalJtPrimSub(const double& t, const double& cj, SparseMatrix& Jt, int& rowOffset) {
   setCurrentTime(t);
   evalJtPrim(t, cj, Jt, rowOffset);
   rowOffset += sizeY();
 }
 
 modeChangeType_t
-SubModel::evalModeSub(const double & t) {
+SubModel::evalModeSub(const double& t) {
   setCurrentTime(t);
   // evaluation of the submodel modes
   modeChange_ = false;
@@ -867,7 +853,7 @@ SubModel::evalModeSub(const double & t) {
 // check data coherence for a sub-model
 
 void
-SubModel::checkDataCoherenceSub(const double & t) {
+SubModel::checkDataCoherenceSub(const double& t) {
   // when loaded variables and parameters are used, do not check the init model coherence because it is not used
   if (isInitProcess_ && withLoadedParameters_ && withLoadedVariables_) {
     return;
@@ -909,7 +895,7 @@ SubModel::getY0Values(vector<double>& y0, vector<double>& yp0, vector<double>& z
 void
 SubModel::addCurve(shared_ptr<curves::Curve>& curve) {
   const string variableName = curve->getFoundVariableName();
-  const shared_ptr <Variable> variable = getVariable(variableName);
+  const shared_ptr<Variable> variable = getVariable(variableName);
   const int varNum = variable->getIndex();
   const typeVar_t typeVar = variable->getType();
   const bool negated = variable->getNegated();
@@ -922,25 +908,24 @@ SubModel::addCurve(shared_ptr<curves::Curve>& curve) {
     curve->setCurveType(Curve::CALCULATED_VARIABLE);
   } else {
     switch (typeVar) {
-      case CONTINUOUS:
-      case FLOW: {
-        buffer = &(yLocal_[varNum]);
-        curve->setCurveType(Curve::CONTINUOUS_VARIABLE);
-        curve->setGlobalIndex(yDeb() + varNum);
-        break;
-      }
-      case DISCRETE:
-      case BOOLEAN:  // @todo : use (double) toNativeBool for the buffer ?
-      case INTEGER: {  // Z vector contains DISCRETE variables and then INTEGER variables
-        buffer = &(zLocal_[varNum]);
-        curve->setCurveType(Curve::DISCRETE_VARIABLE);
-        curve->setGlobalIndex(zDeb() + varNum);
-        break;
-      }
-      case UNDEFINED_TYPE:
-      {
-        throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
-      }
+    case CONTINUOUS:
+    case FLOW: {
+      buffer = &(yLocal_[varNum]);
+      curve->setCurveType(Curve::CONTINUOUS_VARIABLE);
+      curve->setGlobalIndex(yDeb() + varNum);
+      break;
+    }
+    case DISCRETE:
+    case BOOLEAN:    // @todo : use (double) toNativeBool for the buffer ?
+    case INTEGER: {  // Z vector contains DISCRETE variables and then INTEGER variables
+      buffer = &(zLocal_[varNum]);
+      curve->setCurveType(Curve::DISCRETE_VARIABLE);
+      curve->setGlobalIndex(zDeb() + varNum);
+      break;
+    }
+    case UNDEFINED_TYPE: {
+      throw DYNError(Error::MODELER, ModelFuncError, "Unsupported variable type");
+    }
     }
   }
 
@@ -954,11 +939,13 @@ SubModel::updateCalculatedVarForCurve(shared_ptr<curves::Curve>& curve) {
   Timer timer("SubModel::updateCalculatedVarForCurve");
   assert(curve);
 #endif
-  if (curve->getCurveType() != Curve::CALCULATED_VARIABLE) return;
+  if (curve->getCurveType() != Curve::CALCULATED_VARIABLE)
+    return;
   const string variableName = curve->getFoundVariableName();
-  if (!hasVariable(variableName)) return;
+  if (!hasVariable(variableName))
+    return;
 
-  const shared_ptr <Variable> variable = getVariable(variableName);
+  const shared_ptr<Variable> variable = getVariable(variableName);
 
   const int varNum = variable->getIndex();
   calculatedVars_[varNum] = evalCalculatedVarI(varNum);
@@ -974,13 +961,12 @@ void
 SubModel::printLocalInitParametersValues() const {
   const boost::unordered_map<string, ParameterModeler>& params = getParametersDynamic();
   set<string> sortedParams;
-  for (boost::unordered_map<string, ParameterModeler>::const_iterator it = params.begin(), itEnd = params.end();
-      it != itEnd; ++it) {
+  for (boost::unordered_map<string, ParameterModeler>::const_iterator it = params.begin(), itEnd = params.end(); it != itEnd; ++it) {
     sortedParams.insert(it->first);
   }
   if (!params.empty()) {
     Trace::debug(Trace::parameters()) << "------------------------------" << Trace::endline;
-    Trace::debug(Trace::parameters()) << "SubModel " << name()  << " parameters after local initialization"<< Trace::endline;
+    Trace::debug(Trace::parameters()) << "SubModel " << name() << " parameters after local initialization" << Trace::endline;
     Trace::debug(Trace::parameters()) << "------------------------------" << Trace::endline;
   }
 
@@ -992,30 +978,27 @@ SubModel::printLocalInitParametersValues() const {
       continue;
     }
     switch (parameter.getValueType()) {
-      case VAR_TYPE_BOOL: {
-        const bool value = parameter.getValue<bool>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_INT: {
-        const int value = parameter.getValue<int>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_DOUBLE: {
-        const double& value = parameter.getValue<double>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_STRING: {
-        const string& value = parameter.getValue<string>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      default:
-      {
-        throw DYNError(Error::MODELER, ParameterNoTypeDetected, *it);
-      }
+    case VAR_TYPE_BOOL: {
+      const bool value = parameter.getValue<bool>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_INT: {
+      const int value = parameter.getValue<int>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_DOUBLE: {
+      const double& value = parameter.getValue<double>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_STRING: {
+      const string& value = parameter.getValue<string>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    default: { throw DYNError(Error::MODELER, ParameterNoTypeDetected, *it); }
     }
   }
 
@@ -1031,18 +1014,16 @@ SubModel::printLocalInitParametersValues() const {
   }
 }
 
-
 void
 SubModel::printParameterValues() const {
   const boost::unordered_map<string, ParameterModeler>& initParams = getParametersInit();
   set<string> sortedInitParams;
-  for (boost::unordered_map<string, ParameterModeler>::const_iterator it = initParams.begin(), itEnd = initParams.end();
-      it != itEnd; ++it) {
+  for (boost::unordered_map<string, ParameterModeler>::const_iterator it = initParams.begin(), itEnd = initParams.end(); it != itEnd; ++it) {
     sortedInitParams.insert(it->first);
   }
   if (!sortedInitParams.empty()) {
     Trace::debug(Trace::parameters()) << "------------------------------" << Trace::endline;
-    Trace::debug(Trace::parameters()) << "SubModel " << name()  << " initial parameters before local initialization"<< Trace::endline;
+    Trace::debug(Trace::parameters()) << "SubModel " << name() << " initial parameters before local initialization" << Trace::endline;
     Trace::debug(Trace::parameters()) << "------------------------------" << Trace::endline;
   }
 
@@ -1052,30 +1033,27 @@ SubModel::printParameterValues() const {
       continue;
     }
     switch (parameter.getValueType()) {
-      case VAR_TYPE_BOOL: {
-        const bool value = parameter.getValue<bool>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_INT: {
-        const int value = parameter.getValue<int>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_DOUBLE: {
-        const double& value = parameter.getValue<double>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_STRING: {
-        const string& value = parameter.getValue<string>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      default:
-      {
-        throw DYNError(Error::MODELER, ParameterNoTypeDetected, *it);
-      }
+    case VAR_TYPE_BOOL: {
+      const bool value = parameter.getValue<bool>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_INT: {
+      const int value = parameter.getValue<int>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_DOUBLE: {
+      const double& value = parameter.getValue<double>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_STRING: {
+      const string& value = parameter.getValue<string>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    default: { throw DYNError(Error::MODELER, ParameterNoTypeDetected, *it); }
     }
   }
 
@@ -1088,13 +1066,12 @@ SubModel::printParameterValues() const {
 
   const boost::unordered_map<string, ParameterModeler>& params = getParametersDynamic();
   set<string> sortedParams;
-  for (boost::unordered_map<string, ParameterModeler>::const_iterator it = params.begin(), itEnd = params.end();
-      it != itEnd; ++it) {
+  for (boost::unordered_map<string, ParameterModeler>::const_iterator it = params.begin(), itEnd = params.end(); it != itEnd; ++it) {
     sortedParams.insert(it->first);
   }
   if (!params.empty()) {
     Trace::debug(Trace::parameters()) << "------------------------------" << Trace::endline;
-    Trace::debug(Trace::parameters()) << "SubModel " << name()  << " parameters before local initialization"<< Trace::endline;
+    Trace::debug(Trace::parameters()) << "SubModel " << name() << " parameters before local initialization" << Trace::endline;
     Trace::debug(Trace::parameters()) << "------------------------------" << Trace::endline;
   }
 
@@ -1104,30 +1081,27 @@ SubModel::printParameterValues() const {
       continue;
     }
     switch (parameter.getValueType()) {
-      case VAR_TYPE_BOOL: {
-        const bool value = parameter.getValue<bool>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_INT: {
-        const int value = parameter.getValue<int>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_DOUBLE: {
-        const double& value = parameter.getValue<double>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      case VAR_TYPE_STRING: {
-        const string& value = parameter.getValue<string>();
-        Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
-        break;
-      }
-      default:
-      {
-        throw DYNError(Error::MODELER, ParameterNoTypeDetected, *it);
-      }
+    case VAR_TYPE_BOOL: {
+      const bool value = parameter.getValue<bool>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_INT: {
+      const int value = parameter.getValue<int>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_DOUBLE: {
+      const double& value = parameter.getValue<double>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    case VAR_TYPE_STRING: {
+      const string& value = parameter.getValue<string>();
+      Trace::debug(Trace::parameters()) << DYNLog(ParamValueInOrigin, *it, origin2Str(parameter.getOrigin()), value) << Trace::endline;
+      break;
+    }
+    default: { throw DYNError(Error::MODELER, ParameterNoTypeDetected, *it); }
     }
   }
 
@@ -1151,7 +1125,6 @@ SubModel::printModel() const {
   if (sizeMode() != 0) {
     Trace::debug(Trace::modeler()) << "      mode : [" << std::setw(6) << modeDeb_ << " ; " << std::setw(6) << modeDeb_ + sizeMode() << "[" << Trace::endline;
   }
-
 
   if (sizeG() != 0) {
     Trace::debug(Trace::modeler()) << "         G : [" << std::setw(6) << gDeb_ << " ; " << std::setw(6) << gDeb_ + sizeG() << "[" << Trace::endline;
@@ -1190,9 +1163,8 @@ SubModel::addEvent(const string& modelName, const MessageTimeline& messageTimeli
 }
 
 void
-SubModel::addConstraint(const string& modelName, bool begin, const Message& description,
-    const string& modelType) {
-  constraints::Type_t type = (begin)?constraints::CONSTRAINT_BEGIN:constraints::CONSTRAINT_END;
+SubModel::addConstraint(const string& modelName, bool begin, const Message& description, const string& modelType) {
+  constraints::Type_t type = (begin) ? constraints::CONSTRAINT_BEGIN : constraints::CONSTRAINT_END;
   constraints_->addConstraint(modelName, description.str(), getCurrentTime(), type, modelType);
 }
 
@@ -1234,7 +1206,8 @@ SubModel::gEquationIndex() {
     return gEquationIndex_;
 }
 
-void SubModel::getSubModelParameterValue(const string& nameParameter, double& value, bool& found) {
+void
+SubModel::getSubModelParameterValue(const string& nameParameter, double& value, bool& found) {
   const bool isInitParam = false;
   const ParameterModeler& parameter = findParameter(nameParameter, isInitParam);
   if (!parameter.hasValue()) {

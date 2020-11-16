@@ -17,11 +17,11 @@
  * @brief Signal Handler implementation
  *
  */
-#include <csignal>
-#include <cerrno>
-#include <iostream>
-
 #include "DYNSignalHandler.h"
+
+#include <cerrno>
+#include <csignal>
+#include <iostream>
 
 namespace DYN {
 
@@ -41,19 +41,19 @@ void
 SignalHandler::exitSignalHandler(int signal) {
   switch (signal) {
 #ifdef SIGTERM
-    case SIGTERM:
-      setExitSignal(true);
-      break;
+  case SIGTERM:
+    setExitSignal(true);
+    break;
 #endif
 #ifdef SIGINT
-    case SIGINT:
-      setExitSignal(true);
-      break;
+  case SIGINT:
+    setExitSignal(true);
+    break;
 #endif
 #ifdef SIGQUIT
-    case SIGQUIT:
-      setExitSignal(true);
-      break;
+  case SIGQUIT:
+    setExitSignal(true);
+    break;
 #endif
   }
 }

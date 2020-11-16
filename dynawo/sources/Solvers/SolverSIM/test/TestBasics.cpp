@@ -17,57 +17,56 @@
  *
  */
 
-#include <fstream>
-#include <cmath>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/algorithm/string/split.hpp>
-
-#include <IIDM/xml/import.h>
-#include <IIDM/xml/export.h>
-#include <IIDM/Network.h>
-#include <IIDM/components/Connection.h>
-#include <IIDM/components/ConnectionPoint.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/components/Line.h>
-#include <IIDM/components/Load.h>
-#include <IIDM/components/Switch.h>
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
-#include <IIDM/builders/LineBuilder.h>
-#include <IIDM/builders/LoadBuilder.h>
-#include <IIDM/builders/SwitchBuilder.h>
-
-#include "gtest_dynawo.h"
+#include "DYNCompiler.h"
 #include "DYNDataInterfaceIIDM.h"
-#include "DYNFileSystemUtils.h"
+#include "DYNDynamicData.h"
 #include "DYNExecUtils.h"
-#include "DYNSolver.h"
-#include "DYNModeler.h"
+#include "DYNFileSystemUtils.h"
 #include "DYNModel.h"
 #include "DYNModelMulti.h"
-#include "DYNCompiler.h"
-#include "DYNSolverFactory.h"
-#include "DYNDynamicData.h"
+#include "DYNModeler.h"
 #include "DYNParameterSolver.h"
-#include "PARParametersSet.h"
+#include "DYNSolver.h"
+#include "DYNSolverFactory.h"
+#include "DYNTrace.h"
 #include "PARParameterFactory.h"
+#include "PARParametersSet.h"
 #include "PARParametersSetFactory.h"
 #include "TLTimelineFactory.h"
-#include "DYNTrace.h"
+#include "gtest_dynawo.h"
+
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/LineBuilder.h>
+#include <IIDM/builders/LoadBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/SwitchBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/Connection.h>
+#include <IIDM/components/ConnectionPoint.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/Load.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/Switch.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <IIDM/xml/export.h>
+#include <IIDM/xml/import.h>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/filesystem.hpp>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 
 namespace DYN {
 
-boost::shared_ptr<Solver> initSolver(const double& tStart, const double& tStop, const bool& recalculateStep,
-    const int& maxRootRestart, bool optimizeAlgebraicResidualsEvaluations, bool skipNR) {
+boost::shared_ptr<Solver>
+initSolver(const double& tStart, const double& tStop, const bool& recalculateStep, const int& maxRootRestart, bool optimizeAlgebraicResidualsEvaluations,
+           bool skipNR) {
   // Solver
   boost::shared_ptr<Solver> solver = SolverFactory::createSolverFromLib("../dynawo_SolverSIM" + std::string(sharedLibraryExtension()));
 
@@ -88,17 +87,18 @@ boost::shared_ptr<Solver> initSolver(const double& tStart, const double& tStop, 
   return solver;
 }
 
-void compile(boost::shared_ptr<DynamicData> dyd) {
+void
+compile(boost::shared_ptr<DynamicData> dyd) {
   bool preCompiledUseStandardModels = false;
-  std::vector <UserDefinedDirectory> precompiledModelsDirsAbsolute;
+  std::vector<UserDefinedDirectory> precompiledModelsDirsAbsolute;
   std::string preCompiledModelsExtension = sharedLibraryExtension();
   bool modelicaUseStandardModels = false;
 
-  std::vector <UserDefinedDirectory> modelicaModelsDirsAbsolute;
+  std::vector<UserDefinedDirectory> modelicaModelsDirsAbsolute;
   UserDefinedDirectory modelicaModel;
   if (!hasEnvVar("PWD"))
     throw DYNError(Error::GENERAL, MissingEnvironmentVariable, "PWD");
-  modelicaModel.path = getEnvVar("PWD") +"/jobs/";
+  modelicaModel.path = getEnvVar("PWD") + "/jobs/";
   modelicaModel.isRecursive = false;
   modelicaModelsDirsAbsolute.push_back(modelicaModel);
   std::string modelicaModelsExtension = ".mo";
@@ -111,22 +111,15 @@ void compile(boost::shared_ptr<DynamicData> dyd) {
 
   const bool rmModels = true;
   boost::unordered_set<boost::filesystem::path> pathsToIgnore;
-  Compiler cf = Compiler(dyd, preCompiledUseStandardModels,
-            precompiledModelsDirsAbsolute,
-            preCompiledModelsExtension,
-            modelicaUseStandardModels,
-            modelicaModelsDirsAbsolute,
-            modelicaModelsExtension,
-            pathsToIgnore,
-            additionalHeaderFiles,
-            rmModels,
-            getEnvVar("PWD") +"/jobs");
+  Compiler cf = Compiler(dyd, preCompiledUseStandardModels, precompiledModelsDirsAbsolute, preCompiledModelsExtension, modelicaUseStandardModels,
+                         modelicaModelsDirsAbsolute, modelicaModelsExtension, pathsToIgnore, additionalHeaderFiles, rmModels, getEnvVar("PWD") + "/jobs");
   cf.compile();  // modelOnly = false, compilation and parameter linking
   cf.concatConnects();
   cf.concatRefs();
 }
 
-boost::shared_ptr<Model> initModel(const double& tStart, Modeler modeler) {
+boost::shared_ptr<Model>
+initModel(const double& tStart, Modeler modeler) {
   boost::shared_ptr<Model> model = modeler.getModel();
   model->initBuffers();
   model->setIsInitProcess(true);
@@ -139,9 +132,9 @@ boost::shared_ptr<Model> initModel(const double& tStart, Modeler modeler) {
   return model;
 }
 
-std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > initSolverAndModel(std::string dydFileName, std::string iidmFileName,
- std::string parFileName, const double& tStart, const double& tStop, const bool& recalculateStep,
- const int& maxRootRestart, bool optimizeAlgebraicResidualsEvaluations = true, bool skipNR = true) {
+std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> >
+initSolverAndModel(std::string dydFileName, std::string iidmFileName, std::string parFileName, const double& tStart, const double& tStop,
+                   const bool& recalculateStep, const int& maxRootRestart, bool optimizeAlgebraicResidualsEvaluations = true, bool skipNR = true) {
   boost::shared_ptr<Solver> solver = initSolver(tStart, tStop, recalculateStep, maxRootRestart, optimizeAlgebraicResidualsEvaluations, skipNR);
 
   // DYD
@@ -156,7 +149,7 @@ std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > initSolverAndMod
   dyd->setRootDirectory(getEnvVar("PWD"));
   dyd->getNetworkParameters(parFileName, "0");
 
-  std::vector <std::string> fileNames;
+  std::vector<std::string> fileNames;
   fileNames.push_back(dydFileName);
   dyd->initFromDydFiles(fileNames);
 
@@ -182,13 +175,13 @@ std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > initSolverAndMod
   return std::make_pair(solver, model);
 }
 
-std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > initSolverAndModelWithDyd(std::string dydFileName,
- const double& tStart, const double& tStop, const bool& recalculateStep, const int& maxRootRestart,
- bool optimizeAlgebraicResidualsEvaluations = true, bool skipNR = true) {
+std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> >
+initSolverAndModelWithDyd(std::string dydFileName, const double& tStart, const double& tStop, const bool& recalculateStep, const int& maxRootRestart,
+                          bool optimizeAlgebraicResidualsEvaluations = true, bool skipNR = true) {
   boost::shared_ptr<Solver> solver = initSolver(tStart, tStop, recalculateStep, maxRootRestart, optimizeAlgebraicResidualsEvaluations, skipNR);
   // DYD
   boost::shared_ptr<DynamicData> dyd(new DynamicData());
-  std::vector <std::string> fileNames;
+  std::vector<std::string> fileNames;
   fileNames.push_back(dydFileName);
   dyd->initFromDydFiles(fileNames);
 
@@ -300,7 +293,6 @@ TEST(SimulationTest, testSolverSIMTestBeta) {
   // At the initialization step, only the algebraic equations are considered - yp() = 0.
   ASSERT_DOUBLE_EQUALS_DYNAWO(yp0[0], 0);
   ASSERT_DOUBLE_EQUALS_DYNAWO(z0[0], -1);
-
 
   double tCurrent = tStart;
   std::vector<double> y(y0);
@@ -490,8 +482,8 @@ TEST(SimulationTest, testSolverSIMDivergenceWithRecalculation) {
 TEST(SimulationTest, testSolverSIMAlgebraicMode) {
   const double tStart = 0.;
   const double tStop = 3.;
-  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModel("jobs/solverTestDelta.dyd",
-  "jobs/solverTestDelta.iidm", "jobs/solverTestDelta.par", tStart, tStop, true, 3);
+  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p =
+      initSolverAndModel("jobs/solverTestDelta.dyd", "jobs/solverTestDelta.iidm", "jobs/solverTestDelta.par", tStart, tStop, true, 3);
   boost::shared_ptr<Solver> solver = p.first;
   boost::shared_ptr<Model> model = p.second;
 
@@ -602,8 +594,7 @@ TEST(SimulationTest, testSolverSIMAlgebraicMode) {
 TEST(SimulationTest, testSolverSkipNR) {
   const double tStart = 0.;
   const double tStop = 10.;
-  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSkipNR.dyd",
-                                                                                                tStart, tStop, true, 3, false);
+  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSkipNR.dyd", tStart, tStop, true, 3, false);
   boost::shared_ptr<Solver> solver = p.first;
   boost::shared_ptr<Model> model = p.second;
 
@@ -626,10 +617,7 @@ TEST(SimulationTest, testSolverSkipNR) {
   // Solve at t = 2
   solver->solve(tStop, tCurrent);
   std::stringstream msg;
-  msg << "| " << std::setw(8) << 2 << " "
-          << std::setw(16) << 0 << " "
-          << std::setw(10) << 0 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 2 << " " << std::setw(16) << 0 << " " << std::setw(10) << 0 << " " << std::setw(18) << 1 << " ";
   std::stringstream msgRef;
   solver->printSolveSpecific(msgRef);
   ASSERT_EQ(msgRef.str(), msg.str());
@@ -639,10 +627,7 @@ TEST(SimulationTest, testSolverSkipNR) {
   // Solve at t = 4 -> skipNextNR_ = false
   solver->solve(tStop, tCurrent);
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 4 << " "
-          << std::setw(16) << 0 << " "
-          << std::setw(10) << 0 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 4 << " " << std::setw(16) << 0 << " " << std::setw(10) << 0 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_NE(msgRef.str(), msg.str());
@@ -652,10 +637,7 @@ TEST(SimulationTest, testSolverSkipNR) {
   // Solve at t = 6
   solver->solve(tStop, tCurrent);
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 6 << " "
-          << std::setw(16) << 1 << " "
-          << std::setw(10) << 2 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 6 << " " << std::setw(16) << 1 << " " << std::setw(10) << 2 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_EQ(msgRef.str(), msg.str());
@@ -663,10 +645,7 @@ TEST(SimulationTest, testSolverSkipNR) {
   // Solve at t = 7
   solver->solve(tStop, tCurrent);
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 7 << " "
-          << std::setw(16) << 1 << " "
-          << std::setw(10) << 1 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 7 << " " << std::setw(16) << 1 << " " << std::setw(10) << 1 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_NE(msgRef.str(), msg.str());
@@ -675,8 +654,8 @@ TEST(SimulationTest, testSolverSkipNR) {
 TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluations) {
   const double tStart = 0.;
   const double tStop = 10.;
-  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSkipNR.dyd",
-                                                                                                tStart, tStop, true, 3, true, false);
+  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p =
+      initSolverAndModelWithDyd("jobs/solverTestSkipNR.dyd", tStart, tStop, true, 3, true, false);
   boost::shared_ptr<Solver> solver = p.first;
   boost::shared_ptr<Model> model = p.second;
 
@@ -700,10 +679,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluations) {
   // Solve at t = 2
   solver->solve(tStop, tCurrent);
   std::stringstream msg;
-  msg << "| " << std::setw(8) << 2 << " "
-          << std::setw(16) << 0 << " "
-          << std::setw(10) << 0 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 2 << " " << std::setw(16) << 0 << " " << std::setw(10) << 0 << " " << std::setw(18) << 1 << " ";
   std::stringstream msgRef;
   solver->printSolveSpecific(msgRef);
   ASSERT_EQ(msgRef.str(), msg.str());
@@ -716,10 +692,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluations) {
   // Solve at t = 4 -> optimizeAlgebraicResidualsEvaluations = true
   solver->solve(tStop, tCurrent);
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 4 << " "
-          << std::setw(16) << 1 << " "
-          << std::setw(10) << 1 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 4 << " " << std::setw(16) << 1 << " " << std::setw(10) << 1 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_EQ(msgRef.str(), msg.str());
@@ -732,10 +705,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluations) {
   solver->solve(tStop, tCurrent);
   solver->reinit();
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 6 << " "
-          << std::setw(16) << 2 << " "
-          << std::setw(10) << 1 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 6 << " " << std::setw(16) << 2 << " " << std::setw(10) << 1 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_EQ(msgRef.str(), msg.str());
@@ -744,10 +714,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluations) {
   // Solve at t = 7
   solver->solve(tStop, tCurrent);
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 7 << " "
-          << std::setw(16) << 1 << " "
-          << std::setw(10) << 1 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 7 << " " << std::setw(16) << 1 << " " << std::setw(10) << 1 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_NE(msgRef.str(), msg.str());
@@ -757,8 +724,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluations) {
 TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluationsAndSkipNR) {
   const double tStart = 0.;
   const double tStop = 10.;
-  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSkipNR.dyd",
-                                                                                                tStart, tStop, true, 3);
+  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSkipNR.dyd", tStart, tStop, true, 3);
   boost::shared_ptr<Solver> solver = p.first;
   boost::shared_ptr<Model> model = p.second;
 
@@ -783,10 +749,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluationsAndSkipNR) {
   // Solve at t = 2
   solver->solve(tStop, tCurrent);
   std::stringstream msg;
-  msg << "| " << std::setw(8) << 2 << " "
-          << std::setw(16) << 0 << " "
-          << std::setw(10) << 0 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 2 << " " << std::setw(16) << 0 << " " << std::setw(10) << 0 << " " << std::setw(18) << 1 << " ";
   std::stringstream msgRef;
   solver->printSolveSpecific(msgRef);
   ASSERT_EQ(msgRef.str(), msg.str());
@@ -800,10 +763,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluationsAndSkipNR) {
   // and optimizeAlgebraicResidualsEvaluations = true
   solver->solve(tStop, tCurrent);
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 4 << " "
-          << std::setw(16) << 1 << " "
-          << std::setw(10) << 1 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 4 << " " << std::setw(16) << 1 << " " << std::setw(10) << 1 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_EQ(msgRef.str(), msg.str());
@@ -817,10 +777,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluationsAndSkipNR) {
   solver->solve(tStop, tCurrent);
   solver->reinit();
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 6 << " "
-          << std::setw(16) << 2 << " "
-          << std::setw(10) << 1 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 6 << " " << std::setw(16) << 2 << " " << std::setw(10) << 1 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_EQ(msgRef.str(), msg.str());
@@ -829,10 +786,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluationsAndSkipNR) {
   // Solve at t = 7
   solver->solve(tStop, tCurrent);
   msg.str(std::string());
-  msg << "| " << std::setw(8) << 7 << " "
-          << std::setw(16) << 1 << " "
-          << std::setw(10) << 1 << " "
-          << std::setw(18) << 1 << " ";
+  msg << "| " << std::setw(8) << 7 << " " << std::setw(16) << 1 << " " << std::setw(10) << 1 << " " << std::setw(18) << 1 << " ";
   msgRef.str(std::string());
   solver->printSolveSpecific(msgRef);
   ASSERT_NE(msgRef.str(), msg.str());
@@ -842,8 +796,7 @@ TEST(SimulationTest, testSolverOptimizeAlgebraicResidualsEvaluationsAndSkipNR) {
 TEST(SimulationTest, testSolverSIMSilentZ) {
   const double tStart = 0.;
   const double tStop = 10.;
-  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSilentZ.dyd",
-                                                                                                tStart, tStop, true, 3);
+  std::pair<boost::shared_ptr<Solver>, boost::shared_ptr<Model> > p = initSolverAndModelWithDyd("jobs/solverTestSilentZ.dyd", tStart, tStop, true, 3);
   boost::shared_ptr<Solver> solver = p.first;
   boost::shared_ptr<Model> model = p.second;
 

@@ -20,12 +20,11 @@
 #ifndef COMMON_DYNTIMER_H_
 #define COMMON_DYNTIMER_H_
 
+#include <boost/core/noncopyable.hpp>
+#include <boost/timer.hpp>
 #include <map>
 #include <string>
 #include <vector>
-
-#include <boost/timer.hpp>
-#include <boost/core/noncopyable.hpp>
 
 // #define PRINT_TIMERS
 
@@ -80,7 +79,7 @@ class Timers : private boost::noncopyable {
   static Timers& getInstance_();
 
  private:
-  std::map<std::string, double> timers_;  ///< association between timers and time elapsed
+  std::map<std::string, double> timers_;     ///< association between timers and time elapsed
   std::map<std::string, int32_t> nbAppels_;  ///< association between timers and number of call
 };
 
@@ -110,9 +109,9 @@ class Timer : private boost::noncopyable {
   void stop();
 
  private:
-  std::string name_;  ///< name of timer
+  std::string name_;    ///< name of timer
   boost::timer timer_;  ///< boost timer to compute time elapsed
-  bool isStopped_;  ///< @b true is the timer is stopped
+  bool isStopped_;      ///< @b true is the timer is stopped
 };
 
 }  // namespace DYN
@@ -123,7 +122,8 @@ class Timer : private boost::noncopyable {
  *
  * @return the unique instance
  */
-extern "C" DYN::Timers& getTimersInstance() {
+extern "C" DYN::Timers&
+getTimersInstance() {
   return DYN::Timers::getInstance();
 }
 #endif

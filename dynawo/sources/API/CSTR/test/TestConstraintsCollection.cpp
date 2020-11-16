@@ -17,12 +17,10 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "CSTRConstraintsCollectionFactory.h"
-#include "CSTRConstraintsCollection.h"
 #include "CSTRConstraint.h"
-
+#include "CSTRConstraintsCollection.h"
+#include "CSTRConstraintsCollectionFactory.h"
+#include "gtest_dynawo.h"
 
 namespace constraints {
 
@@ -49,9 +47,7 @@ TEST(APICRVTest, ConstraintsCollectionIterator) {
   collection1->addConstraint("model2", "constraint1", 3.4, CONSTRAINT_BEGIN);
 
   int nbPoints = 0;
-  for (ConstraintsCollection::const_iterator itPt = collection1->cbegin();
-            itPt != collection1->cend();
-            ++itPt) {
+  for (ConstraintsCollection::const_iterator itPt = collection1->cbegin(); itPt != collection1->cend(); ++itPt) {
     if (nbPoints == 0) {
       ASSERT_EQ((*itPt)->getTime(), 1.2);
     } else if (nbPoints == 1) {

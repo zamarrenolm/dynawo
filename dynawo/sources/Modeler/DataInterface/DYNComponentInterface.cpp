@@ -19,26 +19,24 @@
  */
 
 #include "DYNComponentInterface.hpp"
+
 #include "DYNSubModel.h"
-#include "DYNVariable.h"
 #include "DYNTrace.h"
+#include "DYNVariable.h"
 
 using boost::shared_ptr;
-using std::string;
 using std::map;
+using std::string;
 
 namespace DYN {
 
-ComponentInterface::ComponentInterface() :
-type_(UNKNOWN),
-hasDynamicModel_(false) {
+ComponentInterface::ComponentInterface() : type_(UNKNOWN), hasDynamicModel_(false) {
 #ifdef _DEBUG_
   checkStateVariableAreUpdatedBeforeCriteriaCheck_ = false;
 #endif
 }
 
-ComponentInterface::~ComponentInterface() {
-}
+ComponentInterface::~ComponentInterface() {}
 
 void
 ComponentInterface::hasDynamicModel(bool hasDynamicModel) {
@@ -66,7 +64,7 @@ ComponentInterface::setReference(const string& componentVar, const string& model
 
 void
 ComponentInterface::updateFromModel(bool filterForCriteriaCheck) {
-  for (unsigned int i =0; i< stateVariables_.size(); ++i) {
+  for (unsigned int i = 0; i < stateVariables_.size(); ++i) {
     StateVariable& var = stateVariables_[i];
     if (!filterForCriteriaCheck || var.isNeededForCriteriaCheck())
       var.setValue(modelDyn_->getVariableValue(var.getVariable()));
@@ -77,24 +75,24 @@ void
 ComponentInterface::exportStateVariables() {
   try {
     exportStateVariablesUnitComponent();
-  }  catch (const DYN::Error& e) {
+  } catch (const DYN::Error& e) {
     if (e.key() == KeyError_t::UnaffectedStateVariable) {
       Trace::error() << e.what() << Trace::endline;
     } else if (e.key() == KeyError_t::UnknownStateVariable) {
-      throw;   // only two possible errors for instant
+      throw;  // only two possible errors for instant
     }
   }
 }
 
 void
 ComponentInterface::getStateVariableReference() {
-  for (unsigned int i=0; i< stateVariables_.size(); ++i) {
+  for (unsigned int i = 0; i < stateVariables_.size(); ++i) {
     try {
       if (hasDynamicModel_)
         stateVariables_[i].setVariable(modelDyn_->getVariable(stateVariables_[i].getVariableId()));
       else  /// specific for network models
         stateVariables_[i].setVariable(modelDyn_->getVariable(stateVariables_[i].getModelId() + "_" + stateVariables_[i].getVariableId()));
-    } catch (const DYN::Error &) {
+    } catch (const DYN::Error&) {
       throw DYNError(Error::MODELER, StateVariableNoReference, stateVariables_[i].getName(), getID());
     }
   }
@@ -110,14 +108,14 @@ ComponentInterface::getType() const {
   return type_;
 }
 
-
 #ifdef _DEBUG_
 void
 ComponentInterface::enableCheckStateVariable() {
   checkStateVariableAreUpdatedBeforeCriteriaCheck_ = true;
 }
 
-void ComponentInterface::disableCheckStateVariable() {
+void
+ComponentInterface::disableCheckStateVariable() {
   checkStateVariableAreUpdatedBeforeCriteriaCheck_ = false;
 }
 #endif

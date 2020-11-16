@@ -17,27 +17,25 @@
  * @brief Network data interface : implementation file for IIDM implementation
  *
  */
+#include "DYNNetworkInterfaceIIDM.h"
+
+#include "DYNHvdcLineInterface.h"
+#include "DYNLineInterface.h"
+#include "DYNThreeWTransformerInterface.h"
+#include "DYNTwoWTransformerInterface.h"
+#include "DYNVoltageLevelInterface.h"
+
 #include <IIDM/Network.h>
 
-#include "DYNNetworkInterfaceIIDM.h"
-#include "DYNLineInterface.h"
-#include "DYNTwoWTransformerInterface.h"
-#include "DYNThreeWTransformerInterface.h"
-#include "DYNVoltageLevelInterface.h"
-#include "DYNHvdcLineInterface.h"
-
+using boost::shared_ptr;
 using std::string;
 using std::vector;
-using boost::shared_ptr;
 
 namespace DYN {
 
-NetworkInterfaceIIDM::NetworkInterfaceIIDM(IIDM::Network& network) :
-networkIIDM_(network) {
-}
+NetworkInterfaceIIDM::NetworkInterfaceIIDM(IIDM::Network& network) : networkIIDM_(network) {}
 
-NetworkInterfaceIIDM::~NetworkInterfaceIIDM() {
-}
+NetworkInterfaceIIDM::~NetworkInterfaceIIDM() {}
 
 void
 NetworkInterfaceIIDM::addLine(const shared_ptr<LineInterface>& line) {

@@ -20,36 +20,37 @@
  *  with the boost::format convention
  */
 
-#include <iostream>
-#include <string>
-#include <sstream>
 #include "DYNMessage.hpp"
+
 #include "DYNIoDico.h"
 #include "DYNMacrosMessage.h"
 
+#include <iostream>
+#include <sstream>
+#include <string>
 
-using std::stringstream;
 using std::string;
+using std::stringstream;
 
 namespace DYN {
 
 Message::Message(const dictionaryKey& dicoKey, const std::string& key) {
   std::string dicoName;
   switch (dicoKey) {
-    case TIMELINE_KEY:
-      dicoName = "TIMELINE";
-      break;
-    case ERROR_KEY:
-      dicoName = "ERROR";
-      break;
-    case CONSTRAINT_KEY:
-      dicoName = "CONSTRAINT";
-      break;
-    case LOG_KEY:
-      dicoName = "LOG";
-      break;
-    default:
-      break;
+  case TIMELINE_KEY:
+    dicoName = "TIMELINE";
+    break;
+  case ERROR_KEY:
+    dicoName = "ERROR";
+    break;
+  case CONSTRAINT_KEY:
+    dicoName = "CONSTRAINT";
+    break;
+  case LOG_KEY:
+    dicoName = "LOG";
+    break;
+  default:
+    break;
   }
   initialize(dicoName, key);
 }
@@ -78,10 +79,7 @@ Message::initialize(const std::string& dicoName, const std::string& key) {
   }
 }
 
-Message::Message(const Message& m) :
-fmt_(m.fmt_),
-hasFmt_(m.hasFmt_),
-key_(m.key_) {
+Message::Message(const Message& m) : fmt_(m.fmt_), hasFmt_(m.hasFmt_), key_(m.key_) {
   fmtss_ << m.fmtss_.str();
 }
 
@@ -91,9 +89,9 @@ Message::str() const {
   if (hasFmt_) {
     try {
       message << fmt_.str();
-    }    catch (boost::io::too_many_args& exc) {
+    } catch (boost::io::too_many_args& exc) {
       std::cerr << exc.what() << " (key: " << key_ << ")" << std::endl;
-    }    catch (boost::io::too_few_args& exc) {
+    } catch (boost::io::too_few_args& exc) {
       std::cerr << exc.what() << " (key: " << key_ << ")" << std::endl;
     }
   } else {

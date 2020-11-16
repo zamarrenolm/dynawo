@@ -17,14 +17,12 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "CSTRConstraintsCollectionFactory.h"
-#include "CSTRConstraintsCollection.h"
 #include "CSTRConstraint.h"
-#include "CSTRXmlExporter.h"
+#include "CSTRConstraintsCollection.h"
+#include "CSTRConstraintsCollectionFactory.h"
 #include "CSTRTxtExporter.h"
-
+#include "CSTRXmlExporter.h"
+#include "gtest_dynawo.h"
 
 namespace constraints {
 
@@ -40,9 +38,7 @@ TEST(APICSTRTest, CollectionAddConstraints) {
   collection->addConstraint("model", "constraint 2", 0, CONSTRAINT_BEGIN);  // add second constraint with different description
 
   int nbConstraint = 0;
-  for (ConstraintsCollection::const_iterator itConstraint = collection->cbegin();
-          itConstraint != collection->cend();
-          ++itConstraint)
+  for (ConstraintsCollection::const_iterator itConstraint = collection->cbegin(); itConstraint != collection->cend(); ++itConstraint)
     ++nbConstraint;
 
   ASSERT_EQ(nbConstraint, 2);  // the two constraints have been added
@@ -62,9 +58,7 @@ TEST(APICSTRTest, CollectionEraseConstraint) {
   collection->addConstraint("model", "constraint 1", 0, CONSTRAINT_END);    // add second constraint with same description and type CONSTRAINT_END
 
   int nbConstraint = 0;
-  for (ConstraintsCollection::const_iterator itConstraint = collection->cbegin();
-          itConstraint != collection->cend();
-          ++itConstraint)
+  for (ConstraintsCollection::const_iterator itConstraint = collection->cbegin(); itConstraint != collection->cend(); ++itConstraint)
     ++nbConstraint;
 
   ASSERT_EQ(nbConstraint, 0);  // the constraint has been erased

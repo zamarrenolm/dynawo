@@ -33,7 +33,8 @@ namespace DYN {
  * 1 -> true
  */
 template<>
-inline StaticParameter& StaticParameter::setValue(const double& value) {
+inline StaticParameter&
+StaticParameter::setValue(const double& value) {
   if (type_ == BOOL) {
     value_ = (value > 0);
   } else if (type_ == DOUBLE) {
@@ -50,7 +51,8 @@ inline StaticParameter& StaticParameter::setValue(const double& value) {
  * @return instance of staticParameter modified
  */
 template<>
-inline StaticParameter& StaticParameter::setValue(const int& value) {
+inline StaticParameter&
+StaticParameter::setValue(const int& value) {
   if (type_ != INT)
     throw DYNError(Error::MODELER, StaticParameterWrongType, name_, typeAsString(type_), "double");
 
@@ -64,7 +66,8 @@ inline StaticParameter& StaticParameter::setValue(const int& value) {
  * @return instance of staticParameter modified
  */
 template<>
-inline StaticParameter& StaticParameter::setValue(const bool& value) {
+inline StaticParameter&
+StaticParameter::setValue(const bool& value) {
   if (type_ != BOOL)
     throw DYNError(Error::MODELER, StaticParameterWrongType, name_, typeAsString(type_), "double");
 
@@ -73,12 +76,12 @@ inline StaticParameter& StaticParameter::setValue(const bool& value) {
 }
 
 template<typename T>
-T StaticParameter::getValue() const {
+T
+StaticParameter::getValue() const {
   T value;
   try {
     value = boost::any_cast<T>(*value_);
-  }
-  catch (boost::bad_any_cast&)  {
+  } catch (boost::bad_any_cast&) {
     throw DYNError(Error::MODELER, StaticParameterBadCast, name_, typeAsString(type_));
   }
   return value;

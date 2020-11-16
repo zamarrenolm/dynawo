@@ -18,6 +18,7 @@
  */
 
 #include "EXTVARVariablesCollectionFactory.h"
+
 #include "EXTVARVariablesCollection.h"
 
 using boost::shared_ptr;

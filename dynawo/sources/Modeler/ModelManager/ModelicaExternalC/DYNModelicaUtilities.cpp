@@ -10,55 +10,62 @@
 // This file is part of Dynawo, an hybrid C++/Modelica open source time domain
 // simulation tool for power systems.
 //
-#include "ModelicaUtilities.h"
 #include "DYNMacrosMessage.h"
 #include "DYNTrace.h"
+#include "ModelicaUtilities.h"
 
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-void ModelicaVFormatMessage(const char *string, va_list args) {
+void
+ModelicaVFormatMessage(const char *string, va_list args) {
   char buff[512];
   vsnprintf(buff, sizeof(buff), string, args);
   std::string buffAsStdStr = buff;
   DYN::Trace::info() << buffAsStdStr << DYN::Trace::endline;
 }
 
-void ModelicaFormatMessage(const char *string, ...) {
+void
+ModelicaFormatMessage(const char *string, ...) {
   va_list args;
   va_start(args, string);
   ModelicaVFormatMessage(string, args);
   va_end(args);
 }
 
-void ModelicaError(const char *string) {
+void
+ModelicaError(const char *string) {
   throw DYNError(DYN::Error::GENERAL, ModelicaError, string);
 }
 
-void ModelicaVFormatError(const char *string, va_list args) {
+void
+ModelicaVFormatError(const char *string, va_list args) {
   char buff[512];
   vsnprintf(buff, sizeof(buff), string, args);
   std::string buffAsStdStr = buff;
   throw DYNError(DYN::Error::GENERAL, ModelicaError, buffAsStdStr);
 }
 
-void ModelicaFormatError(const char *string, ...) {
+void
+ModelicaFormatError(const char *string, ...) {
   va_list args;
   va_start(args, string);
   ModelicaVFormatError(string, args);
   va_end(args);
 }
 
-char* ModelicaAllocateStringWithErrorReturn(size_t len) {
-  char *res = reinterpret_cast<char *>(malloc((len+1)*sizeof(char)));
+char *
+ModelicaAllocateStringWithErrorReturn(size_t len) {
+  char *res = reinterpret_cast<char *>(malloc((len + 1) * sizeof(char)));
   if (res != NULL) {
     res[len] = '\0';
   }
   return res;
 }
 
-char* ModelicaAllocateString(size_t len) {
+char *
+ModelicaAllocateString(size_t len) {
   char *res = ModelicaAllocateStringWithErrorReturn(len);
   if (!res) {
     ModelicaFormatError("%s:%d: ModelicaAllocateString failed", __FILE__, __LINE__);

@@ -19,28 +19,25 @@
  * Terminate use the message class to access to the cause of model
  * interruption
  */
+#include "DYNTerminate.h"
+
+#include "DYNCommon.h"
+#include "DYNMessage.hpp"
+
 #include <sstream>
 #include <stdio.h>
-#include "DYNCommon.h"
-#include "DYNTerminate.h"
-#include "DYNMessage.hpp"
 
 namespace DYN {
 
-using std::stringstream;
 using std::string;
+using std::stringstream;
 
-Terminate::Terminate(const Message& m) :
-std::exception(),
-msgToReturn_(m.str()) {
-}
+Terminate::Terminate(const Message& m) : std::exception(), msgToReturn_(m.str()) {}
 
-Terminate::Terminate(const Terminate& t) :
-std::exception(t),
-msgToReturn_(t.msgToReturn_) {
-}
+Terminate::Terminate(const Terminate& t) : std::exception(t), msgToReturn_(t.msgToReturn_) {}
 
-const char* Terminate::what() const throw() {
+const char*
+Terminate::what() const throw() {
   return (msgToReturn_.c_str());
 }
 

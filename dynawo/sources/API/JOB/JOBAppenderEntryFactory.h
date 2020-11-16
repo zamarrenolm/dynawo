@@ -20,9 +20,9 @@
 #ifndef API_JOB_JOBAPPENDERENTRYFACTORY_H_
 #define API_JOB_JOBAPPENDERENTRYFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "JOBAppenderEntry.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace job {
 

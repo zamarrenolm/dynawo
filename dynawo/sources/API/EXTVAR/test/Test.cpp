@@ -17,14 +17,13 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "EXTVARXmlImporter.h"
-#include "EXTVARXmlExporter.h"
-#include "EXTVARVariablesCollectionFactory.h"
-#include "EXTVARVariableFactory.h"
 #include "EXTVARIterators.h"
 #include "EXTVARVariable.h"
+#include "EXTVARVariableFactory.h"
+#include "EXTVARVariablesCollectionFactory.h"
+#include "EXTVARXmlExporter.h"
+#include "EXTVARXmlImporter.h"
+#include "gtest_dynawo.h"
 
 namespace externalVariables {
 
@@ -63,7 +62,6 @@ TEST(APIEXTVARTest, ExternalContinuousVariable) {
   ASSERT_EQ(variable->hasOptional(), false);
   ASSERT_THROW_DYNAWO(variable->setOptional(true), DYN::Error::API, DYN::KeyError_t::ExternalVariableAttributeOnlyForArray);
   ASSERT_THROW_DYNAWO(variable->getOptional(), DYN::Error::API, DYN::KeyError_t::ExternalVariableAttributeNotDefined);
-
 
   for (variable_iterator itVariable = collection->endVariable(); itVariable == collection->beginVariable(); --itVariable) {
     ASSERT_EQ((*itVariable)->getId(), variable->getId());
@@ -271,7 +269,6 @@ TEST(APIEXTVARTest, ExternalDuplicateVariable) {
 
   ASSERT_NO_THROW(VariablesCollectionFactory::copyCollection(collection));
 }
-
 
 //-----------------------------------------------------
 // TEST build continuous and external discrete variables with the same name, then export and import the generated file

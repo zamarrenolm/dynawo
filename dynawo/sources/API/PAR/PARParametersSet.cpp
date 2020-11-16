@@ -16,19 +16,20 @@
  * @brief Dynawo parameters set : implementation file
  *
  */
-#include <sstream>
-#include <set>
-#include "DYNMacrosMessage.h"
-
 #include "PARParametersSet.h"
+
+#include "DYNMacrosMessage.h"
 #include "PARParameter.h"
 #include "PARParameterFactory.h"
+
+#include <set>
+#include <sstream>
 
 using std::map;
 using std::set;
 using std::string;
-using std::vector;
 using std::stringstream;
+using std::vector;
 
 using boost::dynamic_pointer_cast;
 using boost::shared_ptr;
@@ -36,9 +37,7 @@ using boost::unordered_map;
 
 namespace parameters {
 
-ParametersSet::ParametersSet(const string& id) :
-id_(id) {
-}
+ParametersSet::ParametersSet(const string& id) : id_(id) {}
 
 const std::string&
 ParametersSet::getId() const {
@@ -60,7 +59,8 @@ ParametersSet::setFilePath(const std::string& filepath) {
 // in par file, A[1] will be declared with row = 1, column =1, so we create two names:
 // A_1_1 and A_1 (using column index)
 
-vector<string> ParametersSet::tableParameterNames(const string& name, const string& row, const string& column) const {
+vector<string>
+ParametersSet::tableParameterNames(const string& name, const string& row, const string& column) const {
   vector<string> names;
   stringstream nameFull;
 
@@ -78,7 +78,8 @@ vector<string> ParametersSet::tableParameterNames(const string& name, const stri
   return names;
 }
 
-shared_ptr<ParametersSet> ParametersSet::createAlias(const string& aliasName, const string& origName) {
+shared_ptr<ParametersSet>
+ParametersSet::createAlias(const string& aliasName, const string& origName) {
   if ((!hasParameter(origName)) || (hasParameter(aliasName))) {
     throw DYNError(DYN::Error::API, ParameterAliasFailed, aliasName, origName, id_);
   }
@@ -177,9 +178,7 @@ ParametersSet::extend(shared_ptr<ParametersSet> parametersSet) {
 vector<string>
 ParametersSet::getParametersNames() const {
   vector<string> returnVector;
-  for (map<string, shared_ptr<Parameter> >::const_iterator itParams = parameters_.begin();
-          itParams != parameters_.end();
-          ++itParams) {
+  for (map<string, shared_ptr<Parameter> >::const_iterator itParams = parameters_.begin(); itParams != parameters_.end(); ++itParams) {
     returnVector.push_back(itParams->first);
   }
   return returnVector;
@@ -188,9 +187,7 @@ ParametersSet::getParametersNames() const {
 vector<string>
 ParametersSet::getParamsUnused() const {
   vector<string> returnVector;
-  for (map<string, shared_ptr<Parameter> >::const_iterator itParams = parameters_.begin();
-          itParams != parameters_.end();
-          ++itParams) {
+  for (map<string, shared_ptr<Parameter> >::const_iterator itParams = parameters_.begin(); itParams != parameters_.end(); ++itParams) {
     if (!itParams->second->getUsed()) {
       returnVector.push_back(itParams->first);
     }
@@ -202,14 +199,10 @@ vector<string>
 ParametersSet::getReferencesNames() const {
   vector<string> returnVector;
   set<string> orderedNames;
-  for (unordered_map<string, shared_ptr<Reference> >::const_iterator itRefs = references_.begin();
-          itRefs != references_.end();
-          ++itRefs) {
+  for (unordered_map<string, shared_ptr<Reference> >::const_iterator itRefs = references_.begin(); itRefs != references_.end(); ++itRefs) {
     orderedNames.insert(itRefs->first);
   }
-  for (set<string>::const_iterator itRefs = orderedNames.begin();
-          itRefs != orderedNames.end();
-          ++itRefs) {
+  for (set<string>::const_iterator itRefs = orderedNames.begin(); itRefs != orderedNames.end(); ++itRefs) {
     returnVector.push_back(*itRefs);
   }
   return returnVector;
@@ -251,7 +244,7 @@ ParametersSet::cendReference() const {
 }
 
 ParametersSet::parameter_const_iterator::parameter_const_iterator(const ParametersSet* iterated, bool begin) :
-current_((begin ? iterated->parameters_.begin() : iterated->parameters_.end())) { }
+    current_((begin ? iterated->parameters_.begin() : iterated->parameters_.end())) {}
 
 ParametersSet::parameter_const_iterator&
 ParametersSet::parameter_const_iterator::operator++() {
@@ -289,20 +282,18 @@ ParametersSet::parameter_const_iterator::operator!=(const ParametersSet::paramet
   return current_ != other.current_;
 }
 
-const shared_ptr<Parameter>&
-ParametersSet::parameter_const_iterator::operator*() const {
+const shared_ptr<Parameter>& ParametersSet::parameter_const_iterator::operator*() const {
   return current_->second;
 }
 
-const shared_ptr<Parameter>*
-ParametersSet::parameter_const_iterator::operator->() const {
+const shared_ptr<Parameter>* ParametersSet::parameter_const_iterator::operator->() const {
   return &(current_->second);
 }
 
 // for Reference
 
 ParametersSet::reference_const_iterator::reference_const_iterator(const ParametersSet* iterated, bool begin) :
-current_((begin ? iterated->references_.begin() : iterated->references_.end())) { }
+    current_((begin ? iterated->references_.begin() : iterated->references_.end())) {}
 
 ParametersSet::reference_const_iterator&
 ParametersSet::reference_const_iterator::operator++() {
@@ -327,13 +318,11 @@ ParametersSet::reference_const_iterator::operator!=(const ParametersSet::referen
   return current_ != other.current_;
 }
 
-const shared_ptr<Reference>&
-ParametersSet::reference_const_iterator::operator*() const {
+const shared_ptr<Reference>& ParametersSet::reference_const_iterator::operator*() const {
   return current_->second;
 }
 
-const shared_ptr<Reference>*
-ParametersSet::reference_const_iterator::operator->() const {
+const shared_ptr<Reference>* ParametersSet::reference_const_iterator::operator->() const {
   return &(current_->second);
 }
 

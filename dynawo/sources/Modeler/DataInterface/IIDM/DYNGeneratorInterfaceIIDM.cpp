@@ -20,36 +20,35 @@
  */
 //======================================================================
 
-#include <IIDM/components/Generator.h>
-
 #include "DYNGeneratorInterfaceIIDM.h"
 
-using std::string;
+#include <IIDM/components/Generator.h>
+
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 
-GeneratorInterfaceIIDM::~GeneratorInterfaceIIDM() {
-}
+GeneratorInterfaceIIDM::~GeneratorInterfaceIIDM() {}
 
 GeneratorInterfaceIIDM::GeneratorInterfaceIIDM(IIDM::Generator& generator) :
-InjectorInterfaceIIDM<IIDM::Generator>(generator, generator.id()),
-generatorIIDM_(generator) {
+    InjectorInterfaceIIDM<IIDM::Generator>(generator, generator.id()),
+    generatorIIDM_(generator) {
   setType(ComponentInterface::GENERATOR);
   stateVariables_.resize(3);
-  stateVariables_[VAR_P] = StateVariable("p", StateVariable::DOUBLE);  // P
-  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);  // Q
-  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);   // connectionState
+  stateVariables_[VAR_P] = StateVariable("p", StateVariable::DOUBLE);       // P
+  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);       // Q
+  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);  // connectionState
 }
 
 int
 GeneratorInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "p" )
+  if (varName == "p")
     index = VAR_P;
-  else if ( varName == "q" )
+  else if (varName == "q")
     index = VAR_Q;
-  else if ( varName == "state" )
+  else if (varName == "state")
     index = VAR_STATE;
   return index;
 }
@@ -169,9 +168,8 @@ GeneratorInterfaceIIDM::getPMax() {
 
 double
 GeneratorInterfaceIIDM::getTargetP() {
-  return - 1.0 * generatorIIDM_.targetP();
+  return -1.0 * generatorIIDM_.targetP();
 }
-
 
 double
 GeneratorInterfaceIIDM::getQ() {
@@ -185,7 +183,7 @@ GeneratorInterfaceIIDM::getQMax() {
   } else if (generatorIIDM_.has_reactiveCapabilityCurve()) {
     assert(generatorIIDM_.reactiveCapabilityCurve().size() > 0);
     double qMax = 0;
-    const double pGen = - getP();
+    const double pGen = -getP();
     const IIDM::ReactiveCapabilityCurve& reactiveCurve = generatorIIDM_.reactiveCapabilityCurve();
     if (pGen < reactiveCurve[0].p) {
       qMax = reactiveCurve[0].qmax;
@@ -194,7 +192,7 @@ GeneratorInterfaceIIDM::getQMax() {
     } else {
       for (unsigned int i = 0; i <= reactiveCurve.size() - 2; ++i) {
         IIDM::ReactiveCapabilityCurve::point current_point = reactiveCurve[i];
-        IIDM::ReactiveCapabilityCurve::point next_point = reactiveCurve[i+1];
+        IIDM::ReactiveCapabilityCurve::point next_point = reactiveCurve[i + 1];
         if (current_point.p <= pGen && next_point.p >= pGen) {
           qMax = current_point.qmax + (pGen - current_point.p) * (next_point.qmax - current_point.qmax) / (next_point.p - current_point.p);
         }
@@ -213,7 +211,7 @@ GeneratorInterfaceIIDM::getQMin() {
   } else if (generatorIIDM_.has_reactiveCapabilityCurve()) {
     assert(generatorIIDM_.reactiveCapabilityCurve().size() > 0);
     double qMin = 0;
-    const double pGen = - getP();
+    const double pGen = -getP();
     const IIDM::ReactiveCapabilityCurve& reactiveCurve = generatorIIDM_.reactiveCapabilityCurve();
     if (pGen < reactiveCurve[0].p) {
       qMin = reactiveCurve[0].qmin;
@@ -222,7 +220,7 @@ GeneratorInterfaceIIDM::getQMin() {
     } else {
       for (unsigned int i = 0; i <= reactiveCurve.size() - 2; ++i) {
         IIDM::ReactiveCapabilityCurve::point current_point = reactiveCurve[i];
-        IIDM::ReactiveCapabilityCurve::point next_point = reactiveCurve[i+1];
+        IIDM::ReactiveCapabilityCurve::point next_point = reactiveCurve[i + 1];
         if (current_point.p <= pGen && next_point.p >= pGen) {
           qMin = current_point.qmin + (pGen - current_point.p) * (next_point.qmin - current_point.qmin) / (next_point.p - current_point.p);
         }
@@ -237,7 +235,7 @@ GeneratorInterfaceIIDM::getQMin() {
 double
 GeneratorInterfaceIIDM::getTargetQ() {
   if (generatorIIDM_.has_targetQ()) {
-    return - 1.0 * generatorIIDM_.targetQ();
+    return -1.0 * generatorIIDM_.targetQ();
   } else {
     return 0;
   }
@@ -252,13 +250,13 @@ GeneratorInterfaceIIDM::getTargetV() {
   }
 }
 
-
 string
 GeneratorInterfaceIIDM::getID() const {
   return generatorIIDM_.id();
 }
 
-std::vector<GeneratorInterface::ReactiveCurvePoint> GeneratorInterfaceIIDM::getReactiveCurvesPoints() const {
+std::vector<GeneratorInterface::ReactiveCurvePoint>
+GeneratorInterfaceIIDM::getReactiveCurvesPoints() const {
   std::vector<GeneratorInterface::ReactiveCurvePoint> ret;
   if (generatorIIDM_.has_reactiveCapabilityCurve()) {
     const IIDM::ReactiveCapabilityCurve& reactiveCurve = generatorIIDM_.reactiveCapabilityCurve();
@@ -271,7 +269,8 @@ std::vector<GeneratorInterface::ReactiveCurvePoint> GeneratorInterfaceIIDM::getR
   return ret;
 }
 
-bool GeneratorInterfaceIIDM::isVoltageRegulationOn() const {
+bool
+GeneratorInterfaceIIDM::isVoltageRegulationOn() const {
   return generatorIIDM_.voltageRegulatorOn();
 }
 

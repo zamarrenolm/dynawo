@@ -18,31 +18,32 @@
  *
  */
 
-#include <string>
-
-#include <xml/sax/parser/ParserFactory.h>
-
 #include "DYNSimulationLauncher.h"
+
+#include "DYNExecUtils.h"
+#include "DYNFileSystemUtils.h"
 #include "DYNMacrosMessage.h"
-#include "DYNTrace.h"
 #include "DYNSimulation.h"
 #include "DYNSimulationContext.h"
-#include "DYNFileSystemUtils.h"
 #include "DYNTimer.h"
-#include "DYNExecUtils.h"
-#include "JOBXmlImporter.h"
+#include "DYNTrace.h"
 #include "JOBIterators.h"
-#include "JOBJobsCollection.h"
 #include "JOBJobEntry.h"
+#include "JOBJobsCollection.h"
 #include "JOBOutputsEntry.h"
+#include "JOBXmlImporter.h"
+
+#include <string>
+#include <xml/sax/parser/ParserFactory.h>
 
 namespace parser = xml::sax::parser;
 
-using DYN::Trace;
 using DYN::Simulation;
 using DYN::SimulationContext;
+using DYN::Trace;
 
-void launchSimu(const std::string& jobsFileName) {
+void
+launchSimu(const std::string& jobsFileName) {
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
   DYN::Timer timer("Main::LaunchSimu");
 #endif
@@ -54,9 +55,7 @@ void launchSimu(const std::string& jobsFileName) {
     throw DYNError(DYN::Error::SIMULATION, NoJobDefined);
   Trace::init();
 
-  for (job::job_iterator itJobEntry = jobsCollection->begin();
-      itJobEntry != jobsCollection->end();
-      ++itJobEntry) {
+  for (job::job_iterator itJobEntry = jobsCollection->begin(); itJobEntry != jobsCollection->end(); ++itJobEntry) {
     Trace::info() << DYNLog(LaunchingJob, (*itJobEntry)->getName()) << Trace::endline;
 
     boost::shared_ptr<SimulationContext> context = boost::shared_ptr<SimulationContext>(new SimulationContext());
@@ -75,13 +74,13 @@ void launchSimu(const std::string& jobsFileName) {
     } catch (const DYN::MessageError& e) {
       Trace::error() << e.what() << Trace::endline;
       throw;
-    } catch (const char *s) {
+    } catch (const char* s) {
       Trace::error() << s << Trace::endline;
       throw;
-    } catch (const std::string & Msg) {
+    } catch (const std::string& Msg) {
       Trace::error() << Msg << Trace::endline;
       throw;
-    } catch (std::exception & exc) {
+    } catch (std::exception& exc) {
       Trace::error() << exc.what() << Trace::endline;
       throw;
     }
@@ -104,15 +103,15 @@ void launchSimu(const std::string& jobsFileName) {
       Trace::error() << e.what() << Trace::endline;
       simulation->terminate();
       throw;
-    } catch (const char *s) {
+    } catch (const char* s) {
       Trace::error() << s << Trace::endline;
       simulation->terminate();
       throw;
-    } catch (const std::string & Msg) {
+    } catch (const std::string& Msg) {
       Trace::error() << Msg << Trace::endline;
       simulation->terminate();
       throw;
-    } catch (std::exception & exc) {
+    } catch (std::exception& exc) {
       Trace::error() << exc.what() << Trace::endline;
       simulation->terminate();
       throw;

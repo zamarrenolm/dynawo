@@ -17,25 +17,25 @@
  * @brief
  *
  */
-#include <limits>
-#include <iostream>
 #include "DYNModelCurrentLimits.h"
-#include "DYNModelNetwork.h"
+
 #include "DYNMacrosMessage.h"
 #include "DYNModelConstants.h"
+#include "DYNModelNetwork.h"
+
+#include <iostream>
+#include <limits>
 
 using std::string;
 
 namespace DYN {
 
-ModelCurrentLimits::ModelCurrentLimits() :
-nbTemporaryLimits_(0) {
+ModelCurrentLimits::ModelCurrentLimits() : nbTemporaryLimits_(0) {
   side_ = SIDE_UNDEFINED;
   maxTimeOperation_ = VALDEF;
 }
 
-ModelCurrentLimits::~ModelCurrentLimits() {
-}
+ModelCurrentLimits::~ModelCurrentLimits() {}
 
 int
 ModelCurrentLimits::sizeG() const {
@@ -78,14 +78,14 @@ ModelCurrentLimits::evalG(const double& t, const double& current, state_g* g, co
   for (unsigned int i = 0; i < limits_.size(); ++i) {
     g[0 + 2 * i] = (current > limits_[i] && !(desactivate > 0)) ? ROOT_UP : ROOT_DOWN;  // I > Imax
     if (openingAuthorized_[i])
-        g[1 + 2 * i] = (activated_[i] && t - tLimitReached_[i] > acceptableDurations_[i] && !(desactivate > 0)
-                        && acceptableDurations_[i] < maxTimeOperation_) ? ROOT_UP : ROOT_DOWN;   // t -tLim > tempo
+      g[1 + 2 * i] = (activated_[i] && t - tLimitReached_[i] > acceptableDurations_[i] && !(desactivate > 0) && acceptableDurations_[i] < maxTimeOperation_)
+                         ? ROOT_UP
+                         : ROOT_DOWN;  // t -tLim > tempo
   }
 }
 
 ModelCurrentLimits::state_t
-ModelCurrentLimits::evalZ(const string& componentName, const double& t, state_g* g, ModelNetwork* network, const double& desactivate,
-    const string& modelType) {
+ModelCurrentLimits::evalZ(const string& componentName, const double& t, state_g* g, ModelNetwork* network, const double& desactivate, const string& modelType) {
   state_t state = ModelCurrentLimits::COMPONENT_CLOSE;
 
   for (unsigned int i = 0; i < limits_.size(); ++i) {

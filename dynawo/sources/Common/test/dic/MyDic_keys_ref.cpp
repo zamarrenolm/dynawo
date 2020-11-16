@@ -12,10 +12,11 @@
 #include "MyDic_keys.h"
 namespace DYN {
 
-const char* Keyic_t::names(const value& v) {
+const char*
+Keyic_t::names(const value& v) {
   static const char* names[] = {
-    "MyLabel",
+      "MyLabel",
   };
   return names[v];
 };
-} //namespace DYN
+}  //namespace DYN

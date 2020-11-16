@@ -19,21 +19,20 @@
  *
  */
 //======================================================================
-#include <IIDM/components/VscConverterStation.h>
-
 #include "DYNVscConverterInterfaceIIDM.h"
 
-using std::string;
+#include <IIDM/components/VscConverterStation.h>
+
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 
-VscConverterInterfaceIIDM::~VscConverterInterfaceIIDM() {
-}
+VscConverterInterfaceIIDM::~VscConverterInterfaceIIDM() {}
 
 VscConverterInterfaceIIDM::VscConverterInterfaceIIDM(IIDM::VscConverterStation& vsc) :
-InjectorInterfaceIIDM<IIDM::VscConverterStation>(vsc, vsc.id()),
-vscConverterIIDM_(vsc) {
+    InjectorInterfaceIIDM<IIDM::VscConverterStation>(vsc, vsc.id()),
+    vscConverterIIDM_(vsc) {
   setType(ComponentInterface::VSC_CONVERTER);
 }
 
@@ -43,8 +42,7 @@ VscConverterInterfaceIIDM::getComponentVarIndex(const std::string& /*varName*/) 
 }
 
 void
-VscConverterInterfaceIIDM::exportStateVariablesUnitComponent() {
-}
+VscConverterInterfaceIIDM::exportStateVariablesUnitComponent() {}
 
 void
 VscConverterInterfaceIIDM::importStaticParameters() {

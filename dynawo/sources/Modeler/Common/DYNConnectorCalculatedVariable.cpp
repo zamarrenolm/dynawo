@@ -20,33 +20,31 @@
 
 #include "DYNConnectorCalculatedVariable.h"
 
-#include <iostream>
-#include <iomanip>
-
-#include "PARParametersSet.h"
-
-#include "DYNSparseMatrix.h"
-#include "DYNMacrosMessage.h"
-#include "DYNTrace.h"
 #include "DYNElement.h"
+#include "DYNMacrosMessage.h"
+#include "DYNSparseMatrix.h"
+#include "DYNTrace.h"
 #include "DYNVariableNative.h"
 #include "DYNVariableNativeFactory.h"
+#include "PARParametersSet.h"
 
+#include <iomanip>
+#include <iostream>
+
+using boost::shared_ptr;
+using std::map;
 using std::string;
 using std::stringstream;
 using std::vector;
-using std::map;
-using boost::shared_ptr;
 
 using parameters::ParametersSet;
 
 namespace DYN {
 
-ConnectorCalculatedVariable::ConnectorCalculatedVariable() :
-indexCalculatedVariable_(0) {
-}
+ConnectorCalculatedVariable::ConnectorCalculatedVariable() : indexCalculatedVariable_(0) {}
 
-void ConnectorCalculatedVariable::getSize() {
+void
+ConnectorCalculatedVariable::getSize() {
   sizeF_ = 1;
   sizeY_ = 1;
   sizeZ_ = 0;
@@ -115,7 +113,6 @@ void
 ConnectorCalculatedVariable::evalZ(const double& /*t*/) {
   // no discrete variable
 }
-
 
 void
 ConnectorCalculatedVariable::collectSilentZ(bool* /*silentZTable*/) {
@@ -208,7 +205,7 @@ ConnectorCalculatedVariable::defineVariablesInit(vector<boost::shared_ptr<Variab
 }
 
 void
-ConnectorCalculatedVariable::dumpParameters(map<string, string >& /*mapParameters*/) {
+ConnectorCalculatedVariable::dumpParameters(map<string, string>& /*mapParameters*/) {
   // no parameter
 }
 
@@ -218,7 +215,7 @@ ConnectorCalculatedVariable::getSubModelParameterValue(const string& /*nameParam
 }
 
 void
-ConnectorCalculatedVariable::dumpVariables(map<string, string >& /*mapVariables*/) {
+ConnectorCalculatedVariable::dumpVariables(map<string, string>& /*mapVariables*/) {
   // no variable
 }
 
@@ -236,6 +233,5 @@ void
 ConnectorCalculatedVariable::printInitValues(const string& /*directory*/) {
   // no initialization needed
 }
-
 
 }  // namespace DYN

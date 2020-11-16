@@ -19,43 +19,40 @@
  * SolverKINEuler is the implementation of a solver with euler method based on
  * kinsol solver.
  */
-#include <cmath>
-#include <string.h>
-#include <map>
 #include <algorithm>
+#include <cmath>
 #include <iomanip>
-#include <sstream>
-
 #include <kinsol/kinsol.h>
-#include <sunlinsol/sunlinsol_klu.h>
-#include <sundials/sundials_types.h>
+#include <map>
+#include <nvector/nvector_serial.h>
+#include <sstream>
+#include <string.h>
 #include <sundials/sundials_math.h>
 #include <sundials/sundials_sparse.h>
-#include <nvector/nvector_serial.h>
+#include <sundials/sundials_types.h>
+#include <sunlinsol/sunlinsol_klu.h>
 
 #ifdef WITH_NICSLU
 #include <sunlinsol/sunlinsol_nicslu.h>
 #endif
 
-#include "DYNSparseMatrix.h"
-#include "DYNSolverKINEuler.h"
-#include "DYNModel.h"
-#include "DYNTrace.h"
 #include "DYNMacrosMessage.h"
-#include "DYNTimer.h"
+#include "DYNModel.h"
 #include "DYNSolverCommon.h"
+#include "DYNSolverKINEuler.h"
+#include "DYNSparseMatrix.h"
+#include "DYNTimer.h"
+#include "DYNTrace.h"
 
-using std::vector;
+using boost::shared_ptr;
 using std::map;
 using std::string;
 using std::stringstream;
-using boost::shared_ptr;
+using std::vector;
 
 namespace DYN {
 
-SolverKINEuler::SolverKINEuler() :
-SolverKINCommon(),
-h0_(0.) { }
+SolverKINEuler::SolverKINEuler() : SolverKINCommon(), h0_(0.) {}
 
 SolverKINEuler::~SolverKINEuler() {
   clean();
@@ -63,7 +60,7 @@ SolverKINEuler::~SolverKINEuler() {
 
 void
 SolverKINEuler::init(const shared_ptr<Model>& model, const std::string& linearSolverName, double fnormtol, double initialaddtol, double scsteptol,
-        double mxnewtstep, int msbset, int mxiter, int printfl) {
+                     double mxnewtstep, int msbset, int mxiter, int printfl) {
   clean();
   model_ = model;
   linearSolverName_ = linearSolverName;
@@ -89,17 +86,17 @@ SolverKINEuler::init(const shared_ptr<Model>& model, const std::string& linearSo
 
 int
 SolverKINEuler::evalF_KIN(N_Vector yy, N_Vector rr, void* data) {
-  SolverKINEuler* solv = reinterpret_cast<SolverKINEuler*> (data);
+  SolverKINEuler* solv = reinterpret_cast<SolverKINEuler*>(data);
   shared_ptr<Model> mod = solv->getModel();
 
   // evalF has already been called in the scaling part so it doesn't have to be called again for the first iteration
-  realtype *irr = NV_DATA_S(rr);
+  realtype* irr = NV_DATA_S(rr);
   if (solv->getFirstIteration()) {
     solv->setFirstIteration(false);
     // copy of values in output vector
     memcpy(irr, &solv->F_[0], solv->F_.size() * sizeof(solv->F_[0]));
   } else {  // update of F
-    realtype *iyy = NV_DATA_S(yy);
+    realtype* iyy = NV_DATA_S(yy);
     const vector<int>& diffVar = solv->differentialVars_;
 
     // YP[i] = (y[i]-yprec[i])/h for each differential variable
@@ -112,7 +109,7 @@ SolverKINEuler::evalF_KIN(N_Vector yy, N_Vector rr, void* data) {
     } catch (const DYN::Error& e) {
       if (e.type() == DYN::Error::NUMERICAL_ERROR) {
 #ifdef _DEBUG_
-       Trace::debug() << e.what() << Trace::endline;
+        Trace::debug() << e.what() << Trace::endline;
 #endif
         return (-1);
       } else {
@@ -144,13 +141,12 @@ SolverKINEuler::evalF_KIN(N_Vector yy, N_Vector rr, void* data) {
 }
 
 int
-SolverKINEuler::evalJ_KIN(N_Vector /*yy*/, N_Vector /*rr*/,
-        SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
+SolverKINEuler::evalJ_KIN(N_Vector /*yy*/, N_Vector /*rr*/, SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
   Timer timer("SolverKINEuler::evalJ_KIN");
 #endif
 
-  SolverKINEuler* solv = reinterpret_cast<SolverKINEuler*> (data);
+  SolverKINEuler* solv = reinterpret_cast<SolverKINEuler*>(data);
   shared_ptr<Model> model = solv->getModel();
 
   // cj = 1/h
@@ -179,9 +175,9 @@ SolverKINEuler::solve(bool noInitSetup, bool skipAlgebraicResidualsEvaluation) {
 
   firstIteration_ = true;
   if (skipAlgebraicResidualsEvaluation)
-    model_->evalFDiff(t0_ + h0_ , &y0_[0], &YP_[0], &F_[0]);
+    model_->evalFDiff(t0_ + h0_, &y0_[0], &YP_[0], &F_[0]);
   else
-    model_->evalF(t0_ + h0_ , &y0_[0], &YP_[0], &F_[0]);
+    model_->evalF(t0_ + h0_, &y0_[0], &YP_[0], &F_[0]);
 
   fScale_.assign(nbF_, 1.0);
   for (unsigned int i = 0; i < nbF_; ++i) {

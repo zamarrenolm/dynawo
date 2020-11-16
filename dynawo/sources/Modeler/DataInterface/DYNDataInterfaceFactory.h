@@ -15,6 +15,7 @@
 #define MODELER_DATAINTERFACE_DYNDATAINTERFACEFACTORY_H_
 
 #include "DYNDataInterface.h"
+
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 

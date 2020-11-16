@@ -20,8 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNSWITCHINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNSWITCHINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
 #include "DYNSwitchInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class Switch;
@@ -35,9 +36,7 @@ class SwitchInterfaceIIDM : public SwitchInterface {
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_STATE = 0
-  } indexVar_t;
+  typedef enum { VAR_STATE = 0 } indexVar_t;
 
   /**
    * @brief Destructor
@@ -105,10 +104,10 @@ class SwitchInterfaceIIDM : public SwitchInterface {
   int getComponentVarIndex(const std::string& varName) const;
 
  private:
-  IIDM::Switch& switchIIDM_;  ///< reference to the iidm switch instance
+  IIDM::Switch& switchIIDM_;                       ///< reference to the iidm switch instance
   boost::shared_ptr<BusInterface> busInterface1_;  ///< busInterface of the bus where the side 1 of the switch is connected
   boost::shared_ptr<BusInterface> busInterface2_;  ///< busInterface of the bus where the side 2 of the switch is connected
-};  ///< class for switch model interface
+};                                                 ///< class for switch model interface
 }  // namespace DYN
 
 #endif  // MODELER_DATAINTERFACE_IIDM_DYNSWITCHINTERFACEIIDM_H_

@@ -22,10 +22,10 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNLCCCONVERTERINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNLCCCONVERTERINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
-#include "DYNLccConverterInterface.h"
 #include "DYNInjectorInterfaceIIDM.h"
+#include "DYNLccConverterInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class LccConverterStation;

@@ -11,42 +11,39 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/builders/HvdcLineBuilder.h>
-#include <IIDM/builders/VscConverterStationBuilder.h>
-#include <IIDM/builders/LccConverterStationBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/Network.h>
-#include <IIDM/components/VscConverterStation.h>
-#include <IIDM/components/LccConverterStation.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/HvdcLine.h>
-
-#include "DYNVoltageLevelInterfaceIIDM.h"
-#include "DYNVscConverterInterfaceIIDM.h"
-#include "DYNLccConverterInterfaceIIDM.h"
+#include "CSTRConstraint.h"
+#include "CSTRConstraintsCollection.h"
+#include "CSTRConstraintsCollectionFactory.h"
 #include "DYNBusInterfaceIIDM.h"
+#include "DYNHvdcLineInterfaceIIDM.h"
+#include "DYNLccConverterInterfaceIIDM.h"
+#include "DYNModelBus.h"
+#include "DYNModelHvdcLink.h"
+#include "DYNModelNetwork.h"
 #include "DYNModelVoltageLevel.h"
 #include "DYNNetworkInterfaceIIDM.h"
-#include "DYNHvdcLineInterfaceIIDM.h"
-#include "DYNModelVoltageLevel.h"
-#include "DYNModelBus.h"
-#include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
 #include "DYNSparseMatrix.h"
 #include "DYNVariable.h"
 #include "DYNVariableAlias.h"
-#include "CSTRConstraintsCollectionFactory.h"
-#include "CSTRConstraintsCollection.h"
-#include "CSTRConstraint.h"
-
-#include "DYNModelHvdcLink.h"
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "DYNVscConverterInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
+
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/HvdcLineBuilder.h>
+#include <IIDM/builders/LccConverterStationBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/builders/VscConverterStationBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/HvdcLine.h>
+#include <IIDM/components/LccConverterStation.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <IIDM/components/VscConverterStation.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -118,7 +115,6 @@ createModelHvdcLink(bool initModel, bool vsc, bool withP = true, bool withQ = tr
     networkIIDM.add(hvdc);
   }
 
-
   shared_ptr<NetworkInterfaceIIDM> networkItfIIDM = shared_ptr<NetworkInterfaceIIDM>(new NetworkInterfaceIIDM(networkIIDM));
   shared_ptr<VoltageLevelInterfaceIIDM> vlItfIIDM = shared_ptr<VoltageLevelInterfaceIIDM>(new VoltageLevelInterfaceIIDM(vlIIDM));
   shared_ptr<BusInterfaceIIDM> bus1ItfIIDM = shared_ptr<BusInterfaceIIDM>(new BusInterfaceIIDM(vlIIDM.get_bus("MyBus1")));
@@ -127,34 +123,33 @@ createModelHvdcLink(bool initModel, bool vsc, bool withP = true, bool withQ = tr
 
   ModelNetwork* network = new ModelNetwork();
   network->setIsInitModel(initModel);
-  boost::shared_ptr<constraints::ConstraintsCollection> constraints =
-      constraints::ConstraintsCollectionFactory::newInstance("MyConstraintsCollection");
+  boost::shared_ptr<constraints::ConstraintsCollection> constraints = constraints::ConstraintsCollectionFactory::newInstance("MyConstraintsCollection");
   network->setTimeline(timeline::TimelineFactory::newInstance("Test"));
   network->setConstraints(constraints);
   shared_ptr<ModelHvdcLink> hvdc;
   if (vsc) {
-    for (IIDM::Contains<IIDM::VscConverterStation>::iterator itVSC = vlIIDM.vscConverterStations().begin();
-        itVSC != vlIIDM.vscConverterStations().end(); ++itVSC) {
+    for (IIDM::Contains<IIDM::VscConverterStation>::iterator itVSC = vlIIDM.vscConverterStations().begin(); itVSC != vlIIDM.vscConverterStations().end();
+         ++itVSC) {
       shared_ptr<VscConverterInterfaceIIDM> vsc(new VscConverterInterfaceIIDM(*itVSC));
       vlItfIIDM->addVscConverter(vsc);
       vsc->setVoltageLevelInterface(vlItfIIDM);
       vsc->setBusInterface(bus1ItfIIDM);
     }
     const std::vector<shared_ptr<VscConverterInterface> >& vscConverters = vlItfIIDM->getVscConverters();
-    shared_ptr<HvdcLineInterfaceIIDM> hvdcItfIIDM = shared_ptr<HvdcLineInterfaceIIDM>(new HvdcLineInterfaceIIDM(networkIIDM.get_hvdcline("MyHvdcLine"),
-                                                                                      vscConverters[0], vscConverters[1]));
+    shared_ptr<HvdcLineInterfaceIIDM> hvdcItfIIDM =
+        shared_ptr<HvdcLineInterfaceIIDM>(new HvdcLineInterfaceIIDM(networkIIDM.get_hvdcline("MyHvdcLine"), vscConverters[0], vscConverters[1]));
     hvdc = shared_ptr<ModelHvdcLink>(new ModelHvdcLink(hvdcItfIIDM));
   } else {
-    for (IIDM::Contains<IIDM::LccConverterStation>::iterator itLCC = vlIIDM.lccConverterStations().begin();
-        itLCC != vlIIDM.lccConverterStations().end(); ++itLCC) {
+    for (IIDM::Contains<IIDM::LccConverterStation>::iterator itLCC = vlIIDM.lccConverterStations().begin(); itLCC != vlIIDM.lccConverterStations().end();
+         ++itLCC) {
       shared_ptr<LccConverterInterface> lcc(new LccConverterInterfaceIIDM(*itLCC));
       vlItfIIDM->addLccConverter(lcc);
       lcc->setVoltageLevelInterface(vlItfIIDM);
       lcc->setBusInterface(bus1ItfIIDM);
     }
     const std::vector<shared_ptr<LccConverterInterface> >& lccConverters = vlItfIIDM->getLccConverters();
-    shared_ptr<HvdcLineInterfaceIIDM> hvdcItfIIDM = shared_ptr<HvdcLineInterfaceIIDM>(new HvdcLineInterfaceIIDM(networkIIDM.get_hvdcline("MyHvdcLine"),
-                                                                                      lccConverters[0], lccConverters[1]));
+    shared_ptr<HvdcLineInterfaceIIDM> hvdcItfIIDM =
+        shared_ptr<HvdcLineInterfaceIIDM>(new HvdcLineInterfaceIIDM(networkIIDM.get_hvdcline("MyHvdcLine"), lccConverters[0], lccConverters[1]));
     hvdc = shared_ptr<ModelHvdcLink>(new ModelHvdcLink(hvdcItfIIDM));
   }
   hvdc->setNetwork(network);
@@ -201,7 +196,6 @@ createModelHvdcLink(bool initModel, bool vsc, bool withP = true, bool withQ = tr
   hvdc->setModelBus2(bus2);
   return std::make_pair(hvdc, vl);
 }
-
 
 TEST(ModelsModelNetwork, ModelNetworkHvdcLinkInitializationVCS) {
   std::pair<shared_ptr<ModelHvdcLink>, shared_ptr<ModelVoltageLevel> > p = createModelHvdcLink(false, VSC);

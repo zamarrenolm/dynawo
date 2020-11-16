@@ -53,8 +53,7 @@ class ModelPhaseTapChanger : public ModelTapChanger {
    * @param locked : is the tap changer locked ?
    * @param tfoClosed : is the transformer connected ?
    */
-  void evalG(double t, double iValue, bool nodeOff, state_g* g, double disable,
-             double locked, bool tfoClosed);
+  void evalG(double t, double iValue, bool nodeOff, state_g* g, double disable, double locked, bool tfoClosed);
 
   /**
    * @brief  evaluate discrete values
@@ -67,29 +66,34 @@ class ModelPhaseTapChanger : public ModelTapChanger {
    * @param locked : is the tap changer locked ?
    * @param tfoClosed :is the transformer connected ?
    */
-  void evalZ(double t, state_g* g, ModelNetwork* network, double disable,
-             bool P1SupP2, double locked, bool tfoClosed);
+  void evalZ(double t, state_g* g, ModelNetwork* network, double disable, bool P1SupP2, double locked, bool tfoClosed);
 
   /**
    * @brief  get the size of the local G function
    *
    * @return size of G function
    */
-  inline int sizeG() const { return 6; }
+  inline int sizeG() const {
+    return 6;
+  }
 
   /**
    * @brief  get size of discrete variables
    *
    * @return number of discrete variables
    */
-  inline int sizeZ() const { return 0; }
+  inline int sizeZ() const {
+    return 0;
+  }
 
   /**
    * @brief set the current threshold over which the current should not go
    *
    * @param threshold current threshold
    */
-  inline void setThresholdI(double threshold) { thresholdI_ = threshold; }
+  inline void setThresholdI(double threshold) {
+    thresholdI_ = threshold;
+  }
 
  private:
   /**
@@ -101,14 +105,14 @@ class ModelPhaseTapChanger : public ModelTapChanger {
   bool getIncreaseTap(bool P1SupP2) const;
 
  private:
-  double thresholdI_;  ///< threshold of I
-  double whenUp_;      ///< when the current reached a value over the threshold
-  double whenDown_;    ///< when the current reached a value under the threshold
-  double whenLastTap_;  ///< last time when a tap changer
-  bool moveUp_;         ///< @b true if tap should be increased
-  bool moveDown_;       ///< @b false if tap should be decreased
-  int tapRefDown_;      ///< initial tap when trying to decrease tap
-  int tapRefUp_;        ///<  initial tap when trying to increase tap
+  double thresholdI_;               ///< threshold of I
+  double whenUp_;                   ///< when the current reached a value over the threshold
+  double whenDown_;                 ///< when the current reached a value under the threshold
+  double whenLastTap_;              ///< last time when a tap changer
+  bool moveUp_;                     ///< @b true if tap should be increased
+  bool moveDown_;                   ///< @b false if tap should be decreased
+  int tapRefDown_;                  ///< initial tap when trying to decrease tap
+  int tapRefUp_;                    ///<  initial tap when trying to increase tap
   bool currentOverThresholdState_;  ///< @b true if the current is over the
                                     ///< threshold
 };

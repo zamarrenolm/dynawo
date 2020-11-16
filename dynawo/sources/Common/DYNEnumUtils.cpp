@@ -18,9 +18,9 @@
  *
  */
 
-#include "DYNMacrosMessage.h"
-
 #include "DYNEnumUtils.h"
+
+#include "DYNMacrosMessage.h"
 
 using std::string;
 
@@ -29,16 +29,16 @@ namespace DYN {
 string
 modeChangeType2Str(const modeChangeType_t& modeChangeType) {
   switch (modeChangeType) {
-    case NO_MODE:
-      return "No mode change";
-    case DIFFERENTIAL_MODE:
-      return "Differential mode change";
-    case ALGEBRAIC_MODE:
-      return "Algebraic mode change";
-    case ALGEBRAIC_J_UPDATE_MODE:
-      return "Algebraic mode (with J recalculation) change";
-    default:
-      assert(0 && "Mode change type should be one of the enum values");
+  case NO_MODE:
+    return "No mode change";
+  case DIFFERENTIAL_MODE:
+    return "Differential mode change";
+  case ALGEBRAIC_MODE:
+    return "Algebraic mode change";
+  case ALGEBRAIC_J_UPDATE_MODE:
+    return "Algebraic mode (with J recalculation) change";
+  default:
+    assert(0 && "Mode change type should be one of the enum values");
   }
   return "";
 }
@@ -46,18 +46,18 @@ modeChangeType2Str(const modeChangeType_t& modeChangeType) {
 string
 propertyVar2Str(const propertyContinuousVar_t& property) {
   switch (property) {
-    case DIFFERENTIAL:
-      return "DIFFERENTIAL";
-    case ALGEBRAIC:
-      return "ALGEBRAIC";
-    case EXTERNAL:
-      return "EXTERNAL";
-    case OPTIONAL_EXTERNAL:
-      return "OPTIONAL_EXTERNAL";
-    case UNDEFINED_PROPERTY:
-      return "UNDEFINED";
-    default:
-      assert(0 && "Property should be one of the enum values");
+  case DIFFERENTIAL:
+    return "DIFFERENTIAL";
+  case ALGEBRAIC:
+    return "ALGEBRAIC";
+  case EXTERNAL:
+    return "EXTERNAL";
+  case OPTIONAL_EXTERNAL:
+    return "OPTIONAL_EXTERNAL";
+  case UNDEFINED_PROPERTY:
+    return "UNDEFINED";
+  default:
+    assert(0 && "Property should be one of the enum values");
   }
   return "";
 }
@@ -65,52 +65,54 @@ propertyVar2Str(const propertyContinuousVar_t& property) {
 string
 typeVar2Str(const typeVar_t& type) {
   switch (type) {
-    case DISCRETE:
-      return "DISCRETE";
-    case CONTINUOUS:
-      return "CONTINUOUS";
-    case FLOW:
-      return "FLOW";
-    case INTEGER:
-      return "INTEGER";
-    case BOOLEAN:
-      return "BOOLEAN";
-    case UNDEFINED_TYPE:
-      return "UNDEFINED";
-    default:
-      assert(0 && "TypeVar should be one of the enum values");
+  case DISCRETE:
+    return "DISCRETE";
+  case CONTINUOUS:
+    return "CONTINUOUS";
+  case FLOW:
+    return "FLOW";
+  case INTEGER:
+    return "INTEGER";
+  case BOOLEAN:
+    return "BOOLEAN";
+  case UNDEFINED_TYPE:
+    return "UNDEFINED";
+  default:
+    assert(0 && "TypeVar should be one of the enum values");
   }
   return "";
 }
 
-typeVarC_t toCTypeVar(const typeVar_t& type) {
+typeVarC_t
+toCTypeVar(const typeVar_t& type) {
   switch (type) {
-    case DISCRETE:
-    case CONTINUOUS:
-    case FLOW:
-      return VAR_TYPE_DOUBLE;
-    case INTEGER:
-      return VAR_TYPE_INT;
-    case BOOLEAN:
-      return VAR_TYPE_BOOL;
-    case UNDEFINED_TYPE:
-      assert(0 && "TypeVar undefined");
-    default:
-      assert(0 && "TypeVar should be one of the enum values");
+  case DISCRETE:
+  case CONTINUOUS:
+  case FLOW:
+    return VAR_TYPE_DOUBLE;
+  case INTEGER:
+    return VAR_TYPE_INT;
+  case BOOLEAN:
+    return VAR_TYPE_BOOL;
+  case UNDEFINED_TYPE:
+    assert(0 && "TypeVar undefined");
+  default:
+    assert(0 && "TypeVar should be one of the enum values");
   }
   return VAR_TYPE_DOUBLE;
 }
 
-string paramScope2Str(const parameterScope_t& scope) {
+string
+paramScope2Str(const parameterScope_t& scope) {
   switch (scope) {
-    case EXTERNAL_PARAMETER:
-      return "external parameter";
-    case SHARED_PARAMETER:
-      return "shared parameter";
-    case INTERNAL_PARAMETER:
-      return "internal parameter";
-    default:
-      assert(0 && "Parameter scope should be one of the enum values");
+  case EXTERNAL_PARAMETER:
+    return "external parameter";
+  case SHARED_PARAMETER:
+    return "shared parameter";
+  case INTERNAL_PARAMETER:
+    return "internal parameter";
+  default:
+    assert(0 && "Parameter scope should be one of the enum values");
   }
   return "";
 }

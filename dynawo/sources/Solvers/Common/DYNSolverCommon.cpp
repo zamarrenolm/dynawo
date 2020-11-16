@@ -17,12 +17,12 @@
  * @brief Common utility method shared between all solvers
  *
  */
-#include <iostream>
-#include <string.h>
-#include <stdlib.h>
 #include <cmath>
-#include <sunmatrix/sunmatrix_sparse.h>
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
 #include <sunlinsol/sunlinsol_klu.h>
+#include <sunmatrix/sunmatrix_sparse.h>
 
 #ifdef WITH_NICSLU
 #include <sunlinsol/sunlinsol_nicslu.h>
@@ -37,16 +37,16 @@
 namespace DYN {
 
 bool
-SolverCommon::copySparseToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int& size, sunindextype * lastRowVals) {
+SolverCommon::copySparseToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int& size, sunindextype* lastRowVals) {
   bool matrixStructChange = false;
   if (SM_NNZ_S(JJ) < smj.nbElem()) {
     free(SM_INDEXPTRS_S(JJ));
     free(SM_INDEXVALS_S(JJ));
     free(SM_DATA_S(JJ));
     SM_NNZ_S(JJ) = smj.nbElem();
-    SM_INDEXPTRS_S(JJ) = reinterpret_cast<sunindextype*> (malloc((size + 1) * sizeof (sunindextype)));
-    SM_INDEXVALS_S(JJ) = reinterpret_cast<sunindextype*> (malloc(SM_NNZ_S(JJ) * sizeof (sunindextype)));
-    SM_DATA_S(JJ) = reinterpret_cast<realtype*> (malloc(SM_NNZ_S(JJ) * sizeof (realtype)));
+    SM_INDEXPTRS_S(JJ) = reinterpret_cast<sunindextype*>(malloc((size + 1) * sizeof(sunindextype)));
+    SM_INDEXVALS_S(JJ) = reinterpret_cast<sunindextype*>(malloc(SM_NNZ_S(JJ) * sizeof(sunindextype)));
+    SM_DATA_S(JJ) = reinterpret_cast<realtype*>(malloc(SM_NNZ_S(JJ) * sizeof(realtype)));
     matrixStructChange = true;
   }
 
@@ -58,11 +58,11 @@ SolverCommon::copySparseToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const i
   }
   for (unsigned i = 0, iEnd = smj.nbElem(); i < iEnd; ++i) {
     SM_INDEXVALS_S(JJ)[i] = smj.Ai_[i];  //!!! implicit conversion from int to sunindextype
-    SM_DATA_S(JJ)[i] = smj.Ax_[i];  //!!! implicit conversion from double to realtype
+    SM_DATA_S(JJ)[i] = smj.Ax_[i];       //!!! implicit conversion from double to realtype
   }
 
   if (lastRowVals != NULL) {
-    if (memcmp(lastRowVals, SM_INDEXVALS_S(JJ), sizeof (sunindextype)*SM_NNZ_S(JJ)) != 0) {
+    if (memcmp(lastRowVals, SM_INDEXVALS_S(JJ), sizeof(sunindextype) * SM_NNZ_S(JJ)) != 0) {
       matrixStructChange = true;
     }
   } else {  // first time or size change
@@ -72,8 +72,9 @@ SolverCommon::copySparseToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const i
   return matrixStructChange;
 }
 
-void SolverCommon::propagateMatrixStructureChangeToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int& size, sunindextype* lastRowVals,
-                                                          SUNLinearSolver& LS, const std::string& linearSolverName, bool log) {
+void
+SolverCommon::propagateMatrixStructureChangeToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int& size, sunindextype* lastRowVals, SUNLinearSolver& LS,
+                                                     const std::string& linearSolverName, bool log) {
   bool matrixStructChange = copySparseToKINSOL(smj, JJ, size, lastRowVals);
 
   if (matrixStructChange) {
@@ -84,21 +85,20 @@ void SolverCommon::propagateMatrixStructureChangeToKINSOL(const SparseMatrix& sm
       SUNLinSol_NICSLUReInit(LS, JJ, SM_NNZ_S(JJ), 2);  // reinit symbolic factorisation
     }
 #else
-  }
+    }
 #endif
     if (lastRowVals != NULL) {
       free(lastRowVals);
     }
-    lastRowVals = reinterpret_cast<sunindextype*> (malloc(sizeof (sunindextype)*SM_NNZ_S(JJ)));
-    memcpy(lastRowVals, SM_INDEXVALS_S(JJ), sizeof (sunindextype)*SM_NNZ_S(JJ));
+    lastRowVals = reinterpret_cast<sunindextype*>(malloc(sizeof(sunindextype) * SM_NNZ_S(JJ)));
+    memcpy(lastRowVals, SM_INDEXVALS_S(JJ), sizeof(sunindextype) * SM_NNZ_S(JJ));
     if (log)
       Trace::debug() << DYNLog(MatrixStructureChange) << Trace::endline;
   }
 }
 
 void
-SolverCommon::printLargestErrors(std::vector<std::pair<double, size_t> >& fErr, const boost::shared_ptr<Model>& model,
-                   int nbErr) {
+SolverCommon::printLargestErrors(std::vector<std::pair<double, size_t> >& fErr, const boost::shared_ptr<Model>& model, int nbErr) {
   std::sort(fErr.begin(), fErr.end(), mapcompabs());
 
   for (int i = 0; i < nbErr; ++i) {
@@ -108,12 +108,12 @@ SolverCommon::printLargestErrors(std::vector<std::pair<double, size_t> >& fErr, 
     std::pair<double, size_t> currentErr = fErr[i];
     model->getFInfos(currentErr.second, subModelName, subModelIndexF, fEquation);
 
-    Trace::debug() << DYNLog(KinErrorValue, currentErr.second, currentErr.first,
-                             subModelName, subModelIndexF, fEquation) << Trace::endline;
+    Trace::debug() << DYNLog(KinErrorValue, currentErr.second, currentErr.first, subModelName, subModelIndexF, fEquation) << Trace::endline;
   }
 }
 
-double SolverCommon::weightedInfinityNorm(const std::vector<double>& vec, const std::vector<double>& weights) {
+double
+SolverCommon::weightedInfinityNorm(const std::vector<double>& vec, const std::vector<double>& weights) {
   assert(vec.size() == weights.size() && "Vectors must have same length.");
   double norm = 0.;
   double product = 0.;
@@ -126,7 +126,8 @@ double SolverCommon::weightedInfinityNorm(const std::vector<double>& vec, const 
   return norm;
 }
 
-double SolverCommon::weightedL2Norm(const std::vector<double>& vec, const std::vector<double>& weights) {
+double
+SolverCommon::weightedL2Norm(const std::vector<double>& vec, const std::vector<double>& weights) {
   assert(vec.size() == weights.size() && "Vectors must have same length.");
   double squared_norm = 0.;
   for (unsigned int i = 0; i < vec.size(); ++i) {
@@ -135,7 +136,8 @@ double SolverCommon::weightedL2Norm(const std::vector<double>& vec, const std::v
   return std::sqrt(squared_norm);
 }
 
-double SolverCommon::weightedInfinityNorm(const std::vector<double>& vec, const std::vector<int>& vec_index, const std::vector<double>& weights) {
+double
+SolverCommon::weightedInfinityNorm(const std::vector<double>& vec, const std::vector<int>& vec_index, const std::vector<double>& weights) {
   assert(vec_index.size() == weights.size() && "Weights and indices must have same length.");
   double norm = 0.;
   double product = 0.;
@@ -148,7 +150,8 @@ double SolverCommon::weightedInfinityNorm(const std::vector<double>& vec, const 
   return norm;
 }
 
-double SolverCommon::weightedL2Norm(const std::vector<double>& vec, const std::vector<int>& vec_index, const std::vector<double>& weights) {
+double
+SolverCommon::weightedL2Norm(const std::vector<double>& vec, const std::vector<int>& vec_index, const std::vector<double>& weights) {
   assert(vec_index.size() == weights.size() && "Weights and indices must have same length.");
   double squared_norm = 0.;
   for (unsigned int i = 0; i < vec_index.size(); ++i) {

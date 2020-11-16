@@ -17,24 +17,22 @@
  * @brief  Switch data interface : implementation file for IIDM implementation
  *
  */
-#include <IIDM/components/Switch.h>
-
 #include "DYNSwitchInterfaceIIDM.h"
-#include "DYNBusInterface.h"
-#include "DYNStateVariable.h"
-#include "DYNModelConstants.h"
 
+#include "DYNBusInterface.h"
+#include "DYNModelConstants.h"
+#include "DYNStateVariable.h"
+
+#include <IIDM/components/Switch.h>
 
 using boost::shared_ptr;
 using std::string;
 
 namespace DYN {
 
-SwitchInterfaceIIDM::~SwitchInterfaceIIDM() {
-}
+SwitchInterfaceIIDM::~SwitchInterfaceIIDM() {}
 
-SwitchInterfaceIIDM::SwitchInterfaceIIDM(IIDM::Switch& sw) :
-switchIIDM_(sw) {
+SwitchInterfaceIIDM::SwitchInterfaceIIDM(IIDM::Switch& sw) : switchIIDM_(sw) {
   setType(ComponentInterface::SWITCH);
   stateVariables_.resize(1);
   stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);  // isOpen
@@ -73,7 +71,7 @@ SwitchInterfaceIIDM::getBusInterface2() const {
 int
 SwitchInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "state" )
+  if (varName == "state")
     index = VAR_STATE;
   return index;
 }

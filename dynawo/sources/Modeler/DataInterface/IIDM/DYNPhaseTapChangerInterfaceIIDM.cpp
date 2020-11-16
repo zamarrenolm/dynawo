@@ -17,107 +17,105 @@
  * @brief Phase tap changer data interface : implementation file for IIDM implementation
  *
  */
-#include <IIDM/components/TapChanger.h>
-
 #include "DYNPhaseTapChangerInterfaceIIDM.h"
+
 #include "DYNStepInterfaceIIDM.h"
 
-using std::vector;
+#include <IIDM/components/TapChanger.h>
+
 using boost::shared_ptr;
+using std::vector;
 
 namespace DYN {
 
-  PhaseTapChangerInterfaceIIDM::PhaseTapChangerInterfaceIIDM(IIDM::PhaseTapChanger& tapChanger) :
-  tapChangerIIDM_(tapChanger) {
-  }
+PhaseTapChangerInterfaceIIDM::PhaseTapChangerInterfaceIIDM(IIDM::PhaseTapChanger& tapChanger) : tapChangerIIDM_(tapChanger) {}
 
-  PhaseTapChangerInterfaceIIDM::~PhaseTapChangerInterfaceIIDM() {
-  }
+PhaseTapChangerInterfaceIIDM::~PhaseTapChangerInterfaceIIDM() {}
 
-  void
-  PhaseTapChangerInterfaceIIDM::addStep(const shared_ptr<StepInterface>& step) {
-    steps_.push_back(step);
-  }
+void
+PhaseTapChangerInterfaceIIDM::addStep(const shared_ptr<StepInterface>& step) {
+  steps_.push_back(step);
+}
 
-  vector<shared_ptr<StepInterface> >
-  PhaseTapChangerInterfaceIIDM::getSteps() const {
-    return steps_;
-  }
+vector<shared_ptr<StepInterface> >
+PhaseTapChangerInterfaceIIDM::getSteps() const {
+  return steps_;
+}
 
-  int
-  PhaseTapChangerInterfaceIIDM::getCurrentPosition() const {
-    return tapChangerIIDM_.tapPosition();
-  }
+int
+PhaseTapChangerInterfaceIIDM::getCurrentPosition() const {
+  return tapChangerIIDM_.tapPosition();
+}
 
-  void
-  PhaseTapChangerInterfaceIIDM::setCurrentPosition(const int& position) {
-    tapChangerIIDM_.tapPosition(position);
-  }
+void
+PhaseTapChangerInterfaceIIDM::setCurrentPosition(const int& position) {
+  tapChangerIIDM_.tapPosition(position);
+}
 
-  int
-  PhaseTapChangerInterfaceIIDM::getLowPosition() const {
-    return tapChangerIIDM_.lowTapPosition();
-  }
+int
+PhaseTapChangerInterfaceIIDM::getLowPosition() const {
+  return tapChangerIIDM_.lowTapPosition();
+}
 
-  unsigned int
-  PhaseTapChangerInterfaceIIDM::getNbTap() const {
-    return steps_.size();
-  }
+unsigned int
+PhaseTapChangerInterfaceIIDM::getNbTap() const {
+  return steps_.size();
+}
 
-  bool
-  PhaseTapChangerInterfaceIIDM::isCurrentLimiter() const {
-    return tapChangerIIDM_.regulationMode() == IIDM::PhaseTapChanger::mode_current_limiter;
-  }
+bool
+PhaseTapChangerInterfaceIIDM::isCurrentLimiter() const {
+  return tapChangerIIDM_.regulationMode() == IIDM::PhaseTapChanger::mode_current_limiter;
+}
 
-  bool
-  PhaseTapChangerInterfaceIIDM::getRegulating() const {
-    if (!tapChangerIIDM_.has_regulating())
-      return false;
-    return tapChangerIIDM_.regulating();
-  }
+bool
+PhaseTapChangerInterfaceIIDM::getRegulating() const {
+  if (!tapChangerIIDM_.has_regulating())
+    return false;
+  return tapChangerIIDM_.regulating();
+}
 
-  double
-  PhaseTapChangerInterfaceIIDM::getThresholdI() const {
-    if (!tapChangerIIDM_.has_regulationValue()) {
-      return 99999;
-    }
-    return tapChangerIIDM_.regulationValue();
+double
+PhaseTapChangerInterfaceIIDM::getThresholdI() const {
+  if (!tapChangerIIDM_.has_regulationValue()) {
+    return 99999;
   }
+  return tapChangerIIDM_.regulationValue();
+}
 
-  double
-  PhaseTapChangerInterfaceIIDM::getCurrentR() const {
-    int currentStep = tapChangerIIDM_.tapPosition();
-    return steps_[currentStep]->getR();
-  }
+double
+PhaseTapChangerInterfaceIIDM::getCurrentR() const {
+  int currentStep = tapChangerIIDM_.tapPosition();
+  return steps_[currentStep]->getR();
+}
 
-  double
-  PhaseTapChangerInterfaceIIDM::getCurrentX() const {
-    int currentStep = tapChangerIIDM_.tapPosition();
-    return steps_[currentStep]->getX();
-  }
+double
+PhaseTapChangerInterfaceIIDM::getCurrentX() const {
+  int currentStep = tapChangerIIDM_.tapPosition();
+  return steps_[currentStep]->getX();
+}
 
-  double
-  PhaseTapChangerInterfaceIIDM::getCurrentB() const {
-    int currentStep = tapChangerIIDM_.tapPosition();
-    return steps_[currentStep]->getB();
-  }
+double
+PhaseTapChangerInterfaceIIDM::getCurrentB() const {
+  int currentStep = tapChangerIIDM_.tapPosition();
+  return steps_[currentStep]->getB();
+}
 
-  double
-  PhaseTapChangerInterfaceIIDM::getCurrentG() const {
-    int currentStep = tapChangerIIDM_.tapPosition();
-    return steps_[currentStep]->getG();
-  }
+double
+PhaseTapChangerInterfaceIIDM::getCurrentG() const {
+  int currentStep = tapChangerIIDM_.tapPosition();
+  return steps_[currentStep]->getG();
+}
 
-  double
-  PhaseTapChangerInterfaceIIDM::getCurrentRho() const {
-    int currentStep = tapChangerIIDM_.tapPosition();
-    return steps_[currentStep]->getRho();
-  }
+double
+PhaseTapChangerInterfaceIIDM::getCurrentRho() const {
+  int currentStep = tapChangerIIDM_.tapPosition();
+  return steps_[currentStep]->getRho();
+}
 
-  double
-  PhaseTapChangerInterfaceIIDM::getCurrentAlpha() const {
-    int currentStep = tapChangerIIDM_.tapPosition();
-    return steps_[currentStep]->getAlpha();
-  }
+double
+PhaseTapChangerInterfaceIIDM::getCurrentAlpha() const {
+  int currentStep = tapChangerIIDM_.tapPosition();
+  return steps_[currentStep]->getAlpha();
+}
 
 }  // namespace DYN

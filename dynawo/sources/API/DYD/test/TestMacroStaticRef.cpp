@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYDMacroStaticRefFactory.h"
 #include "DYDMacroStaticRef.h"
+#include "DYDMacroStaticRefFactory.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 

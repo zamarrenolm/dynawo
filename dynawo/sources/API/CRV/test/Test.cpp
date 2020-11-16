@@ -17,15 +17,14 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
+#include "CRVCsvExporter.h"
 #include "CRVCurve.h"
 #include "CRVCurveFactory.h"
-#include "CRVPoint.h"
-#include "CRVCurvesCollectionFactory.h"
 #include "CRVCurvesCollection.h"
+#include "CRVCurvesCollectionFactory.h"
+#include "CRVPoint.h"
 #include "CRVXmlExporter.h"
-#include "CRVCsvExporter.h"
+#include "gtest_dynawo.h"
 
 namespace curves {
 
@@ -49,9 +48,7 @@ TEST(APICRVTest, test1) {
   variables.assign(2, 0);
 
   int i = 0;
-  for (CurvesCollection::iterator itCurve = curves->begin();
-          itCurve != curves->end();
-          ++itCurve) {
+  for (CurvesCollection::iterator itCurve = curves->begin(); itCurve != curves->end(); ++itCurve) {
     (*itCurve)->setFoundVariableName("model_variable");
     (*itCurve)->setBuffer(&variables[i]);
     if (i == 0)
@@ -64,7 +61,7 @@ TEST(APICRVTest, test1) {
   // simulate curve and curve update
   for (int i = 0; i < 10; ++i) {
     variables[0] = i;
-    variables[1] = i*i;
+    variables[1] = i * i;
     int currentTime = i * 10;
 
     curves->updateCurves(currentTime);

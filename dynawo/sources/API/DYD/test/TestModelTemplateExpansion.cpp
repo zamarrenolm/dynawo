@@ -17,19 +17,17 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
 #include "DYDDynamicModelsCollectionFactory.h"
-#include "DYDModelTemplateExpansionFactory.h"
-#include "DYDModelTemplateExpansion.h"
-#include "DYDXmlImporter.h"
-#include "DYDXmlExporter.h"
 #include "DYDIterators.h"
-#include "DYDMacroStaticRefFactory.h"
-#include "DYDStaticRef.h"
 #include "DYDMacroStaticRef.h"
-
+#include "DYDMacroStaticRefFactory.h"
+#include "DYDModelTemplateExpansion.h"
+#include "DYDModelTemplateExpansionFactory.h"
+#include "DYDStaticRef.h"
+#include "DYDXmlExporter.h"
+#include "DYDXmlImporter.h"
 #include "TestUtil.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 //-----------------------------------------------------

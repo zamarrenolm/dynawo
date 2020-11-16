@@ -17,8 +17,8 @@
  *
  */
 
-#include "gtest_dynawo.h"
 #include "DYNStaticParameter.h"
+#include "gtest_dynawo.h"
 
 namespace DYN {
 
@@ -45,7 +45,6 @@ TEST(DataInterfaceTest, testStaticParameter) {
   ASSERT_THROW_DYNAWO(intParameter.setValue(false), Error::MODELER, KeyError_t::StaticParameterWrongType);
   ASSERT_THROW_DYNAWO(intParameter.setValue(1.1), Error::MODELER, KeyError_t::StaticParameterWrongType);
 
-
   // check for double type
   StaticParameter doubleParameter("doubleParameter", StaticParameter::DOUBLE);
   ASSERT_EQ(doubleParameter.getType(), StaticParameter::DOUBLE);
@@ -60,7 +59,6 @@ TEST(DataInterfaceTest, testStaticParameter) {
 
   ASSERT_THROW_DYNAWO(doubleParameter.setValue(false), Error::MODELER, KeyError_t::StaticParameterWrongType);
   ASSERT_THROW_DYNAWO(doubleParameter.setValue(static_cast<int>(1)), Error::MODELER, KeyError_t::StaticParameterWrongType);
-
 
   // check for boolean type
   StaticParameter boolParameter("boolParameter", StaticParameter::BOOL);

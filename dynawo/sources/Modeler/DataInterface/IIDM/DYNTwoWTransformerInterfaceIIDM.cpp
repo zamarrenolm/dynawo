@@ -17,22 +17,22 @@
  * @brief Two windings transformer data interface : implementation file for IIDM implementation
  *
  */
-#include <IIDM/components/Transformer2Windings.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/BasicTypes.h>
-
-#include "DYNCommon.h"
 #include "DYNTwoWTransformerInterfaceIIDM.h"
+
+#include "DYNBusInterface.h"
+#include "DYNCommon.h"
+#include "DYNModelConstants.h"
 #include "DYNPhaseTapChangerInterfaceIIDM.h"
 #include "DYNRatioTapChangerInterfaceIIDM.h"
-#include "DYNStepInterfaceIIDM.h"
-#include "DYNBusInterface.h"
-#include "DYNVoltageLevelInterface.h"
 #include "DYNStateVariable.h"
-#include "DYNModelConstants.h"
-
+#include "DYNStepInterfaceIIDM.h"
 #include "DYNTrace.h"
+#include "DYNVoltageLevelInterface.h"
+
+#include <IIDM/BasicTypes.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/Transformer2Windings.h>
+#include <IIDM/components/VoltageLevel.h>
 
 using boost::shared_ptr;
 using std::string;
@@ -41,21 +41,20 @@ using std::vector;
 namespace DYN {
 
 TwoWTransformerInterfaceIIDM::TwoWTransformerInterfaceIIDM(IIDM::Transformer2Windings& tfo) :
-tfoIIDM_(tfo),
-initialConnected1_(boost::none),
-initialConnected2_(boost::none) {
+    tfoIIDM_(tfo),
+    initialConnected1_(boost::none),
+    initialConnected2_(boost::none) {
   setType(ComponentInterface::TWO_WTFO);
   stateVariables_.resize(6);
-  stateVariables_[VAR_P1] = StateVariable("p1", StateVariable::DOUBLE);  // P1
-  stateVariables_[VAR_P2] = StateVariable("p2", StateVariable::DOUBLE);  // P2
-  stateVariables_[VAR_Q1] = StateVariable("q1", StateVariable::DOUBLE);  // Q1
-  stateVariables_[VAR_Q2] = StateVariable("q2", StateVariable::DOUBLE);  // Q2
+  stateVariables_[VAR_P1] = StateVariable("p1", StateVariable::DOUBLE);     // P1
+  stateVariables_[VAR_P2] = StateVariable("p2", StateVariable::DOUBLE);     // P2
+  stateVariables_[VAR_Q1] = StateVariable("q1", StateVariable::DOUBLE);     // Q1
+  stateVariables_[VAR_Q2] = StateVariable("q2", StateVariable::DOUBLE);     // Q2
   stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);  // connectionState
   stateVariables_[VAR_TAPINDEX] = StateVariable("tapIndex", StateVariable::INT);
 }
 
-TwoWTransformerInterfaceIIDM::~TwoWTransformerInterfaceIIDM() {
-}
+TwoWTransformerInterfaceIIDM::~TwoWTransformerInterfaceIIDM() {}
 
 void
 TwoWTransformerInterfaceIIDM::setBusInterface1(const shared_ptr<BusInterface>& busInterface) {
@@ -211,17 +210,17 @@ TwoWTransformerInterfaceIIDM::getCurrentLimitInterfaces2() const {
 int
 TwoWTransformerInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "p1" )
+  if (varName == "p1")
     index = VAR_P1;
-  else if ( varName == "q1" )
+  else if (varName == "q1")
     index = VAR_Q1;
-  else if ( varName == "p2" )
+  else if (varName == "p2")
     index = VAR_P2;
-  else if ( varName == "q2" )
+  else if (varName == "q2")
     index = VAR_Q2;
-  else if ( varName == "state" )
+  else if (varName == "state")
     index = VAR_STATE;
-  else if ( varName == "tapIndex" )
+  else if (varName == "tapIndex")
     index = VAR_TAPINDEX;
   return index;
 }
@@ -236,7 +235,7 @@ TwoWTransformerInterfaceIIDM::exportStateVariablesUnitComponent() {
 
   if (getPhaseTapChanger()) {
     getPhaseTapChanger()->setCurrentPosition(getValue<int>(VAR_TAPINDEX));
-  }  else if (getRatioTapChanger()) {
+  } else if (getRatioTapChanger()) {
     getRatioTapChanger()->setCurrentPosition(getValue<int>(VAR_TAPINDEX));
   }
 
@@ -379,8 +378,8 @@ TwoWTransformerInterfaceIIDM::importStaticParameters() {
     double factorAToPu = sqrt(3) * getVNom1() / (1000 * SNREF);
     staticParameters_.insert(std::make_pair("iMax", StaticParameter("iMax", StaticParameter::DOUBLE).setValue(thresholdI * factorAToPu)));
     staticParameters_.insert(std::make_pair("iStop", StaticParameter("iStop", StaticParameter::DOUBLE).setValue(thresholdI * factorAToPu)));
-    staticParameters_.insert(std::make_pair("regulating",
-        StaticParameter("regulating", StaticParameter::BOOL).setValue(getPhaseTapChanger()->getRegulating())));
+    staticParameters_.insert(
+        std::make_pair("regulating", StaticParameter("regulating", StaticParameter::BOOL).setValue(getPhaseTapChanger()->getRegulating())));
     vector<shared_ptr<StepInterface> > taps = getPhaseTapChanger()->getSteps();
 
     double phaseTapMin = taps[0]->getAlpha();

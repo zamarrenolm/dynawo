@@ -20,12 +20,13 @@
 #ifndef SOLVERS_ALGEBRAICSOLVERS_DYNSOLVERKINALGRESTORATION_H_
 #define SOLVERS_ALGEBRAICSOLVERS_DYNSOLVERKINALGRESTORATION_H_
 
-#include <boost/shared_ptr.hpp>
-#include <boost/core/noncopyable.hpp>
-#include <boost/unordered_set.hpp>
-#include <sundials/sundials_nvector.h>
 #include "DYNEnumUtils.h"
 #include "DYNSolverKINCommon.h"
+
+#include <boost/core/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/unordered_set.hpp>
+#include <sundials/sundials_nvector.h>
 
 namespace DYN {
 class Model;
@@ -34,7 +35,7 @@ class Model;
  * @brief class Solver KINSOL for algebraic equations restoration and initialization
  * Generic class for KINSOL solver
  */
-class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyable{
+class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyable {
  public:
   /**
    * @brief default constructor
@@ -52,7 +53,7 @@ class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyab
    */
   typedef enum {
     KIN_NORMAL,  ///< solve only algebraic equations
-    KIN_YPRIM  ///< solve the new value of the derivative of differential variables
+    KIN_YPRIM    ///< solve the new value of the derivative of differential variables
   } modeKin_t;
 
   /**
@@ -68,8 +69,8 @@ class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyab
    * @param mxiter maximum number of nonlinear iterations
    * @param printfl level of verbosity of output
    */
-  void init(const boost::shared_ptr<Model>& model, modeKin_t mode, double fnormtol, double initialaddtol, double scsteptol,
-            double mxnewtstep, int msbset, int mxiter, int printfl);
+  void init(const boost::shared_ptr<Model> &model, modeKin_t mode, double fnormtol, double initialaddtol, double scsteptol, double mxnewtstep, int msbset,
+            int mxiter, int printfl);
 
   /**
    * @brief modify the solver settings
@@ -82,8 +83,7 @@ class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyab
    * @param mxiter maximum number of nonlinear iterations
    * @param printfl level of verbosity of output
    */
-  void modifySettings(double fnormtol, double initialaddtol, double scsteptol, double mxnewtstep,
-                      int msbset, int mxiter, int printfl);
+  void modifySettings(double fnormtol, double initialaddtol, double scsteptol, double mxnewtstep, int msbset, int mxiter, int printfl);
 
   /**
    * @brief solve the equations of F(u) = 0 to find the new value of u
@@ -108,7 +108,7 @@ class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyab
    * @param y value of variables
    * @param yp value of derivatives of variables
    */
-  void getValues(std::vector<double> & y, std::vector<double> &yp);
+  void getValues(std::vector<double> &y, std::vector<double> &yp);
 
   /**
    * @brief set the initial conditions of the equations to solve
@@ -117,7 +117,7 @@ class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyab
    * @param y value of variables
    * @param yp value of derivatives of variables
    */
-  void setInitialValues(const double& t, const std::vector<double> & y, const std::vector<double> &yp);
+  void setInitialValues(const double &t, const std::vector<double> &y, const std::vector<double> &yp);
 
  private:
   /**
@@ -144,8 +144,7 @@ class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyab
    *
    * @return 0 is successful, positive value otherwise
    */
-  static int evalJ_KIN(N_Vector yy, N_Vector rr,
-          SUNMatrix JJ, void * data, N_Vector tmp1, N_Vector tmp2);
+  static int evalJ_KIN(N_Vector yy, N_Vector rr, SUNMatrix JJ, void *data, N_Vector tmp1, N_Vector tmp2);
 
   /**
    * @brief calculate the Jacobian associate to F(u): \f$( J=@F/@u)\f$
@@ -161,24 +160,23 @@ class SolverKINAlgRestoration : public SolverKINCommon, private boost::noncopyab
    *
    * @return 0 is successful, positive value otherwise
    */
-  static int evalJPrim_KIN(N_Vector yy, N_Vector rr,
-          SUNMatrix JJ, void * data, N_Vector tmp1, N_Vector tmp2);
+  static int evalJPrim_KIN(N_Vector yy, N_Vector rr, SUNMatrix JJ, void *data, N_Vector tmp1, N_Vector tmp2);
 
  private:
   boost::shared_ptr<Model> model_;  ///< model currently simulated
 
-  std::vector<double> y0_;  ///< initial variables values
-  std::vector<double> Y_;  ///< copy of initial variables values used in evalF
-  std::vector<double> yp0_;  ///< initial values of derivative variables
-  std::vector<double> YP_;  ///< copy of initial derivative variables values used in evalF
+  std::vector<double> y0_;                         ///< initial variables values
+  std::vector<double> Y_;                          ///< copy of initial variables values used in evalF
+  std::vector<double> yp0_;                        ///< initial values of derivative variables
+  std::vector<double> YP_;                         ///< copy of initial derivative variables values used in evalF
   std::vector<DYN::propertyContinuousVar_t> vId_;  ///< property of variables (algebraic/differential)
-  std::vector<DYN::propertyF_t> fType_;  ///< property of equations (algebraic /differential)
-  boost::unordered_set<int> ignoreF_;  ///< equations to erase from the initial set of equations
-  boost::unordered_set<int> ignoreY_;  ///< variables to erase form the initial set of variables
-  std::vector<int> indexF_;  ///< equations to keep from the initial set of equations
-  std::vector<int> indexY_;  ///< variables to keep form the initial set of variables
-  std::vector<double> F_;  ///< current values of residual function
-  modeKin_t mode_;  ///< mode of the solver (i.e algebraic equations or derivative)
+  std::vector<DYN::propertyF_t> fType_;            ///< property of equations (algebraic /differential)
+  boost::unordered_set<int> ignoreF_;              ///< equations to erase from the initial set of equations
+  boost::unordered_set<int> ignoreY_;              ///< variables to erase form the initial set of variables
+  std::vector<int> indexF_;                        ///< equations to keep from the initial set of equations
+  std::vector<int> indexY_;                        ///< variables to keep form the initial set of variables
+  std::vector<double> F_;                          ///< current values of residual function
+  modeKin_t mode_;                                 ///< mode of the solver (i.e algebraic equations or derivative)
 };
 
 }  // end of namespace DYN

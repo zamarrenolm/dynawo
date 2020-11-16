@@ -17,19 +17,19 @@
  *
  */
 
-#include <boost/filesystem.hpp>
-#include <fstream>
-#include <cmath>
-
-#include "gtest_dynawo.h"
 #include "DYNCommon.h"
-#include "DYNFileSystemUtils.h"
+#include "DYNEnumUtils.h"
 #include "DYNError.h"
 #include "DYNError_keys.h"
-#include "DYNTrace.h"
+#include "DYNFileSystemUtils.h"
 #include "DYNSparseMatrix.h"
-#include "DYNEnumUtils.h"
 #include "DYNTimer.h"
+#include "DYNTrace.h"
+#include "gtest_dynawo.h"
+
+#include <boost/filesystem.hpp>
+#include <cmath>
+#include <fstream>
 
 namespace DYN {
 
@@ -47,7 +47,6 @@ TEST(CommonTest, testCommonVarC) {
   ASSERT_EQ(str2TypeVarC("STRING"), VAR_TYPE_STRING);
 
   ASSERT_THROW_DYNAWO(str2TypeVarC("ABCDEF"), Error::MODELER, KeyError_t::TypeVarCUnableToConvert);
-
 
   ASSERT_EQ(sign(-1.), -1);
   ASSERT_EQ(sign(1.), 1);
@@ -105,8 +104,8 @@ TEST(CommonTest, testFileSystemUtilsSearchFilesAccordingToExtensionsFileNonExist
   std::vector<std::string> fileExtensionsAllowed;
   std::vector<std::string> fileExtensionsForbidden;
   std::vector<std::string> filesFound;
-  ASSERT_THROW_DYNAWO(searchFilesAccordingToExtensions("", fileExtensionsAllowed,
-      fileExtensionsForbidden,  true, filesFound), DYN::Error::GENERAL, DYN::KeyError_t::FileSystemItemDoesNotExist);
+  ASSERT_THROW_DYNAWO(searchFilesAccordingToExtensions("", fileExtensionsAllowed, fileExtensionsForbidden, true, filesFound), DYN::Error::GENERAL,
+                      DYN::KeyError_t::FileSystemItemDoesNotExist);
 }
 
 TEST(CommonTest, testFileSystemUtilsSearchFilesAccordingToExtensionsExistingFile) {
@@ -114,8 +113,7 @@ TEST(CommonTest, testFileSystemUtilsSearchFilesAccordingToExtensionsExistingFile
   fileExtensionsAllowed.push_back(".mo");
   std::vector<std::string> fileExtensionsForbidden;
   std::vector<std::string> filesFound;
-  searchFilesAccordingToExtensions("res", fileExtensionsAllowed,
-      fileExtensionsForbidden,  true, filesFound);
+  searchFilesAccordingToExtensions("res", fileExtensionsAllowed, fileExtensionsForbidden, true, filesFound);
   ASSERT_EQ(filesFound.size(), 4);
 }
 
@@ -190,7 +188,7 @@ TEST(CommonTest, testFileSystemUtilsCurrentPath) {
   std::string res = current_path();
   std::size_t pos = res.rfind("test");
   ASSERT_EQ(res.substr(pos), "test");
-  ASSERT_EQ(res.size()-4, pos);
+  ASSERT_EQ(res.size() - 4, pos);
 }
 
 TEST(CommonTest, testFileSystemUtilsExtension) {
@@ -300,10 +298,9 @@ TEST(CommonTest, testTrace) {
   } else {
     assert(0);
   }
-    boost::filesystem::path fspath("res/myLogFile.log");
-    ASSERT_EQ(boost::filesystem::remove(fspath), true);
+  boost::filesystem::path fspath("res/myLogFile.log");
+  ASSERT_EQ(boost::filesystem::remove(fspath), true);
 }
-
 
 TEST(CommonTest, testSparseMatrix) {
   // withoutNan
@@ -311,7 +308,7 @@ TEST(CommonTest, testSparseMatrix) {
   smj.init(3, 3);
   smj.changeCol();
   double zero = 0.0;
-  smj.addTerm(1, 1./zero);
+  smj.addTerm(1, 1. / zero);
   smj.changeCol();
   smj.addTerm(0, 2.);
   smj.addTerm(2, 3.);
@@ -433,8 +430,8 @@ TEST(CommonTest, testSparseMatrix) {
     for (int ind = smj4.Ap_[icol]; ind < smj4.Ap_[icol + 1]; ++ind) {
       int ilig = smj4.Ai_[ind];
       double val = smj4.Ax_[ind];
-      ASSERT_EQ(ilig, ind+1);
-      ASSERT_EQ(val, ind+1);
+      ASSERT_EQ(ilig, ind + 1);
+      ASSERT_EQ(val, ind + 1);
     }
   }
 
@@ -468,12 +465,12 @@ TEST(CommonTest, testSparseMatrix) {
   mat.addTerm(4, 13);
   mat.addTerm(5, -1);
 
-  double norm = std::sqrt(10*10 + 3*3 + 3*3 + 9*9 + 7*7 + 8*8 + 4*4 + 8*8 + 8*8 + 7*7 + 7*7 + 9*9 + 2*2 + 5*5 + 9*9 + 2*2 + 3*3 + 13*13 + 1);
+  double norm = std::sqrt(10 * 10 + 3 * 3 + 3 * 3 + 9 * 9 + 7 * 7 + 8 * 8 + 4 * 4 + 8 * 8 + 8 * 8 + 7 * 7 + 7 * 7 + 9 * 9 + 2 * 2 + 5 * 5 + 9 * 9 + 2 * 2 +
+                          3 * 3 + 13 * 13 + 1);
   ASSERT_DOUBLE_EQ(mat.frobeniusNorm(), norm);  // 30.46309242345563461640
   ASSERT_EQ(mat.norm1(), 28.);
   ASSERT_EQ(mat.infinityNorm(), 39.);
 }
-
 
 TEST(CommonTest, testEnumUtils) {
   ASSERT_EQ(modeChangeType2Str(NO_MODE), "No mode change");

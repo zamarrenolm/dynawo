@@ -19,6 +19,7 @@
  */
 
 #include "CRVCurveFactory.h"
+
 #include "CRVCurve.h"
 
 using boost::shared_ptr;

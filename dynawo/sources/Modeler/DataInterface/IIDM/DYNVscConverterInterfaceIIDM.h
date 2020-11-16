@@ -22,10 +22,10 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNVSCCONVERTERINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNVSCCONVERTERINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
-#include "DYNVscConverterInterface.h"
 #include "DYNInjectorInterfaceIIDM.h"
+#include "DYNVscConverterInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class VscConverterStation;

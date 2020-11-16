@@ -20,10 +20,10 @@
 
 #ifndef MODELER_COMMON_DYNSUBMODELFACTORY_H_
 #define MODELER_COMMON_DYNSUBMODELFACTORY_H_
-#include <map>
-#include <string>
 #include <boost/core/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <map>
+#include <string>
 
 namespace DYN {
 class SubModel;
@@ -39,13 +39,12 @@ class SubModelFactory : private boost::noncopyable {
   /**
    * @brief Constructor
    */
-  SubModelFactory() :
-  handle_(NULL) { }
+  SubModelFactory() : handle_(NULL) {}
 
   /**
    * @brief Destructor
    */
-  virtual ~SubModelFactory() { }
+  virtual ~SubModelFactory() {}
 
   /**
    * @brief create a new instance of a submodel
@@ -109,7 +108,7 @@ class SubModelFactories : private boost::noncopyable {
    * @return A map iterator whose key is the library name and whose value
    * is a pointer to the SubModelFactory.
    */
-  SubmodelFactoryIterator find(const std::string & lib);
+  SubmodelFactoryIterator find(const std::string& lib);
 
   /**
    * @brief Test if a map iterator is the end operator of factories map
@@ -140,7 +139,7 @@ class SubModelFactories : private boost::noncopyable {
   void add(const std::string& lib, destroy_model_t* deleteFactory);
 
  private:
-  std::map<std::string, SubModelFactory* > factoryMap_;  ///< associate a library factory with the name of the library
+  std::map<std::string, SubModelFactory*> factoryMap_;         ///< associate a library factory with the name of the library
   std::map<std::string, destroy_model_t*> factoryMapDestroy_;  ///< associate a library factory with its destruction method
 };
 
@@ -161,7 +160,7 @@ class SubModelDelete {
   /**
    * @brief destructor
    */
-  ~SubModelDelete() { }
+  ~SubModelDelete() {}
 
   /**
    * @brief Function to use this class as a Functor

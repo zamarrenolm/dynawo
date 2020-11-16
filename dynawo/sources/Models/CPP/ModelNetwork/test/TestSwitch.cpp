@@ -11,26 +11,25 @@
 // simulation tool for power systems.
 //
 
-#include <string>
-#include <vector>
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
+#include "DYNBusInterfaceIIDM.h"
+#include "DYNModelNetwork.h"
+#include "DYNModelSwitch.h"
+#include "DYNSparseMatrix.h"
+#include "DYNSwitchInterfaceIIDM.h"
+#include "DYNVariable.h"
+#include "TLTimelineFactory.h"
+#include "gtest_dynawo.h"
 
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/SwitchBuilder.h>
 #include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/SwitchBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
 #include <IIDM/components/Switch.h>
 #include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-
-#include "gtest_dynawo.h"
-#include "DYNVariable.h"
-#include "DYNSwitchInterfaceIIDM.h"
-#include "DYNBusInterfaceIIDM.h"
-#include "DYNModelSwitch.h"
-#include "DYNModelNetwork.h"
-#include "DYNSparseMatrix.h"
-#include "TLTimelineFactory.h"
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
+#include <string>
+#include <vector>
 
 using boost::shared_ptr;
 
@@ -453,7 +452,6 @@ TEST(ModelsModelNetwork, ModelNetworkSwitchDefineInstantiate) {
     ASSERT_EQ(definedVariables[i]->getType(), instantiatedVariables[i]->getType());
   }
 
-
   std::vector<ParameterModeler> parameters;
   sw->defineNonGenericParameters(parameters);
   ASSERT_TRUE(parameters.empty());
@@ -537,7 +535,6 @@ TEST(ModelsModelNetwork, ModelNetworkSwitchJt) {
   ASSERT_EQ(smj.Ap_[0], 0);
   ASSERT_EQ(smj.Ap_[1], 2);
   ASSERT_EQ(smj.Ap_[2], 4);
-
 
   SparseMatrix smjPrime;
   smjPrime.init(size, size);

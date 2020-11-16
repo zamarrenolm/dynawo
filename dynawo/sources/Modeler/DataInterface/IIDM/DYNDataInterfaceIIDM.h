@@ -20,13 +20,12 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNDATAINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNDATAINTERFACEIIDM_H_
 
-#include <map>
-#include <boost/unordered_set.hpp>
+#include "DYNCriteria.h"
+#include "DYNDataInterface.h"
 
 #include <IIDM/Network.h>
-
-#include "DYNDataInterface.h"
-#include "DYNCriteria.h"
+#include <boost/unordered_set.hpp>
+#include <map>
 
 namespace IIDM {
 class Network;
@@ -247,7 +246,7 @@ class DataInterfaceIIDM : public DataInterface {
    * @param country country of the parent substation
    * @return the instance of GeneratorInterface created
    */
-  boost::shared_ptr<GeneratorInterface> importGenerator(IIDM::Generator & generatorIIDM, const std::string& country);
+  boost::shared_ptr<GeneratorInterface> importGenerator(IIDM::Generator& generatorIIDM, const std::string& country);
 
   /**
    * @brief import and create a load interface thanks to the IIDM instance
@@ -288,7 +287,7 @@ class DataInterfaceIIDM : public DataInterface {
    * @param twoWTfo IIDM instance to use to create twoWindingsTransformer Interface
    * @return the instance of TwoWTransformerInterface created
    */
-  boost::shared_ptr<TwoWTransformerInterface> importTwoWindingsTransformer(IIDM::Transformer2Windings & twoWTfo);
+  boost::shared_ptr<TwoWTransformerInterface> importTwoWindingsTransformer(IIDM::Transformer2Windings& twoWTfo);
 
   /**
    * @brief import and create a three windings transformer interface thanks to the IIDM instance
@@ -296,15 +295,15 @@ class DataInterfaceIIDM : public DataInterface {
    * @param threeWTfo IIDM instance to use to create threeWindingsTransformer Interface
    * @return the instance of ThreeWTransformerInterface created
    */
-  boost::shared_ptr<ThreeWTransformerInterface> importThreeWindingsTransformer(IIDM::Transformer3Windings & threeWTfo);
+  boost::shared_ptr<ThreeWTransformerInterface> importThreeWindingsTransformer(IIDM::Transformer3Windings& threeWTfo);
 
-   /**
+  /**
    * @brief import and create a line interface thanks to the IIDM instance
    *
    * @param lineIIDM IIDM instance to use to create line Interface
    * @return the instance of LineInterface created
    */
-  boost::shared_ptr<LineInterface>  importLine(IIDM::Line& lineIIDM);
+  boost::shared_ptr<LineInterface> importLine(IIDM::Line& lineIIDM);
 
   /**
    * @brief import and create a tieline interface thanks to the IIDM instance
@@ -329,7 +328,7 @@ class DataInterfaceIIDM : public DataInterface {
    */
   boost::shared_ptr<LccConverterInterface> importLccConverter(IIDM::LccConverterStation& lccIIDM);
 
-   /**
+  /**
    * @brief import and create a hvdc line interface thanks to the IIDM instance
    *
    * @param hvdcLineIIDM IIDM instance to use to create hvdc line Interface
@@ -359,15 +358,15 @@ class DataInterfaceIIDM : public DataInterface {
   void configureGeneratorCriteria(const boost::shared_ptr<criteria::CriteriaCollection>& criteria);
 
  private:
-  IIDM::Network networkIIDM_;  ///< instance of the IIDM network
-  boost::shared_ptr<NetworkInterfaceIIDM> network_;  ///< instance of the network interface
-  std::map<std::string, boost::shared_ptr<VoltageLevelInterface> > voltageLevels_;  ///< map of voltageLevel by name
-  std::map<std::string, boost::shared_ptr<ComponentInterface> > components_;  ///< map of components by name
-  std::map<std::string, boost::shared_ptr<BusInterface> > busComponents_;  ///< map of bus by name
-  std::map<std::string, boost::shared_ptr<LoadInterface> > loadComponents_;  ///< map of loads by name
-  std::map<std::string, boost::shared_ptr<GeneratorInterface> > generatorComponents_;  ///< map of generators by name
+  IIDM::Network networkIIDM_;                                                                                    ///< instance of the IIDM network
+  boost::shared_ptr<NetworkInterfaceIIDM> network_;                                                              ///< instance of the network interface
+  std::map<std::string, boost::shared_ptr<VoltageLevelInterface> > voltageLevels_;                               ///< map of voltageLevel by name
+  std::map<std::string, boost::shared_ptr<ComponentInterface> > components_;                                     ///< map of components by name
+  std::map<std::string, boost::shared_ptr<BusInterface> > busComponents_;                                        ///< map of bus by name
+  std::map<std::string, boost::shared_ptr<LoadInterface> > loadComponents_;                                      ///< map of loads by name
+  std::map<std::string, boost::shared_ptr<GeneratorInterface> > generatorComponents_;                            ///< map of generators by name
   std::map<std::string, std::vector<boost::shared_ptr<CalculatedBusInterfaceIIDM> > > calculatedBusComponents_;  ///< calculatedBus per voltageLevel
-  std::vector<boost::shared_ptr<Criteria> > criteria_;  ///< table of criteria to check
+  std::vector<boost::shared_ptr<Criteria> > criteria_;                                                           ///< table of criteria to check
 };  ///< Generic data interface for IIDM format files
 }  // namespace DYN
 

@@ -20,37 +20,36 @@
  */
 //======================================================================
 
-#include <IIDM/components/DanglingLine.h>
-
 #include "DYNDanglingLineInterfaceIIDM.h"
 
-using std::string;
+#include <IIDM/components/DanglingLine.h>
+
 using boost::shared_ptr;
+using std::string;
 using std::vector;
 
 namespace DYN {
 
-DanglingLineInterfaceIIDM::~DanglingLineInterfaceIIDM() {
-}
+DanglingLineInterfaceIIDM::~DanglingLineInterfaceIIDM() {}
 
 DanglingLineInterfaceIIDM::DanglingLineInterfaceIIDM(IIDM::DanglingLine& danglingLine) :
-InjectorInterfaceIIDM<IIDM::DanglingLine>(danglingLine, danglingLine.id()),
-danglingLineIIDM_(danglingLine) {
+    InjectorInterfaceIIDM<IIDM::DanglingLine>(danglingLine, danglingLine.id()),
+    danglingLineIIDM_(danglingLine) {
   setType(ComponentInterface::DANGLING_LINE);
   stateVariables_.resize(3);
-  stateVariables_[VAR_P] = StateVariable("p", StateVariable::DOUBLE);  // P
-  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);  // Q
-  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);   // connectionState
+  stateVariables_[VAR_P] = StateVariable("p", StateVariable::DOUBLE);       // P
+  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);       // Q
+  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);  // connectionState
 }
 
 int
 DanglingLineInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "p" )
+  if (varName == "p")
     index = VAR_P;
-  else if ( varName == "q" )
+  else if (varName == "q")
     index = VAR_Q;
-  else if ( varName == "state" )
+  else if (varName == "state")
     index = VAR_STATE;
   return index;
 }

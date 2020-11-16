@@ -16,8 +16,8 @@
  * @brief Unit tests for API_JOB/JOBModelsDirEntry class
  */
 
-#include "gtest_dynawo.h"
 #include "JOBModelsDirEntry.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 

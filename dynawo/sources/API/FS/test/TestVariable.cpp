@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "FSVariableFactory.h"
 #include "FSVariable.h"
+#include "FSVariableFactory.h"
+#include "gtest_dynawo.h"
 
 namespace finalState {
 

@@ -19,15 +19,14 @@
 #ifndef MODELER_COMMON_DYNSUBMODEL_HPP_
 #define MODELER_COMMON_DYNSUBMODEL_HPP_
 
-#include "DYNTrace.h"
 #include "DYNMacrosMessage.h"
 #include "DYNParameterModeler.h"
+#include "DYNTrace.h"
 
 namespace DYN {
 
 template<typename T>
-void
-inline SubModel::setParameterValue(const std::string& name, const parameterOrigin_t& origin, const T& value, const bool isInitParam) {
+void inline SubModel::setParameterValue(const std::string& name, const parameterOrigin_t& origin, const T& value, const bool isInitParam) {
   if (hasParameter(name, isInitParam)) {
     findParameterReference(name, isInitParam).setValue(value, origin);
   }

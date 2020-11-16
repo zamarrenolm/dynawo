@@ -17,8 +17,8 @@
  *
  */
 
-#include "gtest_dynawo.h"
 #include "JOBInitialStateEntry.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 

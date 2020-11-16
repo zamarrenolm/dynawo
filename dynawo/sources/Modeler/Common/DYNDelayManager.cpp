@@ -19,10 +19,10 @@
  */
 
 #include "DYNDelayManager.h"
+
 #include "DYNCommon.h"
 
 #include <boost/optional.hpp>
-
 #include <cassert>
 #include <limits>
 #include <sstream>

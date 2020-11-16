@@ -24,7 +24,7 @@
 #include "DYNSparseMatrix.h"
 
 namespace DYN {
-   /**
+/**
    * @brief print the structure of the matrix in a file.
    *
    * This function is for debug purposes but can be used release mode
@@ -32,7 +32,7 @@ namespace DYN {
    * @param model model to get the informations on equations and variables
    * @param matrix matrix which structure will be printed
    */
-  void printStructureToFile(const boost::shared_ptr<Model>& model, const SparseMatrix& matrix);
+void printStructureToFile(const boost::shared_ptr<Model>& model, const SparseMatrix& matrix);
 }  // namespace DYN
 
 #endif  // MODELER_COMMON_DYNMODELUTIL_H_

@@ -20,11 +20,11 @@
 #ifndef API_EXTVAR_EXTVARXMLHANDLER_H_
 #define API_EXTVAR_EXTVARXMLHANDLER_H_
 
+#include "EXTVARVariablesCollection.h"
+
 #include <boost/shared_ptr.hpp>
 #include <xml/sax/parser/ComposableDocumentHandler.h>
 #include <xml/sax/parser/ComposableElementHandler.h>
-
-#include "EXTVARVariablesCollection.h"
 
 namespace externalVariables {
 
@@ -73,7 +73,7 @@ class XmlHandler : public xml::sax::parser::ComposableDocumentHandler {
   /**
    * @brief Destructor
    */
-  ~XmlHandler() { }
+  ~XmlHandler() {}
 
   /**
    * @brief Parsed parameters set collection getter
@@ -96,7 +96,7 @@ class XmlHandler : public xml::sax::parser::ComposableDocumentHandler {
   void addVariable();
 
   boost::shared_ptr<VariablesCollection> variablesCollection_;  ///< external variables collection parsed
-  VariableHandler variablesHandler_;  ///< handler used to read external variables
+  VariableHandler variablesHandler_;                            ///< handler used to read external variables
 };
 
 }  // namespace externalVariables

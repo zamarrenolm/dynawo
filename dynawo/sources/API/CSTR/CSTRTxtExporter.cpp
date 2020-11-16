@@ -17,14 +17,14 @@
  * @brief Dynawo constraints txt exporter : implementation file
  *
  */
-#include <fstream>
-#include <sstream>
+#include "CSTRTxtExporter.h"
 
+#include "CSTRConstraint.h"
+#include "CSTRConstraintsCollection.h"
 #include "DYNMacrosMessage.h"
 
-#include "CSTRTxtExporter.h"
-#include "CSTRConstraintsCollection.h"
-#include "CSTRConstraint.h"
+#include <fstream>
+#include <sstream>
 
 using std::fstream;
 using std::ostream;
@@ -48,17 +48,11 @@ TxtExporter::exportToFile(const boost::shared_ptr<ConstraintsCollection>& constr
 void
 TxtExporter::exportToStream(const boost::shared_ptr<ConstraintsCollection>& constraints, ostream& stream) const {
   const std::string TXTEXPORTER_SEPARATOR = " | ";  ///< separator in txt file
-  for (ConstraintsCollection::const_iterator itConstraint = constraints->cbegin();
-          itConstraint != constraints->cend();
-          ++itConstraint) {
-    stream << (*itConstraint)->getModelName()
-            << TXTEXPORTER_SEPARATOR
-            << (*itConstraint)->getTime()
-            << TXTEXPORTER_SEPARATOR
-            << (*itConstraint)->getDescription();
+  for (ConstraintsCollection::const_iterator itConstraint = constraints->cbegin(); itConstraint != constraints->cend(); ++itConstraint) {
+    stream << (*itConstraint)->getModelName() << TXTEXPORTER_SEPARATOR << (*itConstraint)->getTime() << TXTEXPORTER_SEPARATOR
+           << (*itConstraint)->getDescription();
     if ((*itConstraint)->hasModelType())
-      stream << (*itConstraint)->getModelType()
-             << TXTEXPORTER_SEPARATOR;
+      stream << (*itConstraint)->getModelType() << TXTEXPORTER_SEPARATOR;
     stream << "\n";
   }
 }

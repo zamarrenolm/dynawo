@@ -18,6 +18,7 @@
  *
  */
 #include "DYNParameter.h"
+
 #include "DYNMacrosMessage.h"
 
 using std::string;
@@ -25,19 +26,17 @@ using std::string;
 namespace DYN {
 
 ParameterCommon::ParameterCommon(const string& name, const typeVarC_t& valueType, bool mandatory) :
-name_(name),
-valueType_(valueType),
-index_(boost::none),
-mandatory_(mandatory) {
-}
+    name_(name),
+    valueType_(valueType),
+    index_(boost::none),
+    mandatory_(mandatory) {}
 
 #ifndef LANG_CXX11
 ParameterCommon::ParameterCommon(const ParameterCommon& parameter) :
-name_(parameter.name_),
-valueType_(parameter.valueType_),
-index_(parameter.index_),
-mandatory_(parameter.mandatory_) {
-}
+    name_(parameter.name_),
+    valueType_(parameter.valueType_),
+    index_(parameter.index_),
+    mandatory_(parameter.mandatory_) {}
 #endif
 
 void
@@ -56,22 +55,23 @@ ParameterCommon::getIndex() const {
   return index_.value();
 }
 
-string origin2Str(const parameterOrigin_t& origin) {
+string
+origin2Str(const parameterOrigin_t& origin) {
   switch (origin) {
-    case MO:
-      return "modelica file";
-    case PAR:
-      return "parameters";
-    case IIDM:
-      return "IIDM";
-    case LOCAL_INIT:
-      return "initialization";
-    case LOADED_DUMP:
-      return "loaded dump";
-    case FINAL:
-      return "final value";
-    case NB_ORIGINS:
-      throw DYNError(Error::MODELER, Origin2StrUnableToConvert, origin);
+  case MO:
+    return "modelica file";
+  case PAR:
+    return "parameters";
+  case IIDM:
+    return "IIDM";
+  case LOCAL_INIT:
+    return "initialization";
+  case LOADED_DUMP:
+    return "loaded dump";
+  case FINAL:
+    return "final value";
+  case NB_ORIGINS:
+    throw DYNError(Error::MODELER, Origin2StrUnableToConvert, origin);
   }
   return "";
 }

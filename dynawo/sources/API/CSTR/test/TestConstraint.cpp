@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "CSTRConstraintFactory.h"
 #include "CSTRConstraint.h"
+#include "CSTRConstraintFactory.h"
+#include "gtest_dynawo.h"
 
 namespace constraints {
 

@@ -20,8 +20,9 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELDANGLINGLINE_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELDANGLINGLINE_H_
 
-#include <boost/shared_ptr.hpp>
 #include "DYNNetworkComponent.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class ModelBus;
@@ -39,17 +40,12 @@ class ModelDanglingLine : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelDanglingLine() { }
+  ~ModelDanglingLine() {}
 
   /**
    * @brief  calculated variables type
    */
-  typedef enum {
-    iNum_ = 0,
-    pNum_ = 1,
-    qNum_ = 2,
-    nbCalculatedVariables_ = 3
-  } CalculatedVariables_t;
+  typedef enum { iNum_ = 0, pNum_ = 1, qNum_ = 2, nbCalculatedVariables_ = 3 } CalculatedVariables_t;
 
   /**
    * @brief  index variables type
@@ -123,7 +119,8 @@ class ModelDanglingLine : public NetworkComponent {
   /**
    * @brief evaluate derivatives prim
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @brief define variables
@@ -212,7 +209,8 @@ class ModelDanglingLine : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
@@ -227,7 +225,8 @@ class ModelDanglingLine : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalYMat()
@@ -237,7 +236,7 @@ class ModelDanglingLine : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::init(int& yNum)
    */
-  void init(int & yNum);
+  void init(int& yNum);
 
   /**
    * @copydoc NetworkComponent::getY0()
@@ -270,7 +269,8 @@ class ModelDanglingLine : public NetworkComponent {
    * @brief add a bus to the neighbours
    *
    */
-  void addBusNeighbors() { /* not needed */ }
+  void addBusNeighbors() { /* not needed */
+  }
 
   /**
    * @brief init size
@@ -488,35 +488,34 @@ class ModelDanglingLine : public NetworkComponent {
    */
   double ii2_dUiFict() const;
 
-
   boost::shared_ptr<ModelBus> modelBus_;  ///< bus
   State connectionState_;  ///< "internal" line connection status, evaluated at the end of evalZ to detect if the state was modified by another component
-  bool stateModified_;  ///< true if the line connection state was modified
+  bool stateModified_;     ///< true if the line connection state was modified
   double currentLimitsDesactivate_;  ///< current limits
-  double admittance_;  ///< admittance
-  double lossAngle_;  ///< loss angle
-  double suscept1_;  ///< susceptance 1
-  double conduct1_;  ///< conductance  1
-  double suscept2_;  ///< susceptance 2
-  double conduct2_;  ///< conductance 2
-  double P0_;  ///< q0
-  double Q0_;  ///< p0
-  double ir0_;  ///< ir0
-  double ii0_;  ///< ii0
+  double admittance_;                ///< admittance
+  double lossAngle_;                 ///< loss angle
+  double suscept1_;                  ///< susceptance 1
+  double conduct1_;                  ///< conductance  1
+  double suscept2_;                  ///< susceptance 2
+  double conduct2_;                  ///< conductance 2
+  double P0_;                        ///< q0
+  double Q0_;                        ///< p0
+  double ir0_;                       ///< ir0
+  double ii0_;                       ///< ii0
   // Injections
   // matrix value
-  double ir1_dUr_;  ///< matrix value
-  double ir1_dUi_;  ///< matrix value
-  double ii1_dUr_;  ///< matrix value
-  double ii1_dUi_;  ///< matrix value
+  double ir1_dUr_;      ///< matrix value
+  double ir1_dUi_;      ///< matrix value
+  double ii1_dUr_;      ///< matrix value
+  double ii1_dUi_;      ///< matrix value
   double ir1_dUrFict_;  ///< matrix value
   double ir1_dUiFict_;  ///< matrix value
   double ii1_dUrFict_;  ///< matrix value
   double ii1_dUiFict_;  ///< matrix value
-  double ir2_dUr_;  ///< matrix value
-  double ir2_dUi_;  ///< matrix value
-  double ii2_dUr_;  ///< matrix value
-  double ii2_dUi_;  ///< matrix value
+  double ir2_dUr_;      ///< matrix value
+  double ir2_dUi_;      ///< matrix value
+  double ii2_dUr_;      ///< matrix value
+  double ii2_dUi_;      ///< matrix value
   double ir2_dUrFict_;  ///< matrix value
   double ir2_dUiFict_;  ///< matrix value
   double ii2_dUrFict_;  ///< matrix value
@@ -533,7 +532,7 @@ class ModelDanglingLine : public NetworkComponent {
   double Q_;  ///< reactive q
 
   const std::string modelType_;  ///< model Type
-};  ///< class for dangling line model
+};                               ///< class for dangling line model
 
 }  // namespace DYN
 #endif  // MODELS_CPP_MODELNETWORK_DYNMODELDANGLINGLINE_H_

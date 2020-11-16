@@ -18,6 +18,7 @@
  */
 
 #include "DYDModelTemplateFactory.h"
+
 #include "DYDModelTemplate.h"
 
 using std::string;

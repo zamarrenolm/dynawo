@@ -17,21 +17,21 @@
  * @brief Dynawo curves collection CSV exporter : implementation file
  *
  */
-#include <fstream>
-#include <vector>
-#include <sstream>
-
-#include "DYNMacrosMessage.h"
-#include "DYNCommon.h"
-
-#include "CRVCurvesCollection.h"
-#include "CRVCurve.h"
-#include "CRVPoint.h"
 #include "CRVCsvExporter.h"
 
+#include "CRVCurve.h"
+#include "CRVCurvesCollection.h"
+#include "CRVPoint.h"
+#include "DYNCommon.h"
+#include "DYNMacrosMessage.h"
+
+#include <fstream>
+#include <sstream>
+#include <vector>
+
 using std::fstream;
-using std::string;
 using std::ostream;
+using std::string;
 
 namespace curves {
 
@@ -53,9 +53,7 @@ CsvExporter::exportToStream(const boost::shared_ptr<CurvesCollection>& curves, o
 
   // check if there are curves to be printed
   bool hasAvailableCurves(false);
-  for (CurvesCollection::iterator itCurve = curves->begin();
-          itCurve != curves->end();
-          ++itCurve) {
+  for (CurvesCollection::iterator itCurve = curves->begin(); itCurve != curves->end(); ++itCurve) {
     if ((*itCurve)->getAvailable()) {
       hasAvailableCurves = true;
       break;
@@ -70,25 +68,18 @@ CsvExporter::exportToStream(const boost::shared_ptr<CurvesCollection>& curves, o
 
   // print title line
   stream << "time" << CSVEXPORTER_SEPARATOR;
-  for (CurvesCollection::iterator itCurve = curves->begin();
-          itCurve != curves->end();
-          ++itCurve) {
+  for (CurvesCollection::iterator itCurve = curves->begin(); itCurve != curves->end(); ++itCurve) {
     if ((*itCurve)->getAvailable()) {
-      stream << (*itCurve)->getModelName() << "_"
-              << (*itCurve)->getVariable() << CSVEXPORTER_SEPARATOR;
+      stream << (*itCurve)->getModelName() << "_" << (*itCurve)->getVariable() << CSVEXPORTER_SEPARATOR;
     }
   }
   stream << "\n";
 
   // get time line
   std::vector<double> time;
-  for (CurvesCollection::iterator itCurve = curves->begin();
-          itCurve != curves->end();
-          ++itCurve) {
+  for (CurvesCollection::iterator itCurve = curves->begin(); itCurve != curves->end(); ++itCurve) {
     if ((*itCurve)->getAvailable()) {
-      for (Curve::const_iterator itPoint = (*itCurve)->cbegin();
-              itPoint != (*itCurve)->cend();
-              ++itPoint) {
+      for (Curve::const_iterator itPoint = (*itCurve)->cbegin(); itPoint != (*itCurve)->cend(); ++itPoint) {
         time.push_back((*itPoint)->getTime());
       }
       break;
@@ -96,10 +87,8 @@ CsvExporter::exportToStream(const boost::shared_ptr<CurvesCollection>& curves, o
   }
   // for each time point ,print value for all the curves.
   for (unsigned int i = 0; i < time.size(); ++i) {
-    stream <<  DYN::double2String(time[i]) << CSVEXPORTER_SEPARATOR;
-    for (CurvesCollection::iterator itCurve = curves->begin();
-            itCurve != curves->end();
-            ++itCurve) {
+    stream << DYN::double2String(time[i]) << CSVEXPORTER_SEPARATOR;
+    for (CurvesCollection::iterator itCurve = curves->begin(); itCurve != curves->end(); ++itCurve) {
       if ((*itCurve)->getAvailable()) {
         stream << DYN::double2String((*((*itCurve)->at(i)))->getValue()) << CSVEXPORTER_SEPARATOR;
       }

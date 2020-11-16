@@ -17,19 +17,15 @@
  *
  */
 
-#include "DYNMacrosMessage.h"
-
 #include "EXTVARVariable.h"
+
+#include "DYNMacrosMessage.h"
 
 using std::string;
 
 namespace externalVariables {
 
-Variable::Variable(const string& id, const Type type) :
-id_(id),
-type_(type),
-size_(boost::none),
-optional_(boost::none) {
+Variable::Variable(const string& id, const Type type) : id_(id), type_(type), size_(boost::none), optional_(boost::none) {
   defaultValue_.clear();
 }
 
@@ -44,7 +40,7 @@ Variable::getType() const {
 }
 
 Variable&
-Variable::setId(const string & id) {
+Variable::setId(const string& id) {
   id_ = id;
   return *this;
 }
@@ -95,7 +91,8 @@ Variable::getOptional() const {
   return *optional_;
 }
 
-bool Variable::hasDefaultValue() const {
+bool
+Variable::hasDefaultValue() const {
   return !defaultValue_.empty();
 }
 
@@ -106,6 +103,5 @@ Variable::getDefaultValue() const {
   }
   return defaultValue_;
 }
-
 
 }  // namespace externalVariables

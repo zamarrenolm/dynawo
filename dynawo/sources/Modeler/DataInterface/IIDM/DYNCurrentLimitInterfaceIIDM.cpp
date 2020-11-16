@@ -17,33 +17,31 @@
  * @brief Current limit interface : implementation file
  *
  */
-#include <limits>
 #include "DYNCurrentLimitInterfaceIIDM.h"
 
+#include <limits>
 
 namespace DYN {
 
-  CurrentLimitInterfaceIIDM::CurrentLimitInterfaceIIDM(const boost::optional<double>& limit, const boost::optional<int>& duration) :
-  limit_(limit) {
-    if (duration == boost::none)
-      acceptableDuration_ = std::numeric_limits<int>::max();
-    else
-      acceptableDuration_ = duration.get();
-  }
+CurrentLimitInterfaceIIDM::CurrentLimitInterfaceIIDM(const boost::optional<double>& limit, const boost::optional<int>& duration) : limit_(limit) {
+  if (duration == boost::none)
+    acceptableDuration_ = std::numeric_limits<int>::max();
+  else
+    acceptableDuration_ = duration.get();
+}
 
-  CurrentLimitInterfaceIIDM::~CurrentLimitInterfaceIIDM() {
-  }
+CurrentLimitInterfaceIIDM::~CurrentLimitInterfaceIIDM() {}
 
-  double
-  CurrentLimitInterfaceIIDM::getLimit() const {
-    if (limit_ == boost::none)
-      return std::numeric_limits<double>::quiet_NaN();
-    return limit_.get();
-  }
+double
+CurrentLimitInterfaceIIDM::getLimit() const {
+  if (limit_ == boost::none)
+    return std::numeric_limits<double>::quiet_NaN();
+  return limit_.get();
+}
 
-  int
-  CurrentLimitInterfaceIIDM::getAcceptableDuration() const {
-    return acceptableDuration_;
-  }
+int
+CurrentLimitInterfaceIIDM::getAcceptableDuration() const {
+  return acceptableDuration_;
+}
 
 }  // namespace DYN

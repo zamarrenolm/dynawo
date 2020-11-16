@@ -12,13 +12,11 @@
 
 #include <string>
 
-namespace DYN
-{
+namespace DYN {
 
 std::string
-ModelOmegaRef::getCheckSum() const
-{
+ModelOmegaRef::getCheckSum() const {
   return "d487af82d96d7fae56828ed54d1f0dab0f5606728917a248f17";
 }
 
-}
+}  // namespace DYN

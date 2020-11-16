@@ -17,29 +17,32 @@
  * @brief  define common function that could be used
  *
  */
-#include <string>
-#include <stdio.h>
-#include <cstring>
+#include "DYNCommon.h"
+
+#include "DYNMacrosMessage.h"
+
 #include <cassert>
 #include <cstdarg>
-#include <sstream>
+#include <cstring>
 #include <iomanip>
-#include "DYNCommon.h"
-#include "DYNMacrosMessage.h"
+#include <sstream>
+#include <stdio.h>
+#include <string>
 
 using std::string;
 
 namespace DYN {
 
-const char* sharedLibraryExtension() {
+const char*
+sharedLibraryExtension() {
 #ifdef _WIN32
-static const char extension[] = ".dll";
+  static const char extension[] = ".dll";
 #elif __APPLE__
-static const char extension[] = ".dylib";
+  static const char extension[] = ".dylib";
 #elif __linux__
-static const char extension[] = ".so";
+  static const char extension[] = ".so";
 #elif __unix__  // all unices not caught above
-static const char extension[] = ".so";
+  static const char extension[] = ".so";
 #else
 #error "Unknown compiler"
 #endif
@@ -47,7 +50,8 @@ static const char extension[] = ".so";
 }
 
 static double MAXIMUM_VALUE_FIXED = 1000000;  ///< maximum precision
-std::string double2String(const double& value) {
+std::string
+double2String(const double& value) {
   std::stringstream ss("");
   if (value > MAXIMUM_VALUE_FIXED)
     ss << std::setprecision(getPrecisionAsNbDecimal()) << std::scientific << value;
@@ -56,26 +60,28 @@ std::string double2String(const double& value) {
   return ss.str();
 }
 
-string typeVarC2Str(const typeVarC_t& type) {
+string
+typeVarC2Str(const typeVarC_t& type) {
   string typeVarC;
   switch (type) {
-    case VAR_TYPE_STRING:
-      typeVarC = "STRING";
-      break;
-    case VAR_TYPE_DOUBLE:
-      typeVarC = "DOUBLE";
-      break;
-    case VAR_TYPE_INT:
-      typeVarC = "INT";
-      break;
-    case VAR_TYPE_BOOL:
-      typeVarC = "BOOL";
-      break;
+  case VAR_TYPE_STRING:
+    typeVarC = "STRING";
+    break;
+  case VAR_TYPE_DOUBLE:
+    typeVarC = "DOUBLE";
+    break;
+  case VAR_TYPE_INT:
+    typeVarC = "INT";
+    break;
+  case VAR_TYPE_BOOL:
+    typeVarC = "BOOL";
+    break;
   }
   return typeVarC;
 }
 
-typeVarC_t str2TypeVarC(const std::string& typeStr) {
+typeVarC_t
+str2TypeVarC(const std::string& typeStr) {
   if (typeStr == "STRING")
     return VAR_TYPE_STRING;
   else if (typeStr == "DOUBLE")
@@ -88,22 +94,25 @@ typeVarC_t str2TypeVarC(const std::string& typeStr) {
     throw DYNError(Error::MODELER, TypeVarCUnableToConvert, typeStr);
 }
 
-int sign(const double& value) {
+int
+sign(const double& value) {
   return (value < 0.) ? -1 : 1;
 }
 
-
-static double MAXIMUM_PRECISION = 1e-6;  ///< maximum precision
+static double MAXIMUM_PRECISION = 1e-6;             ///< maximum precision
 static double MAXIMUM_PRECISION_AS_NB_DECIMAL = 6;  ///< maximum precision
-double getCurrentPrecision() {
+double
+getCurrentPrecision() {
   return MAXIMUM_PRECISION;
 }
-void setCurrentPrecision(double precision) {
+void
+setCurrentPrecision(double precision) {
   MAXIMUM_PRECISION = precision;
-  MAXIMUM_PRECISION_AS_NB_DECIMAL =  -std::log10(MAXIMUM_PRECISION);
+  MAXIMUM_PRECISION_AS_NB_DECIMAL = -std::log10(MAXIMUM_PRECISION);
   MAXIMUM_VALUE_FIXED = std::pow(10, MAXIMUM_PRECISION_AS_NB_DECIMAL);
 }
-unsigned getPrecisionAsNbDecimal() {
+unsigned
+getPrecisionAsNbDecimal() {
   return MAXIMUM_PRECISION_AS_NB_DECIMAL;
 }
 

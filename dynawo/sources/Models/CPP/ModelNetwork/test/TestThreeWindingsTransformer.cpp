@@ -11,34 +11,31 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/Transformer3WindingsBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/components/Transformer3Windings.h>
-#include <IIDM/components/CurrentLimit.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/Network.h>
-
-#include "DYNThreeWTransformerInterfaceIIDM.h"
-#include "DYNVoltageLevelInterfaceIIDM.h"
 #include "DYNBusInterfaceIIDM.h"
-#include "DYNModelThreeWindingsTransformer.h"
-#include "DYNModelVoltageLevel.h"
 #include "DYNModelBus.h"
 #include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
+#include "DYNModelThreeWindingsTransformer.h"
+#include "DYNModelVoltageLevel.h"
 #include "DYNSparseMatrix.h"
+#include "DYNThreeWTransformerInterfaceIIDM.h"
 #include "DYNVariable.h"
-
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
 
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/Transformer3WindingsBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/CurrentLimit.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/Transformer3Windings.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -98,7 +95,6 @@ createModelThreeWindingsTransformer(bool open, bool initModel) {
   t3w->setModelBus3(bus3);
   return std::make_pair(t3w, vl);
 }
-
 
 TEST(ModelsModelNetwork, ModelNetworkThreeWindingsTransformerInitializationClosed) {
   shared_ptr<ModelThreeWindingsTransformer> tw3 = createModelThreeWindingsTransformer(false, false).first;

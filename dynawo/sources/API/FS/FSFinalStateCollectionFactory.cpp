@@ -19,6 +19,7 @@
  */
 
 #include "FSFinalStateCollectionFactory.h"
+
 #include "FSFinalStateCollection.h"
 
 using std::string;

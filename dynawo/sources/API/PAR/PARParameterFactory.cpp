@@ -18,6 +18,7 @@
  */
 
 #include "PARParameterFactory.h"
+
 #include "PARParameter.h"
 
 using std::string;

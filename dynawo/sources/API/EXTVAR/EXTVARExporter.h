@@ -20,9 +20,9 @@
 #ifndef API_EXTVAR_EXTVAREXPORTER_H_
 #define API_EXTVAR_EXTVAREXPORTER_H_
 
-#include <string>
-
 #include "EXTVARVariablesCollection.h"
+
+#include <string>
 namespace externalVariables {
 /**
  * @class Exporter
@@ -44,7 +44,7 @@ class Exporter {
    */
   virtual void exportToFile(const VariablesCollection& collection, const std::string& filePath) const = 0;
 
-   /**
+  /**
    * @brief Export method for this exporter
    *
    * @param collection variables collection to export

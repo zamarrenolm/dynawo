@@ -18,7 +18,6 @@
 #include <xml/sax/parser/ComposableDocumentHandler.h>
 #include <xml/sax/parser/ComposableElementHandler.h>
 
-
 namespace criteria {
 class CriteriaCollection;
 class Criteria;
@@ -39,7 +38,7 @@ class ElementWithIdHandler : public xml::sax::parser::ComposableElementHandler {
   /**
    * @brief default destructor
    */
-  ~ElementWithIdHandler() { }
+  ~ElementWithIdHandler() {}
 
   /**
    * @brief return the component read in xml file
@@ -73,7 +72,7 @@ class CriteriaParamsHandler : public xml::sax::parser::ComposableElementHandler 
   /**
    * @brief default destructor
    */
-  ~CriteriaParamsHandler() { }
+  ~CriteriaParamsHandler() {}
 
   /**
    * @brief return the criteria params read in xml file
@@ -107,7 +106,7 @@ class CriteriaHandler : public xml::sax::parser::ComposableElementHandler {
   /**
    * @brief default destructor
    */
-  ~CriteriaHandler() { }
+  ~CriteriaHandler() {}
 
   /**
    * @brief return the criteria read in xml file
@@ -135,10 +134,10 @@ class CriteriaHandler : public xml::sax::parser::ComposableElementHandler {
   void create(attributes_type const& attributes);
 
  private:
-  boost::shared_ptr<Criteria> criteriaRead_;  ///< current criteria
+  boost::shared_ptr<Criteria> criteriaRead_;     ///< current criteria
   CriteriaParamsHandler criteriaParamsHandler_;  ///< handler used to read criteria parameters element
-  ElementWithIdHandler cmpHandler_;  ///< handler used to read component
-  ElementWithIdHandler countryHandler_;  ///< handler used to read countries
+  ElementWithIdHandler cmpHandler_;              ///< handler used to read component
+  ElementWithIdHandler countryHandler_;          ///< handler used to read countries
 };
 
 /**
@@ -184,11 +183,10 @@ class XmlHandler : public xml::sax::parser::ComposableDocumentHandler {
   void addGenCriteria();
 
   boost::shared_ptr<CriteriaCollection> criteriaCollection_;  ///< Criteria collection parsed
-  CriteriaHandler busCriteriaHandler_;  ///< handler used to read bus criteria element
-  CriteriaHandler loadCriteriaHandler_;  ///< handler used to read load criteria element
-  CriteriaHandler genCriteriaHandler_;  ///< handler used to read generator criteria element
+  CriteriaHandler busCriteriaHandler_;                        ///< handler used to read bus criteria element
+  CriteriaHandler loadCriteriaHandler_;                       ///< handler used to read load criteria element
+  CriteriaHandler genCriteriaHandler_;                        ///< handler used to read generator criteria element
 };
-
 
 }  // namespace criteria
 

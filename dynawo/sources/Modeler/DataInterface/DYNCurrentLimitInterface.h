@@ -27,7 +27,7 @@ class CurrentLimitInterface {
   /**
    * @brief Destructor
    */
-  virtual ~CurrentLimitInterface() { }
+  virtual ~CurrentLimitInterface() {}
 
   /**
    * @brief Getter for current limit value

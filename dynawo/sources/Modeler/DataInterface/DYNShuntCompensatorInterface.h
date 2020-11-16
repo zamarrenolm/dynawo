@@ -31,7 +31,7 @@ class ShuntCompensatorInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~ShuntCompensatorInterface() { }
+  virtual ~ShuntCompensatorInterface() {}
 
   /**
    * @copydoc ComponentInterface::exportStateVariablesUnitComponent()

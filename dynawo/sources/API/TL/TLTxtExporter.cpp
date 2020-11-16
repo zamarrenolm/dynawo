@@ -15,15 +15,15 @@
  * @file  TLTxtExporter.cpp
  * @brief Dynawo timeline txt exporter : implementation file
  */
+#include "TLTxtExporter.h"
+
+#include "DYNMacrosMessage.h"
+#include "TLEvent.h"
+#include "TLTimeline.h"
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
-#include "DYNMacrosMessage.h"
-
-#include "TLTxtExporter.h"
-#include "TLTimeline.h"
-#include "TLEvent.h"
 
 using std::fstream;
 using std::ostream;
@@ -45,17 +45,10 @@ TxtExporter::exportToFile(const boost::shared_ptr<Timeline>& timeline, const std
 void
 TxtExporter::exportToStream(const boost::shared_ptr<Timeline>& timeline, ostream& stream) const {
   const std::string TXTEXPORTER_SEPARATOR = " | ";  ///< definition of the separator to use in txt files
-  for (Timeline::event_const_iterator itEvent = timeline->cbeginEvent();
-          itEvent != timeline->cendEvent();
-          ++itEvent) {
-    stream << (*itEvent)->getTime()
-            << TXTEXPORTER_SEPARATOR
-            << (*itEvent)->getModelName()
-            << TXTEXPORTER_SEPARATOR
-            << (*itEvent)->getMessage();
+  for (Timeline::event_const_iterator itEvent = timeline->cbeginEvent(); itEvent != timeline->cendEvent(); ++itEvent) {
+    stream << (*itEvent)->getTime() << TXTEXPORTER_SEPARATOR << (*itEvent)->getModelName() << TXTEXPORTER_SEPARATOR << (*itEvent)->getMessage();
     if ((*itEvent)->hasPriority()) {
-      stream << TXTEXPORTER_SEPARATOR
-              << (*itEvent)->getPriority();
+      stream << TXTEXPORTER_SEPARATOR << (*itEvent)->getPriority();
     }
     stream << "\n";
   }

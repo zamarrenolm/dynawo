@@ -53,8 +53,7 @@ class ModelRatioTapChanger : public ModelTapChanger {
    * @param locked : is the tap changer locked ?
    * @param tfoClosed : is the transformer connected ?
    */
-  void evalG(double t, double uValue, bool nodeOff, state_g* g, double disable,
-             double locked, bool tfoClosed);
+  void evalG(double t, double uValue, bool nodeOff, state_g* g, double disable, double locked, bool tfoClosed);
 
   /**
    * @brief  evaluate discrete values
@@ -67,47 +66,58 @@ class ModelRatioTapChanger : public ModelTapChanger {
    * @param locked : is the tap changer locked ?
    * @param tfoClosed :is the transformer connected ?
    */
-  void evalZ(double t, state_g* g, ModelNetwork* network, double disable,
-             bool nodeOff, double locked, bool tfoClosed);
+  void evalZ(double t, state_g* g, ModelNetwork* network, double disable, bool nodeOff, double locked, bool tfoClosed);
 
   /**
    * @brief  get the size of the local G function
    * @return size of G function
    */
-  inline int sizeG() const { return 4; }
+  inline int sizeG() const {
+    return 4;
+  }
 
   /**
    * @brief  get size of discrete variables
    * @return number of discrete variables
    */
-  inline int sizeZ() const { return 0; }
+  inline int sizeZ() const {
+    return 0;
+  }
 
   /**
    * @brief set the dead band around the target of the tap changer
    *
    * @param tolerance dead band to use
    */
-  inline void setTolV(const double& tolerance) { tolV_ = tolerance; }
+  inline void setTolV(const double& tolerance) {
+    tolV_ = tolerance;
+  }
 
   /**
    * @brief set the target of the tap changer
    *
    * @param target target to use
    */
-  inline void setTargetV(const double& target) { targetV_ = target; }
+  inline void setTargetV(const double& target) {
+    targetV_ = target;
+  }
 
   /**
    * @brief get the current dead band of the tap changer
    * @return value of the current dead band
    */
-  inline double getTolV() const { return tolV_; }
+  inline double getTolV() const {
+    return tolV_;
+  }
 
   /**
    * @brief set the reference side
    *
    * @param side reference side
    */
-  inline void setSide(const std::string& side) { side_ = side; }
+  inline void setSide(const std::string& side) {
+    side_ = side;
+  }
 
  private:
   /**
@@ -117,11 +127,10 @@ class ModelRatioTapChanger : public ModelTapChanger {
   bool getUpIncreaseTargetU() const;
 
  private:
-  std::string side_;  ///< reference side where the voltage is controlled
-  double tolV_;       ///< dead band around targetV
-  double targetV_;    ///< target voltage
-  double
-      whenUp_;  ///< when the voltage reached a value over the target+deadBand
+  std::string side_;    ///< reference side where the voltage is controlled
+  double tolV_;         ///< dead band around targetV
+  double targetV_;      ///< target voltage
+  double whenUp_;       ///< when the voltage reached a value over the target+deadBand
   double whenDown_;     ///< when the voltage reached a value under the
                         ///< target-deadBand
   double whenLastTap_;  ///< last time when a tap changer

@@ -17,8 +17,8 @@
  *
  */
 
-#include "gtest_dynawo.h"
 #include "JOBSimulationEntry.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 
@@ -41,10 +41,8 @@ TEST(APIJOBTest, testSimulationEntry) {
   ASSERT_EQ(simulation->getStartTime(), 10);
   ASSERT_EQ(simulation->getStopTime(), 100);
   ASSERT_EQ(simulation->getCriteriaFiles().size(), 2);
-  ASSERT_TRUE(std::find(simulation->getCriteriaFiles().begin(),
-      simulation->getCriteriaFiles().end(), "MyFile") != simulation->getCriteriaFiles().end());
-  ASSERT_TRUE(std::find(simulation->getCriteriaFiles().begin(),
-      simulation->getCriteriaFiles().end(), "MyFile2") != simulation->getCriteriaFiles().end());
+  ASSERT_TRUE(std::find(simulation->getCriteriaFiles().begin(), simulation->getCriteriaFiles().end(), "MyFile") != simulation->getCriteriaFiles().end());
+  ASSERT_TRUE(std::find(simulation->getCriteriaFiles().begin(), simulation->getCriteriaFiles().end(), "MyFile2") != simulation->getCriteriaFiles().end());
   ASSERT_EQ(simulation->getCriteriaStep(), 15);
   ASSERT_EQ(simulation->getPrecision(), 1e-8);
 }

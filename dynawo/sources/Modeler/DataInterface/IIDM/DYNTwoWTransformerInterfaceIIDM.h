@@ -20,9 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNTWOWTRANSFORMERINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNTWOWTRANSFORMERINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNTwoWTransformerInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class Transformer2Windings;
@@ -38,14 +38,7 @@ class TwoWTransformerInterfaceIIDM : public TwoWTransformerInterface {
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_P1 = 0,
-    VAR_P2,
-    VAR_Q1,
-    VAR_Q2,
-    VAR_STATE,
-    VAR_TAPINDEX
-  } indexVar_t;
+  typedef enum { VAR_P1 = 0, VAR_P2, VAR_Q1, VAR_Q2, VAR_STATE, VAR_TAPINDEX } indexVar_t;
 
  public:
   /**
@@ -57,8 +50,7 @@ class TwoWTransformerInterfaceIIDM : public TwoWTransformerInterface {
    * @brief Constructor
    * @param tfo two windings transformer's iidm instance
    */
-  explicit TwoWTransformerInterfaceIIDM(IIDM::Transformer2Windings & tfo);
-
+  explicit TwoWTransformerInterfaceIIDM(IIDM::Transformer2Windings& tfo);
 
   /**
    * @copydoc TwoWTransformerInterface::addCurrentLimitInterface1(const boost::shared_ptr<CurrentLimitInterface>& currentLimitInterface)
@@ -221,13 +213,13 @@ class TwoWTransformerInterfaceIIDM : public TwoWTransformerInterface {
   int getComponentVarIndex(const std::string& varName) const;
 
  private:
-  IIDM::Transformer2Windings& tfoIIDM_;  ///< reference to the tfo's iidm instance
-  boost::shared_ptr<BusInterface> busInterface1_;  ///< busInterface of the bus where the side 1 of the tfo is connected
-  boost::shared_ptr<BusInterface> busInterface2_;  ///< busInterface of the bus where the side 2 of the tfo is connected
+  IIDM::Transformer2Windings& tfoIIDM_;                              ///< reference to the tfo's iidm instance
+  boost::shared_ptr<BusInterface> busInterface1_;                    ///< busInterface of the bus where the side 1 of the tfo is connected
+  boost::shared_ptr<BusInterface> busInterface2_;                    ///< busInterface of the bus where the side 2 of the tfo is connected
   boost::shared_ptr<VoltageLevelInterface> voltageLevelInterface1_;  ///< voltageLevel interface where the side 1 of the line is connected
   boost::shared_ptr<VoltageLevelInterface> voltageLevelInterface2_;  ///< voltageLevel interface where the side 2 of the line is connected
-  boost::shared_ptr<PhaseTapChangerInterface> phaseTapChanger_;  ///< reference to the phase tap changer interface instance
-  boost::shared_ptr<RatioTapChangerInterface> ratioTapChanger_;  ///< reference to the ratio tap changer interface instance
+  boost::shared_ptr<PhaseTapChangerInterface> phaseTapChanger_;      ///< reference to the phase tap changer interface instance
+  boost::shared_ptr<RatioTapChangerInterface> ratioTapChanger_;      ///< reference to the ratio tap changer interface instance
 
   std::vector<boost::shared_ptr<CurrentLimitInterface> > currentLimitInterfaces1_;  ///< current limit interfaces for side 1
   std::vector<boost::shared_ptr<CurrentLimitInterface> > currentLimitInterfaces2_;  ///< current limit interfaces for side 2

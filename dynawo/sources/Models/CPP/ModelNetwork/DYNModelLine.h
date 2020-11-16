@@ -20,8 +20,9 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELLINE_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELLINE_H_
 
-#include <boost/shared_ptr.hpp>
 #include "DYNNetworkComponent.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class ModelBus;
@@ -42,7 +43,7 @@ class ModelLine : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelLine() { }
+  ~ModelLine() {}
 
   /**
    * @brief indicate which modelBus are known (case of line without modelBus at one side)
@@ -68,11 +69,11 @@ class ModelLine : public NetworkComponent {
     iS2ToS1Side1Num_ = 7,  // current oriented from side 2 to side 1 at side 1 (unit A)
     iS1ToS2Side2Num_ = 8,  // current oriented from side 1 to side 2 at side 2 (unit A)
     iS2ToS1Side2Num_ = 9,  // current oriented from side 2 to side 1 at side 2 (unit A)
-    iSide1Num_ = 10,  // I1 (unit A)
-    iSide2Num_ = 11,  // I2 (unit A)
-    u1Num_ = 12,  // voltage at side 1
-    u2Num_ = 13,  // voltage at side 2
-    lineStateNum_ = 14,  // state of the line (as a continuous variable)
+    iSide1Num_ = 10,       // I1 (unit A)
+    iSide2Num_ = 11,       // I2 (unit A)
+    u1Num_ = 12,           // voltage at side 1
+    u2Num_ = 13,           // voltage at side 2
+    lineStateNum_ = 14,    // state of the line (as a continuous variable)
     nbCalculatedVariables_ = 15
   } CalculatedVariables_t;
 
@@ -177,7 +178,7 @@ class ModelLine : public NetworkComponent {
    * @param elements
    * @param mapElement map of elements
    */
-  void defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement);
+  void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement);
 
   /**
    * @brief evaluation F
@@ -206,7 +207,7 @@ class ModelLine : public NetworkComponent {
    * @param numCalculatedVar index of the calculated variable
    * @param numVars index of variables used to define the jacobian associated to a calculated variable
    */
-  void getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, std::vector<int> & numVars) const;
+  void getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, std::vector<int>& numVars) const;
 
   /**
    * @brief evaluate the jacobian associated to a calculated variable
@@ -215,7 +216,7 @@ class ModelLine : public NetworkComponent {
 
    * @param res values of the jacobian
    */
-  void evalJCalculatedVarI(unsigned numCalculatedVar, std::vector<double> & res) const;
+  void evalJCalculatedVarI(unsigned numCalculatedVar, std::vector<double>& res) const;
 
   /**
    * @copydoc NetworkComponent::evalJt(SparseMatrix& jt, const double& cj, const int& rowOffset)
@@ -269,7 +270,7 @@ class ModelLine : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::init(int& yNum)
    */
-  void init(int & yNum);
+  void init(int& yNum);
 
   /**
    * @copydoc NetworkComponent::getY0()
@@ -303,7 +304,7 @@ class ModelLine : public NetworkComponent {
   void initSize();
 
  private:
-  KnownBus_t knownBus_;  ///< known bus
+  KnownBus_t knownBus_;                                   ///< known bus
   boost::shared_ptr<ModelCurrentLimits> currentLimits1_;  ///< current limit side 1
   boost::shared_ptr<ModelCurrentLimits> currentLimits2_;  ///< current limit side 2
 
@@ -487,7 +488,7 @@ class ModelLine : public NetworkComponent {
    */
   double uip1() const;
 
-   /**
+  /**
    * @brief get the real part of the voltage at side 2
    * @return real part of the voltage at side 2
    */
@@ -524,35 +525,35 @@ class ModelLine : public NetworkComponent {
   boost::shared_ptr<ModelBus> modelBus2_;  ///< model bus 2
   State connectionState_;  ///< "internal" line connection status, evaluated at the end of evalZ to detect if the state was modified by another component
   bool topologyModified_;  ///< true if the line connection state was modified
-  bool updateYMat_;  ///< true if the YMat need to be updated(= topologyModified)
+  bool updateYMat_;        ///< true if the YMat need to be updated(= topologyModified)
   double currentLimitsDesactivate_;  ///< current limit desactivate
-  bool isDynamic_;  ///< true if the line model is dynamic
+  bool isDynamic_;                   ///< true if the line model is dynamic
 
   double admittance_;  ///< admittance
-  double lossAngle_;  ///< loss angle
-  double suscept1_;  ///< susceptance on side 1
-  double suscept2_;  ///< susceptance on side 2
-  double conduct1_;  ///< conductance on side 1
-  double conduct2_;  ///< conductance on side 2
+  double lossAngle_;   ///< loss angle
+  double suscept1_;    ///< susceptance on side 1
+  double suscept2_;    ///< susceptance on side 2
+  double conduct1_;    ///< conductance on side 1
+  double conduct2_;    ///< conductance on side 2
   double resistance_;  ///< resistance
-  double reactance_;  ///< reactance
+  double reactance_;   ///< reactance
   // Injections
-  double ir1_dUr1_;  ///< injection matrix value
-  double ir1_dUi1_;  ///< injection matrix value
-  double ir1_dUr2_;  ///< injection matrix value
-  double ir1_dUi2_;  ///< injection matrix value
-  double ii1_dUr1_;  ///< injection matrix value
-  double ii1_dUi1_;  ///< injection matrix value
-  double ii1_dUr2_;  ///< injection matrix value
-  double ii1_dUi2_;  ///< injection matrix value
-  double ir2_dUr1_;  ///< injection matrix value
-  double ir2_dUi1_;  ///< injection matrix value
-  double ir2_dUr2_;  ///< injection matrix value
-  double ir2_dUi2_;  ///< injection matrix value
-  double ii2_dUr1_;  ///< injection matrix value
-  double ii2_dUi1_;  ///< injection matrix value
-  double ii2_dUr2_;  ///< injection matrix value
-  double ii2_dUi2_;  ///< injection matrix value
+  double ir1_dUr1_;     ///< injection matrix value
+  double ir1_dUi1_;     ///< injection matrix value
+  double ir1_dUr2_;     ///< injection matrix value
+  double ir1_dUi2_;     ///< injection matrix value
+  double ii1_dUr1_;     ///< injection matrix value
+  double ii1_dUi1_;     ///< injection matrix value
+  double ii1_dUr2_;     ///< injection matrix value
+  double ii1_dUi2_;     ///< injection matrix value
+  double ir2_dUr1_;     ///< injection matrix value
+  double ir2_dUi1_;     ///< injection matrix value
+  double ir2_dUr2_;     ///< injection matrix value
+  double ir2_dUi2_;     ///< injection matrix value
+  double ii2_dUr1_;     ///< injection matrix value
+  double ii2_dUi1_;     ///< injection matrix value
+  double ii2_dUr2_;     ///< injection matrix value
+  double ii2_dUi2_;     ///< injection matrix value
   double factorPuToA_;  ///< factor to convert current from p.u. to A
 
   double ir01_;  ///< initial real part of the current at side 1
@@ -560,13 +561,13 @@ class ModelLine : public NetworkComponent {
   double ir02_;  ///< initial real part of the current at side 2
   double ii02_;  ///< initial imaginary part of the current at side 2
 
-  unsigned int yOffset_;  ///< global Y offset at the beginning of the line model
-  unsigned int IbReNum_;  ///< local Y index for IBranch_re
-  unsigned int IbImNum_;  ///< local Y index for IBranch_im
+  unsigned int yOffset_;      ///< global Y offset at the beginning of the line model
+  unsigned int IbReNum_;      ///< local Y index for IBranch_re
+  unsigned int IbImNum_;      ///< local Y index for IBranch_im
   unsigned int omegaRefNum_;  ///< local Y index for omegaRef
 
-  double omegaNom_;  ///< nominal angular frequency
-  double omegaRef_;  ///< reference angular frequency in p.u.
+  double omegaNom_;              ///< nominal angular frequency
+  double omegaRef_;              ///< reference angular frequency in p.u.
   const std::string modelType_;  ///< model Type
 };
 }  // namespace DYN

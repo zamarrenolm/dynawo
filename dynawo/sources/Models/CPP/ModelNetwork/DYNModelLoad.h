@@ -20,10 +20,10 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELLOAD_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELLOAD_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNModelBus.h"
 #include "DYNNetworkComponent.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class LoadInterface;
@@ -39,19 +39,12 @@ class ModelLoad : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelLoad() { }
+  ~ModelLoad() {}
 
   /**
    * @brief  calculated variables type
    */
-  typedef enum {
-    pNum_ = 0,
-    qNum_ = 1,
-    pcNum_ = 2,
-    qcNum_ = 3,
-    loadStateNum_ = 4,
-    nbCalculatedVariables_ = 5
-  } CalculatedVariables_t;
+  typedef enum { pNum_ = 0, qNum_ = 1, pcNum_ = 2, qcNum_ = 3, loadStateNum_ = 4, nbCalculatedVariables_ = 5 } CalculatedVariables_t;
 
   /**
    * @brief set the load connection status
@@ -93,7 +86,8 @@ class ModelLoad : public NetworkComponent {
   /**
    * @brief evaluate derivatives prim
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @brief define variables
@@ -180,7 +174,8 @@ class ModelLoad : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
@@ -190,7 +185,8 @@ class ModelLoad : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::collectSilentZ()
@@ -200,12 +196,13 @@ class ModelLoad : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::evalYMat()
    */
-  void evalYMat() { /* not needed*/ }
+  void evalYMat() { /* not needed*/
+  }
 
   /**
    * @copydoc NetworkComponent::init(int& yNum)
    */
-  void init(int & yNum);
+  void init(int& yNum);
 
   /**
    * @copydoc NetworkComponent::getY0()
@@ -237,7 +234,8 @@ class ModelLoad : public NetworkComponent {
   /**
    * @brief addBusNeighbors
    */
-  void addBusNeighbors() { /* not needed */ }
+  void addBusNeighbors() { /* not needed */
+  }
 
   /**
    * @brief init size
@@ -390,8 +388,7 @@ class ModelLoad : public NetworkComponent {
    * @param QdUr partial derivative of reactive power with respect to ur
    * @return value
    */
-  inline double ir_dUr(const double& ur, const double& ui, const double& U2,
-                       const double& p, const double& q, const double& PdUr, const double& QdUr) const {
+  inline double ir_dUr(const double& ur, const double& ui, const double& U2, const double& p, const double& q, const double& PdUr, const double& QdUr) const {
     return ((PdUr * ur + p) + (QdUr * ui) - 2. * ur * (p * ur + q * ui) / U2) / U2;
   }
 
@@ -406,8 +403,7 @@ class ModelLoad : public NetworkComponent {
    * @param QdUr partial derivative of reactive power with respect to ur
    * @return value
    */
-  inline double ii_dUr(const double& ur, const double& ui, const double& U2,
-                       const double& p, const double& q, const double& PdUr, const double& QdUr) const {
+  inline double ii_dUr(const double& ur, const double& ui, const double& U2, const double& p, const double& q, const double& PdUr, const double& QdUr) const {
     return ((PdUr * ui) - (QdUr * ur + q) - 2. * ur * (p * ui - q * ur) / U2) / U2;
   }
 
@@ -422,8 +418,7 @@ class ModelLoad : public NetworkComponent {
    * @param QdUi partial derivative of reactive power with respect to ui
    * @return value
    */
-  inline double ir_dUi(const double& ur, const double& ui, const double& U2,
-                       const double& p, const double& q, const double& PdUi, const double& QdUi) const {
+  inline double ir_dUi(const double& ur, const double& ui, const double& U2, const double& p, const double& q, const double& PdUi, const double& QdUi) const {
     return ((PdUi * ur) + (QdUi * ui + q) - 2. * ui * (p * ur + q * ui) / U2) / U2;
   }
 
@@ -438,8 +433,7 @@ class ModelLoad : public NetworkComponent {
    * @param QdUi partial derivative of reactive power with respect to ui
    * @return value
    */
-  inline double ii_dUi(const double& ur, const double & ui, const double& U2,
-                       const double& p, const double& q, const double& PdUi, const double& QdUi) const {
+  inline double ii_dUi(const double& ur, const double& ui, const double& U2, const double& p, const double& q, const double& PdUi, const double& QdUi) const {
     return ((PdUi * ui + p) - (QdUi * ur) - 2. * ui * (p * ui - q * ur) / U2) / U2;
   }
 
@@ -491,42 +485,42 @@ class ModelLoad : public NetworkComponent {
 
   boost::shared_ptr<ModelBus> modelBus_;  ///< model bus
   State connectionState_;  ///< "internal" load connection status, evaluated at the end of evalZ to detect if the state was modified by another component
-  bool stateModified_;  ///< true if the load connection state was modified
-  double kp_;  ///< gain kp
-  double kq_;  ///< gain kq
-  double P0_;  ///< initial active power
-  double Q0_;  ///< initial reactive power
-  double ir0_;  ///< initial real part of the current
-  double ii0_;  ///< initial imaginary part of the current
+  bool stateModified_;     ///< true if the load connection state was modified
+  double kp_;              ///< gain kp
+  double kq_;              ///< gain kq
+  double P0_;              ///< initial active power
+  double Q0_;              ///< initial reactive power
+  double ir0_;             ///< initial real part of the current
+  double ii0_;             ///< initial imaginary part of the current
 
   // Parameters
-  double alpha_;  ///< active power exponential sensitivity to voltage
-  double beta_;  ///< reactive power exponential sensitivity to voltage
-  bool isRestorative_;  ///< whether the consumed energy remains constant
+  double alpha_;         ///< active power exponential sensitivity to voltage
+  double beta_;          ///< reactive power exponential sensitivity to voltage
+  bool isRestorative_;   ///< whether the consumed energy remains constant
   bool isControllable_;  ///< whether the load can be controlled
-  double Tp_;  ///< time constant Tp
-  bool TpIsZero_;  ///< true if Tp == 0
-  double Tq_;  ///< time constant Tq
-  bool TqIsZero_;  ///< true if Tq == 0
-  double zPMax_;  ///< zPmax
-  double zQMax_;  ///< zQMax
-  double alphaLong_;  ///< alpha
-  double betaLong_;  ///< beta
-  double u0_;  ///< initial voltage
+  double Tp_;            ///< time constant Tp
+  bool TpIsZero_;        ///< true if Tp == 0
+  double Tq_;            ///< time constant Tq
+  bool TqIsZero_;        ///< true if Tq == 0
+  double zPMax_;         ///< zPmax
+  double zQMax_;         ///< zQMax
+  double alphaLong_;     ///< alpha
+  double betaLong_;      ///< beta
+  double u0_;            ///< initial voltage
 
   // Variables
-  double DeltaPc0_;  ///< delta pc0
-  double DeltaQc0_;  ///< delta qc0
-  double zP0_;  ///< zP0
-  double zQ0_;  ///< zQ0
-  double zPprim0_;  ///< zPprim0
-  double zQprim0_;  ///< zQprim0
-  unsigned int yOffset_;  ///< global Y offset at the beginning of the load model
+  double DeltaPc0_;           ///< delta pc0
+  double DeltaQc0_;           ///< delta qc0
+  double zP0_;                ///< zP0
+  double zQ0_;                ///< zQ0
+  double zPprim0_;            ///< zPprim0
+  double zQprim0_;            ///< zQprim0
+  unsigned int yOffset_;      ///< global Y offset at the beginning of the load model
   unsigned int DeltaPcYNum_;  ///< local Y index for DeltaPc
   unsigned int DeltaQcYNum_;  ///< local Y index for DeltaQc
-  unsigned int zPYNum_;  ///< local Y index for zP
-  unsigned int zQYNum_;  ///< local Y index for zQ
-};  ///< class for Load model
+  unsigned int zPYNum_;       ///< local Y index for zP
+  unsigned int zQYNum_;       ///< local Y index for zQ
+};                            ///< class for Load model
 
 }  // namespace DYN
 

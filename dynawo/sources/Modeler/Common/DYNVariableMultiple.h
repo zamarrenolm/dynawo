@@ -21,11 +21,10 @@
 #ifndef MODELER_COMMON_DYNVARIABLEMULTIPLE_H_
 #define MODELER_COMMON_DYNVARIABLEMULTIPLE_H_
 
-#include <string>
+#include "DYNVariableNative.h"
 
 #include <boost/optional.hpp>
-
-#include "DYNVariableNative.h"
+#include <string>
 
 namespace DYN {
 
@@ -52,7 +51,7 @@ class VariableMultiple : public VariableNative {
   /**
    * @brief Destructor
    */
-  virtual ~VariableMultiple() { }
+  virtual ~VariableMultiple() {}
 
   /**
    * @brief Getter for variable's cardinality parameter name
@@ -92,7 +91,7 @@ class VariableMultiple : public VariableNative {
  private:
   VariableMultiple();  ///< Private default constructor
 
-  const std::string cardinalityName_;  ///< name of the parameter used for cardinality computation
+  const std::string cardinalityName_;          ///< name of the parameter used for cardinality computation
   boost::optional<unsigned int> cardinality_;  ///< the cardinality numeric value (use of boost::optional to easily check whether it has been set)
 };
 }  // namespace DYN

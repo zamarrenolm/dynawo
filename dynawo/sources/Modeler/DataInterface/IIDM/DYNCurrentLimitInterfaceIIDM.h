@@ -20,9 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNCURRENTLIMITINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNCURRENTLIMITINTERFACEIIDM_H_
 
-#include <boost/optional.hpp>
-
 #include "DYNCurrentLimitInterface.h"
+
+#include <boost/optional.hpp>
 
 namespace DYN {
 
@@ -52,8 +52,8 @@ class CurrentLimitInterfaceIIDM : public CurrentLimitInterface {
 
  private:
   boost::optional<double> limit_;  ///< limit of the current limit
-  int acceptableDuration_;  ///< authorized duration over the limit
-};  ///< class for Current limit interface
+  int acceptableDuration_;         ///< authorized duration over the limit
+};                                 ///< class for Current limit interface
 }  // namespace DYN
 
 #endif  // MODELER_DATAINTERFACE_IIDM_DYNCURRENTLIMITINTERFACEIIDM_H_

@@ -35,14 +35,7 @@ class HvdcLineInterfaceIIDM : public HvdcLineInterface {
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_P1 = 0,
-    VAR_P2,
-    VAR_Q1,
-    VAR_Q2,
-    VAR_STATE1,
-    VAR_STATE2
-  } indexVar_t;
+  typedef enum { VAR_P1 = 0, VAR_P2, VAR_Q1, VAR_Q2, VAR_STATE1, VAR_STATE2 } indexVar_t;
 
  public:
   /**
@@ -56,8 +49,7 @@ class HvdcLineInterfaceIIDM : public HvdcLineInterface {
    * @param conv1: converter 1 data interface instance
    * @param conv2: converter 2 data interface instance
    */
-  explicit HvdcLineInterfaceIIDM(IIDM::HvdcLine& hvdcLine,
-                                 const boost::shared_ptr<ConverterInterface>& conv1,
+  explicit HvdcLineInterfaceIIDM(IIDM::HvdcLine& hvdcLine, const boost::shared_ptr<ConverterInterface>& conv1,
                                  const boost::shared_ptr<ConverterInterface>& conv2);
 
   /**
@@ -126,10 +118,10 @@ class HvdcLineInterfaceIIDM : public HvdcLineInterface {
   const boost::shared_ptr<ConverterInterface>& getConverter2() const;
 
  private:
-  IIDM::HvdcLine& hvdcLineIIDM_;  ///< reference to the iidm line instance
+  IIDM::HvdcLine& hvdcLineIIDM_;                 ///< reference to the iidm line instance
   boost::shared_ptr<ConverterInterface> conv1_;  ///< conv1
   boost::shared_ptr<ConverterInterface> conv2_;  ///< conv2
-};  ///< Interface class for Hvdc Line model
+};                                               ///< Interface class for Hvdc Line model
 
 }  // namespace DYN
 

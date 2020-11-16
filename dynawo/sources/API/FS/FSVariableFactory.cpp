@@ -19,6 +19,7 @@
  */
 
 #include "FSVariableFactory.h"
+
 #include "FSVariable.h"
 
 using std::string;

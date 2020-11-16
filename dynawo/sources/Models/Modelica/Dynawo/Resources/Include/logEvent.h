@@ -14,13 +14,38 @@
 #include "ModelicaUtilities.h"
 
 extern void addLogEvent1(int key){};
-extern void addLogEvent2(int key, const char * arg1, const char * arg2){};
-extern void addLogEvent3(int key, const char * arg1, const char * arg2, const char * arg3){};
-extern void addLogEvent4(int key, const char * arg1, const char * arg2, const char * arg3, const char * arg4){};
-extern void addLogEvent5(int key, const char * arg1, const char * arg2, const char * arg3, const char * arg4, const char * arg5){};
+extern void addLogEvent2(int key, const char* arg1, const char* arg2){};
+extern void addLogEvent3(int key, const char* arg1, const char* arg2, const char* arg3){};
+extern void addLogEvent4(int key, const char* arg1, const char* arg2, const char* arg3, const char* arg4){};
+extern void addLogEvent5(int key, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5){};
 
-extern void addLogEventRaw1(const char * key1){ModelicaMessage(key1);};
-extern void addLogEventRaw2(const char * key1,const char * key2){ModelicaMessage(key1);ModelicaMessage(key2);};
-extern void addLogEventRaw3(const char * key1,const char * key2,const char * key3){ModelicaMessage(key1);ModelicaMessage(key2);ModelicaMessage(key3);};
-extern void addLogEventRaw4(const char * key1,const char * key2,const char * key3,const char * key4){ModelicaMessage(key1);ModelicaMessage(key2);ModelicaMessage(key3);ModelicaMessage(key4);};
-extern void addLogEventRaw5(const char * key1,const char * key2,const char * key3,const char * key4,const char * key5){ModelicaMessage(key1);ModelicaMessage(key2);ModelicaMessage(key3);ModelicaMessage(key4);ModelicaMessage(key5);};
+extern void
+addLogEventRaw1(const char* key1) {
+  ModelicaMessage(key1);
+};
+extern void
+addLogEventRaw2(const char* key1, const char* key2) {
+  ModelicaMessage(key1);
+  ModelicaMessage(key2);
+};
+extern void
+addLogEventRaw3(const char* key1, const char* key2, const char* key3) {
+  ModelicaMessage(key1);
+  ModelicaMessage(key2);
+  ModelicaMessage(key3);
+};
+extern void
+addLogEventRaw4(const char* key1, const char* key2, const char* key3, const char* key4) {
+  ModelicaMessage(key1);
+  ModelicaMessage(key2);
+  ModelicaMessage(key3);
+  ModelicaMessage(key4);
+};
+extern void
+addLogEventRaw5(const char* key1, const char* key2, const char* key3, const char* key4, const char* key5) {
+  ModelicaMessage(key1);
+  ModelicaMessage(key2);
+  ModelicaMessage(key3);
+  ModelicaMessage(key4);
+  ModelicaMessage(key5);
+};

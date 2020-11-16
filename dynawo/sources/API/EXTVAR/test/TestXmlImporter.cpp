@@ -17,9 +17,8 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
 #include "EXTVARXmlImporter.h"
+#include "gtest_dynawo.h"
 
 namespace externalVariables {
 
@@ -69,12 +68,12 @@ TEST(APICRVTest, testXmlFileImporter) {
 TEST(APICRVTest, testXmlStreamImporter) {
   XmlImporter importer;
   std::istringstream goodInputStream(
-    "<?xml version='1.0' encoding='UTF-8'?>"
-    "<external_variables xmlns=\"http://www.rte-france.com/dynawo\" xmlns:xi=\"http://www.w3.org/2001/XInclude\">"
-    "<variable type=\"continuous\" id=\"sortie.V.re\"/>"
-    "<variable type=\"continuous\" id=\"sortie.V.im\"/>"
-    "<variable type=\"continuous\" id=\"omegaRef.value\"/>"
-    "</external_variables>");
+      "<?xml version='1.0' encoding='UTF-8'?>"
+      "<external_variables xmlns=\"http://www.rte-france.com/dynawo\" xmlns:xi=\"http://www.w3.org/2001/XInclude\">"
+      "<variable type=\"continuous\" id=\"sortie.V.re\"/>"
+      "<variable type=\"continuous\" id=\"sortie.V.im\"/>"
+      "<variable type=\"continuous\" id=\"omegaRef.value\"/>"
+      "</external_variables>");
   std::istream goodStream(goodInputStream.rdbuf());
   ASSERT_NO_THROW(importer.importFromStream(goodStream));
 }

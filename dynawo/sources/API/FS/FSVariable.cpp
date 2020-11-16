@@ -23,11 +23,7 @@ using std::string;
 
 namespace finalState {
 
-Variable::Variable(const string& id) :
-id_(id),
-value_(0),
-available_(false) {
-}
+Variable::Variable(const string& id) : id_(id), value_(0), available_(false) {}
 
 void
 Variable::setId(const string& id) {

@@ -20,11 +20,12 @@
 #ifndef MODELER_COMMON_DYNCONNECTOR_H_
 #define MODELER_COMMON_DYNCONNECTOR_H_
 
-#include <boost/unordered_map.hpp>
-#include <vector>
-#include <list>
-#include <boost/shared_ptr.hpp>
 #include "DYNEnumUtils.h"
+
+#include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
+#include <list>
+#include <vector>
 
 namespace DYN {
 class SparseMatrix;
@@ -38,8 +39,7 @@ class connectedSubModel {
   /**
    * @brief default constructor
    */
-  connectedSubModel() :
-  negated_(false) { }
+  connectedSubModel() : negated_(false) {}
 
   /**
    * @brief copy constructor
@@ -48,10 +48,7 @@ class connectedSubModel {
    */
   //---------------------------------------------------------------------
 
-  connectedSubModel(const connectedSubModel & model) :
-  subModel_(model.subModel_),
-  variable_(model.variable_),
-  negated_(model.negated_) { }
+  connectedSubModel(const connectedSubModel& model) : subModel_(model.subModel_), variable_(model.variable_), negated_(model.negated_) {}
 
   /**
    * @brief constructor
@@ -60,15 +57,15 @@ class connectedSubModel {
    * @param variable the variable to use in the connector
    * @param negated @b true if the opposite of the variable should be used in the connector's equations
    */
-  connectedSubModel(const boost::shared_ptr<SubModel> & subModel, const boost::shared_ptr<Variable> variable, bool negated) :
-  subModel_(subModel),
-  variable_(variable),
-  negated_(negated) { }
+  connectedSubModel(const boost::shared_ptr<SubModel>& subModel, const boost::shared_ptr<Variable> variable, bool negated) :
+      subModel_(subModel),
+      variable_(variable),
+      negated_(negated) {}
 
   /**
    * @brief destructor
    */
-  ~connectedSubModel() { }
+  ~connectedSubModel() {}
 
   /**
    * @brief assignment
@@ -112,7 +109,7 @@ class connectedSubModel {
  public:
   boost::shared_ptr<SubModel> subModel_;  ///< submodel connected by the connector
   boost::shared_ptr<Variable> variable_;  ///< the variable
-  bool negated_;  ///< @b true if the opposite of the variable should be used in the connector's equations
+  bool negated_;                          ///< @b true if the opposite of the variable should be used in the connector's equations
 };
 
 /**
@@ -125,7 +122,7 @@ class Connector {
    * @brief getter of the submodels connected by the connector
    * @return submodels connected by the connector
    */
-  inline std::vector<connectedSubModel> & connectedSubModels() {
+  inline std::vector<connectedSubModel>& connectedSubModels() {
     return connectedSubModels_;
   }
 
@@ -141,7 +138,7 @@ class Connector {
    * @param variable the variable inside the subModel to use in the connector's equations
    * @param negated @b true if the opposite of the variable should be used
    */
-  void addConnectedSubModel(const boost::shared_ptr<SubModel> &subModel, const boost::shared_ptr<Variable> & variable, bool negated);
+  void addConnectedSubModel(const boost::shared_ptr<SubModel>& subModel, const boost::shared_ptr<Variable>& variable, bool negated);
 
   /**
    * @brief getter of the number of subModel connected by the connector
@@ -208,28 +205,28 @@ class ConnectorContainer {
    * @param indicesDiff index of each z variables which has changed
    * @param z vector of discrete values
    */
-  void propagateZDiff(std::vector<int> & indicesDiff, double* z);
+  void propagateZDiff(std::vector<int>& indicesDiff, double* z);
 
   /**
    * @brief add a flow connector to the container
    *
    * @param connector flow connector to add
    */
-  void addFlowConnector(boost::shared_ptr<Connector> & connector);
+  void addFlowConnector(boost::shared_ptr<Connector>& connector);
 
   /**
    * @brief add a continuous connector to the container
    *
    * @param connector continuous connector to add
    */
-  void addContinuousConnector(boost::shared_ptr<Connector> & connector);
+  void addContinuousConnector(boost::shared_ptr<Connector>& connector);
 
   /**
    * @brief add a discrete connector to the container
    *
    * @param connector discrete connector to add
    */
-  void addDiscreteConnector(boost::shared_ptr<Connector> & connector);
+  void addDiscreteConnector(boost::shared_ptr<Connector>& connector);
 
   /**
    * @brief print informations about the connector stored in the container
@@ -250,14 +247,14 @@ class ConnectorContainer {
    * @param localFIndex local index of connector
    * @param fEquation connector's submodels
    */
-  void getConnectorInfos(const int & globalFIndex, std::string & subModelName, int & localFIndex, std::string & fEquation) const;
+  void getConnectorInfos(const int& globalFIndex, std::string& subModelName, int& localFIndex, std::string& fEquation) const;
 
   /**
    * @brief evaluate the residual values of each connectors
    *
    * @param t time to used during the evaluation
    */
-  void evalFConnector(const double &t);
+  void evalFConnector(const double& t);
 
   /**
    * @brief evaluate the jacobian of each connectors
@@ -292,9 +289,8 @@ class ConnectorContainer {
    * @param connectorsList the list of connectors
    * @param connectorsByVarNum the association between (global) variable index and connector
    */
-  void mergeConnectors(boost::shared_ptr<Connector> connector, boost::shared_ptr<Connector> reference,
-                       std::list<boost::shared_ptr<Connector> > &connectorsList, boost::unordered_map<int, boost::shared_ptr<Connector> >& connectorsByVarNum);
-
+  void mergeConnectors(boost::shared_ptr<Connector> connector, boost::shared_ptr<Connector> reference, std::list<boost::shared_ptr<Connector> >& connectorsList,
+                       boost::unordered_map<int, boost::shared_ptr<Connector> >& connectorsByVarNum);
 
   /**
    * @brief evaluate the property of each residual functions for each connectors
@@ -386,7 +382,7 @@ class ConnectorContainer {
    *
    * @return information describing the Y connector (which models are connected)
    */
-  std::string getYConnectorInfos(const int & index) const;
+  std::string getYConnectorInfos(const int& index) const;
 
   /**
    * @brief get Flow connector's information according to its index
@@ -394,7 +390,7 @@ class ConnectorContainer {
    *
    * @return information describing the Flow connector (which models are connected)
    */
-  inline std::string getFlowConnectorInfos(const int & index) const {
+  inline std::string getFlowConnectorInfos(const int& index) const {
     return getConnectorInfos("Flow connector : ", flowConnectors_.at(index));
   }
 
@@ -404,7 +400,7 @@ class ConnectorContainer {
    *
    * @return information describing the Z connector (which models are connected)
    */
-  inline std::string getZConnectorInfos(const int & index) const {
+  inline std::string getZConnectorInfos(const int& index) const {
     return getConnectorInfos("Z connector : ", zConnectors_.at(index));
   }
 
@@ -466,29 +462,29 @@ class ConnectorContainer {
   void getY0ConnectorForZConnector();
 
  private:
-  std::vector<boost::shared_ptr<Connector> >yConnectorsDeclared_;  ///< continuous connectors before merge
-  std::vector<boost::shared_ptr<Connector> >flowConnectorsDeclared_;  ///< flow connectors before merge
-  std::vector<boost::shared_ptr<Connector> >zConnectorsDeclared_;  ///< discrete connectors before merge
+  std::vector<boost::shared_ptr<Connector> > yConnectorsDeclared_;     ///< continuous connectors before merge
+  std::vector<boost::shared_ptr<Connector> > flowConnectorsDeclared_;  ///< flow connectors before merge
+  std::vector<boost::shared_ptr<Connector> > zConnectorsDeclared_;     ///< discrete connectors before merge
 
-  std::vector<boost::shared_ptr<Connector> >yConnectors_;  ///< continuous connectors after merge
-  std::vector<boost::shared_ptr<Connector> >flowConnectors_;  ///< flow connectors after merge
-  std::vector<boost::shared_ptr<Connector> >zConnectors_;  ///< discrete connectors after merge
+  std::vector<boost::shared_ptr<Connector> > yConnectors_;     ///< continuous connectors after merge
+  std::vector<boost::shared_ptr<Connector> > flowConnectors_;  ///< flow connectors after merge
+  std::vector<boost::shared_ptr<Connector> > zConnectors_;     ///< discrete connectors after merge
 
-  boost::unordered_map<int, boost::shared_ptr<Connector> > yConnectorByVarNum_;  ///< (global) index of the variable connected -> connector
+  boost::unordered_map<int, boost::shared_ptr<Connector> > yConnectorByVarNum_;     ///< (global) index of the variable connected -> connector
   boost::unordered_map<int, boost::shared_ptr<Connector> > flowConnectorByVarNum_;  ///< (global) index of the variable connected -> connector
-  boost::unordered_map<int, boost::shared_ptr<Connector> > zConnectorByVarNum_;  ///< (global) index of the variable connected -> connector
+  boost::unordered_map<int, boost::shared_ptr<Connector> > zConnectorByVarNum_;     ///< (global) index of the variable connected -> connector
 
-  int offsetModel_;  ///< offset to use when filling the residual's vector
-  int sizeY_;  ///<  size of the Y buffer
-  double* fLocal_;  ///< local buffer to use when filling the residual's vector
-  double* yLocal_;  ///< local buffer to use for continuous variables
-  double* ypLocal_;  ///< local buffer to use for derivatives of continuous variables
-  double* zLocal_;  ///< local buffer to use for discrete variables
+  int offsetModel_;        ///< offset to use when filling the residual's vector
+  int sizeY_;              ///<  size of the Y buffer
+  double* fLocal_;         ///< local buffer to use when filling the residual's vector
+  double* yLocal_;         ///< local buffer to use for continuous variables
+  double* ypLocal_;        ///< local buffer to use for derivatives of continuous variables
+  double* zLocal_;         ///< local buffer to use for discrete variables
   bool* zConnectedLocal_;  ///< local buffer to use for connection status of discrete variables
-  propertyF_t* fType_;  ///< local buffer to use for properties of residual functions
+  propertyF_t* fType_;     ///< local buffer to use for properties of residual functions
 
-  std::vector< std::vector<unsigned int> > index_;  ///< global index of variables for evalF by connector;
-  std::vector< std::vector<int> > factor_;  ///< factor to use for evalF by variables by connector (should be 1 or -1)
+  std::vector<std::vector<unsigned int> > index_;  ///< global index of variables for evalF by connector;
+  std::vector<std::vector<int> > factor_;          ///< factor to use for evalF by variables by connector (should be 1 or -1)
 
   bool connectorsMerged_;  ///< indicates if the connectors are already merged or not
 };

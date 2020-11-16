@@ -17,23 +17,22 @@
  * file : implementation file
  */
 
-#include <xml/sax/parser/Attributes.h>
+#include "EXTVARXmlHandler.h"
 
-#include <boost/phoenix/core.hpp>
-#include <boost/phoenix/operator/self.hpp>
-#include <boost/phoenix/bind.hpp>
-
+#include "DYNExecUtils.h"
 #include "DYNFileSystemUtils.h"
 #include "DYNMacrosMessage.h"
-#include "DYNExecUtils.h"
-
 #include "EXTVARVariableFactory.h"
-#include "EXTVARVariablesCollectionFactory.h"
-#include "EXTVARXmlHandler.h"
 #include "EXTVARVariablesCollection.h"
+#include "EXTVARVariablesCollectionFactory.h"
 
-using std::string;
+#include <boost/phoenix/bind.hpp>
+#include <boost/phoenix/core.hpp>
+#include <boost/phoenix/operator/self.hpp>
+#include <xml/sax/parser/Attributes.h>
+
 using boost::shared_ptr;
+using std::string;
 
 namespace lambda = boost::phoenix;
 namespace lambda_args = lambda::placeholders;
@@ -43,9 +42,7 @@ parser::namespace_uri extvar_ns("http://www.rte-france.com/dynawo");  ///< names
 
 namespace externalVariables {
 
-XmlHandler::XmlHandler() :
-variablesCollection_(VariablesCollectionFactory::newCollection()),
-variablesHandler_(parser::ElementName(extvar_ns, "variable")) {
+XmlHandler::XmlHandler() : variablesCollection_(VariablesCollectionFactory::newCollection()), variablesHandler_(parser::ElementName(extvar_ns, "variable")) {
   onElement(extvar_ns("external_variables/variable"), variablesHandler_);
 
   variablesHandler_.onEnd(lambda::bind(&XmlHandler::addVariable, lambda::ref(*this)));

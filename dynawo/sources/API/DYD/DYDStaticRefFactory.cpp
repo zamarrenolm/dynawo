@@ -18,10 +18,11 @@
  */
 
 #include "DYDStaticRefFactory.h"
+
 #include "DYDStaticRef.h"
 
-using std::string;
 using boost::shared_ptr;
+using std::string;
 
 namespace dynamicdata {
 

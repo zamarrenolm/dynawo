@@ -20,12 +20,12 @@
 #ifndef COMMON_DYNFILESYSTEMUTILS_H_
 #define COMMON_DYNFILESYSTEMUTILS_H_
 
-#include <string>
+#include <boost/filesystem.hpp>
+#include <boost/unordered_set.hpp>
 #include <list>
 #include <map>
+#include <string>
 #include <vector>
-#include <boost/unordered_set.hpp>
-#include <boost/filesystem.hpp>
 
 /**
  * @struct UserDefinedDirectory
@@ -49,7 +49,7 @@ struct UserDefinedDirectory {
  * @return the file path ("" when the file was not found)
  * throw an exception when the rootPath does not exist
  */
-std::string searchFile(const std::string & name, const std::string & rootDir, const bool searchInSubDirs);
+std::string searchFile(const std::string& name, const std::string& rootDir, const bool searchInSubDirs);
 
 /**
  * @brief Search for a files which have a given file extension within a directory
@@ -62,9 +62,9 @@ std::string searchFile(const std::string & name, const std::string & rootDir, co
  *
  * throw an exception when the rootPath does not exist
  */
-void searchFilesAccordingToExtensions(const std::string & directoryToScan, const std::vector <std::string> & fileExtensionsAllowed,
-                                      const std::vector <std::string> & fileExtensionsForbidden, const bool searchInSubDirs,
-                                      std::vector <std::string> & filesFound);
+void searchFilesAccordingToExtensions(const std::string& directoryToScan, const std::vector<std::string>& fileExtensionsAllowed,
+                                      const std::vector<std::string>& fileExtensionsForbidden, const bool searchInSubDirs,
+                                      std::vector<std::string>& filesFound);
 
 /**
  * @brief Search for a files which have a given file extension within a directory
@@ -77,9 +77,8 @@ void searchFilesAccordingToExtensions(const std::string & directoryToScan, const
  *
  * throw an exception when the rootPath does not exist
  */
-void searchFilesAccordingToExtension(const std::string & directoryToScan, const std::string fileExtensionAllowed,
-                                     const std::vector <std::string> & fileExtensionsForbidden, const bool searchInSubDirs,
-                                     std::vector <std::string> & filesFound);
+void searchFilesAccordingToExtension(const std::string& directoryToScan, const std::string fileExtensionAllowed,
+                                     const std::vector<std::string>& fileExtensionsForbidden, const bool searchInSubDirs, std::vector<std::string>& filesFound);
 
 /**
  * @brief Search for models within a directory
@@ -95,10 +94,9 @@ void searchFilesAccordingToExtension(const std::string & directoryToScan, const 
  *
  * call searchModelsFilesRec
  */
-void searchModelsFiles(const std::string & directoryToScan, const std::string& fileExtension, const std::vector<std::string>& fileExtensionsForbidden,
-                       const boost::unordered_set<boost::filesystem::path>& pathsToIgnore, const bool searchInSubDirs,
-                       const bool packageForcesSubDirsSearch, const bool stopWhenSeePackage,
-                       std::map<std::string, std::string>& filesFound);  // search for models data in a given directory;
+void searchModelsFiles(const std::string& directoryToScan, const std::string& fileExtension, const std::vector<std::string>& fileExtensionsForbidden,
+                       const boost::unordered_set<boost::filesystem::path>& pathsToIgnore, const bool searchInSubDirs, const bool packageForcesSubDirsSearch,
+                       const bool stopWhenSeePackage, std::map<std::string, std::string>& filesFound);  // search for models data in a given directory;
 
 /**
  * @brief Search recursively for models within a directory
@@ -116,10 +114,10 @@ void searchModelsFiles(const std::string & directoryToScan, const std::string& f
  *
  * throw an exception when the rootPath does not exist
  */
-void searchModelsFilesRec(const std::string& directoryToScan, const std::string& fileExtension, const std::vector<std::string> & fileExtensionsForbidden,
-                          const boost::unordered_set<boost::filesystem::path>& pathsToIgnore, const bool searchInSubDirs,
-                          const bool isPackage, const bool packageForcesSubDirsSearch, const bool stopWhenSeePackage,
-                          const std::vector <std::string>& namespaces, std::map<std::string, std::string>& filesFound);
+void searchModelsFilesRec(const std::string& directoryToScan, const std::string& fileExtension, const std::vector<std::string>& fileExtensionsForbidden,
+                          const boost::unordered_set<boost::filesystem::path>& pathsToIgnore, const bool searchInSubDirs, const bool isPackage,
+                          const bool packageForcesSubDirsSearch, const bool stopWhenSeePackage, const std::vector<std::string>& namespaces,
+                          std::map<std::string, std::string>& filesFound);
 
 /**
  * @brief Search for Modelica models within a directory
@@ -147,7 +145,7 @@ void searchModelicaModels(const std::string& directoryToScan, const std::string&
  * @return the concatenated file path
  * throw an exception when the path does not exist
  */
-std::string canonical(const std::string & name, const std::string & rootName = ".");
+std::string canonical(const std::string& name, const std::string& rootName = ".");
 
 /**
  * @brief Concatenate two paths
@@ -157,7 +155,7 @@ std::string canonical(const std::string & name, const std::string & rootName = "
  *
  * @return the concatenated file path (even when the path does not exist)
  */
-std::string absolute(const std::string & name, const std::string & rootName = ".");
+std::string absolute(const std::string& name, const std::string& rootName = ".");
 
 /**
  * @brief return name if name is absolute, else concatenate name and rootName
@@ -168,7 +166,7 @@ std::string absolute(const std::string & name, const std::string & rootName = ".
  *
  * @return the concatenated file path (if path is not absolute)
  */
-std::string createAbsolutePath(const std::string & name, const std::string & rootName);
+std::string createAbsolutePath(const std::string& name, const std::string& rootName);
 
 /**
  * @brief Check whether a given path exists
@@ -178,7 +176,7 @@ std::string createAbsolutePath(const std::string & name, const std::string & roo
  * @return whether the path exists
  * Warning : using this function on a canonical path will either return true or throw an exception (when path is not relevant)
  */
-bool exists(const std::string & path);
+bool exists(const std::string& path);
 
 /**
  * @brief Remove a given path
@@ -187,7 +185,7 @@ bool exists(const std::string & path);
  *
  * @return whether the path existed (before trying to remove it)
  */
-bool remove(const std::string & path);
+bool remove(const std::string& path);
 
 /**
  * @brief copy a given file
@@ -196,7 +194,7 @@ bool remove(const std::string & path);
  * @param[in] newPath : the copied file
  *
  */
-void copy(const std::string & oldPath, const std::string & newPath);
+void copy(const std::string& oldPath, const std::string& newPath);
 
 /**
  * @brief Retrieve the current path
@@ -213,7 +211,7 @@ std::string current_path();
  * @param[in] path : the current path as a string
 
  */
-void current_path(const std::string & path);
+void current_path(const std::string& path);
 
 /**
  * @brief replace the file extension from a file path
@@ -223,7 +221,7 @@ void current_path(const std::string & path);
  * @return : the updated path as a string
 
  */
-std::string replace_extension(const std::string & path, const std::string & ext);
+std::string replace_extension(const std::string& path, const std::string& ext);
 
 /**
  * @brief Check whether a path points toward a directory
@@ -232,7 +230,7 @@ std::string replace_extension(const std::string & path, const std::string & ext)
  * @return : whether the path points toward a directory
 
  */
-bool is_directory(const std::string & path);
+bool is_directory(const std::string& path);
 
 /**
  * @brief Create all relevant directories in order to make a path relevant
@@ -241,7 +239,7 @@ bool is_directory(const std::string & path);
  * @return : whether the path was successfully created
 
  */
-void create_directory(const std::string & path);
+void create_directory(const std::string& path);
 
 /**
  * @brief Retrieve the file extension from a file path
@@ -250,7 +248,7 @@ void create_directory(const std::string & path);
  * @return : the file extension (or an empty string when no extension was found)
  * Warning : extension ("file.txt.tmp") will return ".tmp"
  */
-std::string extension(const std::string & path);
+std::string extension(const std::string& path);
 
 /**
  * @brief Check wether given extentions are found in a directory
@@ -258,7 +256,7 @@ std::string extension(const std::string & path);
  * @param[in] extensionList: list of extensions to search in the directory
  * @return : wether given extensions are found in directory
  */
-bool extensionFound(const std::string directoryToScan, const std::vector <std::string> & extensionList);
+bool extensionFound(const std::string directoryToScan, const std::vector<std::string>& extensionList);
 
 /**
  * @brief Check wether file path ends with a given extension
@@ -275,7 +273,7 @@ bool extensionEquals(const std::string path, const std::string extension);
  * @param path : the path from which to extract the directories list
  * @return the directories list in the path
  */
-std::list<std::string> list_directory(const std::string & path);
+std::list<std::string> list_directory(const std::string& path);
 
 /**
  * @brief Retrieve the file name from a file path
@@ -284,7 +282,7 @@ std::list<std::string> list_directory(const std::string & path);
  * @return : the file name (or an empty string when it fails)
 
  */
-std::string file_name(const std::string & path);
+std::string file_name(const std::string& path);
 
 /**
  * @brief Remove the file name from a file path
@@ -292,7 +290,7 @@ std::string file_name(const std::string & path);
  *
  * @return : the file path without the file name
  */
-std::string remove_file_name(const std::string & path);
+std::string remove_file_name(const std::string& path);
 
 /**
  * @brief Delete all contents in a directory
@@ -300,7 +298,7 @@ std::string remove_file_name(const std::string & path);
  *
  * @param[in] directory the directory where all contents are deleted
  */
-void remove_all_in_directory(const std::string & directory);
+void remove_all_in_directory(const std::string& directory);
 
 /**
  * @brief Generate the parent directory from a given path

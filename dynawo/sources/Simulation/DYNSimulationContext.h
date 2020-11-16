@@ -85,10 +85,10 @@ class SimulationContext {
   const std::string& getLocale();
 
  private:
-  std::string workingDirectory_;  ///< working directory of the simulation : where files should be created
-  std::string inputDirectory_;  ///< input directory : where files describing the simulation are located
+  std::string workingDirectory_;    ///< working directory of the simulation : where files should be created
+  std::string inputDirectory_;      ///< input directory : where files describing the simulation are located
   std::string resourcesDirectory_;  ///< directory where resources files are located
-  std::string locale_;  ///< locale to use for log messages
+  std::string locale_;              ///< locale to use for log messages
 };
 
 }  // end of namespace DYN

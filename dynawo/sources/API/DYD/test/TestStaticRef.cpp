@@ -17,13 +17,12 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYDStaticRefFactory.h"
-#include "DYDStaticRef.h"
-#include "DYDBlackBoxModelFactory.h"
 #include "DYDBlackBoxModel.h"
+#include "DYDBlackBoxModelFactory.h"
 #include "DYDIterators.h"
+#include "DYDStaticRef.h"
+#include "DYDStaticRefFactory.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 
@@ -52,9 +51,7 @@ TEST(APIDYDTest, StaticRefWithModel) {
   model->addStaticRef("var2", "staticVar2");
 
   int nbStaticRefs = 0;
-  for (staticRef_const_iterator itSR = model->cbeginStaticRef();
-          itSR != model->cendStaticRef();
-          ++itSR) {
+  for (staticRef_const_iterator itSR = model->cbeginStaticRef(); itSR != model->cendStaticRef(); ++itSR) {
     if (nbStaticRefs == 0) {
       ASSERT_EQ((*itSR)->getModelVar(), "var1");
       ASSERT_EQ((*itSR)->getStaticVar(), "staticVar1");

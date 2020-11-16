@@ -21,9 +21,10 @@
 #ifndef COMMON_DYNERROR_H_
 #define COMMON_DYNERROR_H_
 
+#include "DYNMessage.h"
+
 #include <stdio.h>
 #include <string>
-#include "DYNMessage.h"
 
 namespace DYN {
 
@@ -38,17 +39,16 @@ class Error : public std::exception {
    * Don't use the 0 value, which means success for shell script
    */
   typedef enum {
-    UNDEFINED = -1, /**< undefined error */
-    SUNDIALS_ERROR = 1, /**< error localised in sundials solver when reading/creating data */
-    SOLVER_ALGO = 2, /**< error localised in solver during solve algorithm */
-    MODELER = 3, /**< error localised in modeler */
-    GENERAL = 4, /**< general error */
-    SIMULATION = 5, /**< error localised in simulation */
+    UNDEFINED = -1,      /**< undefined error */
+    SUNDIALS_ERROR = 1,  /**< error localised in sundials solver when reading/creating data */
+    SOLVER_ALGO = 2,     /**< error localised in solver during solve algorithm */
+    MODELER = 3,         /**< error localised in modeler */
+    GENERAL = 4,         /**< general error */
+    SIMULATION = 5,      /**< error localised in simulation */
     NUMERICAL_ERROR = 6, /**< numerical error (localised in models) */
-    STATIC_DATA = 7, /**< error localised in DynawoIidm library */
-    API = 8 /**< error localised in Dynawo API */
+    STATIC_DATA = 7,     /**< error localised in DynawoIidm library */
+    API = 8              /**< error localised in Dynawo API */
   } TypeError_t;
-
 
  public:
   /**
@@ -78,19 +78,19 @@ class Error : public std::exception {
    *
    * @return an error with same value as e
    */
-  Error & operator=(const Error & e);
+  Error& operator=(const Error& e);
 
   /**
    * @brief Returns a pointer to the error description
    *
    * @return error's description
    */
-  virtual const char * what() const throw();
+  virtual const char* what() const throw();
 
   /**
    * @brief destructor
    */
-  virtual ~Error() throw() { }
+  virtual ~Error() throw() {}
 
   /**
    * @brief returns the error's type
@@ -115,7 +115,7 @@ class Error : public std::exception {
    * @return reference to the stream instance
    *
    */
-  friend std::ostream & operator<<(std::ostream & os, const Error & e) {
+  friend std::ostream& operator<<(std::ostream& os, const Error& e) {
     os << e.msgToReturn_;
     return os;
   }
@@ -124,11 +124,11 @@ class Error : public std::exception {
   /**
    * @brief default constructor
    */
-  Error(): key_(-1), type_(UNDEFINED) { }
+  Error() : key_(-1), type_(UNDEFINED) {}
 
  private:
-  int key_;  ///< key of the error
-  TypeError_t type_;  ///< type of the error
+  int key_;                  ///< key of the error
+  TypeError_t type_;         ///< type of the error
   std::string msgToReturn_;  ///< string message to return when the error is flushed
 };
 
@@ -161,19 +161,19 @@ class MessageError : public std::exception {
    *
    * @return an error with same value as e
    */
-  MessageError& operator=(const MessageError & e);
+  MessageError& operator=(const MessageError& e);
 
   /**
    * @brief Returns a pointer to the error description
    *
    * @return error's description
    */
-  virtual const char * what() const throw();
+  virtual const char* what() const throw();
 
   /**
    * @brief destructor
    */
-  virtual ~MessageError() throw() { }
+  virtual ~MessageError() throw() {}
 
   /**
    * @brief returns the error's message
@@ -191,7 +191,7 @@ class MessageError : public std::exception {
    * @return reference to the stream instance
    *
    */
-  friend std::ostream & operator<<(std::ostream & os, const MessageError & e) {
+  friend std::ostream& operator<<(std::ostream& os, const MessageError& e) {
     os << e.msgToReturn_;
     return os;
   }
@@ -200,7 +200,7 @@ class MessageError : public std::exception {
   /**
    * @brief default constructor
    */
-  MessageError() { }
+  MessageError() {}
 
  private:
   std::string msgToReturn_;  ///< string message to return when the error is flushed

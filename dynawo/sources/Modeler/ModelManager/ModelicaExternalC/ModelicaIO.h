@@ -78,21 +78,17 @@
 #define _Out_
 #endif
 
-MODELICA_EXPORT void ModelicaIO_readMatrixSizes(_In_z_ const char* fileName,
-                                _In_z_ const char* matrixName,
-                                _Out_ int* dim) MODELICA_NONNULLATTR;
-  /* Read matrix dimensions from file
+MODELICA_EXPORT void ModelicaIO_readMatrixSizes(_In_z_ const char* fileName, _In_z_ const char* matrixName, _Out_ int* dim) MODELICA_NONNULLATTR;
+/* Read matrix dimensions from file
 
      -> fileName: Name of file
      -> matrixName: Name of matrix
      -> dim: Output array for number of rows and columns
   */
 
-MODELICA_EXPORT void ModelicaIO_readRealMatrix(_In_z_ const char* fileName,
-                               _In_z_ const char* matrixName,
-                               _Inout_ double* matrix, size_t m, size_t n,
-                               int verbose) MODELICA_NONNULLATTR;
-  /* Read matrix from file
+MODELICA_EXPORT void ModelicaIO_readRealMatrix(_In_z_ const char* fileName, _In_z_ const char* matrixName, _Inout_ double* matrix, size_t m, size_t n,
+                                               int verbose) MODELICA_NONNULLATTR;
+/* Read matrix from file
 
      -> fileName: Name of file
      -> matrixName: Name of matrix
@@ -102,12 +98,9 @@ MODELICA_EXPORT void ModelicaIO_readRealMatrix(_In_z_ const char* fileName,
      -> verbose: Print message that file is loading
   */
 
-MODELICA_EXPORT int ModelicaIO_writeRealMatrix(_In_z_ const char* fileName,
-                               _In_z_ const char* matrixName,
-                               _In_ double* matrix, size_t m, size_t n,
-                               int append,
-                               _In_z_ const char* version) MODELICA_NONNULLATTR;
-  /* Write matrix to file
+MODELICA_EXPORT int ModelicaIO_writeRealMatrix(_In_z_ const char* fileName, _In_z_ const char* matrixName, _In_ double* matrix, size_t m, size_t n, int append,
+                                               _In_z_ const char* version) MODELICA_NONNULLATTR;
+/* Write matrix to file
 
      -> fileName: Name of file
      -> matrixName: Name of matrix
@@ -124,11 +117,9 @@ MODELICA_EXPORT int ModelicaIO_writeRealMatrix(_In_z_ const char* fileName,
                  = "7.3": MATLAB MAT-file of version 7.3
   */
 
-MODELICA_EXPORT double* ModelicaIO_readRealTable(_In_z_ const char* fileName,
-                                 _In_z_ const char* tableName,
-                                 _Out_ size_t* m, _Out_ size_t* n,
-                                 int verbose) MODELICA_NONNULLATTR;
-  /* Read matrix and its dimensions from file
+MODELICA_EXPORT double* ModelicaIO_readRealTable(_In_z_ const char* fileName, _In_z_ const char* tableName, _Out_ size_t* m, _Out_ size_t* n,
+                                                 int verbose) MODELICA_NONNULLATTR;
+/* Read matrix and its dimensions from file
      Note: Only called from ModelicaStandardTables, but impossible to be called
      from a Modelica environment
 
@@ -141,7 +132,7 @@ MODELICA_EXPORT double* ModelicaIO_readRealTable(_In_z_ const char* fileName,
   */
 
 MODELICA_EXPORT void ModelicaIO_freeRealTable(double* table);
-  /* Free table
+/* Free table
      Note: Only called from ModelicaStandardTables to free the allocated memory by
      ModelicaIO_readRealTable
   */

@@ -17,12 +17,14 @@
  * @brief sub-model factory implementation file
  *
  */
-#include <map>
-#include <iostream>
-#include <dlfcn.h>
 #include "DYNSubModelFactory.h"
-#include "DYNTrace.h"
+
 #include "DYNSubModel.h"
+#include "DYNTrace.h"
+
+#include <dlfcn.h>
+#include <iostream>
+#include <map>
 
 using std::map;
 using std::string;
@@ -33,8 +35,7 @@ typedef SubModelFactory* getSubModelFactory_t();
 
 SubModelFactories SubModelFactory::factories_;
 
-SubModelFactories::SubModelFactories() {
-}
+SubModelFactories::SubModelFactories() {}
 
 SubModelFactories::~SubModelFactories() {
   SubmodelFactoryIterator iter = factoryMap_.begin();
@@ -51,11 +52,13 @@ SubModelFactories::~SubModelFactories() {
   }
 }
 
-SubModelFactories::SubmodelFactoryIterator SubModelFactories::find(const std::string& lib) {
+SubModelFactories::SubmodelFactoryIterator
+SubModelFactories::find(const std::string& lib) {
   return (factoryMap_.find(lib));
 }
 
-bool SubModelFactories::end(SubmodelFactoryIterator& iter) {
+bool
+SubModelFactories::end(SubmodelFactoryIterator& iter) {
   return (iter == factoryMap_.end());
 }
 
@@ -64,11 +67,13 @@ SubModelFactories::add(const std::string& lib, SubModelFactory* factory) {
   factoryMap_.insert(std::make_pair(lib, factory));
 }
 
-void SubModelFactories::add(const std::string& lib, destroy_model_t* deleteFactory) {
+void
+SubModelFactories::add(const std::string& lib, destroy_model_t* deleteFactory) {
   factoryMapDestroy_.insert(std::make_pair(lib, deleteFactory));
 }
 
-boost::shared_ptr<SubModel> SubModelFactory::createSubModelFromLib(const std::string & lib) {
+boost::shared_ptr<SubModel>
+SubModelFactory::createSubModelFromLib(const std::string& lib) {
   SubModelFactories::SubmodelFactoryIterator iter = factories_.find(lib);
   SubModel* subModel;
   boost::shared_ptr<SubModel> subModelShared;
@@ -87,13 +92,13 @@ boost::shared_ptr<SubModel> SubModelFactory::createSubModelFromLib(const std::st
     // reset errors
     dlerror();
 
-    getSubModelFactory_t* getFactory = reinterpret_cast<getSubModelFactory_t*> (dlsym(handle, "getFactory"));
+    getSubModelFactory_t* getFactory = reinterpret_cast<getSubModelFactory_t*>(dlsym(handle, "getFactory"));
     const char* dlsym_error = dlerror();
     if (dlsym_error) {
       stringstream msg;
       msg << "Load error :" << dlsym_error;
       Trace::error() << msg.str() << Trace::endline;
-      throw DYNError(DYN::Error::GENERAL, LibraryLoadFailure, lib+"::getFactory");
+      throw DYNError(DYN::Error::GENERAL, LibraryLoadFailure, lib + "::getFactory");
     }
 
     destroy_model_t* deleteFactory = reinterpret_cast<destroy_model_t*>(dlsym(handle, "deleteFactory"));
@@ -102,7 +107,7 @@ boost::shared_ptr<SubModel> SubModelFactory::createSubModelFromLib(const std::st
       stringstream msg;
       msg << "Load error :" << dlsym_error;
       Trace::error() << msg.str() << Trace::endline;
-      throw DYNError(DYN::Error::GENERAL, LibraryLoadFailure, lib+"::deleteFactory");
+      throw DYNError(DYN::Error::GENERAL, LibraryLoadFailure, lib + "::deleteFactory");
     }
 
     SubModelFactory* factory = getFactory();
@@ -120,10 +125,10 @@ boost::shared_ptr<SubModel> SubModelFactory::createSubModelFromLib(const std::st
   return subModelShared;
 }
 
-SubModelDelete::SubModelDelete(SubModelFactory* factory) : factory_(factory) {
-}
+SubModelDelete::SubModelDelete(SubModelFactory* factory) : factory_(factory) {}
 
-void SubModelDelete::operator()(SubModel* subModel) {
+void
+SubModelDelete::operator()(SubModel* subModel) {
   factory_->destroy(subModel);
 }
 

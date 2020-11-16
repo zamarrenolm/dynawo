@@ -12,6 +12,7 @@
 //
 
 #include "CRTCriteriaFactory.h"
+
 #include "CRTCriteria.h"
 
 using boost::shared_ptr;

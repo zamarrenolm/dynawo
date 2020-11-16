@@ -17,6 +17,7 @@
  * @brief Ring buffer implementation
  */
 #include "DYNRingBuffer.h"
+
 #include "DYNCommon.h"
 #include "DYNError.h"
 #include "DYNMacrosMessage.h"

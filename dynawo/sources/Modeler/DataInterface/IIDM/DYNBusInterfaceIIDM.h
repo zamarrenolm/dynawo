@@ -20,9 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNBUSINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNBUSINTERFACEIIDM_H_
 
-#include <boost/optional.hpp>
-
 #include "DYNBusInterface.h"
+
+#include <boost/optional.hpp>
 
 namespace IIDM {
 class Bus;
@@ -39,10 +39,7 @@ class BusInterfaceIIDM : public BusInterface {
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_V = 0,
-    VAR_ANGLE = 1
-  } indexVar_t;
+  typedef enum { VAR_V = 0, VAR_ANGLE = 1 } indexVar_t;
 
   /**
    * @brief Destructor
@@ -154,10 +151,10 @@ class BusInterfaceIIDM : public BusInterface {
   IIDM::Bus& busIIDM_;  ///< reference to the iidm bus instance
   bool hasConnection_;  ///< @b true if the bus has an outside connection, @b false else
   // state variables
-  boost::optional<double> U0_;  ///< initial voltage
+  boost::optional<double> U0_;      ///< initial voltage
   boost::optional<double> angle0_;  ///< initial angle
-  std::string country_;  ///< country of the bus
-};  ///< Interface class for Bus Model
+  std::string country_;             ///< country of the bus
+};                                  ///< Interface class for Bus Model
 }  // namespace DYN
 
 #endif  // MODELER_DATAINTERFACE_IIDM_DYNBUSINTERFACEIIDM_H_

@@ -30,9 +30,9 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELTWOWINDINGSTRANSFORMER_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELTWOWINDINGSTRANSFORMER_H_
 
+#include "DYNNetworkComponent.h"
 
 #include <boost/shared_ptr.hpp>
-#include "DYNNetworkComponent.h"
 
 namespace DYN {
 class ModelBus;
@@ -56,16 +56,12 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelTwoWindingsTransformer() { }
+  ~ModelTwoWindingsTransformer() {}
 
   /**
    * @brief  indicate which modelBus are known (case of line without modelBus at one side)
    */
-  typedef enum {
-    BUS1_BUS2 = 0,
-    BUS1 = 1,
-    BUS2 = 2
-  } KnownBus_t;
+  typedef enum { BUS1_BUS2 = 0, BUS1 = 1, BUS2 = 2 } KnownBus_t;
 
   /**
    * @brief  calculated variables type
@@ -82,9 +78,9 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
     iS2ToS1Side1Num_ = 7,  // current oriented from side 2 to side 1 at side 1 (unit A)
     iS1ToS2Side2Num_ = 8,  // current oriented from side 1 to side 2 at side 2 (unit A)
     iS2ToS1Side2Num_ = 9,  // current oriented from side 2 to side 1 at side 2 (unit A)
-    iSide1Num_ = 10,  // (max I1 and -1*I1, unit A => equivalent of the absolute value of I1)
-    iSide2Num_ = 11,  // (max I2 and -1*I2, unit A => equivalent of the absolute value of I2)
-    twtStateNum_ = 12,  // state of the 2wt (as a continuous variable)
+    iSide1Num_ = 10,       // (max I1 and -1*I1, unit A => equivalent of the absolute value of I1)
+    iSide2Num_ = 11,       // (max I2 and -1*I2, unit A => equivalent of the absolute value of I2)
+    twtStateNum_ = 12,     // state of the 2wt (as a continuous variable)
     nbCalculatedVariables_ = 13
   } CalculatedVariables_t;  // enumeration of calculated variables which can be retrieved for this model
 
@@ -211,7 +207,7 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
    */
   void setTapChangerLocked(const double& locked) {
     tapChangerLocked_ = locked;
-  }   // set whether the tap-changer is locked (and cannot change taps)
+  }  // set whether the tap-changer is locked (and cannot change taps)
 
   /**
    * @brief get whether the tap-changer is locked (and cannot change taps)
@@ -230,7 +226,8 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
   /**
    * @brief evaluate derivatives prim
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalF()
@@ -281,7 +278,7 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
    * @param elements
    * @param mapElement
    */
-  void defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement);
+  void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement);
 
   /**
    * @copydoc NetworkComponent::evalZ(const double& t)
@@ -326,22 +323,26 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::evalYType()
    */
-  void evalYType() { /* not needed */ }
+  void evalYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
    */
-  void evalFType() { /* not needed */ }
+  void evalFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::collectSilentZ()
@@ -645,7 +646,7 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
    */
   double i2(const double& ur1, const double& ui1, const double& ur2, const double& ui2) const;
 
-   /**
+  /**
    * @brief get the real part of the voltage at side 1
    * @return  real part of the voltage at side 1
    */
@@ -657,7 +658,7 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
    */
   double ui1() const;
 
-   /**
+  /**
    * @brief get the real part of the voltage at side 2
    * @return  real part of the voltage at side 2
    */
@@ -673,44 +674,44 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
   KnownBus_t knownBus_;  ///< bus known
 
   // Injections
-  double ir1_dUr1_;  ///< injection matrix value
-  double ir1_dUi1_;  ///< injection matrix value
-  double ir1_dUr2_;  ///< injection matrix value
-  double ir1_dUi2_;  ///< injection matrix value
-  double ii1_dUr1_;  ///< injection matrix value
-  double ii1_dUi1_;  ///< injection matrix value
-  double ii1_dUr2_;  ///< injection matrix value
-  double ii1_dUi2_;  ///< injection matrix value
-  double ir2_dUr1_;  ///< injection matrix value
-  double ir2_dUi1_;  ///< injection matrix value
-  double ir2_dUr2_;  ///< injection matrix value
-  double ir2_dUi2_;  ///< injection matrix value
-  double ii2_dUr1_;  ///< injection matrix value
-  double ii2_dUi1_;  ///< injection matrix value
-  double ii2_dUr2_;  ///< injection matrix value
-  double ii2_dUi2_;  ///< injection matrix value
-  double ir01_;  ///< initial real part of the current at side 1
-  double ii01_;  ///< initial imaginary part of the current at side 1
-  double ir02_;  ///< initial real part of the current at side 2
-  double ii02_;  ///< initial imaginary part of the current at side 2
+  double ir1_dUr1_;                        ///< injection matrix value
+  double ir1_dUi1_;                        ///< injection matrix value
+  double ir1_dUr2_;                        ///< injection matrix value
+  double ir1_dUi2_;                        ///< injection matrix value
+  double ii1_dUr1_;                        ///< injection matrix value
+  double ii1_dUi1_;                        ///< injection matrix value
+  double ii1_dUr2_;                        ///< injection matrix value
+  double ii1_dUi2_;                        ///< injection matrix value
+  double ir2_dUr1_;                        ///< injection matrix value
+  double ir2_dUi1_;                        ///< injection matrix value
+  double ir2_dUr2_;                        ///< injection matrix value
+  double ir2_dUi2_;                        ///< injection matrix value
+  double ii2_dUr1_;                        ///< injection matrix value
+  double ii2_dUi1_;                        ///< injection matrix value
+  double ii2_dUr2_;                        ///< injection matrix value
+  double ii2_dUi2_;                        ///< injection matrix value
+  double ir01_;                            ///< initial real part of the current at side 1
+  double ii01_;                            ///< initial imaginary part of the current at side 1
+  double ir02_;                            ///< initial real part of the current at side 2
+  double ii02_;                            ///< initial imaginary part of the current at side 2
   boost::shared_ptr<ModelBus> modelBus1_;  ///< model for the bus on side 1
   boost::shared_ptr<ModelBus> modelBus2_;  ///< model for the bus on side 2
 
   // evaluated at the end of evalZ to detect if the state was modified by another component
-  State connectionState_;  ///< "internal" 2wt connection state for the transformer
-  bool topologyModified_;  ///< true if the 2wt connection state was modified
-  bool stateIndexModified_;  ///< true if the 2wt state index was modified
-  bool updateYMat_;  ///< true if YMat needs to be updated (= topologyModified or stateIndexModified on this 2wt)
-  double currentLimitsDesactivate_;  ///< whether the current limit automaton is deactivated
-  double disableInternalTapChanger_;  ///< whether an external (or internal) model is used for the tap-changer
-  double tapChangerLocked_;  ///< whether the tap-changer is locked
+  State connectionState_;                                      ///< "internal" 2wt connection state for the transformer
+  bool topologyModified_;                                      ///< true if the 2wt connection state was modified
+  bool stateIndexModified_;                                    ///< true if the 2wt state index was modified
+  bool updateYMat_;                                            ///< true if YMat needs to be updated (= topologyModified or stateIndexModified on this 2wt)
+  double currentLimitsDesactivate_;                            ///< whether the current limit automaton is deactivated
+  double disableInternalTapChanger_;                           ///< whether an external (or internal) model is used for the tap-changer
+  double tapChangerLocked_;                                    ///< whether the tap-changer is locked
   boost::shared_ptr<ModelRatioTapChanger> modelRatioChanger_;  ///< model used for the ratio tap-changer
-  std::string terminalRefId_;  ///< id of the terminal where the voltage is measured
-  std::string side_;  ///< side of the terminal where the voltage is measured
-  boost::shared_ptr<ModelBus> modelBusMonitored_;  ///< model of the bus where the voltage is measured
+  std::string terminalRefId_;                                  ///< id of the terminal where the voltage is measured
+  std::string side_;                                           ///< side of the terminal where the voltage is measured
+  boost::shared_ptr<ModelBus> modelBusMonitored_;              ///< model of the bus where the voltage is measured
 
   boost::shared_ptr<ModelPhaseTapChanger> modelPhaseChanger_;  ///< model used for the phase tap changer
-  boost::shared_ptr<ModelTapChanger> modelTapChanger_;  ///< generic model used for the tap changer (when there is only one tap)
+  boost::shared_ptr<ModelTapChanger> modelTapChanger_;         ///< generic model used for the tap changer (when there is only one tap)
 
   boost::shared_ptr<ModelCurrentLimits> currentLimits1_;  ///< current limit side 1
   boost::shared_ptr<ModelCurrentLimits> currentLimits2_;  ///< current limit side 2
@@ -719,8 +720,8 @@ class ModelTwoWindingsTransformer : public NetworkComponent {
   double factorPuToASide2_;  ///< factor to convert current side 1 from p.u. to A
 
   // state variables
-  double vNom1_;  ///< nominal voltage on side 1
-  double vNom2_;  ///< nominal voltage on side 2
+  double vNom1_;         ///< nominal voltage on side 1
+  double vNom2_;         ///< nominal voltage on side 2
   int tapChangerIndex_;  ///< current tap index (for tap-changer)
 
   const std::string modelType_;  ///< model Type

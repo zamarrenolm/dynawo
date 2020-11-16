@@ -16,14 +16,13 @@
  * @brief Unit tests for API_PAR
  */
 
-#include <boost/shared_ptr.hpp>
-
+#include "PARParametersSetCollection.h"
+#include "PARXmlExporter.h"
+#include "PARXmlImporter.h"
+#include "TestUtil.h"
 #include "gtest_dynawo.h"
 
-#include "PARXmlImporter.h"
-#include "PARXmlExporter.h"
-#include "PARParametersSetCollection.h"
-#include "TestUtil.h"
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 

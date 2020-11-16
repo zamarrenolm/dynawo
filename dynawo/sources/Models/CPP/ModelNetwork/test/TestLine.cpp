@@ -11,35 +11,33 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string/replace.hpp>
-
-#include <IIDM/builders/NetworkBuilder.h>
-#include <IIDM/builders/LineBuilder.h>
-#include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/components/Line.h>
-#include <IIDM/components/CurrentLimit.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/Network.h>
-
-#include "DYNLineInterfaceIIDM.h"
-#include "DYNVoltageLevelInterfaceIIDM.h"
-#include "DYNCurrentLimitInterfaceIIDM.h"
 #include "DYNBusInterfaceIIDM.h"
-#include "DYNModelLine.h"
-#include "DYNModelVoltageLevel.h"
+#include "DYNCurrentLimitInterfaceIIDM.h"
+#include "DYNElement.h"
+#include "DYNLineInterfaceIIDM.h"
 #include "DYNModelBus.h"
+#include "DYNModelLine.h"
 #include "DYNModelNetwork.h"
-#include "TLTimelineFactory.h"
+#include "DYNModelVoltageLevel.h"
 #include "DYNSparseMatrix.h"
 #include "DYNVariable.h"
-#include "DYNElement.h"
-
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
+
+#include <IIDM/Network.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/LineBuilder.h>
+#include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/VoltageLevelBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/CurrentLimit.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
 
@@ -176,7 +174,6 @@ createModelLine(bool open, bool initModel, bool closed1 = true, bool closed2 = t
   }
   return std::make_pair(dl, vl);
 }
-
 
 TEST(ModelsModelNetwork, ModelNetworkLineInitializationClosed) {
   shared_ptr<ModelLine> dl = createModelLine(false, false).first;
@@ -431,7 +428,7 @@ TEST(ModelsModelNetwork, ModelNetworkLineCalculatedVariables) {
   ASSERT_NO_THROW(dl->getIndexesOfVariablesUsedForCalculatedVarI(ModelLine::u2Num_, numVars));
   ASSERT_EQ(numVars.size(), 2);
   for (size_t i = 0; i < numVars.size(); ++i) {
-    ASSERT_EQ(numVars[i], i+2);
+    ASSERT_EQ(numVars[i], i + 2);
   }
   numVars.clear();
   ASSERT_NO_THROW(dl->getIndexesOfVariablesUsedForCalculatedVarI(ModelLine::lineStateNum_, numVars));
@@ -1341,6 +1338,5 @@ TEST(ModelsModelNetwork, ModelNetworkLineJt) {
   ASSERT_NO_THROW(dlInit->evalJt(smjInit, 1., 0));
   ASSERT_EQ(smjInit.nbElem(), 0);
 }
-
 
 }  // namespace DYN

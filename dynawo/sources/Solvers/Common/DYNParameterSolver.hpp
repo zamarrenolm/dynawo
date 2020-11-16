@@ -28,7 +28,8 @@ namespace DYN {
  * template specialization for boolean type
  */
 template<>
-inline void ParameterSolver::setValue(const bool& value) {
+inline void
+ParameterSolver::setValue(const bool& value) {
   if (getValueType() != VAR_TYPE_BOOL)
     throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "BOOL");
 
@@ -40,7 +41,8 @@ inline void ParameterSolver::setValue(const bool& value) {
  * template specialization for integer type
  */
 template<>
-inline void ParameterSolver::setValue(const int& value) {
+inline void
+ParameterSolver::setValue(const int& value) {
   if (getValueType() != VAR_TYPE_INT)
     throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "INT");
 
@@ -52,7 +54,8 @@ inline void ParameterSolver::setValue(const int& value) {
  * template specialization for double type
  */
 template<>
-inline void ParameterSolver::setValue(const double& value) {
+inline void
+ParameterSolver::setValue(const double& value) {
   if (getValueType() != VAR_TYPE_DOUBLE)
     throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "DOUBLE");
 
@@ -64,7 +67,8 @@ inline void ParameterSolver::setValue(const double& value) {
  * template specialization for string type
  */
 template<>
-inline void ParameterSolver::setValue(const std::string& value) {
+inline void
+ParameterSolver::setValue(const std::string& value) {
   if (getValueType() != VAR_TYPE_STRING)
     throw DYNError(Error::MODELER, ParameterInvalidTypeRequested, getName(), typeVarC2Str(getValueType()), "STRING");
 

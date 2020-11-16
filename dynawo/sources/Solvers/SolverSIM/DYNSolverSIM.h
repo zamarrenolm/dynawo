@@ -21,13 +21,13 @@
 #ifndef SOLVERS_SOLVERSIM_DYNSOLVERSIM_H_
 #define SOLVERS_SOLVERSIM_DYNSOLVERSIM_H_
 
-#include <vector>
+#include "DYNEnumUtils.h"
+#include "DYNSolver.h"
+#include "DYNSolverFactory.h"
+
 #include <boost/shared_ptr.hpp>
 #include <sundials/sundials_nvector.h>
-
-#include "DYNSolverFactory.h"
-#include "DYNSolver.h"
-#include "DYNEnumUtils.h"
+#include <vector>
 
 namespace parameters {
 class ParametersSet;
@@ -75,10 +75,10 @@ class SolverSIM : public Solver {
    * @brief define returns value by the solver
    */
   typedef enum {
-    CONV = 0,  ///< the Newton-Raphson solver finds a solution
+    CONV = 0,      ///< the Newton-Raphson solver finds a solution
     NON_CONV = 1,  ///< the Newton-Raphson solver doesn't find a solution
     ROOT_ALG = 2,  ///< an algebraic mode has been detected
-    ROOT = 3  ///< a root was found (discrete value change)
+    ROOT = 3       ///< a root was found (discrete value change)
   } SolverStatus_t;
 
  public:
@@ -110,7 +110,7 @@ class SolverSIM : public Solver {
   /**
    * @copydoc Solver::init(const boost::shared_ptr<Model> & model, const double & t0, const double & tEnd)
    */
-  void init(const boost::shared_ptr<Model> &model, const double & t0, const double & tEnd);
+  void init(const boost::shared_ptr<Model>& model, const double& t0, const double& tEnd);
 
   /**
    * @copydoc Solver::reinit()
@@ -141,13 +141,13 @@ class SolverSIM : public Solver {
    * @brief integrate the DAE over an interval and recalculate it in case of a z change
    * @param tNxt next time step
    */
-  void solveWithStepRecalculation(double &tNxt);
+  void solveWithStepRecalculation(double& tNxt);
 
   /**
    * @brief integrate the DAE over an interval without recalculting the step in case of a z change
    * @param tNxt next time step
    */
-  void solveWithoutStepRecalculation(double &tNxt);
+  void solveWithoutStepRecalculation(double& tNxt);
 
   /**
    * @brief save the initial values of roots, y, and z before the time step
@@ -234,7 +234,7 @@ class SolverSIM : public Solver {
   /**
    * @copydoc Solver::solveStep(double tAim, double &tNxt)
    */
-  void solveStep(double tAim, double &tNxt);
+  void solveStep(double tAim, double& tNxt);
 
   /**
    * @copydoc Solver::initAlgRestoration(modeChangeType_t modeChangeType)
@@ -247,44 +247,44 @@ class SolverSIM : public Solver {
   void updateStatistics();
 
  private:
-  boost::shared_ptr<SolverKINEuler> solverKINEuler_;  ///< Backward Euler solver
+  boost::shared_ptr<SolverKINEuler> solverKINEuler_;                    ///< Backward Euler solver
   boost::shared_ptr<SolverKINAlgRestoration> solverKINAlgRestoration_;  ///< Newton Raphson solver for the algebraic variables restoration
 
   // Generic and alterable parameters
-  double hMin_;  ///< minimum time-step
-  double hMax_;  ///< maximum time-step
-  double kReduceStep_;  ///< factor to reduce the time-step
-  int nEff_;  ///< desired number of Newton iterations
-  int nDeadband_;  ///< deadband (iterations number) to avoid too frequent step size variations
-  int maxRootRestart_;  ///< maximum number of Newton resolutions leading to root changes for one time-step
-  int maxNewtonTry_;  ///< maximum number of Newton resolutions for one time-step
+  double hMin_;           ///< minimum time-step
+  double hMax_;           ///< maximum time-step
+  double kReduceStep_;    ///< factor to reduce the time-step
+  int nEff_;              ///< desired number of Newton iterations
+  int nDeadband_;         ///< deadband (iterations number) to avoid too frequent step size variations
+  int maxRootRestart_;    ///< maximum number of Newton resolutions leading to root changes for one time-step
+  int maxNewtonTry_;      ///< maximum number of Newton resolutions for one time-step
   bool recalculateStep_;  ///< step recalculation in case of root detection
 
-  double tEnd_;  ///< simulation end time
-  double h_;  ///< current time step
-  double hNew_;  ///< next time-step
-  long int nNewt_;  ///< number of newton iterations since the beginning of the simulation
-  int countRestart_;  ///< current number of consecutive Newton resolutions leading to root changes
+  double tEnd_;               ///< simulation end time
+  double h_;                  ///< current time step
+  double hNew_;               ///< next time-step
+  long int nNewt_;            ///< number of newton iterations since the beginning of the simulation
+  int countRestart_;          ///< current number of consecutive Newton resolutions leading to root changes
   bool factorizationForced_;  ///< force the Jacobian calculation due to an algebraic mode or a non convergence of the previous NR
 
   // Parameters for the algebraic resolution at each time step
   std::string linearSolverName_;  ///< name of the linear solver (KLU or NICSLU at the moment)
-  double fnormtol_;  ///< stopping tolerance on L2-norm of residual function
-  double initialaddtol_;  ///< stopping tolerance at initialization of residual function
-  double scsteptol_;  ///< scaled step length tolerance
-  double mxnewtstep_;  ///< maximum allowable scaled step length
-  int msbset_;  ///< maximum number of nonlinear iterations that may be performed between calls to the linear solver setup routine
-  int mxiter_;  ///< maximum number of nonlinear iterations
-  int printfl_;  ///< level of verbosity of output
+  double fnormtol_;               ///< stopping tolerance on L2-norm of residual function
+  double initialaddtol_;          ///< stopping tolerance at initialization of residual function
+  double scsteptol_;              ///< scaled step length tolerance
+  double mxnewtstep_;             ///< maximum allowable scaled step length
+  int msbset_;                    ///< maximum number of nonlinear iterations that may be performed between calls to the linear solver setup routine
+  int mxiter_;                    ///< maximum number of nonlinear iterations
+  int printfl_;                   ///< level of verbosity of output
 
   bool skipNextNR_;  ///< indicates if the next Newton-Raphson resolution could be skipped
 
-  std::vector<double> ySave_;  ///< values of state variables before step
-  std::vector<double> zSave_;  ///< values of discrete variables before step
-  std::vector<state_g> gSave_;  ///< values of roots before step
-  bool skipAlgebraicResidualsEvaluation_;  ///< flag used to skip algebraic residuals evaluation after a convergence or a mode
+  std::vector<double> ySave_;                   ///< values of state variables before step
+  std::vector<double> zSave_;                   ///< values of discrete variables before step
+  std::vector<state_g> gSave_;                  ///< values of roots before step
+  bool skipAlgebraicResidualsEvaluation_;       ///< flag used to skip algebraic residuals evaluation after a convergence or a mode
   bool optimizeAlgebraicResidualsEvaluations_;  ///< enable or disable the optimization of the number of algebraic residuals evals
-  bool skipNRIfInitialGuessOK_;  ///< enable the possibility to skip next iterations if the simulation is stable
+  bool skipNRIfInitialGuessOK_;                 ///< enable the possibility to skip next iterations if the simulation is stable
 };
 
 }  // end of namespace DYN

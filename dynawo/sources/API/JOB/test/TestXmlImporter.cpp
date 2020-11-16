@@ -17,27 +17,27 @@
  *
  */
 
-#include "gtest_dynawo.h"
-#include "JOBXmlImporter.h"
-#include "JOBJobsCollection.h"
-#include "JOBJobEntry.h"
-#include "JOBIterators.h"
-#include "JOBSolverEntry.h"
-#include "JOBModelerEntry.h"
-#include "JOBNetworkEntry.h"
-#include "JOBInitialStateEntry.h"
-#include "JOBDynModelsEntry.h"
-#include "JOBSimulationEntry.h"
-#include "JOBOutputsEntry.h"
-#include "JOBInitValuesEntry.h"
+#include "JOBAppenderEntry.h"
 #include "JOBConstraintsEntry.h"
+#include "JOBCurvesEntry.h"
+#include "JOBDynModelsEntry.h"
+#include "JOBFinalStateEntry.h"
+#include "JOBInitValuesEntry.h"
+#include "JOBInitialStateEntry.h"
+#include "JOBIterators.h"
+#include "JOBJobEntry.h"
+#include "JOBJobsCollection.h"
+#include "JOBLogsEntry.h"
+#include "JOBModelerEntry.h"
+#include "JOBModelsDirEntry.h"
+#include "JOBNetworkEntry.h"
+#include "JOBOutputsEntry.h"
+#include "JOBSimulationEntry.h"
+#include "JOBSolverEntry.h"
 #include "JOBTimelineEntry.h"
 #include "JOBTimetableEntry.h"
-#include "JOBFinalStateEntry.h"
-#include "JOBCurvesEntry.h"
-#include "JOBLogsEntry.h"
-#include "JOBAppenderEntry.h"
-#include "JOBModelsDirEntry.h"
+#include "JOBXmlImporter.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 
@@ -63,41 +63,41 @@ TEST(APIJOBTest, testXmlWrongStream) {
 TEST(APIJOBTest, testXmlStreamImporter) {
   XmlImporter importer;
   std::istringstream goodInputStream(
-    "<?xml version='1.0' encoding='UTF-8'?>"
-    "<dyn:jobs xmlns:dyn=\"http://www.rte-france.com/dynawo\">"
-    "<dyn:job name=\"100 nodes with final dump\">"
-    "<!-- Simulation using simplified solver - final dump-->"
-    "<dyn:solver lib=\"libdynawo_SolverSIM\" parFile=\"../solvers.par\" parId=\"3\"/>"
-    "<dyn:modeler compileDir=\"outputs/dump/compilation\">"
-    "<dyn:network iidmFile=\"../baseCase/100n.iidm\" parFile=\"../BDD/DYNModelNetwork.par\" parId=\"1\"/>"
-    "<dyn:dynModels dydFile=\"dydFile_dump.dyd\"/>"
-    "<dyn:dynModels dydFile=\"../../DDB/Generators.dyd\"/>"
-    "<dyn:initialState file=\"outputs/dump/finalState/outputState.dmp\"/>"
-    "<dyn:precompiledModels useStandardModels=\"true\">"
-    "<dyn:directory path=\".\" recursive=\"false\"/>"
-    "<dyn:directory path=\"/tmp/\" recursive=\"true\"/>"
-    "</dyn:precompiledModels>"
-    "<dyn:modelicaModels useStandardModels=\"true\" modelExtension=\".mo\">"
-    "<dyn:directory path=\"/tmp1/\" recursive=\"false\"/>"
-    "<dyn:directory path=\"/tmp2/\" recursive=\"true\"/>"
-    "</dyn:modelicaModels>"
-    "</dyn:modeler>"
-    "<dyn:simulation startTime=\"10\" stopTime=\"200\"/>"
-    "<dyn:outputs directory=\"outputs/dump\">"
-    "<dyn:finalState exportDumpFile=\"true\" exportIIDMFile=\"true\"/>"
-    "<dyn:curves inputFile=\"curves_dump.crv\" exportMode=\"CSV\"/>"
-    "<dyn:timeline exportMode=\"TXT\"/>"
-    "<dyn:constraints exportMode=\"XML\"/>"
-    "<dyn:dumpInitValues local=\"true\" global=\"false\"/>"
-    "<dyn:logs>"
-    "<dyn:appender tag=\"\" file=\"dynawo.log\" lvlFilter=\"DEBUG\" separator=\"-\" showLevelTag=\"false\" timeStampFormat=\"%H:%M:%S\"/>"
-    "<dyn:appender tag=\"COMPILE\" file=\"dynawoCompiler.log\" lvlFilter=\"INFO\"/>"
-    "<dyn:appender tag=\"NETWORK\" file=\"dynawoNetwork.log\" lvlFilter=\"DEBUG\"/>"
-    "<dyn:appender tag=\"MODELER\" file=\"dynawoModeler.log\" lvlFilter=\"ERROR\"/>"
-    "</dyn:logs>"
-    "</dyn:outputs>"
-    "</dyn:job>"
-    "</dyn:jobs>");
+      "<?xml version='1.0' encoding='UTF-8'?>"
+      "<dyn:jobs xmlns:dyn=\"http://www.rte-france.com/dynawo\">"
+      "<dyn:job name=\"100 nodes with final dump\">"
+      "<!-- Simulation using simplified solver - final dump-->"
+      "<dyn:solver lib=\"libdynawo_SolverSIM\" parFile=\"../solvers.par\" parId=\"3\"/>"
+      "<dyn:modeler compileDir=\"outputs/dump/compilation\">"
+      "<dyn:network iidmFile=\"../baseCase/100n.iidm\" parFile=\"../BDD/DYNModelNetwork.par\" parId=\"1\"/>"
+      "<dyn:dynModels dydFile=\"dydFile_dump.dyd\"/>"
+      "<dyn:dynModels dydFile=\"../../DDB/Generators.dyd\"/>"
+      "<dyn:initialState file=\"outputs/dump/finalState/outputState.dmp\"/>"
+      "<dyn:precompiledModels useStandardModels=\"true\">"
+      "<dyn:directory path=\".\" recursive=\"false\"/>"
+      "<dyn:directory path=\"/tmp/\" recursive=\"true\"/>"
+      "</dyn:precompiledModels>"
+      "<dyn:modelicaModels useStandardModels=\"true\" modelExtension=\".mo\">"
+      "<dyn:directory path=\"/tmp1/\" recursive=\"false\"/>"
+      "<dyn:directory path=\"/tmp2/\" recursive=\"true\"/>"
+      "</dyn:modelicaModels>"
+      "</dyn:modeler>"
+      "<dyn:simulation startTime=\"10\" stopTime=\"200\"/>"
+      "<dyn:outputs directory=\"outputs/dump\">"
+      "<dyn:finalState exportDumpFile=\"true\" exportIIDMFile=\"true\"/>"
+      "<dyn:curves inputFile=\"curves_dump.crv\" exportMode=\"CSV\"/>"
+      "<dyn:timeline exportMode=\"TXT\"/>"
+      "<dyn:constraints exportMode=\"XML\"/>"
+      "<dyn:dumpInitValues local=\"true\" global=\"false\"/>"
+      "<dyn:logs>"
+      "<dyn:appender tag=\"\" file=\"dynawo.log\" lvlFilter=\"DEBUG\" separator=\"-\" showLevelTag=\"false\" timeStampFormat=\"%H:%M:%S\"/>"
+      "<dyn:appender tag=\"COMPILE\" file=\"dynawoCompiler.log\" lvlFilter=\"INFO\"/>"
+      "<dyn:appender tag=\"NETWORK\" file=\"dynawoNetwork.log\" lvlFilter=\"DEBUG\"/>"
+      "<dyn:appender tag=\"MODELER\" file=\"dynawoModeler.log\" lvlFilter=\"ERROR\"/>"
+      "</dyn:logs>"
+      "</dyn:outputs>"
+      "</dyn:job>"
+      "</dyn:jobs>");
   std::istream goodStream(goodInputStream.rdbuf());
   ASSERT_NO_THROW(importer.importFromStream(goodStream));
 }
@@ -111,9 +111,7 @@ TEST(APIJOBTest, testXmlImporter) {
   int nbJobs = 0;
   boost::shared_ptr<JobEntry> job1;
   boost::shared_ptr<JobEntry> job2;
-  for (job_const_iterator itJob = jobsCollection->cbegin();
-          itJob != jobsCollection->cend();
-          ++itJob) {
+  for (job_const_iterator itJob = jobsCollection->cbegin(); itJob != jobsCollection->cend(); ++itJob) {
     ++nbJobs;
     if (nbJobs == 1)
       job1 = (*itJob);
@@ -130,7 +128,7 @@ TEST(APIJOBTest, testXmlImporter) {
 
   // ===== SolverEntry =====
   ASSERT_NE(job1->getSolverEntry(), boost::shared_ptr<SolverEntry>());
-  boost::shared_ptr<SolverEntry> solver =  job1->getSolverEntry();
+  boost::shared_ptr<SolverEntry> solver = job1->getSolverEntry();
   ASSERT_EQ(solver->getLib(), "libdynawo_SolverSIM");
   ASSERT_EQ(solver->getParametersFile(), "solvers.par");
   ASSERT_EQ(solver->getParametersId(), "3");
@@ -144,7 +142,7 @@ TEST(APIJOBTest, testXmlImporter) {
   boost::shared_ptr<ModelsDirEntry> preCompiledModelsDirEntry = modeler->getPreCompiledModelsDirEntry();
   ASSERT_EQ(preCompiledModelsDirEntry->getUseStandardModels(), true);
   ASSERT_EQ(preCompiledModelsDirEntry->getDirectories().size(), 2);
-  std::vector <UserDefinedDirectory> precompiledModelsDirs = preCompiledModelsDirEntry->getDirectories();
+  std::vector<UserDefinedDirectory> precompiledModelsDirs = preCompiledModelsDirEntry->getDirectories();
   ASSERT_EQ(precompiledModelsDirs[0].path, ".");
   ASSERT_EQ(precompiledModelsDirs[0].isRecursive, false);
   ASSERT_EQ(precompiledModelsDirs[1].path, "/tmp/");
@@ -154,7 +152,7 @@ TEST(APIJOBTest, testXmlImporter) {
   boost::shared_ptr<ModelsDirEntry> modelicaModelsDirEntry = modeler->getModelicaModelsDirEntry();
   ASSERT_EQ(modelicaModelsDirEntry->getUseStandardModels(), true);
   ASSERT_EQ(modelicaModelsDirEntry->getDirectories().size(), 2);
-  std::vector <UserDefinedDirectory> modelicaModelsDirs = modelicaModelsDirEntry->getDirectories();
+  std::vector<UserDefinedDirectory> modelicaModelsDirs = modelicaModelsDirEntry->getDirectories();
   ASSERT_EQ(modelicaModelsDirs[0].path, "/tmp1/");
   ASSERT_EQ(modelicaModelsDirs[0].isRecursive, false);
   ASSERT_EQ(modelicaModelsDirs[1].path, "/tmp2/");
@@ -178,19 +176,19 @@ TEST(APIJOBTest, testXmlImporter) {
 
   // ===== SimulationEntry =====
   ASSERT_NE(job1->getSimulationEntry(), boost::shared_ptr<SimulationEntry>());
-  boost::shared_ptr<SimulationEntry> simulation =  job1->getSimulationEntry();
+  boost::shared_ptr<SimulationEntry> simulation = job1->getSimulationEntry();
   ASSERT_EQ(simulation->getStartTime(), 10);
   ASSERT_EQ(simulation->getStopTime(), 200);
   ASSERT_EQ(simulation->getCriteriaFiles().size(), 2);
-  ASSERT_TRUE(std::find(simulation->getCriteriaFiles().begin(),
-      simulation->getCriteriaFiles().end(), "myCriteriaFile.crt") != simulation->getCriteriaFiles().end());
-  ASSERT_TRUE(std::find(simulation->getCriteriaFiles().begin(),
-      simulation->getCriteriaFiles().end(), "myCriteriaFile2.crt") != simulation->getCriteriaFiles().end());
+  ASSERT_TRUE(std::find(simulation->getCriteriaFiles().begin(), simulation->getCriteriaFiles().end(), "myCriteriaFile.crt") !=
+              simulation->getCriteriaFiles().end());
+  ASSERT_TRUE(std::find(simulation->getCriteriaFiles().begin(), simulation->getCriteriaFiles().end(), "myCriteriaFile2.crt") !=
+              simulation->getCriteriaFiles().end());
   ASSERT_EQ(simulation->getCriteriaStep(), 5);
 
   // ===== OutputsEntry =====
   ASSERT_NE(job1->getOutputsEntry(), boost::shared_ptr<OutputsEntry>());
-  boost::shared_ptr<OutputsEntry> outputs =  job1->getOutputsEntry();
+  boost::shared_ptr<OutputsEntry> outputs = job1->getOutputsEntry();
   ASSERT_EQ(outputs->getOutputsDirectory(), "outputs1");
 
   // ===== InitValuesEntry =====

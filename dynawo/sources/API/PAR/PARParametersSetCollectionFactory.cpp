@@ -18,6 +18,7 @@
  */
 
 #include "PARParametersSetCollectionFactory.h"
+
 #include "PARParametersSetCollection.h"
 
 using boost::shared_ptr;

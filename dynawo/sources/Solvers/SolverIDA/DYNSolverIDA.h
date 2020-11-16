@@ -20,13 +20,13 @@
 #ifndef SOLVERS_SOLVERIDA_DYNSOLVERIDA_H_
 #define SOLVERS_SOLVERIDA_DYNSOLVERIDA_H_
 
+#include "DYNSolver.h"
+#include "DYNSolverFactory.h"
+
 #include <boost/shared_ptr.hpp>
-#include <vector>
 #include <map>
 #include <sundials/sundials_nvector.h>
-
-#include "DYNSolverFactory.h"
-#include "DYNSolver.h"
+#include <vector>
 
 namespace parameters {
 class ParametersSet;
@@ -55,12 +55,12 @@ class SolverIDAFactory : public SolverFactory {
    * @brief Create an instance of solver
    * @return the new instance of solver created by the factory
    */
-  Solver* create() const;
+  Solver *create() const;
 
   /**
    * @brief SolverIDA destroy
    */
-  void destroy(Solver*) const;
+  void destroy(Solver *) const;
 };
 
 /**
@@ -96,7 +96,7 @@ class SolverIDA : public Solver {
   /**
    * @copydoc Solver::init(const boost::shared_ptr<Model> & model, const double & t0, const double & tEnd)
    */
-  void init(const boost::shared_ptr<Model> & model, const double & t0, const double & tEnd);
+  void init(const boost::shared_ptr<Model> &model, const double &t0, const double &tEnd);
 
   /**
    * @copydoc Solver::reinit()
@@ -113,14 +113,14 @@ class SolverIDA : public Solver {
    *
    * @param ss stringstream to modify
    */
-  void printHeaderSpecific(std::stringstream& ss) const;
+  void printHeaderSpecific(std::stringstream &ss) const;
 
   /**
    * @brief print specific info regarding the latest step made by the solver (i.e solution)
    *
    * @param msg stringstream to modify
    */
-  void printSolveSpecific(std::stringstream& msg) const;
+  void printSolveSpecific(std::stringstream &msg) const;
 
   /**
    * @brief getter for the state of the solver
@@ -143,7 +143,7 @@ class SolverIDA : public Solver {
    * @param kused the integration method order used during the last internal step
    * @param hused the integration step size taken on the last internal step
    */
-  void getLastConf(long int &nst, int & kused, double & hused) const;
+  void getLastConf(long int &nst, int &kused, double &hused) const;
 
   /**
    * @brief indicates which root was activated
@@ -163,8 +163,7 @@ class SolverIDA : public Solver {
    *
    * @return 0 is successful, positive value otherwise
    */
-  static int evalF(double tres, N_Vector yy, N_Vector yp, N_Vector rr,
-          void *data);
+  static int evalF(double tres, N_Vector yy, N_Vector yp, N_Vector rr, void *data);
 
   /**
    * @brief computes the function g(t,y,yp) such that a root should be found during the integration
@@ -177,8 +176,7 @@ class SolverIDA : public Solver {
    *
    * @return  0 is successful, positive value otherwise
    */
-  static int evalG(double tres, N_Vector yy, N_Vector yp, double *gout,
-          void *data);
+  static int evalG(double tres, N_Vector yy, N_Vector yp, double *gout, void *data);
 
   /**
    * @brief compute the Jacobian J of the DAE system \f$(J=@F/@y + cj @F/@yp)\f$
@@ -196,10 +194,7 @@ class SolverIDA : public Solver {
    *
    * @return 0 is successful, positive value otherwise
    */
-  static int evalJ(double tt, double cj,
-          N_Vector yy, N_Vector yp, N_Vector rr,
-          SUNMatrix JJ, void *data,
-          N_Vector tmp1, N_Vector tmp2, N_Vector tmp3);
+  static int evalJ(double tt, double cj, N_Vector yy, N_Vector yp, N_Vector rr, SUNMatrix JJ, void *data, N_Vector tmp1, N_Vector tmp2, N_Vector tmp3);
 
   /**
    * @brief processes error and warning messages from IDA solver
@@ -210,8 +205,7 @@ class SolverIDA : public Solver {
    * @param msg error message
    * @param eh_data unused
    */
-  static void errHandlerFn(int error_code, const char *module, const char *function,
-          char *msg, void *eh_data);
+  static void errHandlerFn(int error_code, const char *module, const char *function, char *msg, void *eh_data);
 
   /**
    * @brief destroy all allocated memory
@@ -223,7 +217,7 @@ class SolverIDA : public Solver {
    *
    * @param flag flag to analyse
    */
-  void analyseFlag(const int & flag);
+  void analyseFlag(const int &flag);
 
  protected:
   /**
@@ -237,24 +231,24 @@ class SolverIDA : public Solver {
   bool initAlgRestoration(modeChangeType_t modeChangeType);
 
  private:
-  void* IDAMem_;  ///< IDA internal memory structure
-  SUNLinearSolver LS_;  ///< Linear Solver pointer
-  SUNMatrix M_;  ///< sparse SUNMatrix
+  void *IDAMem_;                                                ///< IDA internal memory structure
+  SUNLinearSolver LS_;                                          ///< Linear Solver pointer
+  SUNMatrix M_;                                                 ///< sparse SUNMatrix
   boost::shared_ptr<SolverKINAlgRestoration> solverKINNormal_;  ///< Newton Raphson solver for the algebraic variables restoration
-  boost::shared_ptr<SolverKINAlgRestoration> solverKINYPrim_;  ///< Newton-Raphson solver for the derivatives of the differential variables restoration
+  boost::shared_ptr<SolverKINAlgRestoration> solverKINYPrim_;   ///< Newton-Raphson solver for the derivatives of the differential variables restoration
 
   // Time-domain parameters
-  int order_;  ///< maximum order to use in the integration method
-  double initStep_;  ///< initial step size
-  double minStep_;  ///< minimal step size
-  double maxStep_;  ///< maximum step size
+  int order_;           ///< maximum order to use in the integration method
+  double initStep_;     ///< initial step size
+  double minStep_;      ///< minimal step size
+  double maxStep_;      ///< maximum step size
   double absAccuracy_;  ///< relative error tolerance
   double relAccuracy_;  ///< absolute error tolerance
 
-  bool flagInit_;  ///< @b true if the solver is in initialization mode
+  bool flagInit_;            ///< @b true if the solver is in initialization mode
   int nbLastTimeSimulated_;  ///< nb times of simulation of the latest time (to see if the solver succeed to pass through event at one point)
 
-  sunindextype* lastRowVals_;  ///< save of last Jacobian structure, to force symbolic factorization if structure change
+  sunindextype *lastRowVals_;  ///< save of last Jacobian structure, to force symbolic factorization if structure change
 };
 
 }  // end of namespace DYN

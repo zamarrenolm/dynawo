@@ -36,12 +36,12 @@ class ModelVariationAreaFactory : public SubModelFactory {
    * @brief default constructor
    *
    */
-  ModelVariationAreaFactory() { }
+  ModelVariationAreaFactory() {}
   /**
    * @brief default destructor
    *
    */
-  ~ModelVariationAreaFactory() { }
+  ~ModelVariationAreaFactory() {}
 
   /**
    * @brief Model VariationArea getter
@@ -65,9 +65,7 @@ class ModelVariationArea : public ModelCPP {
    * @brief define type of calculated variables
    *
    */
-  typedef enum {
-    nbCalculatedVars_ = 0
-  } CalculatedVars_t;
+  typedef enum { nbCalculatedVars_ = 0 } CalculatedVars_t;
 
   /**
    * @brief Default constructor
@@ -80,7 +78,7 @@ class ModelVariationArea : public ModelCPP {
    *
    * Creates a new ModelVariationArea instance.
    */
-  ~ModelVariationArea() { }
+  ~ModelVariationArea() {}
 
   // instantiate virtual methods of the Model class
 
@@ -115,7 +113,7 @@ class ModelVariationArea : public ModelCPP {
    * Get the roots' value
    * @param[in] t Simulation instant
    */
-  void evalG(const double & t);
+  void evalG(const double& t);
   /**
    * @brief  VariationArea discrete variables evaluation
    *
@@ -125,7 +123,7 @@ class ModelVariationArea : public ModelCPP {
    * @throws Error::MODELER typed @p Error. Shouldn't, but if it happens
    * it shows that there is a bug in the selection of activated shunt.
    */
-  void evalZ(const double & t);
+  void evalZ(const double& t);
 
   /**
    * @copydoc SubModel::collectSilentZ()
@@ -135,7 +133,7 @@ class ModelVariationArea : public ModelCPP {
   /**
    * @copydoc ModelCPP::evalMode(const double& t)
    */
-  modeChangeType_t evalMode(const double & t);
+  modeChangeType_t evalMode(const double& t);
   /**
    * @brief calculate calculated variables
    */
@@ -150,7 +148,7 @@ class ModelVariationArea : public ModelCPP {
    * @param jt jacobian matrix to fullfill
    * @param rowOffset offset to use to identify the row where data should be added
    */
-  void evalJt(const double & t, const double & cj, SparseMatrix& jt, const int& rowOffset);
+  void evalJt(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset);
   /**
    * @brief calculate jacobien prime matrix
    *
@@ -159,7 +157,7 @@ class ModelVariationArea : public ModelCPP {
    * @param jt jacobian matrix to fullfill
    * @param rowOffset offset to use to identify the row where data should be added
    */
-  void evalJtPrim(const double & t, const double & cj, SparseMatrix& jt, const int& rowOffset);
+  void evalJtPrim(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset);
 
   /**
    * @copydoc ModelCPP::evalFType()
@@ -169,7 +167,8 @@ class ModelVariationArea : public ModelCPP {
   /**
    * @copydoc ModelCPP::updateFType()
    */
-  void updateFType() { /* not needed */}
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc ModelCPP::getY0()
@@ -184,7 +183,8 @@ class ModelVariationArea : public ModelCPP {
   /**
    * @copydoc ModelCPP::updateYType()
    */
-  void updateYType() { /* not needed */}
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @brief get the index of variables used to define the jacobian associated to a calculated variable
@@ -200,7 +200,7 @@ class ModelVariationArea : public ModelCPP {
    * @param iCalculatedVar index of the calculated variable
    * @param res values of the jacobian
    */
-  void evalJCalculatedVarI(unsigned iCalculatedVar, std::vector<double>& res)const;
+  void evalJCalculatedVarI(unsigned iCalculatedVar, std::vector<double>& res) const;
   /**
    * @brief evaluate the value of a calculated variable
    *
@@ -223,7 +223,7 @@ class ModelVariationArea : public ModelCPP {
    * @param[out] mapElement Map associating each element index in the elements vector to its name
    */
   //---------------------------------------------------------------------
-  void defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement);
+  void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement);
 
   /**
    * @copydoc ModelCPP::defineVariables(std::vector<boost::shared_ptr<Variable> >& variables)
@@ -264,26 +264,23 @@ class ModelVariationArea : public ModelCPP {
   /**
    * @copydoc ModelCPP::initParams()
    */
-  void initParams() { /* not needed */ }
+  void initParams() { /* not needed */
+  }
 
  private:
   // parameters
-  std::vector<double> deltaP_;  ///< load variations for active power
-  std::vector<double> deltaQ_;  ///< load variations for reactive power
-  double startTime_;  ///< start time
-  double stopTime_;  ///< stop time
-  int nbLoads_;  ///< number of loads
-  double timeModeOnGoingRaised_;  ///< true if the mode change indicating the start of the slope has been done
+  std::vector<double> deltaP_;     ///< load variations for active power
+  std::vector<double> deltaQ_;     ///< load variations for reactive power
+  double startTime_;               ///< start time
+  double stopTime_;                ///< stop time
+  int nbLoads_;                    ///< number of loads
+  double timeModeOnGoingRaised_;   ///< true if the mode change indicating the start of the slope has been done
   double timeModeFinishedRaised_;  ///< true if the mode change indicating the end of the slope has been done
 
   /**
    * @brief enum to represent the current state of the variation
    */
-  typedef enum {
-    NOT_STARTED = 0,
-    ON_GOING = 1,
-    FINISHED = 2
-  } variationState_t;
+  typedef enum { NOT_STARTED = 0, ON_GOING = 1, FINISHED = 2 } variationState_t;
   variationState_t stateVariationArea_;  ///< equal to 1 if activated, 2 if ended, 0 either
 };
 

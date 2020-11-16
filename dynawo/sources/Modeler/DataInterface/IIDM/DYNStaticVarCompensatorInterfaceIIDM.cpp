@@ -20,70 +20,67 @@
  */
 //======================================================================
 
-#include <IIDM/components/StaticVarCompensator.h>
-
-#include <IIDM/extensions/StandbyAutomaton.h>
-
 #include "DYNStaticVarCompensatorInterfaceIIDM.h"
 
+#include <IIDM/components/StaticVarCompensator.h>
+#include <IIDM/extensions/StandbyAutomaton.h>
 
+using boost::shared_ptr;
 using IIDM::extensions::standbyautomaton::StandbyAutomaton;
 using std::string;
-using boost::shared_ptr;
 
 namespace DYN {
 
-StaticVarCompensatorInterfaceIIDM::~StaticVarCompensatorInterfaceIIDM() {
-}
+StaticVarCompensatorInterfaceIIDM::~StaticVarCompensatorInterfaceIIDM() {}
 
 StaticVarCompensatorInterfaceIIDM::StaticVarCompensatorInterfaceIIDM(IIDM::StaticVarCompensator& svc) :
-InjectorInterfaceIIDM<IIDM::StaticVarCompensator>(svc, svc.id()),
-staticVarCompensatorIIDM_(svc) {
+    InjectorInterfaceIIDM<IIDM::StaticVarCompensator>(svc, svc.id()),
+    staticVarCompensatorIIDM_(svc) {
   setType(ComponentInterface::SVC);
   sa_ = staticVarCompensatorIIDM_.findExtension<StandbyAutomaton>();
   stateVariables_.resize(4);
-  stateVariables_[VAR_P] = StateVariable("p", StateVariable::DOUBLE);  // P
-  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);  // Q
-  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);  // connectionState
+  stateVariables_[VAR_P] = StateVariable("p", StateVariable::DOUBLE);                         // P
+  stateVariables_[VAR_Q] = StateVariable("q", StateVariable::DOUBLE);                         // Q
+  stateVariables_[VAR_STATE] = StateVariable("state", StateVariable::INT);                    // connectionState
   stateVariables_[VAR_REGULATINGMODE] = StateVariable("regulatingMode", StateVariable::INT);  // regulatingMode
 }
 
 int
 StaticVarCompensatorInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
   int index = -1;
-  if ( varName == "p" )
+  if (varName == "p")
     index = VAR_P;
-  else if ( varName == "q" )
+  else if (varName == "q")
     index = VAR_Q;
-  else if ( varName == "state" )
+  else if (varName == "state")
     index = VAR_STATE;
-  else if ( varName == "regulatingMode" )
+  else if (varName == "regulatingMode")
     index = VAR_REGULATINGMODE;
   return index;
 }
 
 void
 StaticVarCompensatorInterfaceIIDM::exportStateVariablesUnitComponent() {
-  staticVarCompensatorIIDM_.p(-1 * getValue<double>(VAR_P)* SNREF);
-  staticVarCompensatorIIDM_.q(-1 * getValue<double>(VAR_Q)* SNREF);
+  staticVarCompensatorIIDM_.p(-1 * getValue<double>(VAR_P) * SNREF);
+  staticVarCompensatorIIDM_.q(-1 * getValue<double>(VAR_Q) * SNREF);
   bool connected = (getValue<int>(VAR_STATE) == CLOSED);
   int regulatingMode = getValue<int>(VAR_REGULATINGMODE);
   bool standbyMode(false);
   switch (regulatingMode) {
-    case StaticVarCompensatorInterface::OFF:
-      staticVarCompensatorIIDM_.regulationMode(IIDM::StaticVarCompensator::regulation_off);
-      break;
-    case StaticVarCompensatorInterface::STANDBY:
-      standbyMode = true;
-      break;
-    case StaticVarCompensatorInterface::RUNNING_Q:
-      staticVarCompensatorIIDM_.regulationMode(IIDM::StaticVarCompensator::regulation_reactive_power);
-      break;
-    case StaticVarCompensatorInterface::RUNNING_V:
-      staticVarCompensatorIIDM_.regulationMode(IIDM::StaticVarCompensator::regulation_voltage);
-      break;
-    default:
-      throw DYNError(Error::STATIC_DATA, RegulationModeNotInIIDM, regulatingMode, staticVarCompensatorIIDM_.id());
+  case StaticVarCompensatorInterface::OFF:
+    staticVarCompensatorIIDM_.regulationMode(IIDM::StaticVarCompensator::regulation_off);
+    break;
+  case StaticVarCompensatorInterface::STANDBY:
+    standbyMode = true;
+    break;
+  case StaticVarCompensatorInterface::RUNNING_Q:
+    staticVarCompensatorIIDM_.regulationMode(IIDM::StaticVarCompensator::regulation_reactive_power);
+    break;
+  case StaticVarCompensatorInterface::RUNNING_V:
+    staticVarCompensatorIIDM_.regulationMode(IIDM::StaticVarCompensator::regulation_voltage);
+    break;
+  default:
+    throw DYNError(Error::STATIC_DATA, RegulationModeNotInIIDM, regulatingMode, staticVarCompensatorIIDM_.id());
   }
   if (sa_) {
     sa_->standBy(standbyMode);
@@ -250,21 +247,22 @@ StaticVarCompensatorInterfaceIIDM::getB0() const {
   return sa_->b0();
 }
 
-StaticVarCompensatorInterface::RegulationMode_t StaticVarCompensatorInterfaceIIDM::getRegulationMode() const {
+StaticVarCompensatorInterface::RegulationMode_t
+StaticVarCompensatorInterfaceIIDM::getRegulationMode() const {
   if (sa_ && sa_->standBy()) {
     return StaticVarCompensatorInterface::STANDBY;
   }
 
   IIDM::StaticVarCompensator::e_regulation_mode regMode = staticVarCompensatorIIDM_.regulationMode();
   switch (regMode) {
-    case IIDM::StaticVarCompensator::regulation_voltage:
-      return StaticVarCompensatorInterface::RUNNING_V;
-    case IIDM::StaticVarCompensator::regulation_reactive_power:
-      return StaticVarCompensatorInterface::RUNNING_Q;
-    case IIDM::StaticVarCompensator::regulation_off:
-      return StaticVarCompensatorInterface::OFF;
-    default:
-      return StaticVarCompensatorInterface::OFF;
+  case IIDM::StaticVarCompensator::regulation_voltage:
+    return StaticVarCompensatorInterface::RUNNING_V;
+  case IIDM::StaticVarCompensator::regulation_reactive_power:
+    return StaticVarCompensatorInterface::RUNNING_Q;
+  case IIDM::StaticVarCompensator::regulation_off:
+    return StaticVarCompensatorInterface::OFF;
+  default:
+    return StaticVarCompensatorInterface::OFF;
   }
 }
 

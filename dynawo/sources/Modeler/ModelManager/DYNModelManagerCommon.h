@@ -20,38 +20,38 @@
 #ifndef MODELER_MODELMANAGER_DYNMODELMANAGERCOMMON_H_
 #define MODELER_MODELMANAGER_DYNMODELMANAGERCOMMON_H_
 
-#include <list>
-#include <string>
-#include <iostream>
 #include <cerrno>
 #include <cmath>
+#include <iostream>
+#include <list>
+#include <string>
 
-#define MODELICA_STRING_H_  ///< to avoid definition of macro in modelica_string.h
+#define MODELICA_STRING_H_     ///< to avoid definition of macro in modelica_string.h
 #define OPENMODELICA_TYPES_H_  ///< to avoid definition of modelica_type
-#define BASE_ARRAY_H_   ///< to avoid definition of base_array functions/types
-#define BOOLEAN_ARRAY_H_   ///< to avoid definition of boolean_array functions/types
-#define STRING_ARRAY_H_   ///< to avoid definition of string_array functions/types
-#define REAL_ARRAY_H_   ///< to avoid definition of real_array functions/types
-#define INTEGER_ARRAY_H_   ///< to avoid definition of integer_array functions/types
+#define BASE_ARRAY_H_          ///< to avoid definition of base_array functions/types
+#define BOOLEAN_ARRAY_H_       ///< to avoid definition of boolean_array functions/types
+#define STRING_ARRAY_H_        ///< to avoid definition of string_array functions/types
+#define REAL_ARRAY_H_          ///< to avoid definition of real_array functions/types
+#define INTEGER_ARRAY_H_       ///< to avoid definition of integer_array functions/types
 
 #ifdef _MSC_VER
-#define OMC_NO_THREADS   ///< to avoid inclusion of pthread.h
+#define OMC_NO_THREADS  ///< to avoid inclusion of pthread.h
 #endif
 
-#include "DYNError.h"
 #include "DYNCommon.h"
+#include "DYNError.h"
 #include "DYNMessage.hpp"
 #include "DYNMessageTimeline.h"
+#include "DYNModelManagerOwnFunctions.h"  ///< redefinition of local own functions
+#include "DYNModelManagerOwnTypes.h"      ///< redefinition of local own types : should be before simulation_data.h
 #include "DYNTimeline_keys.h"
-#include "DYNModelManagerOwnTypes.h"  ///< redefinition of local own types : should be before simulation_data.h
-#include "simulation_data.h"
 #include "ModelicaStandardTables.h"
 #include "ModelicaStrings.h"
-#include "DYNModelManagerOwnFunctions.h"  ///< redefinition of local own functions
 #include "ModelicaUtilities.h"
+#include "simulation_data.h"
 
 #ifdef _MSC_VER
-#undef isnan    // undef macros defined in omc.msvc.h !
+#undef isnan  // undef macros defined in omc.msvc.h !
 #undef isinf
 #endif
 
@@ -64,14 +64,15 @@
  * @param index position of the relation in the relationsPre map
  * @param op_w operator to used
  */
-#define RELATIONHYSTERESIS(res, exp1, exp2, index, op_w) { \
-  if (data->simulationInfo->discreteCall == 0) { \
-    res = data->simulationInfo->relationsPre[index]; \
-  } else { \
-    res = ((op_w)((exp1), (exp2))); \
-    data->simulationInfo->relations[index] = res; \
-  } \
-}
+#define RELATIONHYSTERESIS(res, exp1, exp2, index, op_w) \
+  {                                                      \
+    if (data->simulationInfo->discreteCall == 0) {       \
+      res = data->simulationInfo->relationsPre[index];   \
+    } else {                                             \
+      res = ((op_w)((exp1), (exp2)));                    \
+      data->simulationInfo->relations[index] = res;      \
+    }                                                    \
+  }
 
 /**
  * less operator definition
@@ -80,7 +81,8 @@
  * @return @b exp2 if exp2 is less than exp1, @b exp1 otherwise
  */
 template<typename T>
-T FMIN(T exp1, T exp2) {
+T
+FMIN(T exp1, T exp2) {
   if (Greater(exp1, exp2))
     return exp2;
   else
@@ -94,7 +96,8 @@ T FMIN(T exp1, T exp2) {
  * @return @b exp1 if exp1 is greater than exp2, @b exp2 otherwise
  */
 template<typename T>
-T FMAX(T exp1, T exp2) {
+T
+FMAX(T exp1, T exp2) {
   if (Greater(exp1, exp2))
     return exp1;
   else
@@ -108,7 +111,8 @@ T FMAX(T exp1, T exp2) {
  * @return  @b true if a is less than b, @b false otherwise
  */
 template<typename T>
-modelica_boolean Less(T a, T b) {
+modelica_boolean
+Less(T a, T b) {
   return a < b;
 }
 
@@ -119,7 +123,8 @@ modelica_boolean Less(T a, T b) {
  * @return  @b true if a is greater than b, @b b otherwise
  */
 template<typename T>
-modelica_boolean Greater(T a, T b) {
+modelica_boolean
+Greater(T a, T b) {
   return a > b;
 }
 
@@ -130,7 +135,8 @@ modelica_boolean Greater(T a, T b) {
  * @return  @b true if a is less or equal to b, @b false otherwise
  */
 template<typename T>
-modelica_boolean LessEq(T a, T b) {
+modelica_boolean
+LessEq(T a, T b) {
   return a <= b;
 }
 
@@ -141,7 +147,8 @@ modelica_boolean LessEq(T a, T b) {
  * @return  @b true if a is greater or equal to b, @b false otherwise
  */
 template<typename T>
-modelica_boolean GreaterEq(T a, T b) {
+modelica_boolean
+GreaterEq(T a, T b) {
   return a >= b;
 }
 
@@ -152,7 +159,8 @@ modelica_boolean GreaterEq(T a, T b) {
  * @return  @b true if a is less than b, @b false otherwise
  */
 template<>
-inline modelica_boolean Less<double>(double a, double b) {
+inline modelica_boolean
+Less<double>(double a, double b) {
   return DYN::doubleNotEquals(a, b) && a < b;
 }
 
@@ -163,7 +171,8 @@ inline modelica_boolean Less<double>(double a, double b) {
  * @return  @b true if a is greater than b, @b b otherwise
  */
 template<>
-inline modelica_boolean Greater<double>(double a, double b) {
+inline modelica_boolean
+Greater<double>(double a, double b) {
   return DYN::doubleNotEquals(a, b) && a > b;
 }
 
@@ -174,7 +183,8 @@ inline modelica_boolean Greater<double>(double a, double b) {
  * @return  @b true if a is less or equal to b, @b false otherwise
  */
 template<>
-inline modelica_boolean LessEq<double>(double a, double b) {
+inline modelica_boolean
+LessEq<double>(double a, double b) {
   return DYN::doubleEquals(a, b) || a < b;
 }
 
@@ -185,7 +195,8 @@ inline modelica_boolean LessEq<double>(double a, double b) {
  * @return  @b true if a is greater or equal to b, @b false otherwise
  */
 template<>
-inline modelica_boolean GreaterEq<double>(double a, double b) {
+inline modelica_boolean
+GreaterEq<double>(double a, double b) {
   return DYN::doubleEquals(a, b) || a > b;
 }
 
@@ -196,20 +207,21 @@ inline modelica_boolean GreaterEq<double>(double a, double b) {
  * @return a^b
  */
 template<typename T>
-T pow_dynawo(T a, T b) {
+T
+pow_dynawo(T a, T b) {
   T value = pow(a, b);
   if (std::isnan(value)) {
-    throw(DYN::Error(DYN::Error::NUMERICAL_ERROR, DYN::KeyError_t::NumericalErrorFunction, std::string(__FILE__), __LINE__, \
-          (DYN::Message("ERROR", DYN::KeyError_t::names(DYN::KeyError_t::NumericalErrorFunction)), "pow")));
+    throw(DYN::Error(DYN::Error::NUMERICAL_ERROR, DYN::KeyError_t::NumericalErrorFunction, std::string(__FILE__), __LINE__,
+                     (DYN::Message("ERROR", DYN::KeyError_t::names(DYN::KeyError_t::NumericalErrorFunction)), "pow")));
   }
   return value;
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define  LessZC(a, b, direction) Less(a, b)
-#define  LessEqZC(a, b, direction) LessEq(a, b)
-#define  GreaterZC(a, b, direction) Greater(a, b)
-#define  GreaterEqZC(a, b, direction) GreaterEq(a, b)
+#define LessZC(a, b, direction) Less(a, b)
+#define LessEqZC(a, b, direction) LessEq(a, b)
+#define GreaterZC(a, b, direction) Greater(a, b)
+#define GreaterEqZC(a, b, direction) GreaterEq(a, b)
 
 #define addLogConstraintBegin(key) \
   addLogConstraintBegin_((this)->getModelManager(), (Message("CONSTRAINT", DYN::KeyConstraint_t::names(DYN::KeyConstraint_t::value(key)))))
@@ -220,7 +232,7 @@ T pow_dynawo(T a, T b) {
  * @brief Macro to define a timeline message from a Modelica model
  * @param key key to find the message
  */
-#define DYNTimelineFromModelica(key, ...) (DYN::MessageTimeline(DYN::KeyTimeline_t::names(DYN::KeyTimeline_t::value(key))), ##__VA_ARGS__ )
+#define DYNTimelineFromModelica(key, ...) (DYN::MessageTimeline(DYN::KeyTimeline_t::names(DYN::KeyTimeline_t::value(key))), ##__VA_ARGS__)
 
 #define addLogEvent1(key) addLogEvent_((this)->getModelManager(), DYNTimelineFromModelica(key))
 #define addLogEvent2(key, arg1) addLogEvent_((this)->getModelManager(), DYNTimelineFromModelica(key, arg1))
@@ -241,11 +253,11 @@ T pow_dynawo(T a, T b) {
 #define omc_assert(info, message, ...) assert_((this)->getModelManager(), (Message("", std::string(message)), ##__VA_ARGS__))
 #define omc_assert_warning(message, ...) assert_((this)->getModelManager(), (Message("", std::string(message)), ##__VA_ARGS__))
 
-#define omc_assert_withEquationIndexes(info, equationIndexes, message, ...) assert_((this)->getModelManager(), (Message("", std::string(message)), \
-                                       ##__VA_ARGS__))
+#define omc_assert_withEquationIndexes(info, equationIndexes, message, ...) \
+  assert_((this)->getModelManager(), (Message("", std::string(message)), ##__VA_ARGS__))
 
-#define omc_assert_warning_withEquationIndexes(equationIndexes, message, ...) assert_((this)->getModelManager(), (Message("", std::string(message)), \
-                                               ##__VA_ARGS__))
+#define omc_assert_warning_withEquationIndexes(equationIndexes, message, ...) \
+  assert_((this)->getModelManager(), (Message("", std::string(message)), ##__VA_ARGS__))
 
 #define throwStreamPrint(data, message, ...) throw_((this)->getModelManager(), (Message("", std::string(message)), ##__VA_ARGS__))
 
@@ -253,7 +265,7 @@ T pow_dynawo(T a, T b) {
 
 #define stringEqual(x, y) compareString_(std::string(x), std::string(y))
 
-#define size_of_dimension_base_array(x, y) sizeOffArray_ (x.dim_size, y - 1)
+#define size_of_dimension_base_array(x, y) sizeOffArray_(x.dim_size, y - 1)
 
 #define MMC_STRINGDATA(x) x
 #define MMC_THROW_INTERNAL() assert(false)
@@ -264,15 +276,14 @@ T pow_dynawo(T a, T b) {
 
 #define modelica_string_to_modelica_string(item, index1, index2) item
 
-#define callExternalAutomaton(command, time, inputs, inputs_name, nbInputs, nbMaxInputs, outputs, outputs_name, nbOutputs, nbMaxOutputs) \
-    callExternalAutomatonModel((this)->getModelManager()->name(), command, time, inputs, inputs_name, nbInputs, nbMaxInputs, outputs, outputs_name, nbOutputs, \
-nbMaxOutputs, this->getModelManager()->getWorkingDirectory());
+#define callExternalAutomaton(command, time, inputs, inputs_name, nbInputs, nbMaxInputs, outputs, outputs_name, nbOutputs, nbMaxOutputs)                     \
+  callExternalAutomatonModel((this)->getModelManager()->name(), command, time, inputs, inputs_name, nbInputs, nbMaxInputs, outputs, outputs_name, nbOutputs, \
+                             nbMaxOutputs, this->getModelManager()->getWorkingDirectory());
 
 #define delayImpl(data, exprNumber, exprValue, time, delayTime, delayMax) \
   computeDelay((this)->getModelManager(), data, exprNumber, exprValue, time, delayTime, delayMax)
 
-#define createDelay(exprNumber, time, exprValue, delayMax) \
-  addDelay((this)->getModelManager(), exprNumber, time, exprValue, delayMax)
+#define createDelay(exprNumber, time, exprValue, delayMax) addDelay((this)->getModelManager(), exprNumber, time, exprValue, delayMax)
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -282,12 +293,12 @@ nbMaxOutputs, this->getModelManager()->getWorkingDirectory());
  */
 class DYNDATA : public DATA {
  public:
-  int nbDummy;  ///< number of dummy variables
-  int nbVars;  ///< number of variables
-  int nbF;  ///< number of residual functions
-  int nbModes;  ///< number of modes
-  int nbZ;  ///< number of discrete variables
-  int nbCalculatedVars;  ///< number of calculated variables
+  int nbDummy;                        ///< number of dummy variables
+  int nbVars;                         ///< number of variables
+  int nbF;                            ///< number of residual functions
+  int nbModes;                        ///< number of modes
+  int nbZ;                            ///< number of discrete variables
+  int nbCalculatedVars;               ///< number of calculated variables
   std::vector<double> constCalcVars;  ///< values of constant calculated variables with complex initialization
 };
 
@@ -302,18 +313,17 @@ class memoryManagerChars {
    * @brief Default constructor
    *
    */
-  memoryManagerChars() { }
+  memoryManagerChars() {}
 
   /**
    * @brief Default destructor
    *
    */
-  ~memoryManagerChars() { }
+  ~memoryManagerChars() {}
 
  public:
   std::list<std::string> string2Keep_;  ///< string created along the simulation and that should be deleted at the end of the simulation
 };
-
 
 class ModelManager;
 class Message;
@@ -590,7 +600,7 @@ void throw_(ModelManager* model, const Message& message);
  * @param dim1 the first array dimension
  * @return the address of an integer element in an array
  */
-const modelica_integer* integerArrayElementAddress1_(const modelica_integer * source, int dim1);
+const modelica_integer* integerArrayElementAddress1_(const modelica_integer* source, int dim1);
 
 /**
  * @brief compute the size of an integer array
@@ -609,7 +619,7 @@ modelica_integer sizeOffArray_(const modelica_integer array[], modelica_integer 
  * @param e the array gathering enum string values
  * @return the enum value as a string
  */
-modelica_string enumToModelicaString_(modelica_integer nr, const char *e[]);
+modelica_string enumToModelicaString_(modelica_integer nr, const char* e[]);
 
 /**
  * @brief call an external code of automaton
@@ -627,10 +637,9 @@ modelica_string enumToModelicaString_(modelica_integer nr, const char *e[]);
  * @param nbMaxOutputs maximum number of outputs
  * @param workingDirectory Working directory of the simulation.
  */
-void callExternalAutomatonModel(const std::string& modelName, const char* command, const double time,
-    const double* inputs, const char** inputs_name, const int nbInputs, const int nbMaxInputs,
-    double* outputs, const char** outputs_name, const int nbOutputs, const int nbMaxOutputs,
-    const std::string& workingDirectory);
+void callExternalAutomatonModel(const std::string& modelName, const char* command, const double time, const double* inputs, const char** inputs_name,
+                                const int nbInputs, const int nbMaxInputs, double* outputs, const char** outputs_name, const int nbOutputs,
+                                const int nbMaxOutputs, const std::string& workingDirectory);
 
 }  // namespace DYN
 #endif  // MODELER_MODELMANAGER_DYNMODELMANAGERCOMMON_H_

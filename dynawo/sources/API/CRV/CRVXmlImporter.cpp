@@ -17,20 +17,19 @@
  * @brief Dynawo curves collection XML importer : implementation file
  *
  */
-#include <fstream>
-#include <iostream>
-
-#include <xml/sax/parser/ParserFactory.h>
-#include <xml/sax/parser/ParserException.h>
-
-#include "DYNMacrosMessage.h"
-
 #include "CRVXmlImporter.h"
+
 #include "CRVXmlHandler.h"
 #include "DYNExecUtils.h"
+#include "DYNMacrosMessage.h"
 
-using std::string;
+#include <fstream>
+#include <iostream>
+#include <xml/sax/parser/ParserException.h>
+#include <xml/sax/parser/ParserFactory.h>
+
 using boost::shared_ptr;
+using std::string;
 namespace parser = xml::sax::parser;
 namespace curves {
 

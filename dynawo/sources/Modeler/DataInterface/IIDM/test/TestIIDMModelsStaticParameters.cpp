@@ -17,58 +17,55 @@
  *
  */
 
+#include "DYNDataInterfaceIIDM.h"
+#include "DYNLoadInterface.h"
+#include "DYNModelConstants.h"
+#include "DYNModelMulti.h"
+#include "DYNNetworkInterface.h"
+#include "DYNSubModel.h"
+#include "DYNSubModelFactory.h"
+#include "DYNTwoWTransformerInterface.h"
+#include "DYNVoltageLevelInterface.h"
+#include "PARParametersSetFactory.h"
+#include "gtest_dynawo.h"
 
 #include <IIDM/Network.h>
-#include <IIDM/components/Connection.h>
-#include <IIDM/components/ConnectionPoint.h>
-#include <IIDM/components/TapChanger.h>
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/BusBarSection.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/ShuntCompensator.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/components/StaticVarCompensator.h>
-#include <IIDM/components/DanglingLine.h>
-#include <IIDM/components/HvdcLine.h>
-#include <IIDM/components/Generator.h>
-#include <IIDM/components/LccConverterStation.h>
-#include <IIDM/components/HvdcLine.h>
-#include <IIDM/components/Line.h>
-#include <IIDM/components/Load.h>
-#include <IIDM/components/Switch.h>
-#include <IIDM/components/VscConverterStation.h>
+#include <IIDM/builders/BusBarSectionBuilder.h>
+#include <IIDM/builders/BusBuilder.h>
+#include <IIDM/builders/DanglingLineBuilder.h>
+#include <IIDM/builders/GeneratorBuilder.h>
+#include <IIDM/builders/HvdcLineBuilder.h>
+#include <IIDM/builders/LccConverterStationBuilder.h>
+#include <IIDM/builders/LineBuilder.h>
+#include <IIDM/builders/LoadBuilder.h>
 #include <IIDM/builders/NetworkBuilder.h>
+#include <IIDM/builders/ShuntCompensatorBuilder.h>
+#include <IIDM/builders/StaticVarCompensatorBuilder.h>
+#include <IIDM/builders/SubstationBuilder.h>
+#include <IIDM/builders/SwitchBuilder.h>
 #include <IIDM/builders/Transformer2WindingsBuilder.h>
 #include <IIDM/builders/Transformer3WindingsBuilder.h>
 #include <IIDM/builders/VoltageLevelBuilder.h>
-#include <IIDM/builders/ShuntCompensatorBuilder.h>
-#include <IIDM/builders/SubstationBuilder.h>
-#include <IIDM/builders/BusBuilder.h>
-#include <IIDM/builders/BusBarSectionBuilder.h>
-#include <IIDM/builders/StaticVarCompensatorBuilder.h>
-#include <IIDM/builders/DanglingLineBuilder.h>
-#include <IIDM/builders/HvdcLineBuilder.h>
-#include <IIDM/builders/GeneratorBuilder.h>
-#include <IIDM/builders/LccConverterStationBuilder.h>
-#include <IIDM/builders/HvdcLineBuilder.h>
-#include <IIDM/builders/LineBuilder.h>
-#include <IIDM/builders/LoadBuilder.h>
-#include <IIDM/builders/SwitchBuilder.h>
 #include <IIDM/builders/VscConverterStationBuilder.h>
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/BusBarSection.h>
+#include <IIDM/components/Connection.h>
+#include <IIDM/components/ConnectionPoint.h>
+#include <IIDM/components/DanglingLine.h>
+#include <IIDM/components/Generator.h>
+#include <IIDM/components/HvdcLine.h>
+#include <IIDM/components/LccConverterStation.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/Load.h>
+#include <IIDM/components/ShuntCompensator.h>
+#include <IIDM/components/StaticVarCompensator.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/Switch.h>
+#include <IIDM/components/TapChanger.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <IIDM/components/VscConverterStation.h>
 #include <IIDM/extensions/standbyAutomaton/StandbyAutomaton.h>
 #include <IIDM/extensions/standbyAutomaton/StandbyAutomatonBuilder.h>
-
-#include "gtest_dynawo.h"
-#include "DYNDataInterfaceIIDM.h"
-#include "DYNSubModelFactory.h"
-#include "DYNSubModel.h"
-#include "PARParametersSetFactory.h"
-#include "DYNModelMulti.h"
-#include "DYNNetworkInterface.h"
-#include "DYNTwoWTransformerInterface.h"
-#include "DYNModelConstants.h"
-#include "DYNVoltageLevelInterface.h"
-#include "DYNLoadInterface.h"
 
 using boost::shared_ptr;
 
@@ -131,8 +128,7 @@ createBusBreakerNetwork(const BusBreakerNetworkProperty& properties) {
   IIDM::Network network = nb.build("MyNetwork");
   IIDM::connection_status_t cs = {true /*connected*/};
   IIDM::Port p1("MyBus", cs), p2("MyBus", cs), p3("MyBus", cs);
-  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2),
-      c3("MyVoltageLevel", p3, IIDM::side_3);
+  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2), c3("MyVoltageLevel", p3, IIDM::side_3);
 
   IIDM::builders::SubstationBuilder ssb;
   IIDM::Substation ss = ssb.build("MySubStation");
@@ -307,7 +303,6 @@ createBusBreakerNetwork(const BusBreakerNetworkProperty& properties) {
     ss.add(t3W, c1, c2, c3);
   }
 
-
   network.add(ss);
 
   if (properties.instantiateLine) {
@@ -335,8 +330,8 @@ createBusBreakerNetwork(const BusBreakerNetworkProperty& properties) {
 
 shared_ptr<SubModel>
 initializeModel(shared_ptr<DataInterface> data) {
-  shared_ptr<SubModel> modelNetwork = SubModelFactory::createSubModelFromLib("../../../../Models/CPP/ModelNetwork/DYNModelNetwork" +
-                                                std::string(sharedLibraryExtension()));
+  shared_ptr<SubModel> modelNetwork =
+      SubModelFactory::createSubModelFromLib("../../../../Models/CPP/ModelNetwork/DYNModelNetwork" + std::string(sharedLibraryExtension()));
   modelNetwork->initFromData(data);
   data->setModelNetwork(modelNetwork);
   modelNetwork->name("NETWORK");
@@ -378,7 +373,7 @@ TEST(DataInterfaceIIDMTest, testNodeBreakerBusIIDMAndStaticParameters) {
 
   ASSERT_EQ(data->getStaticParameterDoubleValue("calculatedBus_MyVoltageLevel_0", "U"), 110.);
   ASSERT_EQ(data->getStaticParameterDoubleValue("calculatedBus_MyVoltageLevel_0", "Teta"), 1.5);
-  ASSERT_EQ(data->getStaticParameterDoubleValue("calculatedBus_MyVoltageLevel_0", "Upu"), 110./190.);
+  ASSERT_EQ(data->getStaticParameterDoubleValue("calculatedBus_MyVoltageLevel_0", "Upu"), 110. / 190.);
   ASSERT_EQ(data->getStaticParameterDoubleValue("calculatedBus_MyVoltageLevel_0", "Teta_pu"), 1.5 * M_PI / 180);
 }
 
@@ -406,7 +401,6 @@ TEST(DataInterfaceIIDMTest, testBusIIDMStaticParameters) {
   ASSERT_EQ(data->getStaticParameterDoubleValue("MyBus", "Upu"), 1.);
   ASSERT_EQ(data->getStaticParameterDoubleValue("MyBus", "Teta_pu"), 1.5 * M_PI / 180);
 }
-
 
 TEST(DataInterfaceIIDMTest, testDanglingLineIIDMAndStaticParameters) {
   const BusBreakerNetworkProperty properties = {
@@ -479,7 +473,6 @@ TEST(DataInterfaceIIDMTest, testGeneratorIIDMAndStaticParameters) {
   ASSERT_DOUBLE_EQUALS_DYNAWO(data->getStaticParameterDoubleValue("MyGenerator", "targetQ_pu"), 90. / SNREF);
   ASSERT_DOUBLE_EQUALS_DYNAWO(data->getStaticParameterDoubleValue("MyGenerator", "targetQ"), 90.);
 }
-
 
 TEST(DataInterfaceIIDMTest, testHvdcLineIIDMAndStaticParameters) {
   const BusBreakerNetworkProperty properties = {
@@ -723,8 +716,7 @@ TEST(DataInterfaceIIDMTest, testBadlyFormedRegulatingRatioTapChangerNoTargetV) {
   IIDM::Network network = nb.build("MyNetwork");
   IIDM::connection_status_t cs = {true /*connected*/};
   IIDM::Port p1("MyBus", cs), p2("MyBus", cs), p3("MyBus", cs);
-  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2),
-      c3("MyVoltageLevel", p3, IIDM::side_3);
+  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2), c3("MyVoltageLevel", p3, IIDM::side_3);
 
   IIDM::builders::SubstationBuilder ssb;
   IIDM::Substation ss = ssb.build("MySubStation");
@@ -761,8 +753,7 @@ TEST(DataInterfaceIIDMTest, testBadlyFormedRegulatingRatioTapChangerNoTerminalRe
   IIDM::Network network = nb.build("MyNetwork");
   IIDM::connection_status_t cs = {true /*connected*/};
   IIDM::Port p1("MyBus", cs), p2("MyBus", cs), p3("MyBus", cs);
-  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2),
-      c3("MyVoltageLevel", p3, IIDM::side_3);
+  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2), c3("MyVoltageLevel", p3, IIDM::side_3);
 
   IIDM::builders::SubstationBuilder ssb;
   IIDM::Substation ss = ssb.build("MySubStation");
@@ -798,8 +789,7 @@ TEST(DataInterfaceIIDMTest, testBadlyFormedRegulatingRatioTapChangerNoTerminalRe
   IIDM::Network network = nb.build("MyNetwork");
   IIDM::connection_status_t cs = {true /*connected*/};
   IIDM::Port p1("MyBus", cs), p2("MyBus", cs), p3("MyBus", cs);
-  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2),
-      c3("MyVoltageLevel", p3, IIDM::side_3);
+  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2), c3("MyVoltageLevel", p3, IIDM::side_3);
 
   IIDM::builders::SubstationBuilder ssb;
   IIDM::Substation ss = ssb.build("MySubStation");
@@ -837,8 +827,7 @@ TEST(DataInterfaceIIDMTest, testRegulatingRatioTapChanger) {
   IIDM::Network network = nb.build("MyNetwork");
   IIDM::connection_status_t cs = {true /*connected*/};
   IIDM::Port p1("MyBus", cs), p2("MyBus", cs), p3("MyBus", cs);
-  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2),
-      c3("MyVoltageLevel", p3, IIDM::side_3);
+  IIDM::Connection c1("MyVoltageLevel", p1, IIDM::side_1), c2("MyVoltageLevel", p2, IIDM::side_2), c3("MyVoltageLevel", p3, IIDM::side_3);
 
   IIDM::builders::SubstationBuilder ssb;
   IIDM::Substation ss = ssb.build("MySubStation");

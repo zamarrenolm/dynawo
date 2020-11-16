@@ -26,13 +26,13 @@ using std::string;
 namespace DYN {
 
 ParameterModeler::ParameterModeler(const string& name, const typeVarC_t& valueType, const parameterScope_t& scope, const string& cardinality,
-                     const string& cardinalityInformator) :
-ParameterCommon(name, valueType, true),
-origin_(boost::none),
-scope_(scope),
-cardinality_(cardinality),
-cardinalityInformator_(cardinalityInformator),
-nonUnitaryParameterInstance_(false) {
+                                   const string& cardinalityInformator) :
+    ParameterCommon(name, valueType, true),
+    origin_(boost::none),
+    scope_(scope),
+    cardinality_(cardinality),
+    cardinalityInformator_(cardinalityInformator),
+    nonUnitaryParameterInstance_(false) {
   // write rights are defined as follows
   // any parameter may have a local init value,
   // even internal parameters, because such a parameter may be set through an internal init model variable (see TapChanger.valueToMonitor0 for such an example)
@@ -57,15 +57,14 @@ nonUnitaryParameterInstance_(false) {
 
 #ifndef LANG_CXX11
 ParameterModeler::ParameterModeler(const ParameterModeler& parameter) :
-ParameterCommon(parameter),
-writeRights_(parameter.writeRights_),
-values_(parameter.values_),
-origin_(parameter.origin_),
-scope_(parameter.scope_),
-cardinality_(parameter.cardinality_),
-cardinalityInformator_(parameter.cardinalityInformator_),
-nonUnitaryParameterInstance_(parameter.nonUnitaryParameterInstance_) {
-}
+    ParameterCommon(parameter),
+    writeRights_(parameter.writeRights_),
+    values_(parameter.values_),
+    origin_(parameter.origin_),
+    scope_(parameter.scope_),
+    cardinality_(parameter.cardinality_),
+    cardinalityInformator_(parameter.cardinalityInformator_),
+    nonUnitaryParameterInstance_(parameter.nonUnitaryParameterInstance_) {}
 #endif
 
 void
@@ -100,7 +99,7 @@ ParameterModeler::getDoubleValue() const {
   if (getValueType() == VAR_TYPE_DOUBLE)
     return getValue<double>();
   else if (getValueType() == VAR_TYPE_INT)
-    return static_cast<double> (getValue<int>());
+    return static_cast<double>(getValue<int>());
   else if (getValueType() == VAR_TYPE_BOOL)
     return fromNativeBool(getValue<bool>());
   else

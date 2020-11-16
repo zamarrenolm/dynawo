@@ -1,24 +1,28 @@
 
 #include "GeneratorPQ.h"
+
 #include "DYNSubModel.h"
 #include "GeneratorPQ_Dyn.h"
 #include "GeneratorPQ_Init.h"
 
-extern "C" DYN::SubModelFactory* getFactory() {
+extern "C" DYN::SubModelFactory*
+getFactory() {
   return (new DYN::ModelGeneratorPQFactory());
 }
 
-extern "C" void deleteFactory(DYN::SubModelFactory* factory) {
+extern "C" void
+deleteFactory(DYN::SubModelFactory* factory) {
   delete factory;
 }
 
-extern "C" DYN::SubModel* DYN::ModelGeneratorPQFactory::create() const
-{
-  DYN::SubModel* model (new DYN::ModelGeneratorPQ() );
+extern "C" DYN::SubModel*
+DYN::ModelGeneratorPQFactory::create() const {
+  DYN::SubModel* model(new DYN::ModelGeneratorPQ());
   return model;
 }
 
-extern "C" void DYN::ModelGeneratorPQFactory::destroy(DYN::SubModel* model) const {
+extern "C" void
+DYN::ModelGeneratorPQFactory::destroy(DYN::SubModel* model) const {
   delete model;
 }
 
@@ -41,6 +45,4 @@ ModelGeneratorPQ::~ModelGeneratorPQ() {
   delete modelInit_;
 }
 
-}
-
-
+}  // namespace DYN

@@ -17,10 +17,11 @@
  * @brief Dynawo native variable : factory file
  */
 #include "DYNVariableNativeFactory.h"
+
 #include "DYNVariableNative.h"
 
-using std::string;
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 

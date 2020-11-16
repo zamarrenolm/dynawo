@@ -17,14 +17,12 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
 #include "DYNIoDico.h"
+#include "DYNMacrosMessage.h"
 #include "DYNMessage.h"
 #include "DYNMessageTimeline.h"
-#include "DYNMacrosMessage.h"
 #include "DYNTerminate.h"
-
+#include "gtest_dynawo.h"
 
 namespace DYN {
 
@@ -64,7 +62,7 @@ TEST(CommonIoDicoTest, testCommonIoDicosTest) {
   ASSERT_EQ(dico2->msg("MyFourthEntry"), "My Fourth Entry");
 
   Message mess("MyIoDico", "MySecondEntry");
-  ASSERT_EQ((mess.operator ,(4)).str(), "My Second Entry 4");
+  ASSERT_EQ((mess.operator,(4)).str(), "My Second Entry 4");
   Message mess2(mess);
   ASSERT_EQ(mess2.str(), "My Second Entry 4");
 
@@ -76,7 +74,7 @@ TEST(CommonIoDicoTest, testCommonIoDicosTest) {
   MessageTimeline tmess("MySecondEntry");
   assert(tmess.priority() != boost::none);
   ASSERT_EQ(tmess.priority().get(), 1);
-  ASSERT_EQ((tmess.operator ,(4)).str(), "My Second Entry 4");
+  ASSERT_EQ((tmess.operator,(4)).str(), "My Second Entry 4");
   MessageTimeline tmess2(tmess);
   ASSERT_EQ(tmess2.str(), "My Second Entry 4");
 

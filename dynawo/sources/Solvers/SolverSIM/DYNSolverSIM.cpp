@@ -22,45 +22,42 @@
 
 #include "DYNSolverSIM.h"
 
-#include <cmath>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <set>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-
-#include <boost/shared_ptr.hpp>
-
-#include <nvector/nvector_serial.h>
-#include <sundials/sundials_types.h>
-#include <sundials/sundials_math.h>
-
-#include "PARParametersSet.h"
+#include "DYNMacrosMessage.h"
+#include "DYNModel.h"
+#include "DYNSolverKINAlgRestoration.h"
+#include "DYNSolverKINEuler.h"
+#include "DYNSparseMatrix.h"
+#include "DYNTrace.h"
 #include "PARParameter.h"
+#include "PARParametersSet.h"
 #include "TLTimeline.h"
 
-#include "DYNMacrosMessage.h"
-#include "DYNSparseMatrix.h"
-#include "DYNSolverKINEuler.h"
-#include "DYNSolverKINAlgRestoration.h"
-#include "DYNTrace.h"
-#include "DYNModel.h"
+#include <algorithm>
+#include <boost/shared_ptr.hpp>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <nvector/nvector_serial.h>
+#include <set>
+#include <sstream>
+#include <sundials/sundials_math.h>
+#include <sundials/sundials_types.h>
+#include <vector>
 
 using boost::shared_ptr;
 using std::endl;
+using std::make_pair;
+using std::map;
 using std::max;
 using std::min;
 using std::ofstream;
-using std::stringstream;
 using std::set;
-using std::setw;
 using std::setfill;
-using std::vector;
-using std::map;
+using std::setw;
 using std::string;
-using std::make_pair;
+using std::stringstream;
+using std::vector;
 
 using parameters::ParametersSet;
 using timeline::Timeline;
@@ -69,14 +66,16 @@ using timeline::Timeline;
  * @brief SolverSIMFactory getter
  * @return A pointer to a new instance of SolverSIMFactory
  */
-extern "C" DYN::SolverFactory* getFactory() {
+extern "C" DYN::SolverFactory*
+getFactory() {
   return (new DYN::SolverSIMFactory());
 }
 
 /**
  * @brief SolverSIMFactory destroy method
  */
-extern "C" void deleteFactory(DYN::SolverFactory* factory) {
+extern "C" void
+deleteFactory(DYN::SolverFactory* factory) {
   delete factory;
 }
 
@@ -84,7 +83,8 @@ extern "C" void deleteFactory(DYN::SolverFactory* factory) {
  * @brief SolverSIM getter
  * @return A pointer to a new instance of SolverSIM
  */
-extern "C" DYN::Solver* DYN::SolverSIMFactory::create() const {
+extern "C" DYN::Solver*
+DYN::SolverSIMFactory::create() const {
   DYN::Solver* solver(new DYN::SolverSIM());
   return solver;
 }
@@ -92,50 +92,48 @@ extern "C" DYN::Solver* DYN::SolverSIMFactory::create() const {
 /**
  * @brief SolverSIM destroy method
  */
-extern "C" void DYN::SolverSIMFactory::destroy(DYN::Solver* solver) const {
+extern "C" void
+DYN::SolverSIMFactory::destroy(DYN::Solver* solver) const {
   delete solver;
 }
 
 namespace DYN {
 
-SolverSIMFactory::SolverSIMFactory() {
-}
+SolverSIMFactory::SolverSIMFactory() {}
 
-SolverSIMFactory::~SolverSIMFactory() {
-}
+SolverSIMFactory::~SolverSIMFactory() {}
 
 SolverSIM::SolverSIM() :
-Solver(),
-hMin_(0),
-hMax_(0),
-kReduceStep_(0),
-nEff_(0),
-nDeadband_(0),
-maxRootRestart_(0),
-maxNewtonTry_(0),
-recalculateStep_(false),
-tEnd_(0.),
-h_(0.),
-hNew_(0.),
-nNewt_(0),
-countRestart_(0),
-factorizationForced_(false),
-fnormtol_(1e-4),
-initialaddtol_(0.1),
-scsteptol_(1e-4),
-mxnewtstep_(100000),
-msbset_(0),
-mxiter_(15),
-printfl_(0),
-skipNextNR_(false),
-skipAlgebraicResidualsEvaluation_(false),
-optimizeAlgebraicResidualsEvaluations_(true),
-skipNRIfInitialGuessOK_(true) {
+    Solver(),
+    hMin_(0),
+    hMax_(0),
+    kReduceStep_(0),
+    nEff_(0),
+    nDeadband_(0),
+    maxRootRestart_(0),
+    maxNewtonTry_(0),
+    recalculateStep_(false),
+    tEnd_(0.),
+    h_(0.),
+    hNew_(0.),
+    nNewt_(0),
+    countRestart_(0),
+    factorizationForced_(false),
+    fnormtol_(1e-4),
+    initialaddtol_(0.1),
+    scsteptol_(1e-4),
+    mxnewtstep_(100000),
+    msbset_(0),
+    mxiter_(15),
+    printfl_(0),
+    skipNextNR_(false),
+    skipAlgebraicResidualsEvaluation_(false),
+    optimizeAlgebraicResidualsEvaluations_(true),
+    skipNRIfInitialGuessOK_(true) {
   solverKINAlgRestoration_.reset(new SolverKINAlgRestoration());
 }
 
-SolverSIM::~SolverSIM() {
-}
+SolverSIM::~SolverSIM() {}
 
 void
 SolverSIM::defineSpecificParameters() {
@@ -172,7 +170,7 @@ SolverSIM::setSolverSpecificParameters() {
   nEff_ = findParameter("nEff").getValue<int>();
   nDeadband_ = findParameter("nDeadband").getValue<int>();
   maxRootRestart_ = findParameter("maxRootRestart").getValue<int>();
-  maxNewtonTry_ =  findParameter("maxNewtonTry").getValue<int>();
+  maxNewtonTry_ = findParameter("maxNewtonTry").getValue<int>();
   recalculateStep_ = findParameter("recalculateStep").getValue<bool>();
   linearSolverName_ = findParameter("linearSolverName").getValue<std::string>();
 
@@ -211,7 +209,7 @@ SolverSIM::solverType() const {
 }
 
 void
-SolverSIM::init(const shared_ptr<Model> &model, const double & t0, const double & tEnd) {
+SolverSIM::init(const shared_ptr<Model>& model, const double& t0, const double& tEnd) {
   tSolve_ = t0;
   tEnd_ = tEnd;
   h_ = hMax_;
@@ -252,8 +250,8 @@ SolverSIM::calculateIC() {
   model_->reinitMode();
 
   // KINSOL initialization
-  solverKINAlgRestoration_->init(model_, SolverKINAlgRestoration::KIN_NORMAL, fnormtolAlg_,
-      initialaddtolAlg_, scsteptolAlg_, mxnewtstepAlg_, msbsetAlg_, mxiterAlg_, printflAlg_);
+  solverKINAlgRestoration_->init(model_, SolverKINAlgRestoration::KIN_NORMAL, fnormtolAlg_, initialaddtolAlg_, scsteptolAlg_, mxnewtstepAlg_, msbsetAlg_,
+                                 mxiterAlg_, printflAlg_);
 
   // Loop as long as there is a z or a mode change
   do {
@@ -287,14 +285,16 @@ SolverSIM::calculateIC() {
   solverKINAlgRestoration_->clean();
 }
 
-void SolverSIM::solveStep(double /*tAim*/, double& tNxt) {
+void
+SolverSIM::solveStep(double /*tAim*/, double& tNxt) {
   if (recalculateStep_)
     solveWithStepRecalculation(tNxt);
   else
     solveWithoutStepRecalculation(tNxt);
 }
 
-void SolverSIM::solveWithStepRecalculation(double& tNxt) {
+void
+SolverSIM::solveWithStepRecalculation(double& tNxt) {
   int counter = 0;
   bool redoStep = false;
   saveInitialValues();
@@ -317,68 +317,68 @@ void SolverSIM::solveWithStepRecalculation(double& tNxt) {
     skipAlgebraicResidualsEvaluation_ = false;
 
     switch (status) {
-      /* NON_CONV: the Newton-Raphson algorithm fails to converge
+    /* NON_CONV: the Newton-Raphson algorithm fails to converge
        *   => The time step is decreased
        *   => The LU decomposition is forced for the next time steps
        *   => The initial point for the next time step (h = h/2) is the initial point from the previous accepted time step
        *   => In case we use the recalculateStep strategy, timeline events must be deleted.
       */
-      case NON_CONV: {
-        handleDivergence(redoStep);
-        restoreInitialValues();
-        countRestart_ = 0;
-        // Erase timeline messages that could have been added between the previous accepted time step and the non convergence
-        if (timeline_) {
-          finalEventsSize = timeline_->getSizeEvents();
-          if (finalEventsSize != initialEventsSize)
-            timeline_->eraseEvents(finalEventsSize - initialEventsSize);
-        }
-        break;
+    case NON_CONV: {
+      handleDivergence(redoStep);
+      restoreInitialValues();
+      countRestart_ = 0;
+      // Erase timeline messages that could have been added between the previous accepted time step and the non convergence
+      if (timeline_) {
+        finalEventsSize = timeline_->getSizeEvents();
+        if (finalEventsSize != initialEventsSize)
+          timeline_->eraseEvents(finalEventsSize - initialEventsSize);
       }
-      /*
+      break;
+    }
+    /*
        * CONV: the Newton-Rapshon algorithm converges and there is no discrete value or mode change
        * => The time step is increased (if possible)
        * => The LU decomposition is avoided for the next time steps (we have come back to a stabilized situation)
        */
-      case CONV: {
-        handleConvergence(redoStep);
-        skipAlgebraicResidualsEvaluation_ = optimizeAlgebraicResidualsEvaluations_;
-        countRestart_ = 0;
-        break;
-      }
-      /*
+    case CONV: {
+      handleConvergence(redoStep);
+      skipAlgebraicResidualsEvaluation_ = optimizeAlgebraicResidualsEvaluations_;
+      countRestart_ = 0;
+      break;
+    }
+    /*
        * ROOT_ALG: algebraic change
        * => a restoration of the algebraic variables will be called by the simulation
        * => The current time step is accepted.
        * => The next time step will be done with the current time step (neither increase nor decrease)
        */
-      case ROOT_ALG: {
-        handleAlgebraicRoot(redoStep);
-        skipAlgebraicResidualsEvaluation_ = optimizeAlgebraicResidualsEvaluations_;
-        countRestart_ = 0;
-        break;
-      }
-      /*
+    case ROOT_ALG: {
+      handleAlgebraicRoot(redoStep);
+      skipAlgebraicResidualsEvaluation_ = optimizeAlgebraicResidualsEvaluations_;
+      countRestart_ = 0;
+      break;
+    }
+    /*
        * ROOT: a root has been detected (discrete variable change at the moment)
        * => The current time step is recalculated
        * => The LU decomposition status is kept constant or not (depending on the overall strategy - recalculateStep parameter)
        * => The next time step will be done with the current time step (neither increase nor decrease)
        */
-      case ROOT: {
-          // Number of discrete variable values / mode change greater than maxRootRestart
-          if (countRestart_ >= maxRootRestart_) {
-            countRestart_ = 0;
-            factorizationForced_ = true;
-            redoStep = false;
-          } else {
-            countRestart_++;
-            redoStep = true;
-            restoreContinuousVariables();
-            state_.reset();
-            model_->reinitMode();
-          }
-        break;
+    case ROOT: {
+      // Number of discrete variable values / mode change greater than maxRootRestart
+      if (countRestart_ >= maxRootRestart_) {
+        countRestart_ = 0;
+        factorizationForced_ = true;
+        redoStep = false;
+      } else {
+        countRestart_++;
+        redoStep = true;
+        restoreContinuousVariables();
+        state_.reset();
+        model_->reinitMode();
       }
+      break;
+    }
     }
   } while (redoStep);
 
@@ -387,7 +387,8 @@ void SolverSIM::solveWithStepRecalculation(double& tNxt) {
   ++stats_.nst_;
 }
 
-void SolverSIM::solveWithoutStepRecalculation(double& tNxt) {
+void
+SolverSIM::solveWithoutStepRecalculation(double& tNxt) {
   int counter = 0;
   bool redoStep = false;
   saveContinuousVariables();
@@ -404,48 +405,48 @@ void SolverSIM::solveWithoutStepRecalculation(double& tNxt) {
     skipAlgebraicResidualsEvaluation_ = false;
 
     switch (status) {
-      /* NON_CONV: the Newton-Raphson algorithm fails to converge
+    /* NON_CONV: the Newton-Raphson algorithm fails to converge
        *   => The time step is decreased
        *   => The LU decomposition is forced for the next time steps
        *   => The initial point for the next time step (h = h/2) is the initial point from the previous accepted time step
       */
-      case NON_CONV: {
-        handleDivergence(redoStep);
-        restoreContinuousVariables();
-        break;
-      }
-      /*
+    case NON_CONV: {
+      handleDivergence(redoStep);
+      restoreContinuousVariables();
+      break;
+    }
+    /*
        * CONV: the Newton-Rapshon algorithm converges and there is no discrete value or mode change
        * => The time step is increased (if possible)
        * => The LU decomposition is avoided for the next time steps (we have come back to a stabilized situation)
       */
-      case CONV: {
-        handleConvergence(redoStep);
-        skipAlgebraicResidualsEvaluation_ = optimizeAlgebraicResidualsEvaluations_;
-        break;
-      }
-      /*
+    case CONV: {
+      handleConvergence(redoStep);
+      skipAlgebraicResidualsEvaluation_ = optimizeAlgebraicResidualsEvaluations_;
+      break;
+    }
+    /*
        * ROOT_ALG: algebraic change
        * => a restoration of the algebraic variables will be called by the simulation
        * => The current time step is accepted.
        * => The next time step will be done with the current time step (neither increase nor decrease)
       */
-      case ROOT_ALG: {
-        handleAlgebraicRoot(redoStep);
-        skipAlgebraicResidualsEvaluation_ = optimizeAlgebraicResidualsEvaluations_;
-        break;
-      }
-      /*
+    case ROOT_ALG: {
+      handleAlgebraicRoot(redoStep);
+      skipAlgebraicResidualsEvaluation_ = optimizeAlgebraicResidualsEvaluations_;
+      break;
+    }
+    /*
        * ROOT: a root has been detected (discrete variable change at the moment)
        * => The current time step is not recalculated
        * => The LU decomposition status is kept constant or not (depending on the overall strategy - recalculateStep parameter)
        * => The next time step will be done with the current time step (neither increase nor decrease)
       */
-      case ROOT: {
-        redoStep = false;
-        factorizationForced_ = false;
-        break;
-      }
+    case ROOT: {
+      redoStep = false;
+      factorizationForced_ = false;
+      break;
+    }
     }
   } while (redoStep);
 
@@ -465,7 +466,8 @@ SolverSIM::saveContinuousVariables() {
   ySave_.assign(vYy_.begin(), vYy_.end());
 }
 
-void SolverSIM::handleMaximumTries(int& counter) {
+void
+SolverSIM::handleMaximumTries(int& counter) {
   ++counter;
   if (counter >= maxNewtonTry_)
     throw DYNError(Error::SOLVER_ALGO, SolverSIMConvFail, maxNewtonTry_);
@@ -564,9 +566,10 @@ SolverSIM::updateStatistics() {
   stats_.nje_ += nje;
 }
 
-void SolverSIM::handleDivergence(bool& redoStep) {
+void
+SolverSIM::handleDivergence(bool& redoStep) {
   if (doubleEquals(h_, hMin_)) {
-    throw DYNError(Error::SOLVER_ALGO, SolverSIMConvFailMin);   // Divergence or unstable root at minimum step length, fail to resolve problem
+    throw DYNError(Error::SOLVER_ALGO, SolverSIMConvFailMin);  // Divergence or unstable root at minimum step length, fail to resolve problem
   }
   factorizationForced_ = true;
   redoStep = true;
@@ -575,7 +578,7 @@ void SolverSIM::handleDivergence(bool& redoStep) {
 
 void
 SolverSIM::updateStepDivergence() {
-  hNew_ = max(h_*kReduceStep_, hMin_);
+  hNew_ = max(h_ * kReduceStep_, hMin_);
 }
 
 void
@@ -590,7 +593,8 @@ SolverSIM::restoreInitialValues() {
   g0_.assign(gSave_.begin(), gSave_.end());
 }
 
-void SolverSIM::handleConvergence(bool& redoStep) {
+void
+SolverSIM::handleConvergence(bool& redoStep) {
   factorizationForced_ = false;
   redoStep = false;
   updateStepConvergence();
@@ -612,23 +616,26 @@ SolverSIM::updateStepConvergence() {
   hNew_ = min(hNew_, tEnd_ - (tSolve_ + h_));
 }
 
-void SolverSIM::handleAlgebraicRoot(bool& redoStep) {
+void
+SolverSIM::handleAlgebraicRoot(bool& redoStep) {
   if (model_->getModeChangeType() == ALGEBRAIC_J_UPDATE_MODE)
     factorizationForced_ = true;
   redoStep = false;
 }
 
-void SolverSIM::updateTimeStep(double& tNxt) {
+void
+SolverSIM::updateTimeStep(double& tNxt) {
   hNew_ = min(hNew_, tEnd_ - (tSolve_ + hNew_));
   // tNxt is the initial time step value (corresponding to the current time step done)
   tNxt = tSolve_ + h_;
 }
 
-bool SolverSIM::initAlgRestoration(modeChangeType_t modeChangeType) {
+bool
+SolverSIM::initAlgRestoration(modeChangeType_t modeChangeType) {
   if (modeChangeType == ALGEBRAIC_MODE) {
     if (previousReinit_ == None) {
-      solverKINAlgRestoration_->init(model_, SolverKINAlgRestoration::KIN_NORMAL, fnormtolAlg_,
-            initialaddtolAlg_, scsteptolAlg_, mxnewtstepAlg_, msbsetAlg_, mxiterAlg_, printflAlg_);
+      solverKINAlgRestoration_->init(model_, SolverKINAlgRestoration::KIN_NORMAL, fnormtolAlg_, initialaddtolAlg_, scsteptolAlg_, mxnewtstepAlg_, msbsetAlg_,
+                                     mxiterAlg_, printflAlg_);
       previousReinit_ = Algebraic;
       return true;
     } else if (previousReinit_ == AlgebraicWithJUpdate) {
@@ -639,13 +646,12 @@ bool SolverSIM::initAlgRestoration(modeChangeType_t modeChangeType) {
     return true;
   } else {
     if (previousReinit_ == None) {
-      solverKINAlgRestoration_->init(model_, SolverKINAlgRestoration::KIN_NORMAL, fnormtolAlgJ_,
-            initialaddtolAlgJ_, scsteptolAlgJ_, mxnewtstepAlgJ_, msbsetAlgJ_, mxiterAlgJ_, printflAlgJ_);
+      solverKINAlgRestoration_->init(model_, SolverKINAlgRestoration::KIN_NORMAL, fnormtolAlgJ_, initialaddtolAlgJ_, scsteptolAlgJ_, mxnewtstepAlgJ_,
+                                     msbsetAlgJ_, mxiterAlgJ_, printflAlgJ_);
       previousReinit_ = AlgebraicWithJUpdate;
       return false;
     } else if (previousReinit_ == Algebraic) {
-      solverKINAlgRestoration_->modifySettings(fnormtolAlgJ_, initialaddtolAlgJ_,
-            scsteptolAlgJ_, mxnewtstepAlgJ_, msbsetAlgJ_, mxiterAlgJ_, printflAlgJ_);
+      solverKINAlgRestoration_->modifySettings(fnormtolAlgJ_, initialaddtolAlgJ_, scsteptolAlgJ_, mxnewtstepAlgJ_, msbsetAlgJ_, mxiterAlgJ_, printflAlgJ_);
       previousReinit_ = AlgebraicWithJUpdate;
       return false;
     }
@@ -715,10 +721,7 @@ SolverSIM::printHeaderSpecific(std::stringstream& ss) const {
 
 void
 SolverSIM::printSolveSpecific(std::stringstream& msg) const {
-  msg << "| " << setw(8) << stats_.nst_ << " "
-          << setw(16) << stats_.nni_ << " "
-          << setw(10) << stats_.nje_ << " "
-          << setw(18) << h_ << " ";
+  msg << "| " << setw(8) << stats_.nst_ << " " << setw(16) << stats_.nni_ << " " << setw(10) << stats_.nje_ << " " << setw(18) << h_ << " ";
 }
 
 }  // end namespace DYN

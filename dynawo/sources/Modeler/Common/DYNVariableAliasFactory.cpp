@@ -18,14 +18,14 @@
  *
  */
 
-#include "DYNMacrosMessage.h"
-
 #include "DYNVariableAliasFactory.h"
+
+#include "DYNMacrosMessage.h"
 #include "DYNVariableAlias.h"
 #include "DYNVariableNative.h"
 
-using std::string;
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 

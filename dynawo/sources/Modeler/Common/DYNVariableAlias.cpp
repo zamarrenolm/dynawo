@@ -18,29 +18,28 @@
  *
  */
 
-#include "DYNMacrosMessage.h"
-
 #include "DYNVariableAlias.h"
+
+#include "DYNMacrosMessage.h"
 #include "DYNVariableNative.h"
 
-using std::string;
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 
 VariableAlias::VariableAlias(const string& name, const string& refName, const typeVar_t& type, bool negated) :
-Variable(name, true),
-referenceName_(refName),
-negated_(negated),
-type_(type) {
-}
+    Variable(name, true),
+    referenceName_(refName),
+    negated_(negated),
+    type_(type) {}
 
 VariableAlias::VariableAlias(const string& name, const shared_ptr<VariableNative> refVar, const typeVar_t& type, bool negated) :
-Variable(name, true),
-referenceName_(refVar->getName()),
-negated_(negated),
-type_(type),
-referenceVariable_(refVar) {
+    Variable(name, true),
+    referenceName_(refVar->getName()),
+    negated_(negated),
+    type_(type),
+    referenceVariable_(refVar) {
   if (referenceVariable_ && type_ == UNDEFINED_TYPE) {
     type_ = refVar->getType();
   }
@@ -48,8 +47,7 @@ referenceVariable_(refVar) {
     checkTypeCompatibility();
 }
 
-VariableAlias::~VariableAlias() {
-}
+VariableAlias::~VariableAlias() {}
 
 void
 VariableAlias::setReferenceVariable(const shared_ptr<VariableNative> refVar) {
@@ -117,9 +115,8 @@ VariableAlias::checkTypeCompatibility() const {
   if (referenceVariableSet() && type_ != refType) {
     if ((type_ == FLOW && refType != CONTINUOUS) || (type_ == CONTINUOUS && refType != FLOW))
       throw DYNError(Error::MODELER, VariableAliasIncoherentType, getName(), typeVar2Str(type_), getReferenceVariableName(), typeVar2Str(refType));
-    if ((type_ == DISCRETE && refType != INTEGER && refType != BOOLEAN)
-        || (type_ == INTEGER && refType != DISCRETE && refType != BOOLEAN)
-        || (type_ == BOOLEAN && refType != DISCRETE && refType != INTEGER))
+    if ((type_ == DISCRETE && refType != INTEGER && refType != BOOLEAN) || (type_ == INTEGER && refType != DISCRETE && refType != BOOLEAN) ||
+        (type_ == BOOLEAN && refType != DISCRETE && refType != INTEGER))
       throw DYNError(Error::MODELER, VariableAliasIncoherentType, getName(), typeVar2Str(type_), getReferenceVariableName(), typeVar2Str(refType));
   }
 }

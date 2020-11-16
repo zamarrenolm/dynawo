@@ -43,45 +43,55 @@ class TapChangerStep {
    * @param g step conductance
    * @param b step susceptance
    */
-  inline TapChangerStep(double rho, double alpha, double r, double x, double g,
-                        double b)
-      : rho_(rho), alpha_(alpha), r_(r), x_(x), g_(g), b_(b) {}
+  inline TapChangerStep(double rho, double alpha, double r, double x, double g, double b) : rho_(rho), alpha_(alpha), r_(r), x_(x), g_(g), b_(b) {}
 
   /**
    * @brief Get the step conversion ratio
    * @return The conversion ratio of the step
    */
-  inline double getRho() const { return rho_; }
+  inline double getRho() const {
+    return rho_;
+  }
 
   /**
    * @brief Get the step phase shift
    * @return The phase shift of the step
    */
-  inline double getAlpha() const { return alpha_; }
+  inline double getAlpha() const {
+    return alpha_;
+  }
 
   /**
    * @brief Get the step resistance
    * @return The resistance of the step
    */
-  inline double getR() const { return r_; }
+  inline double getR() const {
+    return r_;
+  }
 
   /**
    * @brief Get the step reactance
    * @return The reactance of the step
    */
-  inline double getX() const { return x_; }
+  inline double getX() const {
+    return x_;
+  }
 
   /**
    * @brief Get the step conductance
    * @return The conductance of the step
    */
-  inline double getG() const { return g_; }
+  inline double getG() const {
+    return g_;
+  }
 
   /**
    * @brief Get the step susceptance
    * @return The susceptance of the step
    */
-  inline double getB() const { return b_; }
+  inline double getB() const {
+    return b_;
+  }
 
  private:
   double rho_;    ///< conversion ratio

@@ -17,8 +17,6 @@
  *
  */
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNElement.h"
 #include "DYNModelOmegaRef.h"
 #include "DYNModelOmegaRef.hpp"
@@ -28,12 +26,14 @@
 #include "DYNVariable.h"
 #include "PARParametersSet.h"
 #include "PARParametersSetFactory.h"
-
 #include "gtest_dynawo.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 
-boost::shared_ptr<SubModel> initModelOmegaRef(double weightGen2) {
+boost::shared_ptr<SubModel>
+initModelOmegaRef(double weightGen2) {
   boost::shared_ptr<SubModel> modelOmegaRef = SubModelFactory::createSubModelFromLib("../DYNModelOmegaRef" + std::string(sharedLibraryExtension()));
 
   std::vector<ParameterModeler> parameters;
@@ -307,7 +307,7 @@ TEST(ModelsModelOmegaRef, ModelOmegaRefContinuousAndDiscreteMethods) {
 
   mode = modelOmegaRef->evalMode(2);
   ASSERT_EQ(mode, NO_MODE);
-  z[0] = 1;  // Changing numCC for gen1
+  z[0] = 1;                 // Changing numCC for gen1
   modelOmegaRef->evalZ(2);  // Propagating the changes to internal discrete values
   mode = modelOmegaRef->evalMode(2);
   ASSERT_EQ(mode, ALGEBRAIC_J_UPDATE_MODE);

@@ -20,9 +20,9 @@
 #ifndef MODELER_COMMON_DYNVARIABLEFORMODEL_H_
 #define MODELER_COMMON_DYNVARIABLEFORMODEL_H_
 
-#include "DYNVariableNative.h"
-#include "DYNVariableNativeFactory.h"
 #include "DYNVariableAlias.h"
 #include "DYNVariableAliasFactory.h"
+#include "DYNVariableNative.h"
+#include "DYNVariableNativeFactory.h"
 
 #endif  // MODELER_COMMON_DYNVARIABLEFORMODEL_H_

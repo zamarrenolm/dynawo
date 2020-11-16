@@ -17,11 +17,12 @@
  *
  */
 
-#include "gtest_dynawo.h"
-#include <boost/optional.hpp>
-#include <boost/none.hpp>
 #include "TLEvent.h"
 #include "TLEventFactory.h"
+#include "gtest_dynawo.h"
+
+#include <boost/none.hpp>
+#include <boost/optional.hpp>
 
 using boost::shared_ptr;
 

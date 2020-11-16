@@ -20,10 +20,11 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELSWITCH_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELSWITCH_H_
 
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include "DYNNetworkComponent.h"
 #include "DYNModelBus.h"
+#include "DYNNetworkComponent.h"
+
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class SwitchInterface;
@@ -42,7 +43,7 @@ class ModelSwitch : public boost::enable_shared_from_this<ModelSwitch>, public N
   /**
    * @brief destructor
    */
-  ~ModelSwitch() { }
+  ~ModelSwitch() {}
 
   /**
    * @brief  calculated variables type
@@ -55,10 +56,7 @@ class ModelSwitch : public boost::enable_shared_from_this<ModelSwitch>, public N
   /**
    * @brief  index variables type
    */
-  typedef enum {
-    irNum_ = 0,
-    iiNum_ = 1
-  } IndexVariables_t;
+  typedef enum { irNum_ = 0, iiNum_ = 1 } IndexVariables_t;
 
   /**
    * @brief set the switch connection state
@@ -159,7 +157,8 @@ class ModelSwitch : public boost::enable_shared_from_this<ModelSwitch>, public N
   /**
    * @brief evaluate derivatives prim
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
   /**
    * @brief define variables
    * @param variables
@@ -245,7 +244,8 @@ class ModelSwitch : public boost::enable_shared_from_this<ModelSwitch>, public N
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
@@ -255,7 +255,8 @@ class ModelSwitch : public boost::enable_shared_from_this<ModelSwitch>, public N
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::collectSilentZ()
@@ -265,12 +266,13 @@ class ModelSwitch : public boost::enable_shared_from_this<ModelSwitch>, public N
   /**
    * @copydoc NetworkComponent::evalYMat()
    */
-  void evalYMat() { /* not needed*/ }
+  void evalYMat() { /* not needed*/
+  }
 
   /**
    * @copydoc NetworkComponent::init(int& yNum)
    */
-  void init(int & yNum);
+  void init(int& yNum);
 
   /**
    * @copydoc NetworkComponent::getY0()
@@ -334,9 +336,9 @@ class ModelSwitch : public boost::enable_shared_from_this<ModelSwitch>, public N
   boost::shared_ptr<ModelBus> modelBus2_;  ///< bus at end 2 of the switch
   State connectionState_;  ///< "internal" switch connection status, evaluated at the end of evalZ to detect if the state was modified by another component
   bool topologyModified_;  ///< true if the switch connection state was modified
-  bool inLoop_;  ///< inLoop
-  double ir0_;  ///< initial current (real part)
-  double ii0_;  ///< initial current (imaginary part)
+  bool inLoop_;            ///< inLoop
+  double ir0_;             ///< initial current (real part)
+  double ii0_;             ///< initial current (imaginary part)
   // index use for filling the Jacobian
   int irYNum_;  ///< irYNum
   int iiYNum_;  ///< iiYNum

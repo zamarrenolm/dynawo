@@ -16,19 +16,18 @@
  * @brief Dynawo parameters collection XML importer : implementation file
  *
  */
-#include <fstream>
-
-#include <xml/sax/parser/ParserFactory.h>
-#include <xml/sax/parser/ParserException.h>
-
-#include "DYNMacrosMessage.h"
-
-#include "PARXmlHandler.h"
 #include "PARXmlImporter.h"
-#include "DYNExecUtils.h"
 
-using std::string;
+#include "DYNExecUtils.h"
+#include "DYNMacrosMessage.h"
+#include "PARXmlHandler.h"
+
+#include <fstream>
+#include <xml/sax/parser/ParserException.h>
+#include <xml/sax/parser/ParserFactory.h>
+
 using boost::shared_ptr;
+using std::string;
 
 namespace parser = xml::sax::parser;
 
@@ -47,7 +46,8 @@ XmlImporter::importFromFile(const string& fileName) const {
   }
 }
 
-shared_ptr<ParametersSetCollection> XmlImporter::importFromStream(std::istream& stream) const {
+shared_ptr<ParametersSetCollection>
+XmlImporter::importFromStream(std::istream& stream) const {
   XmlHandler parHandler;
   xml::sax::parser::ParserFactory parser_factory;
   xml::sax::parser::ParserPtr parser = parser_factory.createParser();

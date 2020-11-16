@@ -17,97 +17,92 @@
  * @brief Data interface : implementation file of IIDM implementation
  *
  */
-#include <iostream>
-#include <fstream>
-
-#include <IIDM/components/Bus.h>
-#include <IIDM/components/Switch.h>
-#include <IIDM/components/Line.h>
-#include <IIDM/components/Transformer2Windings.h>
-#include <IIDM/components/Transformer3Windings.h>
-#include <IIDM/components/TapChanger.h>
-#include <IIDM/components/Load.h>
-#include <IIDM/components/ShuntCompensator.h>
-#include <IIDM/components/Generator.h>
-#include <IIDM/components/DanglingLine.h>
-#include <IIDM/components/CurrentLimit.h>
-#include <IIDM/components/Substation.h>
-#include <IIDM/components/TieLine.h>
-#include <IIDM/components/StaticVarCompensator.h>
-#include <IIDM/components/VoltageLevel.h>
-#include <IIDM/components/HvdcLine.h>
-#include <IIDM/components/VscConverterStation.h>
-#include <IIDM/components/LccConverterStation.h>
-
-#include <IIDM/xml/export.h>
-#include <IIDM/xml/import.h>
-#include <IIDM/extensions/standbyAutomaton/xml.h>
-#include <IIDM/extensions/activeSeason/xml.h>
-#include <IIDM/extensions/currentLimitsPerSeason/xml.h>
-#include <IIDM/extensions/generatorActivePowerControl/xml.h>
-#include <IIDM/extensions/busbarSectionPosition/xml.h>
-#include <IIDM/extensions/connectablePosition/xml.h>
-#include <IIDM/extensions/hvdcAngleDroopActivePowerControl/xml.h>
-#include <IIDM/extensions/hvdcOperatorActivePowerRange/xml.h>
-#include <IIDM/extensions/generatorEntsoeCategory/xml.h>
-#include <IIDM/extensions/generatorStartup/xml.h>
-#include <IIDM/extensions/loadDetail/xml.h>
-
 #include "DYNDataInterfaceIIDM.h"
-#include "DYNBusInterfaceIIDM.h"
+
+#include "CRTCriteria.h"
+#include "CRTCriteriaParams.h"
 #include "DYNBusBarSectionInterfaceIIDM.h"
-#include "DYNSwitchInterfaceIIDM.h"
-#include "DYNLineInterfaceIIDM.h"
-#include "DYNTwoWTransformerInterfaceIIDM.h"
-#include "DYNThreeWTransformerInterfaceIIDM.h"
-#include "DYNLoadInterfaceIIDM.h"
-#include "DYNShuntCompensatorInterfaceIIDM.h"
-#include "DYNStaticVarCompensatorInterfaceIIDM.h"
-#include "DYNGeneratorInterfaceIIDM.h"
+#include "DYNBusInterfaceIIDM.h"
+#include "DYNCalculatedBusInterfaceIIDM.h"
+#include "DYNCriteria.h"
+#include "DYNCurrentLimitInterfaceIIDM.h"
 #include "DYNDanglingLineInterfaceIIDM.h"
+#include "DYNErrorQueue.h"
+#include "DYNExecUtils.h"
+#include "DYNGeneratorInterfaceIIDM.h"
+#include "DYNHvdcLineInterfaceIIDM.h"
+#include "DYNLccConverterInterfaceIIDM.h"
+#include "DYNLineInterfaceIIDM.h"
+#include "DYNLoadInterfaceIIDM.h"
+#include "DYNMacrosMessage.h"
 #include "DYNNetworkInterfaceIIDM.h"
 #include "DYNPhaseTapChangerInterfaceIIDM.h"
 #include "DYNRatioTapChangerInterfaceIIDM.h"
-#include "DYNCurrentLimitInterfaceIIDM.h"
+#include "DYNShuntCompensatorInterfaceIIDM.h"
+#include "DYNStaticVarCompensatorInterfaceIIDM.h"
 #include "DYNStepInterfaceIIDM.h"
-#include "DYNCalculatedBusInterfaceIIDM.h"
-#include "DYNVoltageLevelInterfaceIIDM.h"
-#include "DYNHvdcLineInterfaceIIDM.h"
-#include "DYNVscConverterInterfaceIIDM.h"
-#include "DYNLccConverterInterfaceIIDM.h"
-#include "DYNMacrosMessage.h"
 #include "DYNSubModel.h"
+#include "DYNSwitchInterfaceIIDM.h"
+#include "DYNThreeWTransformerInterfaceIIDM.h"
 #include "DYNTimer.h"
-#include "DYNExecUtils.h"
 #include "DYNTrace.h"
-#include "DYNErrorQueue.h"
-#include "DYNCriteria.h"
-#include "CRTCriteria.h"
-#include "CRTCriteriaParams.h"
+#include "DYNTwoWTransformerInterfaceIIDM.h"
+#include "DYNVoltageLevelInterfaceIIDM.h"
+#include "DYNVscConverterInterfaceIIDM.h"
 
+#include <IIDM/components/Bus.h>
+#include <IIDM/components/CurrentLimit.h>
+#include <IIDM/components/DanglingLine.h>
+#include <IIDM/components/Generator.h>
+#include <IIDM/components/HvdcLine.h>
+#include <IIDM/components/LccConverterStation.h>
+#include <IIDM/components/Line.h>
+#include <IIDM/components/Load.h>
+#include <IIDM/components/ShuntCompensator.h>
+#include <IIDM/components/StaticVarCompensator.h>
+#include <IIDM/components/Substation.h>
+#include <IIDM/components/Switch.h>
+#include <IIDM/components/TapChanger.h>
+#include <IIDM/components/TieLine.h>
+#include <IIDM/components/Transformer2Windings.h>
+#include <IIDM/components/Transformer3Windings.h>
+#include <IIDM/components/VoltageLevel.h>
+#include <IIDM/components/VscConverterStation.h>
+#include <IIDM/extensions/activeSeason/xml.h>
+#include <IIDM/extensions/busbarSectionPosition/xml.h>
+#include <IIDM/extensions/connectablePosition/xml.h>
+#include <IIDM/extensions/currentLimitsPerSeason/xml.h>
+#include <IIDM/extensions/generatorActivePowerControl/xml.h>
+#include <IIDM/extensions/generatorEntsoeCategory/xml.h>
+#include <IIDM/extensions/generatorStartup/xml.h>
+#include <IIDM/extensions/hvdcAngleDroopActivePowerControl/xml.h>
+#include <IIDM/extensions/hvdcOperatorActivePowerRange/xml.h>
+#include <IIDM/extensions/loadDetail/xml.h>
+#include <IIDM/extensions/standbyAutomaton/xml.h>
+#include <IIDM/xml/export.h>
+#include <IIDM/xml/import.h>
+#include <fstream>
+#include <iostream>
+
+using std::fstream;
 using std::map;
 using std::string;
-using std::vector;
 using std::stringstream;
-using std::fstream;
+using std::vector;
 
-using boost::shared_ptr;
 using boost::dynamic_pointer_cast;
+using boost::shared_ptr;
 
 using criteria::CriteriaCollection;
 
 namespace DYN {
-DataInterfaceIIDM::DataInterfaceIIDM(IIDM::Network networkIIDM) :
-networkIIDM_(networkIIDM) {
-}
+DataInterfaceIIDM::DataInterfaceIIDM(IIDM::Network networkIIDM) : networkIIDM_(networkIIDM) {}
 
-DataInterfaceIIDM::~DataInterfaceIIDM() {
-}
-
+DataInterfaceIIDM::~DataInterfaceIIDM() {}
 
 boost::shared_ptr<DataInterface>
 DataInterfaceIIDM::build(std::string iidmFilePath) {
-  boost::shared_ptr<DataInterfaceIIDM>  data;
+  boost::shared_ptr<DataInterfaceIIDM> data;
   try {
     IIDM::xml::xml_parser parser;
     parser.register_extension<IIDM::extensions::standbyautomaton::xml::StandbyAutomatonHandler>();
@@ -135,64 +130,39 @@ DataInterfaceIIDM::build(std::string iidmFilePath) {
   return data;
 }
 
-
 void
 DataInterfaceIIDM::dumpToFile(const std::string& iidmFilePath) const {
   IIDM::xml::xml_formatter formatter;
-  formatter.register_extension(
-      &IIDM::extensions::busbarsection_position::xml::exportBusbarSectionPosition,
-      IIDM::extensions::busbarsection_position::xml::BusbarSectionPositionHandler::uri(),
-      "bbsp");
+  formatter.register_extension(&IIDM::extensions::busbarsection_position::xml::exportBusbarSectionPosition,
+                               IIDM::extensions::busbarsection_position::xml::BusbarSectionPositionHandler::uri(), "bbsp");
 
-  formatter.register_extension(
-      &IIDM::extensions::connectable_position::xml::exportConnectablePosition,
-      IIDM::extensions::connectable_position::xml::ConnectablePositionHandler::uri(),
-      "cp");
+  formatter.register_extension(&IIDM::extensions::connectable_position::xml::exportConnectablePosition,
+                               IIDM::extensions::connectable_position::xml::ConnectablePositionHandler::uri(), "cp");
 
-  formatter.register_extension(
-      &IIDM::extensions::generatoractivepowercontrol::xml::exportGeneratorActivePowerControl,
-      IIDM::extensions::generatoractivepowercontrol::xml::GeneratorActivePowerControlHandler::uri(),
-      "gapc");
+  formatter.register_extension(&IIDM::extensions::generatoractivepowercontrol::xml::exportGeneratorActivePowerControl,
+                               IIDM::extensions::generatoractivepowercontrol::xml::GeneratorActivePowerControlHandler::uri(), "gapc");
 
-  formatter.register_extension(
-      &IIDM::extensions::standbyautomaton::xml::exportStandbyAutomaton,
-      IIDM::extensions::standbyautomaton::xml::StandbyAutomatonHandler::uri(),
-      "sa");
+  formatter.register_extension(&IIDM::extensions::standbyautomaton::xml::exportStandbyAutomaton,
+                               IIDM::extensions::standbyautomaton::xml::StandbyAutomatonHandler::uri(), "sa");
 
-  formatter.register_extension(
-      &IIDM::extensions::hvdcoperatoractivepowerrange::xml::exportHvdcOperatorActivePowerRange,
-      IIDM::extensions::hvdcoperatoractivepowerrange::xml::HvdcOperatorActivePowerRangeHandler::uri(),
-      "hopr");
+  formatter.register_extension(&IIDM::extensions::hvdcoperatoractivepowerrange::xml::exportHvdcOperatorActivePowerRange,
+                               IIDM::extensions::hvdcoperatoractivepowerrange::xml::HvdcOperatorActivePowerRangeHandler::uri(), "hopr");
 
-  formatter.register_extension(
-      &IIDM::extensions::hvdcangledroopactivepowercontrol::xml::exportHvdcAngleDroopActivePowerControl,
-      IIDM::extensions::hvdcangledroopactivepowercontrol::xml::HvdcAngleDroopActivePowerControlHandler::uri(),
-      "hapc");
+  formatter.register_extension(&IIDM::extensions::hvdcangledroopactivepowercontrol::xml::exportHvdcAngleDroopActivePowerControl,
+                               IIDM::extensions::hvdcangledroopactivepowercontrol::xml::HvdcAngleDroopActivePowerControlHandler::uri(), "hapc");
 
-  formatter.register_extension(
-      &IIDM::extensions::activeseason::xml::exportActiveSeason,
-      IIDM::extensions::activeseason::xml::ActiveSeasonHandler::uri(),
-      "as");
+  formatter.register_extension(&IIDM::extensions::activeseason::xml::exportActiveSeason, IIDM::extensions::activeseason::xml::ActiveSeasonHandler::uri(), "as");
 
-  formatter.register_extension(
-      &IIDM::extensions::currentlimitsperseason::xml::exportCurrentLimitsPerSeason,
-      IIDM::extensions::currentlimitsperseason::xml::CurrentLimitsPerSeasonHandler::uri(),
-      "clps");
+  formatter.register_extension(&IIDM::extensions::currentlimitsperseason::xml::exportCurrentLimitsPerSeason,
+                               IIDM::extensions::currentlimitsperseason::xml::CurrentLimitsPerSeasonHandler::uri(), "clps");
 
-  formatter.register_extension(
-      &IIDM::extensions::generator_entsoe_category::xml::exportGeneratorEntsoeCategory,
-      IIDM::extensions::generator_entsoe_category::xml::GeneratorEntsoeCategoryHandler::uri(),
-      "gec");
+  formatter.register_extension(&IIDM::extensions::generator_entsoe_category::xml::exportGeneratorEntsoeCategory,
+                               IIDM::extensions::generator_entsoe_category::xml::GeneratorEntsoeCategoryHandler::uri(), "gec");
 
-  formatter.register_extension(
-      &IIDM::extensions::generator_startup::xml::exportGeneratorStartup,
-      IIDM::extensions::generator_startup::xml::GeneratorStartupHandler::uri(),
-      "gs");
+  formatter.register_extension(&IIDM::extensions::generator_startup::xml::exportGeneratorStartup,
+                               IIDM::extensions::generator_startup::xml::GeneratorStartupHandler::uri(), "gs");
 
-  formatter.register_extension(
-      &IIDM::extensions::load_detail::xml::exportLoadDetail,
-      IIDM::extensions::load_detail::xml::LoadDetailHandler::uri(),
-      "ld");
+  formatter.register_extension(&IIDM::extensions::load_detail::xml::exportLoadDetail, IIDM::extensions::load_detail::xml::LoadDetailHandler::uri(), "ld");
 
   fstream file(iidmFilePath.c_str(), fstream::out);
   formatter.to_xml(networkIIDM_, file);
@@ -211,69 +181,69 @@ DataInterfaceIIDM::getBusName(const std::string& componentName, const std::strin
     shared_ptr<ComponentInterface> component = iter->second;
 
     switch (component->getType()) {
-      case ComponentInterface::BUS:
-      case ComponentInterface::CALCULATED_BUS: {
-        shared_ptr<BusInterface> bus = dynamic_pointer_cast<BusInterface>(component);
-        busName = bus->getID();
-        break;
+    case ComponentInterface::BUS:
+    case ComponentInterface::CALCULATED_BUS: {
+      shared_ptr<BusInterface> bus = dynamic_pointer_cast<BusInterface>(component);
+      busName = bus->getID();
+      break;
+    }
+    case ComponentInterface::SWITCH:
+      break;
+    case ComponentInterface::LOAD: {
+      shared_ptr<LoadInterface> load = dynamic_pointer_cast<LoadInterface>(component);
+      busName = load->getBusInterface()->getID();
+      break;
+    }
+    case ComponentInterface::LINE:  // @todo with @NODE1@, @NODE2@
+      break;
+    case ComponentInterface::GENERATOR: {
+      shared_ptr<GeneratorInterface> generator = dynamic_pointer_cast<GeneratorInterface>(component);
+      busName = generator->getBusInterface()->getID();
+      break;
+    }
+    case ComponentInterface::SHUNT: {
+      shared_ptr<ShuntCompensatorInterface> shunt = dynamic_pointer_cast<ShuntCompensatorInterface>(component);
+      busName = shunt->getBusInterface()->getID();
+      break;
+    }
+    case ComponentInterface::DANGLING_LINE: {
+      shared_ptr<DanglingLineInterface> line = dynamic_pointer_cast<DanglingLineInterface>(component);
+      busName = line->getBusInterface()->getID();
+      break;
+    }
+    case ComponentInterface::TWO_WTFO:  // @todo with @NODE1@ , @NODE2@
+      break;
+    case ComponentInterface::THREE_WTFO:  // @todo with @NODE1@, @NODE2@
+      break;
+    case ComponentInterface::SVC: {
+      shared_ptr<StaticVarCompensatorInterface> svc = dynamic_pointer_cast<StaticVarCompensatorInterface>(component);
+      busName = svc->getBusInterface()->getID();
+      break;
+    }
+    case ComponentInterface::VSC_CONVERTER: {
+      shared_ptr<VscConverterInterface> vsc = dynamic_pointer_cast<VscConverterInterface>(component);
+      busName = vsc->getBusInterface()->getID();
+      break;
+    }
+    case ComponentInterface::LCC_CONVERTER: {
+      shared_ptr<LccConverterInterface> lcc = dynamic_pointer_cast<LccConverterInterface>(component);
+      busName = lcc->getBusInterface()->getID();
+      break;
+    }
+    case ComponentInterface::HVDC_LINE: {
+      shared_ptr<HvdcLineInterface> hvdc = dynamic_pointer_cast<HvdcLineInterface>(component);
+      if (labelNode == "@NODE1@") {
+        shared_ptr<ConverterInterface> conv1 = hvdc->getConverter1();
+        busName = conv1->getBusInterface()->getID();
       }
-      case ComponentInterface::SWITCH:
-        break;
-      case ComponentInterface::LOAD: {
-        shared_ptr<LoadInterface> load = dynamic_pointer_cast<LoadInterface>(component);
-        busName = load->getBusInterface()->getID();
-        break;
+      if (labelNode == "@NODE2@") {
+        shared_ptr<ConverterInterface> conv2 = hvdc->getConverter2();
+        busName = conv2->getBusInterface()->getID();
       }
-      case ComponentInterface::LINE:  // @todo with @NODE1@, @NODE2@
-        break;
-      case ComponentInterface::GENERATOR: {
-        shared_ptr<GeneratorInterface> generator = dynamic_pointer_cast<GeneratorInterface>(component);
-        busName = generator->getBusInterface()->getID();
-        break;
-      }
-      case ComponentInterface::SHUNT: {
-        shared_ptr<ShuntCompensatorInterface> shunt = dynamic_pointer_cast<ShuntCompensatorInterface>(component);
-        busName = shunt->getBusInterface()->getID();
-        break;
-      }
-      case ComponentInterface::DANGLING_LINE: {
-        shared_ptr<DanglingLineInterface> line = dynamic_pointer_cast<DanglingLineInterface>(component);
-        busName = line->getBusInterface()->getID();
-        break;
-      }
-      case ComponentInterface::TWO_WTFO:  // @todo with @NODE1@ , @NODE2@
-        break;
-      case ComponentInterface::THREE_WTFO:  // @todo with @NODE1@, @NODE2@
-        break;
-      case ComponentInterface::SVC: {
-        shared_ptr<StaticVarCompensatorInterface> svc = dynamic_pointer_cast<StaticVarCompensatorInterface>(component);
-        busName = svc->getBusInterface()->getID();
-        break;
-      }
-      case ComponentInterface::VSC_CONVERTER: {
-        shared_ptr<VscConverterInterface> vsc = dynamic_pointer_cast<VscConverterInterface>(component);
-        busName = vsc->getBusInterface()->getID();
-        break;
-      }
-      case ComponentInterface::LCC_CONVERTER: {
-        shared_ptr<LccConverterInterface> lcc = dynamic_pointer_cast<LccConverterInterface>(component);
-        busName = lcc->getBusInterface()->getID();
-        break;
-      }
-      case ComponentInterface::HVDC_LINE: {
-        shared_ptr<HvdcLineInterface> hvdc = dynamic_pointer_cast<HvdcLineInterface>(component);
-        if (labelNode == "@NODE1@") {
-          shared_ptr<ConverterInterface> conv1 = hvdc->getConverter1();
-          busName = conv1->getBusInterface()->getID();
-        }
-        if (labelNode == "@NODE2@") {
-          shared_ptr<ConverterInterface> conv2 = hvdc->getConverter2();
-          busName = conv2->getBusInterface()->getID();
-        }
-        break;
-      }
-      case ComponentInterface::UNKNOWN:
-        break;
+      break;
+    }
+    case ComponentInterface::UNKNOWN:
+      break;
     }
   }
   return busName;
@@ -298,7 +268,7 @@ DataInterfaceIIDM::initFromIIDM() {
     //===========================
     IIDM::Contains<IIDM::Transformer2Windings>::iterator it2WTfo = itSubstation->twoWindingsTransformers().begin();
     for (; it2WTfo != itSubstation->twoWindingsTransformers().end(); ++it2WTfo) {
-      if ( !(*it2WTfo).has_connection(IIDM::side_1) && !(*it2WTfo).has_connection(IIDM::side_2) ) {
+      if (!(*it2WTfo).has_connection(IIDM::side_1) && !(*it2WTfo).has_connection(IIDM::side_2)) {
         Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*it2WTfo).id()) << Trace::endline;
         continue;
       }
@@ -322,13 +292,12 @@ DataInterfaceIIDM::initFromIIDM() {
     }
   }
 
-
   //===========================
   //  ADD LINE INTERFACE
   //===========================
   IIDM::Contains<IIDM::Line>::iterator itLine = networkIIDM_.lines().begin();
   for (; itLine != networkIIDM_.lines().end(); ++itLine) {
-    if ( !(*itLine).has_connection(IIDM::side_1) && !(*itLine).has_connection(IIDM::side_2) ) {
+    if (!(*itLine).has_connection(IIDM::side_1) && !(*itLine).has_connection(IIDM::side_2)) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itLine).id()) << Trace::endline;
       continue;
     }
@@ -342,7 +311,7 @@ DataInterfaceIIDM::initFromIIDM() {
   //===========================
   IIDM::Contains<IIDM::TieLine>::iterator itTieLine = networkIIDM_.tielines().begin();
   for (; itTieLine != networkIIDM_.tielines().end(); ++itTieLine) {
-    if ( !(*itTieLine).has_connection(IIDM::side_1) && !(*itTieLine).has_connection(IIDM::side_2) ) {
+    if (!(*itTieLine).has_connection(IIDM::side_1) && !(*itTieLine).has_connection(IIDM::side_2)) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itTieLine).id()) << Trace::endline;
       continue;
     }
@@ -418,7 +387,7 @@ DataInterfaceIIDM::importVoltageLevel(IIDM::VoltageLevel& voltageLevelIIDM, cons
   //===========================
   IIDM::Contains<IIDM::Generator>::iterator itGen = voltageLevelIIDM.generators().begin();
   for (; itGen != voltageLevelIIDM.generators().end(); ++itGen) {
-    if ( !(*itGen).has_connection() ) {
+    if (!(*itGen).has_connection()) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itGen).id()) << Trace::endline;
       continue;
     }
@@ -434,7 +403,7 @@ DataInterfaceIIDM::importVoltageLevel(IIDM::VoltageLevel& voltageLevelIIDM, cons
   //===========================
   IIDM::Contains<IIDM::Load>::iterator itLoad = voltageLevelIIDM.loads().begin();
   for (; itLoad != voltageLevelIIDM.loads().end(); ++itLoad) {
-    if ( !(*itLoad).has_connection() ) {
+    if (!(*itLoad).has_connection()) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itLoad).id()) << Trace::endline;
       continue;
     }
@@ -450,7 +419,7 @@ DataInterfaceIIDM::importVoltageLevel(IIDM::VoltageLevel& voltageLevelIIDM, cons
   // =======================================
   IIDM::Contains<IIDM::ShuntCompensator>::iterator itShunt = voltageLevelIIDM.shuntCompensators().begin();
   for (; itShunt != voltageLevelIIDM.shuntCompensators().end(); ++itShunt) {
-    if ( !(*itShunt).has_connection() ) {
+    if (!(*itShunt).has_connection()) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itShunt).id()) << Trace::endline;
       continue;
     }
@@ -465,7 +434,7 @@ DataInterfaceIIDM::importVoltageLevel(IIDM::VoltageLevel& voltageLevelIIDM, cons
   //==============================
   IIDM::Contains<IIDM::DanglingLine>::iterator itDanglingLine = voltageLevelIIDM.danglingLines().begin();
   for (; itDanglingLine != voltageLevelIIDM.danglingLines().end(); ++itDanglingLine) {
-    if ( !(*itDanglingLine).has_connection() ) {
+    if (!(*itDanglingLine).has_connection()) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itDanglingLine).id()) << Trace::endline;
       continue;
     }
@@ -480,7 +449,7 @@ DataInterfaceIIDM::importVoltageLevel(IIDM::VoltageLevel& voltageLevelIIDM, cons
   //==========================================
   IIDM::Contains<IIDM::StaticVarCompensator>::iterator itSVC = voltageLevelIIDM.staticVarCompensators().begin();
   for (; itSVC != voltageLevelIIDM.staticVarCompensators().end(); ++itSVC) {
-    if ( !(*itSVC).has_connection() ) {
+    if (!(*itSVC).has_connection()) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itSVC).id()) << Trace::endline;
       continue;
     }
@@ -495,7 +464,7 @@ DataInterfaceIIDM::importVoltageLevel(IIDM::VoltageLevel& voltageLevelIIDM, cons
   //==========================================
   IIDM::Contains<IIDM::VscConverterStation>::iterator itVSC = voltageLevelIIDM.vscConverterStations().begin();
   for (; itVSC != voltageLevelIIDM.vscConverterStations().end(); ++itVSC) {
-    if ( !(*itVSC).has_connection() ) {
+    if (!(*itVSC).has_connection()) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itVSC).id()) << Trace::endline;
       continue;
     }
@@ -510,7 +479,7 @@ DataInterfaceIIDM::importVoltageLevel(IIDM::VoltageLevel& voltageLevelIIDM, cons
   //==========================================
   IIDM::Contains<IIDM::LccConverterStation>::iterator itLCC = voltageLevelIIDM.lccConverterStations().begin();
   for (; itLCC != voltageLevelIIDM.lccConverterStations().end(); ++itLCC) {
-    if ( !(*itLCC).has_connection() ) {
+    if (!(*itLCC).has_connection()) {
       Trace::debug(Trace::modeler()) << DYNLog(NoNetworkConnection, (*itLCC).id()) << Trace::endline;
       continue;
     }
@@ -548,7 +517,7 @@ DataInterfaceIIDM::importSwitch(IIDM::Switch& switchIIDM) {
 }
 
 shared_ptr<GeneratorInterface>
-DataInterfaceIIDM::importGenerator(IIDM::Generator & generatorIIDM, const std::string& country) {
+DataInterfaceIIDM::importGenerator(IIDM::Generator& generatorIIDM, const std::string& country) {
   shared_ptr<GeneratorInterfaceIIDM> generator(new GeneratorInterfaceIIDM(generatorIIDM));
   generator->setCountry(country);
 
@@ -614,7 +583,7 @@ DataInterfaceIIDM::importDanglingLine(IIDM::DanglingLine& danglingLineIIDM) {
   if (danglingLineIIDM.has_currentLimits()) {
     IIDM::CurrentLimits currentLimits = danglingLineIIDM.currentLimits();
 
-     // permanent limit
+    // permanent limit
     if (currentLimits.has_permanent_limit()) {
       shared_ptr<CurrentLimitInterfaceIIDM> cLimit(new CurrentLimitInterfaceIIDM(currentLimits.permanent_limit(), boost::none));
       danglingLine->addCurrentLimitInterface(cLimit);
@@ -650,7 +619,7 @@ DataInterfaceIIDM::importStaticVarCompensator(IIDM::StaticVarCompensator& svcIID
 }
 
 shared_ptr<TwoWTransformerInterface>
-DataInterfaceIIDM::importTwoWindingsTransformer(IIDM::Transformer2Windings & twoWTfoIIDM) {
+DataInterfaceIIDM::importTwoWindingsTransformer(IIDM::Transformer2Windings& twoWTfoIIDM) {
   shared_ptr<TwoWTransformerInterfaceIIDM> twoWTfo(new TwoWTransformerInterfaceIIDM(twoWTfoIIDM));
 
   // add phase tapChanger and steps if exists
@@ -674,7 +643,6 @@ DataInterfaceIIDM::importTwoWindingsTransformer(IIDM::Transformer2Windings & two
     }
     twoWTfo->setRatioTapChanger(tapChanger);
   }
-
 
   // reference to bus interface
   if (twoWTfoIIDM.connection(IIDM::side_1)) {
@@ -704,7 +672,7 @@ DataInterfaceIIDM::importTwoWindingsTransformer(IIDM::Transformer2Windings & two
   if (twoWTfoIIDM.has_currentLimits1()) {
     IIDM::CurrentLimits currentLimits = twoWTfoIIDM.currentLimits1();
 
-     // permanent limit
+    // permanent limit
     if (currentLimits.has_permanent_limit()) {
       shared_ptr<CurrentLimitInterfaceIIDM> cLimit(new CurrentLimitInterfaceIIDM(currentLimits.permanent_limit(), boost::none));
       twoWTfo->addCurrentLimitInterface1(cLimit);
@@ -723,7 +691,7 @@ DataInterfaceIIDM::importTwoWindingsTransformer(IIDM::Transformer2Windings & two
   if (twoWTfoIIDM.has_currentLimits2()) {
     IIDM::CurrentLimits currentLimits = twoWTfoIIDM.currentLimits2();
 
-     // permanent limit
+    // permanent limit
     if (currentLimits.has_permanent_limit()) {
       shared_ptr<CurrentLimitInterfaceIIDM> cLimit(new CurrentLimitInterfaceIIDM(currentLimits.permanent_limit(), boost::none));
       twoWTfo->addCurrentLimitInterface2(cLimit);
@@ -742,7 +710,7 @@ DataInterfaceIIDM::importTwoWindingsTransformer(IIDM::Transformer2Windings & two
 }
 
 shared_ptr<ThreeWTransformerInterface>
-DataInterfaceIIDM::importThreeWindingsTransformer(IIDM::Transformer3Windings & threeWTfoIIDM) {
+DataInterfaceIIDM::importThreeWindingsTransformer(IIDM::Transformer3Windings& threeWTfoIIDM) {
   shared_ptr<ThreeWTransformerInterfaceIIDM> threeWTfo(new ThreeWTransformerInterfaceIIDM(threeWTfoIIDM));
 
   // reference to bus interface
@@ -785,7 +753,7 @@ DataInterfaceIIDM::importThreeWindingsTransformer(IIDM::Transformer3Windings & t
   if (threeWTfoIIDM.has_currentLimits1()) {
     IIDM::CurrentLimits currentLimits = threeWTfoIIDM.currentLimits1();
 
-     // permanent limit
+    // permanent limit
     if (currentLimits.has_permanent_limit()) {
       shared_ptr<CurrentLimitInterfaceIIDM> cLimit(new CurrentLimitInterfaceIIDM(currentLimits.permanent_limit(), boost::none));
       threeWTfo->addCurrentLimitInterface1(cLimit);
@@ -805,7 +773,7 @@ DataInterfaceIIDM::importThreeWindingsTransformer(IIDM::Transformer3Windings & t
   if (threeWTfoIIDM.has_currentLimits2()) {
     IIDM::CurrentLimits currentLimits = threeWTfoIIDM.currentLimits2();
 
-     // permanent limit
+    // permanent limit
     if (currentLimits.has_permanent_limit()) {
       shared_ptr<CurrentLimitInterfaceIIDM> cLimit(new CurrentLimitInterfaceIIDM(currentLimits.permanent_limit(), boost::none));
       threeWTfo->addCurrentLimitInterface2(cLimit);
@@ -825,7 +793,7 @@ DataInterfaceIIDM::importThreeWindingsTransformer(IIDM::Transformer3Windings & t
   if (threeWTfoIIDM.has_currentLimits3()) {
     IIDM::CurrentLimits currentLimits = threeWTfoIIDM.currentLimits3();
 
-     // permanent limit
+    // permanent limit
     if (currentLimits.has_permanent_limit()) {
       shared_ptr<CurrentLimitInterfaceIIDM> cLimit(new CurrentLimitInterfaceIIDM(currentLimits.permanent_limit(), boost::none));
       threeWTfo->addCurrentLimitInterface3(cLimit);
@@ -876,7 +844,7 @@ DataInterfaceIIDM::importLine(IIDM::Line& lineIIDM) {
   if (lineIIDM.has_currentLimits1()) {
     IIDM::CurrentLimits currentLimits = lineIIDM.currentLimits1();
 
-     // permanent limit
+    // permanent limit
     if (currentLimits.has_permanent_limit()) {
       shared_ptr<CurrentLimitInterfaceIIDM> cLimit(new CurrentLimitInterfaceIIDM(currentLimits.permanent_limit(), boost::none));
       line->addCurrentLimitInterface1(cLimit);
@@ -896,7 +864,7 @@ DataInterfaceIIDM::importLine(IIDM::Line& lineIIDM) {
   if (lineIIDM.has_currentLimits2()) {
     IIDM::CurrentLimits currentLimits = lineIIDM.currentLimits2();
 
-     // permanent limit
+    // permanent limit
     if (currentLimits.has_permanent_limit()) {
       shared_ptr<CurrentLimitInterfaceIIDM> cLimit(new CurrentLimitInterfaceIIDM(currentLimits.permanent_limit(), boost::none));
       line->addCurrentLimitInterface2(cLimit);
@@ -960,7 +928,6 @@ DataInterfaceIIDM::importHvdcLine(IIDM::HvdcLine& hvdcLineIIDM) {
   shared_ptr<HvdcLineInterfaceIIDM> hvdcLine(new HvdcLineInterfaceIIDM(hvdcLineIIDM, conv1, conv2));
   return hvdcLine;
 }
-
 
 shared_ptr<NetworkInterface>
 DataInterfaceIIDM::getNetwork() const {
@@ -1069,7 +1036,7 @@ DataInterfaceIIDM::mapConnections() {
     }
   }
 
-  const vector< shared_ptr<VoltageLevelInterface> > voltageLevels = network_->getVoltageLevels();
+  const vector<shared_ptr<VoltageLevelInterface> > voltageLevels = network_->getVoltageLevels();
   for (vector<shared_ptr<VoltageLevelInterface> >::const_iterator iVL = voltageLevels.begin(); iVL != voltageLevels.end(); ++iVL) {
     (*iVL)->mapConnections();
   }
@@ -1123,19 +1090,16 @@ DataInterfaceIIDM::configureCriteria(const shared_ptr<CriteriaCollection>& crite
   configureGeneratorCriteria(criteria);
 }
 
-
 void
 DataInterfaceIIDM::configureBusCriteria(const boost::shared_ptr<criteria::CriteriaCollection>& criteria) {
-  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::BUS),
-      itEnd = criteria->end(CriteriaCollection::BUS);
-      it != itEnd; ++it) {
+  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::BUS), itEnd = criteria->end(CriteriaCollection::BUS);
+       it != itEnd; ++it) {
     shared_ptr<criteria::Criteria> crit = *it;
-    if (!BusCriteria::criteriaEligibleForBus(crit->getParams())) continue;
+    if (!BusCriteria::criteriaEligibleForBus(crit->getParams()))
+      continue;
     shared_ptr<BusCriteria> dynCriteria = shared_ptr<BusCriteria>(new BusCriteria(crit->getParams()));
     if (crit->begin() != crit->end()) {
-      for (criteria::Criteria::component_id_const_iterator cmpIt = crit->begin(),
-          cmpItEnd = crit->end();
-          cmpIt != cmpItEnd; ++cmpIt) {
+      for (criteria::Criteria::component_id_const_iterator cmpIt = crit->begin(), cmpItEnd = crit->end(); cmpIt != cmpItEnd; ++cmpIt) {
         std::map<std::string, boost::shared_ptr<ComponentInterface> >::const_iterator busItfIter = components_.find(*cmpIt);
         if (busItfIter != components_.end()) {
           const boost::shared_ptr<ComponentInterface>& cmp = busItfIter->second;
@@ -1157,9 +1121,8 @@ DataInterfaceIIDM::configureBusCriteria(const boost::shared_ptr<criteria::Criter
         }
       }
     } else {
-      for (std::map<std::string, boost::shared_ptr<BusInterface> >::const_iterator cmpIt = busComponents_.begin(),
-          cmpItEnd = busComponents_.end();
-          cmpIt != cmpItEnd; ++cmpIt) {
+      for (std::map<std::string, boost::shared_ptr<BusInterface> >::const_iterator cmpIt = busComponents_.begin(), cmpItEnd = busComponents_.end();
+           cmpIt != cmpItEnd; ++cmpIt) {
         if (crit->hasCountryFilter()) {
           boost::shared_ptr<BusInterfaceIIDM> bus = dynamic_pointer_cast<BusInterfaceIIDM>(cmpIt->second);
           if (!bus->getCountry().empty() && !crit->containsCountry(bus->getCountry()))
@@ -1168,12 +1131,12 @@ DataInterfaceIIDM::configureBusCriteria(const boost::shared_ptr<criteria::Criter
         dynCriteria->addBus(cmpIt->second);
       }
       for (std::map<std::string, std::vector<boost::shared_ptr<CalculatedBusInterfaceIIDM> > >::const_iterator cmpIt = calculatedBusComponents_.begin(),
-          cmpItEnd = calculatedBusComponents_.end();
-          cmpIt != cmpItEnd; ++cmpIt) {
+                                                                                                               cmpItEnd = calculatedBusComponents_.end();
+           cmpIt != cmpItEnd; ++cmpIt) {
         const std::vector<boost::shared_ptr<CalculatedBusInterfaceIIDM> >& calBuses = cmpIt->second;
         for (size_t i = 0, iEnd = calBuses.size(); i < iEnd; ++i) {
           if (crit->hasCountryFilter() && !calBuses[i]->getCountry().empty() && !crit->containsCountry(calBuses[i]->getCountry()))
-              continue;
+            continue;
           dynCriteria->addBus(calBuses[i]);
         }
       }
@@ -1186,16 +1149,14 @@ DataInterfaceIIDM::configureBusCriteria(const boost::shared_ptr<criteria::Criter
 
 void
 DataInterfaceIIDM::configureLoadCriteria(const boost::shared_ptr<criteria::CriteriaCollection>& criteria) {
-  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::LOAD),
-      itEnd = criteria->end(CriteriaCollection::LOAD);
-      it != itEnd; ++it) {
+  for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::LOAD), itEnd = criteria->end(CriteriaCollection::LOAD);
+       it != itEnd; ++it) {
     shared_ptr<criteria::Criteria> crit = *it;
-    if (!LoadCriteria::criteriaEligibleForLoad(crit->getParams())) continue;
+    if (!LoadCriteria::criteriaEligibleForLoad(crit->getParams()))
+      continue;
     shared_ptr<LoadCriteria> dynCriteria = shared_ptr<LoadCriteria>(new LoadCriteria(crit->getParams()));
     if (crit->begin() != crit->end()) {
-      for (criteria::Criteria::component_id_const_iterator cmpIt = crit->begin(),
-          cmpItEnd = crit->end();
-          cmpIt != cmpItEnd; ++cmpIt) {
+      for (criteria::Criteria::component_id_const_iterator cmpIt = crit->begin(), cmpItEnd = crit->end(); cmpIt != cmpItEnd; ++cmpIt) {
         std::map<std::string, boost::shared_ptr<ComponentInterface> >::const_iterator loadItfIter = components_.find(*cmpIt);
         if (loadItfIter != components_.end()) {
           const boost::shared_ptr<ComponentInterface>& cmp = loadItfIter->second;
@@ -1214,9 +1175,8 @@ DataInterfaceIIDM::configureLoadCriteria(const boost::shared_ptr<criteria::Crite
         }
       }
     } else {
-      for (std::map<std::string, boost::shared_ptr<LoadInterface> >::const_iterator cmpIt = loadComponents_.begin(),
-          cmpItEnd = loadComponents_.end();
-          cmpIt != cmpItEnd; ++cmpIt) {
+      for (std::map<std::string, boost::shared_ptr<LoadInterface> >::const_iterator cmpIt = loadComponents_.begin(), cmpItEnd = loadComponents_.end();
+           cmpIt != cmpItEnd; ++cmpIt) {
         if (crit->hasCountryFilter()) {
           boost::shared_ptr<LoadInterfaceIIDM> load = dynamic_pointer_cast<LoadInterfaceIIDM>(cmpIt->second);
           if (!load->getCountry().empty() && !crit->containsCountry(load->getCountry()))
@@ -1234,15 +1194,14 @@ DataInterfaceIIDM::configureLoadCriteria(const boost::shared_ptr<criteria::Crite
 void
 DataInterfaceIIDM::configureGeneratorCriteria(const boost::shared_ptr<criteria::CriteriaCollection>& criteria) {
   for (CriteriaCollection::CriteriaCollectionConstIterator it = criteria->begin(CriteriaCollection::GENERATOR),
-      itEnd = criteria->end(CriteriaCollection::GENERATOR);
-      it != itEnd; ++it) {
+                                                           itEnd = criteria->end(CriteriaCollection::GENERATOR);
+       it != itEnd; ++it) {
     shared_ptr<criteria::Criteria> crit = *it;
-    if (!GeneratorCriteria::criteriaEligibleForGenerator(crit->getParams())) continue;
+    if (!GeneratorCriteria::criteriaEligibleForGenerator(crit->getParams()))
+      continue;
     shared_ptr<GeneratorCriteria> dynCriteria = shared_ptr<GeneratorCriteria>(new GeneratorCriteria(crit->getParams()));
     if (crit->begin() != crit->end()) {
-      for (criteria::Criteria::component_id_const_iterator cmpIt = crit->begin(),
-          cmpItEnd = crit->end();
-          cmpIt != cmpItEnd; ++cmpIt) {
+      for (criteria::Criteria::component_id_const_iterator cmpIt = crit->begin(), cmpItEnd = crit->end(); cmpIt != cmpItEnd; ++cmpIt) {
         std::map<std::string, boost::shared_ptr<ComponentInterface> >::const_iterator generatorItfIter = components_.find(*cmpIt);
         if (generatorItfIter != components_.end()) {
           const boost::shared_ptr<ComponentInterface>& cmp = generatorItfIter->second;
@@ -1262,8 +1221,8 @@ DataInterfaceIIDM::configureGeneratorCriteria(const boost::shared_ptr<criteria::
       }
     } else {
       for (std::map<std::string, boost::shared_ptr<GeneratorInterface> >::const_iterator cmpIt = generatorComponents_.begin(),
-          cmpItEnd = generatorComponents_.end();
-          cmpIt != cmpItEnd; ++cmpIt) {
+                                                                                         cmpItEnd = generatorComponents_.end();
+           cmpIt != cmpItEnd; ++cmpIt) {
         if (crit->hasCountryFilter()) {
           boost::shared_ptr<GeneratorInterfaceIIDM> gen = dynamic_pointer_cast<GeneratorInterfaceIIDM>(cmpIt->second);
           if (!gen->getCountry().empty() && !crit->containsCountry(gen->getCountry()))
@@ -1289,8 +1248,7 @@ DataInterfaceIIDM::checkCriteria(double t, bool finalStep) {
   }
 #endif
   bool criteriaOk = true;
-  for (std::vector<boost::shared_ptr<Criteria> >::const_iterator it = criteria_.begin(), itEnd = criteria_.end();
-      it != itEnd; ++it) {
+  for (std::vector<boost::shared_ptr<Criteria> >::const_iterator it = criteria_.begin(), itEnd = criteria_.end(); it != itEnd; ++it) {
     criteriaOk &= (*it)->checkCriteria(t, finalStep);
   }
 #ifdef _DEBUG_
@@ -1303,8 +1261,7 @@ DataInterfaceIIDM::checkCriteria(double t, bool finalStep) {
 
 void
 DataInterfaceIIDM::getFailingCriteria(std::vector<std::pair<double, std::string> >& failingCriteria) const {
-  for (std::vector<boost::shared_ptr<Criteria> >::const_iterator it = criteria_.begin(), itEnd = criteria_.end();
-      it != itEnd; ++it) {
+  for (std::vector<boost::shared_ptr<Criteria> >::const_iterator it = criteria_.begin(), itEnd = criteria_.end(); it != itEnd; ++it) {
     const std::vector<std::pair<double, std::string> >& ids = (*it)->getFailingCriteria();
     failingCriteria.insert(failingCriteria.end(), ids.begin(), ids.end());
   }
@@ -1324,7 +1281,5 @@ bool
 DataInterfaceIIDM::getStaticParameterBoolValue(const std::string& staticID, const std::string& refOrigName) {
   return findComponent(staticID)->getStaticParameterValue<bool>(refOrigName);
 }
-
-
 
 }  // namespace DYN

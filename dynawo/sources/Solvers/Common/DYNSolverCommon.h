@@ -22,10 +22,10 @@
 
 #include "DYNModel.h"
 
+#include <cmath>
 #include <sundials/sundials_linearsolver.h>
 #include <sunmatrix/sunmatrix_band.h>
 #include <sunmatrix/sunmatrix_sparse.h>
-#include <cmath>
 
 namespace DYN {
 class SparseMatrix;
@@ -35,7 +35,7 @@ class SparseMatrix;
  */
 class SolverCommon {
  public:
-/**
+  /**
  * @brief Copy one sparse matrix to the KINSOL structure
  *
  * @param smj Sparse matrix to copy to the KINSOL structure
@@ -45,9 +45,9 @@ class SolverCommon {
  *
  * @return @b true if the matrix structure has changed, @b false else
  */
-static bool copySparseToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int& size, sunindextype * lastRowVals);
+  static bool copySparseToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int& size, sunindextype* lastRowVals);
 
-/**
+  /**
  *
  * @brief propagate the matrix structure change to KINSOL structure
  *
@@ -59,19 +59,19 @@ static bool copySparseToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int
  * @param linearSolverName name of the linear solver name (KLU / NICSLU)
  * @param log @b true if a log should be added if a complete re-initialization is done
  */
-static void propagateMatrixStructureChangeToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int& size,
-                                                   sunindextype* lastRowVals, SUNLinearSolver& LS, const std::string& linearSolverName, bool log);
+  static void propagateMatrixStructureChangeToKINSOL(const SparseMatrix& smj, SUNMatrix& JJ, const int& size, sunindextype* lastRowVals, SUNLinearSolver& LS,
+                                                     const std::string& linearSolverName, bool log);
 
-/**
+  /**
  * @brief Print the largest residuals errors
  *
  * @param fErr vector containing a pair with the residual function value and the global index of the residual function
  * @param model model currently simulated
  * @param nbErrors maximum number of errors to be displayed
  */
-static void printLargestErrors(std::vector<std::pair<double, size_t> >& fErr, const boost::shared_ptr<Model>& model, int nbErrors);
+  static void printLargestErrors(std::vector<std::pair<double, size_t> >& fErr, const boost::shared_ptr<Model>& model, int nbErrors);
 
-/**
+  /**
  * @brief Compute the weighted infinity norm of a vector
  *
  * @param vec vector which norm is to be computed
@@ -80,9 +80,9 @@ static void printLargestErrors(std::vector<std::pair<double, size_t> >& fErr, co
  * @return value of the weighted infinity-norm of the vector
  *
  */
-static double weightedInfinityNorm(const std::vector<double>& vec, const std::vector<double>& weights);
+  static double weightedInfinityNorm(const std::vector<double>& vec, const std::vector<double>& weights);
 
-/**
+  /**
  * @brief Compute the weighted l2 norm of a vector
  *
  * @param vec vector which norm is to be computed
@@ -91,9 +91,9 @@ static double weightedInfinityNorm(const std::vector<double>& vec, const std::ve
  * @return value of the weighted l2 norm of the vector
  *
  */
-static double weightedL2Norm(const std::vector<double>& vec, const std::vector<double>& weights);
+  static double weightedL2Norm(const std::vector<double>& vec, const std::vector<double>& weights);
 
-/**
+  /**
  * @brief Compute the weighted infinity norm of a sub vector
  *
  * @param vec vector which norm is to be computed
@@ -103,9 +103,9 @@ static double weightedL2Norm(const std::vector<double>& vec, const std::vector<d
  * @return value of the weighted infinity-norm of the sub vector
  *
  */
-static double weightedInfinityNorm(const std::vector<double>& vec, const std::vector<int>& vec_index, const std::vector<double>& weights);
+  static double weightedInfinityNorm(const std::vector<double>& vec, const std::vector<int>& vec_index, const std::vector<double>& weights);
 
-/**
+  /**
  * @brief Compute the weighted l2 norm of a sub vector
  *
  * @param vec vector which norm is to be computed
@@ -115,7 +115,7 @@ static double weightedInfinityNorm(const std::vector<double>& vec, const std::ve
  * @return value of the weighted l2 norm of the sub vector
  *
  */
-static double weightedL2Norm(const std::vector<double>& vec, const std::vector<int>& vec_index, const std::vector<double>& weights);
+  static double weightedL2Norm(const std::vector<double>& vec, const std::vector<int>& vec_index, const std::vector<double>& weights);
 };
 
 }  // end of namespace DYN

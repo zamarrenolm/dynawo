@@ -17,18 +17,16 @@
  * @brief  Class timer implementation : timers are used to monitored the code execution
  *
  */
-#include <iostream>
+#include "DYNTimer.h"
 
 #include <dlfcn.h>
-
-#include "DYNTimer.h"
+#include <iostream>
 
 using std::stringstream;
 
 namespace DYN {
 
-Timers::Timers() {
-}
+Timers::Timers() {}
 
 Timers::~Timers() {
 #if defined(_DEBUG_) || defined(PRINT_TIMERS)
@@ -56,7 +54,7 @@ Timers::getInstance_() {
     std::cerr << dlerror() << '\n';
   } else {
     dlerror();
-    getTimersInstance_t* getTimersInstance = reinterpret_cast<getTimersInstance_t*> (dlsym(handle, "getTimersInstance"));
+    getTimersInstance_t* getTimersInstance = reinterpret_cast<getTimersInstance_t*>(dlsym(handle, "getTimersInstance"));
     if (!dlerror()) {
       pTimers = &(getTimersInstance());
     }
@@ -82,10 +80,7 @@ Timers::add_(const std::string& name, const double& time) {
   nbAppels_[name] += 1;
 }
 
-Timer::Timer(const std::string& name) :
-name_(name),
-isStopped_(false) {
-}
+Timer::Timer(const std::string& name) : name_(name), isStopped_(false) {}
 
 void
 Timer::stop() {

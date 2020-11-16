@@ -24,12 +24,12 @@
 namespace DYN {
 
 template<typename T>
-T StateVariable::getValue() const {
+T
+StateVariable::getValue() const {
   T value;
   try {
     value = boost::any_cast<T>(*value_);
-  }
-  catch (boost::bad_any_cast&)  {
+  } catch (boost::bad_any_cast&) {
     throw DYNError(Error::MODELER, StateVariableBadCast, name_, typeAsString(type_));
   }
   return value;

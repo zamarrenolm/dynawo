@@ -17,26 +17,25 @@
  * @brief Ratio tap changer data interface : implementation file for IIDM implementation
  *
  */
+#include "DYNRatioTapChangerInterfaceIIDM.h"
+
+#include "DYNErrorQueue.h"
+#include "DYNMacrosMessage.h"
+#include "DYNStepInterfaceIIDM.h"
+#include "DYNTrace.h"
+
 #include <IIDM/components/TapChanger.h>
 #include <IIDM/components/TerminalReference.h>
 
-#include "DYNRatioTapChangerInterfaceIIDM.h"
-#include "DYNStepInterfaceIIDM.h"
-#include "DYNMacrosMessage.h"
-#include "DYNErrorQueue.h"
-#include "DYNTrace.h"
-
-using std::vector;
-using std::string;
 using boost::shared_ptr;
+using std::string;
+using std::vector;
 
 namespace DYN {
 
-RatioTapChangerInterfaceIIDM::~RatioTapChangerInterfaceIIDM() {
-}
+RatioTapChangerInterfaceIIDM::~RatioTapChangerInterfaceIIDM() {}
 
-RatioTapChangerInterfaceIIDM::RatioTapChangerInterfaceIIDM(IIDM::RatioTapChanger& tapChanger, const std::string& parentName) :
-tapChangerIIDM_(tapChanger) {
+RatioTapChangerInterfaceIIDM::RatioTapChangerInterfaceIIDM(IIDM::RatioTapChanger& tapChanger, const std::string& parentName) : tapChangerIIDM_(tapChanger) {
   sanityCheck(parentName);
 }
 
@@ -102,14 +101,14 @@ string
 RatioTapChangerInterfaceIIDM::getTerminalRefSide() const {
   if (tapChangerIIDM_.has_terminalReference()) {
     switch (tapChangerIIDM_.terminalReference().side) {
-      case IIDM::side_1:
-        return "ONE";
-      case IIDM::side_2:
-        return "TWO";
-      case IIDM::side_3:
-        return "THREE";
-      case IIDM::side_end:
-        return "";
+    case IIDM::side_1:
+      return "ONE";
+    case IIDM::side_2:
+      return "TWO";
+    case IIDM::side_3:
+      return "THREE";
+    case IIDM::side_end:
+      return "";
     }
   }
   return "";

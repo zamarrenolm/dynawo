@@ -20,10 +20,10 @@
 #ifndef MODELER_DATAINTERFACE_DYNCOMPONENTINTERFACE_H_
 #define MODELER_DATAINTERFACE_DYNCOMPONENTINTERFACE_H_
 
-#include <string>
-#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <string>
+#include <vector>
 
 namespace DYN {
 
@@ -45,21 +45,21 @@ class ComponentInterface {
    * @brief Definition of the type of the component
    */
   typedef enum {
-    UNKNOWN,  ///< Unknown type
-    BUS,  ///< the component is a bus
+    UNKNOWN,         ///< Unknown type
+    BUS,             ///< the component is a bus
     CALCULATED_BUS,  ///< the component is a calculated bus
-    SWITCH,  ///< the component is a switch
-    LOAD,  ///< the component is a load
-    LINE,  ///< the component is a line
-    GENERATOR,  ///< the component is a generator
-    SHUNT,  ///< the component is a shunt
-    DANGLING_LINE,  ///< the component is a dangling line
-    TWO_WTFO,  ///< the component is a two windings transformer
-    THREE_WTFO,  ///< the component is a three windings transformer
-    SVC,  ///< the component is a static var compensator
-    VSC_CONVERTER,  ///< the component is a voltage source converter
-    LCC_CONVERTER,  ///< the component is a line-commutated converter
-    HVDC_LINE  ///< the component is a dc line (without converter)
+    SWITCH,          ///< the component is a switch
+    LOAD,            ///< the component is a load
+    LINE,            ///< the component is a line
+    GENERATOR,       ///< the component is a generator
+    SHUNT,           ///< the component is a shunt
+    DANGLING_LINE,   ///< the component is a dangling line
+    TWO_WTFO,        ///< the component is a two windings transformer
+    THREE_WTFO,      ///< the component is a three windings transformer
+    SVC,             ///< the component is a static var compensator
+    VSC_CONVERTER,   ///< the component is a voltage source converter
+    LCC_CONVERTER,   ///< the component is a line-commutated converter
+    HVDC_LINE        ///< the component is a dc line (without converter)
   } ComponentType_t;
 
  public:
@@ -171,7 +171,8 @@ class ComponentInterface {
    *
    * @return the value of the state variable
    */
-  template<typename T> T getStaticParameterValue(const std::string& name) const;
+  template<typename T>
+  T getStaticParameterValue(const std::string& name) const;
 
  protected:
   /**
@@ -181,15 +182,16 @@ class ComponentInterface {
    *
    * @return the value of the state variable
    */
-  template<typename T> T getValue(const int index) const;
+  template<typename T>
+  T getValue(const int index) const;
 
  protected:
-  std::vector<StateVariable> stateVariables_;  ///< state variable
+  std::vector<StateVariable> stateVariables_;                            ///< state variable
   boost::unordered_map<std::string, StaticParameter> staticParameters_;  ///< static parameter by name, from iidm data
-  ComponentType_t type_;  ///< type of the interface
+  ComponentType_t type_;                                                 ///< type of the interface
 
  private:
-  bool hasDynamicModel_;  ///< @b true is component has a dynamic model (other than c++ one), @b false else
+  bool hasDynamicModel_;                  ///< @b true is component has a dynamic model (other than c++ one), @b false else
   boost::shared_ptr<SubModel> modelDyn_;  ///< dynamic model of the component
 #ifdef _DEBUG_
   bool checkStateVariableAreUpdatedBeforeCriteriaCheck_;  ///< true if we want to check that all state variable used in check criteria are properly updated

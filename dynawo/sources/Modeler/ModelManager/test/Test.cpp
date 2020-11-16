@@ -11,39 +11,38 @@
 // simulation tool for power systems.
 //
 
-
-#include "gtest_dynawo.h"
+#include "DYNExecUtils.h"
+#include "DYNModelManager.h"
+#include "DYNModelModelica.h"
+#include "DYNSparseMatrix.h"
+#include "DYNVariable.h"
+#include "DYNVariableAlias.h"
+#include "DYNVariableAliasFactory.h"
+#include "DYNVariableNative.h"
+#include "DYNVariableNativeFactory.h"
 #include "PARParametersSet.h"
 #include "PARParametersSetFactory.h"
-#include "DYNModelModelica.h"
-#include "DYNModelManager.h"
-#include "DYNSparseMatrix.h"
-#include "DYNVariableAliasFactory.h"
-#include "DYNVariableAlias.h"
-#include "DYNVariableNativeFactory.h"
-#include "DYNVariableNative.h"
-#include "DYNVariable.h"
-#include "DYNExecUtils.h"
+#include "gtest_dynawo.h"
 
 namespace DYN {
 
-class MyModelica: public ModelModelica {
+class MyModelica : public ModelModelica {
  public:
-  explicit MyModelica(ModelManager* parent):
-    parent_(parent),
-    nbCallF_(0),
-    nbCallCheckDataCoherence_(0),
-    nbCallG_(0),
-    nbCallZ_(0),
-    nbCallCalcVars_(0),
-    nbCallY0_(0),
-    nbCallFType_(0),
-    nbCallYType_(0) { }
+  explicit MyModelica(ModelManager *parent) :
+      parent_(parent),
+      nbCallF_(0),
+      nbCallCheckDataCoherence_(0),
+      nbCallG_(0),
+      nbCallZ_(0),
+      nbCallCalcVars_(0),
+      nbCallY0_(0),
+      nbCallFType_(0),
+      nbCallYType_(0) {}
 
   /**
    * @brief default destructor
    */
-  virtual ~MyModelica() { }
+  virtual ~MyModelica() {}
 
  public:
   /**
@@ -51,7 +50,7 @@ class MyModelica: public ModelModelica {
    *
    * @param data dyn data to initialize
    */
-  virtual void initData(DYNDATA* data) {
+  virtual void initData(DYNDATA *data) {
     data->nbF = 2;
     data->nbCalculatedVars = 1;
     data->nbModes = 1;
@@ -60,7 +59,7 @@ class MyModelica: public ModelModelica {
     data->modelData = reinterpret_cast<MODEL_DATA *>(calloc(1, sizeof(MODEL_DATA)));
     data->simulationInfo = reinterpret_cast<SIMULATION_INFO *>(calloc(1, sizeof(SIMULATION_INFO)));
     data->simulationInfo->daeModeData = reinterpret_cast<DAEMODE_DATA *>(calloc(1, sizeof(DAEMODE_DATA)));
-    data->localData = reinterpret_cast<SIMULATION_DATA **>(calloc(1, sizeof(SIMULATION_DATA*)));
+    data->localData = reinterpret_cast<SIMULATION_DATA **>(calloc(1, sizeof(SIMULATION_DATA *)));
     data->localData[0] = reinterpret_cast<SIMULATION_DATA *>(calloc(1, sizeof(SIMULATION_DATA)));
     data->modelData->nParametersReal = 1;
     data->modelData->nParametersInteger = 1;
@@ -91,10 +90,10 @@ class MyModelica: public ModelModelica {
     nb = (data->modelData->nVariablesReal > 0) ? data->modelData->nVariablesReal : 0;
     data->simulationInfo->realVarsPre = reinterpret_cast<modelica_real *>(calloc(nb, sizeof(modelica_real)));
 
-    nb = (data->modelData->nStates > 0) ? data->modelData->nStates  : 0;
+    nb = (data->modelData->nStates > 0) ? data->modelData->nStates : 0;
     data->simulationInfo->derivativesVarsPre = reinterpret_cast<modelica_real *>(calloc(nb, sizeof(modelica_real)));
 
-    nb = (data->modelData->nDiscreteReal >0) ? data->modelData->nDiscreteReal : 0;
+    nb = (data->modelData->nDiscreteReal > 0) ? data->modelData->nDiscreteReal : 0;
     data->simulationInfo->discreteVarsPre = reinterpret_cast<modelica_real *>(calloc(nb, sizeof(modelica_real)));
 
     nb = (data->modelData->nVariablesBoolean > 0) ? data->modelData->nVariablesBoolean : 0;
@@ -105,7 +104,7 @@ class MyModelica: public ModelModelica {
     data->simulationInfo->integerDoubleVarsPre = reinterpret_cast<modelica_real *>(calloc(nb, sizeof(modelica_real)));
 
     nb = (data->modelData->nExtObjs > 0) ? data->modelData->nExtObjs : 0;
-    data->simulationInfo->extObjs = reinterpret_cast<void**>(calloc(nb, sizeof(void*)));
+    data->simulationInfo->extObjs = reinterpret_cast<void **>(calloc(nb, sizeof(void *)));
   }
 
   /**
@@ -119,7 +118,7 @@ class MyModelica: public ModelModelica {
    *
    * @param f local buffer to fill
    */
-  virtual void setFomc(double* /*f*/, propertyF_t /*type*/) {
+  virtual void setFomc(double * /*f*/, propertyF_t /*type*/) {
     ++nbCallF_;
   }
 
@@ -132,7 +131,7 @@ class MyModelica: public ModelModelica {
    *
    * @param g local buffer to fill
    */
-  void setGomc(state_g* /*g*/) {
+  void setGomc(state_g * /*g*/) {
     ++nbCallG_;
   }
 
@@ -166,7 +165,7 @@ class MyModelica: public ModelModelica {
    * @brief set the silent flag for discrete variables
    * @param silentZTable flag table
    */
-  void collectSilentZ(bool* /*silentZTable*/) { }
+  void collectSilentZ(bool * /*silentZTable*/) {}
 
   /**
    * @brief calculates the initial values (discretes and continuous) of the model
@@ -180,7 +179,7 @@ class MyModelica: public ModelModelica {
    * @brief call the constructors of objects that need a custom build based on parameters values
    *
    */
-  void callCustomParametersConstructors() { }
+  void callCustomParametersConstructors() {}
 
   unsigned getNbCallY0() const {
     return nbCallY0_;
@@ -198,7 +197,7 @@ class MyModelica: public ModelModelica {
    *
    * @param variables vector to fill
    */
-  virtual void defineVariables(std::vector<boost::shared_ptr<Variable> >& variables) {
+  virtual void defineVariables(std::vector<boost::shared_ptr<Variable> > &variables) {
     variables.push_back(DYN::VariableNativeFactory::createState("MyVariable", DISCRETE, false));
     variables.push_back(DYN::VariableNativeFactory::createState("MyVariable2", CONTINUOUS, false));
     variables.push_back(DYN::VariableNativeFactory::createState("MyVariable3", CONTINUOUS, false));
@@ -211,11 +210,10 @@ class MyModelica: public ModelModelica {
    *
    * @param parameters vector to fill
    */
-  virtual void defineParameters(std::vector<ParameterModeler>& parameters) {
+  virtual void defineParameters(std::vector<ParameterModeler> &parameters) {
     parameters.push_back(ParameterModeler("MyParam2", VAR_TYPE_DOUBLE, INTERNAL_PARAMETER));
     parameters.push_back(ParameterModeler("MyParam", VAR_TYPE_INT, INTERNAL_PARAMETER));
   }
-
 
   /**
    * @brief defines the checkSum of the model (in order to check whether it was modified)
@@ -236,8 +234,8 @@ class MyModelica: public ModelModelica {
     ASSERT_EQ(y.size(), 2);
     ASSERT_EQ(yp.size(), 2);
     ASSERT_EQ(res.size(), 2);
-    res[0] = 2*y[0]+yp[1];
-    res[1] = 0.5*y[1]-yp[0];
+    res[0] = 2 * y[0] + yp[1];
+    res[1] = 0.5 * y[1] - yp[0];
   }
 #endif
 
@@ -261,7 +259,7 @@ class MyModelica: public ModelModelica {
    * @brief set formula for modelica model's equation
    * @param fEquationIndex map of equation's formula by idnex as it key
    */
-  void setFequations(std::map<int, std::string>& fEquationIndex) {
+  void setFequations(std::map<int, std::string> &fEquationIndex) {
     fEquationIndex[0] = "MyFEq";
   }
 
@@ -269,7 +267,7 @@ class MyModelica: public ModelModelica {
    * @brief set formula for modelica model's root equation
    * @param gEquationIndex map of root equation's formula by idnex as it key
    */
-  void setGequations(std::map<int, std::string>& gEquationIndex) {
+  void setGequations(std::map<int, std::string> &gEquationIndex) {
     gEquationIndex[0] = "MyGEq";
   }
 
@@ -285,7 +283,7 @@ class MyModelica: public ModelModelica {
    *
    * @return the current model manager used
    */
-  ModelManager* getModelManager() const {
+  ModelManager *getModelManager() const {
     return parent_;
   }
 
@@ -294,14 +292,14 @@ class MyModelica: public ModelModelica {
    *
    * @param model current model manager used
    */
-  void setModelManager(ModelManager* /*model*/) {}
+  void setModelManager(ModelManager * /*model*/) {}
 
   /**
    * @brief defines the property of each continuous variables
    *
    * @param yType local buffer to fill
    */
-  void setYType_omc(propertyContinuousVar_t* /*yType*/) {
+  void setYType_omc(propertyContinuousVar_t * /*yType*/) {
     ++nbCallYType_;
   }
 
@@ -314,7 +312,7 @@ class MyModelica: public ModelModelica {
    *
    * @param fType local buffer to fill
    */
-  void setFType_omc(propertyF_t* /*fType*/) {
+  void setFType_omc(propertyF_t * /*fType*/) {
     ++nbCallFType_;
   }
 
@@ -328,7 +326,7 @@ class MyModelica: public ModelModelica {
    * @param elements vector of each elements contains in the model
    * @param mapElement map associating an element and the index of the elements contains in it
    */
-  void defineElements(std::vector<Element> &/*elements*/, std::map<std::string, int>& /*mapElement*/) {}
+  void defineElements(std::vector<Element> & /*elements*/, std::map<std::string, int> & /*mapElement*/) {}
 
   /**
    * @brief set shared parameters default values
@@ -347,7 +345,7 @@ class MyModelica: public ModelModelica {
    *
    * @param calculatedVars calculated variables vector
    */
-  void evalCalculatedVars(std::vector<double>& /*calculatedVars*/) {
+  void evalCalculatedVars(std::vector<double> & /*calculatedVars*/) {
     ++nbCallCalcVars_;
   }
 
@@ -374,9 +372,9 @@ class MyModelica: public ModelModelica {
    * @param iCalculatedVar index of the calculated variable
    * @return value of the calculated variable
    */
-  adept::adouble evalCalculatedVarIAdept(unsigned /*iCalculatedVar*/, unsigned /*indexOffset*/,
-      const std::vector<adept::adouble> &y, const std::vector<adept::adouble> &/*yp*/) const {
-    return 2*y[0];
+  adept::adouble evalCalculatedVarIAdept(unsigned /*iCalculatedVar*/, unsigned /*indexOffset*/, const std::vector<adept::adouble> &y,
+                                         const std::vector<adept::adouble> & /*yp*/) const {
+    return 2 * y[0];
   }
 #endif
 
@@ -387,13 +385,13 @@ class MyModelica: public ModelModelica {
    *
    * @return index of variables used to define the jacobian
    */
-  void getIndexesOfVariablesUsedForCalculatedVarI(unsigned /*iCalculatedVar*/, std::vector<int>& indexes) const {
+  void getIndexesOfVariablesUsedForCalculatedVarI(unsigned /*iCalculatedVar*/, std::vector<int> &indexes) const {
     indexes.push_back(0);
     indexes.push_back(1);
   }
 
  private:
-  ModelManager* parent_;
+  ModelManager *parent_;
   unsigned nbCallF_;
   unsigned nbCallG_;
   unsigned nbCallZ_;
@@ -404,28 +402,23 @@ class MyModelica: public ModelModelica {
   unsigned nbCallCheckDataCoherence_;
 };
 
-
-
-class MyModelicaInit: public MyModelica {
+class MyModelicaInit : public MyModelica {
  public:
-  explicit MyModelicaInit(ModelManager* parent):
-    MyModelica(parent),
-    data_(NULL) { }
+  explicit MyModelicaInit(ModelManager *parent) : MyModelica(parent), data_(NULL) {}
 
   /**
    * @brief default destructor
    */
-  virtual ~MyModelicaInit() { }
+  virtual ~MyModelicaInit() {}
 
-  void defineVariables(std::vector<boost::shared_ptr<Variable> >& variables) {
+  void defineVariables(std::vector<boost::shared_ptr<Variable> > &variables) {
     variables.push_back(DYN::VariableNativeFactory::createState("MyParam2", CONTINUOUS, false));
     variables.push_back(DYN::VariableNativeFactory::createState("MyParam", INTEGER, false));
   }
 
-  void defineParameters(std::vector<ParameterModeler>& /*parameters*/) {
-  }
+  void defineParameters(std::vector<ParameterModeler> & /*parameters*/) {}
 
-  void setFomc(double* f, propertyF_t /*type*/) {
+  void setFomc(double *f, propertyF_t /*type*/) {
     f[0] = data_->localData[0]->realVars[0] - 8;
   }
 
@@ -449,7 +442,7 @@ class MyModelicaInit: public MyModelica {
     data_->localData[0]->integerDoubleVars[0] = 4;
   }
 
-  virtual void initData(DYNDATA* data) {
+  virtual void initData(DYNDATA *data) {
     data->nbF = 1;
     data->nbCalculatedVars = 0;
     data->nbModes = 0;
@@ -458,7 +451,7 @@ class MyModelicaInit: public MyModelica {
     data->modelData = reinterpret_cast<MODEL_DATA *>(calloc(1, sizeof(MODEL_DATA)));
     data->simulationInfo = reinterpret_cast<SIMULATION_INFO *>(calloc(1, sizeof(SIMULATION_INFO)));
     data->simulationInfo->daeModeData = reinterpret_cast<DAEMODE_DATA *>(calloc(1, sizeof(DAEMODE_DATA)));
-    data->localData = reinterpret_cast<SIMULATION_DATA **>(calloc(1, sizeof(SIMULATION_DATA*)));
+    data->localData = reinterpret_cast<SIMULATION_DATA **>(calloc(1, sizeof(SIMULATION_DATA *)));
     data->localData[0] = reinterpret_cast<SIMULATION_DATA *>(calloc(1, sizeof(SIMULATION_DATA)));
     data_ = data;
     data->modelData->nParametersReal = 0;
@@ -477,13 +470,12 @@ class MyModelicaInit: public MyModelica {
   }
 
  private:
-  DYNDATA* data_;
+  DYNDATA *data_;
 };
 
 class MyModelManager : public ModelManager {
  public:
-  MyModelManager() :
-    ModelManager() {
+  MyModelManager() : ModelManager() {
     modelInit_ = new MyModelicaInit(this);
     modelDyn_ = new MyModelica(this);
     modelType_ = "MyModelica";
@@ -497,44 +489,44 @@ class MyModelManager : public ModelManager {
     ASSERT_EQ(dataInit_->nbCalculatedVars, 0);
     ASSERT_EQ(dataInit_->nbModes, 0);
     ASSERT_EQ(dataInit_->nbVars, 1);
-    ASSERT_EQ(dataInit_->nbZ , 0);
+    ASSERT_EQ(dataInit_->nbZ, 0);
     ASSERT_EQ(dataDyn_->nbF, 2);
     ASSERT_EQ(dataDyn_->nbCalculatedVars, 1);
     ASSERT_EQ(dataDyn_->nbModes, 1);
     ASSERT_EQ(dataDyn_->nbVars, 2);
-    ASSERT_EQ(dataDyn_->nbZ , 1);
+    ASSERT_EQ(dataDyn_->nbZ, 1);
   }
 
   void testNbCallF(unsigned ref) {
-    ASSERT_EQ(dynamic_cast<MyModelica*>(modelDyn_)->getNbCallF(), ref);
+    ASSERT_EQ(dynamic_cast<MyModelica *>(modelDyn_)->getNbCallF(), ref);
   }
 
   void testNbCallG(unsigned ref) {
-    ASSERT_EQ(dynamic_cast<MyModelica*>(modelDyn_)->getNbCallG(), ref);
+    ASSERT_EQ(dynamic_cast<MyModelica *>(modelDyn_)->getNbCallG(), ref);
   }
 
   void testNbCallZ(unsigned ref) {
-    ASSERT_EQ(dynamic_cast<MyModelica*>(modelDyn_)->getNbCallZ(), ref);
+    ASSERT_EQ(dynamic_cast<MyModelica *>(modelDyn_)->getNbCallZ(), ref);
   }
 
   void testNbCallCalcVars(unsigned ref) {
-    ASSERT_EQ(dynamic_cast<MyModelica*>(modelDyn_)->getNbCallCalcVars(), ref);
+    ASSERT_EQ(dynamic_cast<MyModelica *>(modelDyn_)->getNbCallCalcVars(), ref);
   }
 
   void testNbCallY0(unsigned ref) {
-    ASSERT_EQ(dynamic_cast<MyModelica*>(modelDyn_)->getNbCallY0(), ref);
+    ASSERT_EQ(dynamic_cast<MyModelica *>(modelDyn_)->getNbCallY0(), ref);
   }
 
   void testNbCallFType(unsigned ref) {
-    ASSERT_EQ(dynamic_cast<MyModelica*>(modelDyn_)->getNbCallFType(), ref);
+    ASSERT_EQ(dynamic_cast<MyModelica *>(modelDyn_)->getNbCallFType(), ref);
   }
 
   void testNbCallYType(unsigned ref) {
-    ASSERT_EQ(dynamic_cast<MyModelica*>(modelDyn_)->getNbCallYType(), ref);
+    ASSERT_EQ(dynamic_cast<MyModelica *>(modelDyn_)->getNbCallYType(), ref);
   }
 
   void testNbCallCheckDataCoherence(unsigned ref) {
-    ASSERT_EQ(dynamic_cast<MyModelica*>(modelDyn_)->getNbCallCheckDataCoherence(), ref);
+    ASSERT_EQ(dynamic_cast<MyModelica *>(modelDyn_)->getNbCallCheckDataCoherence(), ref);
   }
 
  protected:
@@ -569,7 +561,7 @@ TEST(TestModelManager, TestModelManagerBasics) {
   yp[1] = 2;
   std::vector<double> f(mm->sizeF(), 0.);
   std::vector<double> z(mm->sizeZ(), 0.);
-  bool* zConnected = new bool[mm->sizeZ()];
+  bool *zConnected = new bool[mm->sizeZ()];
   for (size_t i = 0; i < mm->sizeZ(); ++i)
     zConnected[i] = true;
   std::vector<state_g> g(mm->sizeG(), NO_ROOT);
@@ -642,7 +634,7 @@ TEST(TestModelManager, TestModelManagerBasics) {
   mm->setSharedParametersDefaultValues();
   mm->setSharedParametersDefaultValuesInit();
   for (boost::unordered_map<std::string, ParameterModeler>::const_iterator it = mm->getParametersDynamic().begin(), itEnd = mm->getParametersDynamic().end();
-      it != itEnd; ++it) {
+       it != itEnd; ++it) {
     if (it->first == "MyParam")
       ASSERT_EQ(it->second.getValue<int>(), 2);
     else if (it->first == "MyParam2")
@@ -650,10 +642,10 @@ TEST(TestModelManager, TestModelManagerBasics) {
     else
       assert(0);
   }
-  std::map< std::string, std::string > mapParameters;
+  std::map<std::string, std::string> mapParameters;
   mm->dumpParameters(mapParameters);
   ASSERT_EQ(mapParameters.size(), 1);
-  std::map< std::string, std::string > mapVariables;
+  std::map<std::string, std::string> mapVariables;
   mm->dumpVariables(mapVariables);
   ASSERT_EQ(mapVariables.size(), 1);
 
@@ -662,7 +654,7 @@ TEST(TestModelManager, TestModelManagerBasics) {
 
   mm->loadParameters(mapParameters["MyModelica-MyModelManager-parameters.bin"]);
   for (boost::unordered_map<std::string, ParameterModeler>::const_iterator it = mm->getParametersDynamic().begin(), itEnd = mm->getParametersDynamic().end();
-      it != itEnd; ++it) {
+       it != itEnd; ++it) {
     if (it->first == "MyParam")
       ASSERT_EQ(it->second.getValue<int>(), 0);
     else if (it->first == "MyParam2")
@@ -674,7 +666,7 @@ TEST(TestModelManager, TestModelManagerBasics) {
   mm->initParams();
 
   for (boost::unordered_map<std::string, ParameterModeler>::const_iterator it = mm->getParametersDynamic().begin(), itEnd = mm->getParametersDynamic().end();
-      it != itEnd; ++it) {
+       it != itEnd; ++it) {
     if (it->first == "MyParam")
       ASSERT_EQ(it->second.getValue<int>(), 4);
     else if (it->first == "MyParam2")
@@ -700,6 +692,5 @@ TEST(TestModelManager, TestModelManagerBasics) {
   mm->setSubModelParameters();
   delete[] zConnected;
 }
-
 
 }  // namespace DYN

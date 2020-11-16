@@ -20,7 +20,6 @@
 #ifndef API_FS_FSXMLEXPORTER_H_
 #define API_FS_FSXMLEXPORTER_H_
 
-
 #include "FSExporter.h"
 
 namespace finalState {

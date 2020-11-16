@@ -23,9 +23,6 @@ using std::string;
 
 namespace DYN {
 
-Variable::Variable(const string& name, bool isAlias) :
-name_(name),
-isAlias_(isAlias) {
-}
+Variable::Variable(const string& name, bool isAlias) : name_(name), isAlias_(isAlias) {}
 
 }  // namespace DYN

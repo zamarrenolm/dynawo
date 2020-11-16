@@ -18,6 +18,7 @@
  */
 
 #include "DYDDynamicModelsCollectionFactory.h"
+
 #include "DYDDynamicModelsCollection.h"
 
 using boost::shared_ptr;

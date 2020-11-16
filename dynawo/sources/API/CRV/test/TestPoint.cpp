@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "CRVPointFactory.h"
 #include "CRVPoint.h"
+#include "CRVPointFactory.h"
+#include "gtest_dynawo.h"
 
 namespace curves {
 

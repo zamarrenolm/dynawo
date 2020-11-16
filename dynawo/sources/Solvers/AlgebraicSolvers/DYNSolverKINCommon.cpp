@@ -18,52 +18,43 @@
  *
  */
 
-
 #include <kinsol/kinsol.h>
 #include <sunlinsol/sunlinsol_klu.h>
 #ifdef WITH_NICSLU
 #include <sunlinsol/sunlinsol_nicslu.h>
 #endif
-#include <sundials/sundials_types.h>
-#include <sundials/sundials_math.h>
-#include <sundials/sundials_sparse.h>
-#include <nvector/nvector_serial.h>
-#include <string.h>
-#include <vector>
-#include <cmath>
-#include <map>
-#include <algorithm>
-#include <iomanip>
-
-#include "DYNSolverKINCommon.h"
-#include "DYNTrace.h"
 #include "DYNMacrosMessage.h"
 #include "DYNSolverCommon.h"
+#include "DYNSolverKINCommon.h"
+#include "DYNTrace.h"
 
-using std::vector;
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <map>
+#include <nvector/nvector_serial.h>
+#include <string.h>
+#include <sundials/sundials_math.h>
+#include <sundials/sundials_sparse.h>
+#include <sundials/sundials_types.h>
+#include <vector>
+
+using boost::shared_ptr;
 using std::map;
 using std::string;
 using std::stringstream;
-using boost::shared_ptr;
+using std::vector;
 
 namespace DYN {
 
-SolverKINCommon::SolverKINCommon() :
-KINMem_(NULL),
-LS_(NULL),
-M_(NULL),
-yy_(NULL),
-lastRowVals_(NULL),
-nbF_(0),
-t0_(0.),
-firstIteration_(false) {
-}
+SolverKINCommon::SolverKINCommon() : KINMem_(NULL), LS_(NULL), M_(NULL), yy_(NULL), lastRowVals_(NULL), nbF_(0), t0_(0.), firstIteration_(false) {}
 
 SolverKINCommon::~SolverKINCommon() {
   clean();
 }
 
-void SolverKINCommon::clean() {
+void
+SolverKINCommon::clean() {
   if (M_ != NULL) {
     SUNMatDestroy(M_);
     M_ = NULL;
@@ -75,7 +66,8 @@ void SolverKINCommon::clean() {
   if (KINMem_ != NULL) {
     KINFree(&KINMem_);
     KINMem_ = NULL;
-    if (yy_ != NULL) N_VDestroy_Serial(yy_);
+    if (yy_ != NULL)
+      N_VDestroy_Serial(yy_);
   }
   if (lastRowVals_ != NULL) {
     free(lastRowVals_);
@@ -84,8 +76,8 @@ void SolverKINCommon::clean() {
 }
 
 void
-SolverKINCommon::initCommon(const std::string& linearSolverName, double fnormtol, double initialaddtol, double scsteptol,
-                     double mxnewtstep, int msbset, int mxiter, int printfl, KINSysFn evalF, KINLsJacFn evalJ) {
+SolverKINCommon::initCommon(const std::string& linearSolverName, double fnormtol, double initialaddtol, double scsteptol, double mxnewtstep, int msbset,
+                            int mxiter, int printfl, KINSysFn evalF, KINLsJacFn evalJ) {
   linearSolverName_ = linearSolverName;
 
   // (1) Problem size
@@ -191,84 +183,86 @@ int
 SolverKINCommon::solveCommon() {
   N_Vector fScaleNV = N_VNew_Serial(fScale_.size());
   N_Vector yScaleNV = N_VNew_Serial(yScale_.size());
-  memcpy(NV_DATA_S(fScaleNV), &fScale_[0], fScale_.size() * sizeof (fScale_[0]));
-  memcpy(NV_DATA_S(yScaleNV), &yScale_[0], yScale_.size() * sizeof (yScale_[0]));
+  memcpy(NV_DATA_S(fScaleNV), &fScale_[0], fScale_.size() * sizeof(fScale_[0]));
+  memcpy(NV_DATA_S(yScaleNV), &yScale_[0], yScale_.size() * sizeof(yScale_[0]));
 
   int flag = KINSol(KINMem_, yy_, KIN_NONE, yScaleNV, fScaleNV);
   analyseFlag(flag);
 
-  if (fScaleNV != NULL) N_VDestroy_Serial(fScaleNV);
-  if (yScaleNV != NULL) N_VDestroy_Serial(yScaleNV);
+  if (fScaleNV != NULL)
+    N_VDestroy_Serial(fScaleNV);
+  if (yScaleNV != NULL)
+    N_VDestroy_Serial(yScaleNV);
 
   return flag;
 }
 
 void
-SolverKINCommon::analyseFlag(const int & flag) {
+SolverKINCommon::analyseFlag(const int& flag) {
   stringstream msg;
   switch (flag) {
-    case KIN_SUCCESS:
-      msg << DYNLog(KinsolSucceeded);
-      break;
-    case KIN_INITIAL_GUESS_OK:
-      msg << DYNLog(KinInitialGuessOk);
-      break;
-    case KIN_STEP_LT_STPTOL:
-      msg << DYNLog(KinStepLtStpTol);
-      break;
-    case KIN_MEM_NULL:
-      msg << DYNLog(KinMemNull);
-      break;
-    case KIN_ILL_INPUT:
-      msg << DYNLog(KinIllInput);
-      break;
-    case KIN_NO_MALLOC:
-      msg << DYNLog(KinNoMalloc);
-      break;
-    case KIN_MEM_FAIL:
-      msg << DYNLog(KinMemFail);
-      break;
-    case KIN_LINESEARCH_NONCONV:
-      msg << DYNLog(KinLineSearchNonConv);
-      break;
-    case KIN_MAXITER_REACHED:
-      msg << DYNLog(KinMaxIterReached);
-      break;
-    case KIN_MXNEWT_5X_EXCEEDED:
-      msg << DYNLog(KinMxNewt5xExceeded);
-      break;
-    case KIN_LINESEARCH_BCFAIL:
-      msg << DYNLog(KinLineSearchBcFail);
-      break;
-    case KIN_LINSOLV_NO_RECOVERY:
-      msg << DYNLog(KinLinsolvNoRecovery);
-      break;
-    case KIN_LINIT_FAIL:
-      msg << DYNLog(KinLinitFail);
-      break;
-    case KIN_LSETUP_FAIL:
-      msg << DYNLog(KinLsetupFail);
-      break;
-    case KIN_LSOLVE_FAIL:
-      msg << DYNLog(KinLsolveFail);
-      break;
-    case KIN_SYSFUNC_FAIL:
-      msg << DYNLog(KinSysFuncFail);
-      break;
-    case KIN_FIRST_SYSFUNC_ERR:
-      msg << DYNLog(KinFirstSysFuncErr);
-      break;
-    case KIN_REPTD_SYSFUNC_ERR:
-      msg << DYNLog(KinReptdSysfuncErr);
-      break;
-    case KIN_VECTOROP_ERR:
-      msg << DYNLog(KinVectoropErr);
-      break;
-    default:
+  case KIN_SUCCESS:
+    msg << DYNLog(KinsolSucceeded);
+    break;
+  case KIN_INITIAL_GUESS_OK:
+    msg << DYNLog(KinInitialGuessOk);
+    break;
+  case KIN_STEP_LT_STPTOL:
+    msg << DYNLog(KinStepLtStpTol);
+    break;
+  case KIN_MEM_NULL:
+    msg << DYNLog(KinMemNull);
+    break;
+  case KIN_ILL_INPUT:
+    msg << DYNLog(KinIllInput);
+    break;
+  case KIN_NO_MALLOC:
+    msg << DYNLog(KinNoMalloc);
+    break;
+  case KIN_MEM_FAIL:
+    msg << DYNLog(KinMemFail);
+    break;
+  case KIN_LINESEARCH_NONCONV:
+    msg << DYNLog(KinLineSearchNonConv);
+    break;
+  case KIN_MAXITER_REACHED:
+    msg << DYNLog(KinMaxIterReached);
+    break;
+  case KIN_MXNEWT_5X_EXCEEDED:
+    msg << DYNLog(KinMxNewt5xExceeded);
+    break;
+  case KIN_LINESEARCH_BCFAIL:
+    msg << DYNLog(KinLineSearchBcFail);
+    break;
+  case KIN_LINSOLV_NO_RECOVERY:
+    msg << DYNLog(KinLinsolvNoRecovery);
+    break;
+  case KIN_LINIT_FAIL:
+    msg << DYNLog(KinLinitFail);
+    break;
+  case KIN_LSETUP_FAIL:
+    msg << DYNLog(KinLsetupFail);
+    break;
+  case KIN_LSOLVE_FAIL:
+    msg << DYNLog(KinLsolveFail);
+    break;
+  case KIN_SYSFUNC_FAIL:
+    msg << DYNLog(KinSysFuncFail);
+    break;
+  case KIN_FIRST_SYSFUNC_ERR:
+    msg << DYNLog(KinFirstSysFuncErr);
+    break;
+  case KIN_REPTD_SYSFUNC_ERR:
+    msg << DYNLog(KinReptdSysfuncErr);
+    break;
+  case KIN_VECTOROP_ERR:
+    msg << DYNLog(KinVectoropErr);
+    break;
+  default:
 #ifdef _DEBUG_
-      Trace::error() << DYNLog(SolverKINUnknownError) << Trace::endline;
+    Trace::error() << DYNLog(SolverKINUnknownError) << Trace::endline;
 #endif
-      throw DYNError(Error::SUNDIALS_ERROR, SolverSolveErrorKINSOL);
+    throw DYNError(Error::SUNDIALS_ERROR, SolverSolveErrorKINSOL);
   }
 
   if (flag < 0)
@@ -276,14 +270,12 @@ SolverKINCommon::analyseFlag(const int & flag) {
 }
 
 void
-SolverKINCommon::errHandlerFn(int /*error_code*/, const char* /*module*/, const char* /*function*/,
-        char* /*msg*/, void* /*eh_data*/) {
+SolverKINCommon::errHandlerFn(int /*error_code*/, const char* /*module*/, const char* /*function*/, char* /*msg*/, void* /*eh_data*/) {
   // error messages are analysed by analyseFlag method, no need to print error message
 }
 
 void
-SolverKINCommon::infoHandlerFn(const char* module, const char* function,
-        char* msg, void* /*eh_data*/) {
+SolverKINCommon::infoHandlerFn(const char* module, const char* function, char* msg, void* /*eh_data*/) {
   Trace::info() << module << " " << function << " :" << msg << Trace::endline;
 }
 

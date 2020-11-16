@@ -29,10 +29,7 @@ namespace DYN {
 /**
  * define derivative Ir, Ii type
  */
-typedef enum {
-  IR_DERIVATIVE = 0,
-  II_DERIVATIVE = 1
-} typeDerivative_t;
+typedef enum { IR_DERIVATIVE = 0, II_DERIVATIVE = 1 } typeDerivative_t;
 
 /**
  * class Derivatives
@@ -108,7 +105,7 @@ class BusDerivatives {
  private:
   Derivatives irDerivatives_;  ///< ir derivative
   Derivatives iiDerivatives_;  ///< ii derivative
-};  ///< Class for Derivative elements of Bus Model
+};                             ///< Class for Derivative elements of Bus Model
 
 }  // namespace DYN
 

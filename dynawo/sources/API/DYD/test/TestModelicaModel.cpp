@@ -16,27 +16,24 @@
  * @brief Unit tests for API_DYD
  *
  */
-#include <map>
-
-#include <boost/shared_ptr.hpp>
-
+#include "DYDDynamicModelsCollectionFactory.h"
+#include "DYDIterators.h"
+#include "DYDMacroConnect.h"
+#include "DYDMacroConnectFactory.h"
+#include "DYDMacroStaticRef.h"
+#include "DYDMacroStaticRefFactory.h"
+#include "DYDModelicaModel.h"
+#include "DYDModelicaModelFactory.h"
+#include "DYDStaticRef.h"
+#include "DYDUnitDynamicModel.h"
+#include "DYDUnitDynamicModelFactory.h"
+#include "DYDXmlExporter.h"
+#include "DYDXmlImporter.h"
+#include "TestUtil.h"
 #include "gtest_dynawo.h"
 
-#include "DYDDynamicModelsCollectionFactory.h"
-#include "DYDModelicaModelFactory.h"
-#include "DYDModelicaModel.h"
-#include "DYDUnitDynamicModelFactory.h"
-#include "DYDUnitDynamicModel.h"
-#include "DYDMacroConnectFactory.h"
-#include "DYDMacroConnect.h"
-#include "DYDXmlImporter.h"
-#include "DYDXmlExporter.h"
-#include "DYDIterators.h"
-#include "DYDMacroStaticRefFactory.h"
-#include "DYDStaticRef.h"
-#include "DYDMacroStaticRef.h"
-
-#include "TestUtil.h"
+#include <boost/shared_ptr.hpp>
+#include <map>
 
 namespace dynamicdata {
 //-----------------------------------------------------
@@ -120,14 +117,14 @@ TEST(APIDYDTest, ModelicaModelBadConnectors) {
   model->addUnitDynamicModel(udm2);
 
   ASSERT_THROW_DYNAWO(model->addConnect("component1", "var1", "component3", "var2"), DYN::Error::API,
-          DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
+                      DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
   ASSERT_THROW_DYNAWO(model->addConnect("component3", "var1", "component2", "var2"), DYN::Error::API,
-          DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
+                      DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
 
   ASSERT_THROW_DYNAWO(model->addInitConnect("component1", "var1", "component3", "var2"), DYN::Error::API,
-          DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
+                      DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
   ASSERT_THROW_DYNAWO(model->addInitConnect("component3", "var1", "component2", "var2"), DYN::Error::API,
-          DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
+                      DYN::KeyError_t::ConnectorNotPartofModel);  // component3 does not exist
 }
 
 //==================================================
@@ -142,11 +139,9 @@ TEST(APIDYDTest, ModelicaModel_1UDM_EqualsFromXml) {
   files.push_back("res/sameModelicaModel.xml");
   ASSERT_NO_THROW(collection = importer.importFromDydFiles(files));
 
-  std::vector<boost::shared_ptr<ModelicaModel> >models;
+  std::vector<boost::shared_ptr<ModelicaModel> > models;
 
-  for (dynamicModel_iterator itModel = collection->beginModel();
-          itModel != collection->endModel();
-          ++itModel) {
+  for (dynamicModel_iterator itModel = collection->beginModel(); itModel != collection->endModel(); ++itModel) {
     models.push_back(boost::dynamic_pointer_cast<ModelicaModel>(*itModel));
   }
 
@@ -168,11 +163,9 @@ TEST(APIDYDTest, ModelicaModel_1UDM_DifferentFromXml) {
   files.push_back("res/differentModelicaModel.xml");
   ASSERT_NO_THROW(collection = importer.importFromDydFiles(files));
 
-  std::vector<boost::shared_ptr<ModelicaModel> >models;
+  std::vector<boost::shared_ptr<ModelicaModel> > models;
 
-  for (dynamicModel_iterator itModel = collection->beginModel();
-          itModel != collection->endModel();
-          ++itModel) {
+  for (dynamicModel_iterator itModel = collection->beginModel(); itModel != collection->endModel(); ++itModel) {
     models.push_back(boost::dynamic_pointer_cast<ModelicaModel>(*itModel));
   }
 
@@ -194,11 +187,9 @@ TEST(APIDYDTest, ModelicaModel_3UDMsNoConnections_EqualsFromXml) {
   files.push_back("res/3UDMsameModelicaModel.xml");
   ASSERT_NO_THROW(collection = importer.importFromDydFiles(files));
 
-  std::vector<boost::shared_ptr<ModelicaModel> >models;
+  std::vector<boost::shared_ptr<ModelicaModel> > models;
 
-  for (dynamicModel_iterator itModel = collection->beginModel();
-          itModel != collection->endModel();
-          ++itModel) {
+  for (dynamicModel_iterator itModel = collection->beginModel(); itModel != collection->endModel(); ++itModel) {
     models.push_back(boost::dynamic_pointer_cast<ModelicaModel>(*itModel));
   }
 
@@ -220,11 +211,9 @@ TEST(APIDYDTest, ModelicaModel_3UDMsNoConnections_DifferentFromXml) {
   files.push_back("res/3UDMdifferentModelicaModel.xml");
   ASSERT_NO_THROW(collection = importer.importFromDydFiles(files));
 
-  std::vector<boost::shared_ptr<ModelicaModel> >models;
+  std::vector<boost::shared_ptr<ModelicaModel> > models;
 
-  for (dynamicModel_iterator itModel = collection->beginModel();
-          itModel != collection->endModel();
-          ++itModel) {
+  for (dynamicModel_iterator itModel = collection->beginModel(); itModel != collection->endModel(); ++itModel) {
     models.push_back(boost::dynamic_pointer_cast<ModelicaModel>(*itModel));
   }
 
@@ -246,11 +235,9 @@ TEST(APIDYDTest, ModelicaModelSameModelFromXml) {
   files.push_back("res/modelicaModel.xml");
   ASSERT_NO_THROW(collection = importer.importFromDydFiles(files));
 
-  std::vector<boost::shared_ptr<ModelicaModel> >models;
+  std::vector<boost::shared_ptr<ModelicaModel> > models;
 
-  for (dynamicModel_iterator itModel = collection->beginModel();
-          itModel != collection->endModel();
-          ++itModel) {
+  for (dynamicModel_iterator itModel = collection->beginModel(); itModel != collection->endModel(); ++itModel) {
     models.push_back(boost::dynamic_pointer_cast<ModelicaModel>(*itModel));
   }
 
@@ -566,7 +553,7 @@ TEST(APIDYDTest, ModelicaModelWithMacroConnect) {
   std::map<std::string, boost::shared_ptr<MacroConnect> > macroConnects = model->getMacroConnects();
   ASSERT_EQ(macroConnects.size(), 2);
 
-  std::map<std::string, boost::shared_ptr<MacroConnect > >::const_iterator iter = macroConnects.begin();
+  std::map<std::string, boost::shared_ptr<MacroConnect> >::const_iterator iter = macroConnects.begin();
   int index = 0;
   for (; iter != macroConnects.end(); ++iter) {
     if (index == 0)

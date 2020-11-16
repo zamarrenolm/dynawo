@@ -20,25 +20,24 @@
  * <A HREF="http://boost-log.sourceforge.net/libs/log/doc/html/index.html"> documentation</A>
  *
  */
-#include <fstream>
-#include <ostream>
-#include <iomanip>
-
-#include <boost/version.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/log/core.hpp>
-#include <boost/log/expressions.hpp>
 #include <boost/log/attributes.hpp>
 #include <boost/log/attributes/attribute_value_set.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/sinks.hpp>
 #include <boost/log/sinks/sync_frontend.hpp>
 #include <boost/log/sinks/text_ostream_backend.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/support/date_time.hpp>
+#include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/sinks.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/version.hpp>
+#include <fstream>
+#include <iomanip>
+#include <ostream>
 
 #if BOOST_VERSION / 100 % 1000 < 56
 #include <boost/utility/empty_deleter.hpp>
@@ -61,11 +60,11 @@ namespace keywords = boost::log::keywords;
 
 namespace DYN {
 
-typedef sinks::synchronous_sink< sinks::text_ostream_backend > text_sink;  ///< define text sink
-typedef sinks::synchronous_sink< sinks::text_file_backend > file_sink;  ///< define file sink
+typedef sinks::synchronous_sink<sinks::text_ostream_backend> text_sink;  ///< define text sink
+typedef sinks::synchronous_sink<sinks::text_file_backend> file_sink;     ///< define file sink
 
-static vector< boost::shared_ptr<file_sink> > sinks;  ///<  vector of file sink
-static vector< boost::shared_ptr<text_sink> > originalSinks;  ///< vector of text sink
+static vector<boost::shared_ptr<file_sink> > sinks;          ///<  vector of file sink
+static vector<boost::shared_ptr<text_sink> > originalSinks;  ///< vector of text sink
 
 #if _DEBUG_
 const SeverityLevel Trace::defaultLevel_ = DEBUG;
@@ -83,7 +82,8 @@ const SeverityLevel Trace::defaultLevel_ = INFO;
  * @todo Change this function to avoid duplication of the severity level into a pair
  * enum/vector. For the moment, solution based on Boost.Log examples.
  */
-std::ostream& operator<<(std::ostream& strm, SeverityLevel level) {
+std::ostream&
+operator<<(std::ostream& strm, SeverityLevel level) {
   strm << Trace::stringFromSeverityLevel(level);
   return strm;
 }
@@ -93,23 +93,25 @@ BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", SeverityLevel)
 BOOST_LOG_ATTRIBUTE_KEYWORD(tag_attr, "Tag", std::string)
 #pragma GCC diagnostic error "-Wmissing-field-initializers"
 
-TraceStream& Trace::endline(TraceStream& os) {
+TraceStream&
+Trace::endline(TraceStream& os) {
   return eol(os);
 }
 
-void Trace::init() {
+void
+Trace::init() {
   // Setup the formatters for the sinks
   logging::formatter onlyMsg = expr::stream << expr::smessage;
 
   // Construct the sink
-  boost::shared_ptr< text_sink > sink = boost::make_shared< text_sink >();
+  boost::shared_ptr<text_sink> sink = boost::make_shared<text_sink>();
   sink->set_formatter(onlyMsg);
 
   // Add a stream to write log to
 #if BOOST_VERSION / 100 % 1000 < 56
-  boost::shared_ptr< std::ostream > stream(&std::clog, boost::empty_deleter());
+  boost::shared_ptr<std::ostream> stream(&std::clog, boost::empty_deleter());
 #else
-  boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
+  boost::shared_ptr<std::ostream> stream(&std::clog, boost::null_deleter());
 #endif
   sink->locked_backend()->add_stream(stream);
 
@@ -120,11 +122,13 @@ void Trace::init() {
   logging::add_common_attributes();
 }
 
-void Trace::disableLogging() {
+void
+Trace::disableLogging() {
   logging::core::get()->set_logging_enabled(false);
 }
 
-void Trace::addAppenders(const std::vector<TraceAppender>& appenders) {
+void
+Trace::addAppenders(const std::vector<TraceAppender>& appenders) {
   // remove old appenders (console_log)
   Trace::resetCustomAppenders();
 
@@ -132,9 +136,7 @@ void Trace::addAppenders(const std::vector<TraceAppender>& appenders) {
   // Add appender
   for (unsigned int i = 0; i < appenders.size(); ++i) {
     const std::ios_base::openmode mode = appenders[i].doesAppend() ? std::ios_base::app : std::ios_base::out;
-    boost::shared_ptr< file_sink > sink(new file_sink(
-      keywords::file_name = appenders[i].getFilePath(),
-      keywords::open_mode = mode));
+    boost::shared_ptr<file_sink> sink(new file_sink(keywords::file_name = appenders[i].getFilePath(), keywords::open_mode = mode));
 
     // build format for each appenders depending on its attributes
     string separator = appenders[i].getSeparator();
@@ -145,9 +147,9 @@ void Trace::addAppenders(const std::vector<TraceAppender>& appenders) {
     logging::formatter fmt;
 
     if (showTimeStamp && showTag) {
-      fmt = expr::stream << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", dateFormat) << separator << severity << separator << expr::message;
+      fmt = expr::stream << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", dateFormat) << separator << severity << separator << expr::message;
     } else if (showTimeStamp) {  // && ! showTag
-      fmt = expr::stream << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", dateFormat) << separator << expr::message;
+      fmt = expr::stream << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", dateFormat) << separator << expr::message;
     } else if (showTag) {  // && ! showTimeStamp
       fmt = expr::stream << severity << separator << expr::message;
     } else {  // ! showTimeStamp && ! showTag
@@ -168,14 +170,15 @@ void Trace::addAppenders(const std::vector<TraceAppender>& appenders) {
   logging::add_common_attributes();
 }
 
-void Trace::resetCustomAppenders() {
-  vector< boost::shared_ptr<file_sink> >::iterator itSinks;
+void
+Trace::resetCustomAppenders() {
+  vector<boost::shared_ptr<file_sink> >::iterator itSinks;
   for (itSinks = sinks.begin(); itSinks != sinks.end(); ++itSinks) {
     logging::core::get()->remove_sink(*itSinks);
   }
   sinks.clear();
 
-  vector< boost::shared_ptr<text_sink> >::iterator itOSinks;
+  vector<boost::shared_ptr<text_sink> >::iterator itOSinks;
   for (itOSinks = originalSinks.begin(); itOSinks != originalSinks.end(); ++itOSinks) {
     logging::core::get()->remove_sink(*itOSinks);
   }
@@ -232,11 +235,12 @@ Trace::modeler() {
   return "MODELER";
 }
 
-void Trace::log(SeverityLevel slv, const std::string& tag, const std::string& message) {
-  src::severity_logger< SeverityLevel > slg;
+void
+Trace::log(SeverityLevel slv, const std::string& tag, const std::string& message) {
+  src::severity_logger<SeverityLevel> slg;
 
   if (tag != "")
-    slg.add_attribute("Tag", attrs::constant< std::string >(tag));
+    slg.add_attribute("Tag", attrs::constant<std::string>(tag));
 
   BOOST_LOG_SEV(slg, slv) << message;
 }
@@ -244,10 +248,10 @@ void Trace::log(SeverityLevel slv, const std::string& tag, const std::string& me
 bool
 Trace::logExists(const std::string& tag, SeverityLevel slv) {
   boost::log::attribute_value_set set;
-  set.insert("Severity",  attrs::make_attribute_value(slv));
+  set.insert("Severity", attrs::make_attribute_value(slv));
   if (tag != "")
-    set.insert("Tag",  attrs::make_attribute_value(tag));
-  for (vector< boost::shared_ptr<file_sink> >::iterator itSinks = sinks.begin(); itSinks != sinks.end(); ++itSinks) {
+    set.insert("Tag", attrs::make_attribute_value(tag));
+  for (vector<boost::shared_ptr<file_sink> >::iterator itSinks = sinks.begin(); itSinks != sinks.end(); ++itSinks) {
     if ((*itSinks)->will_consume(set))
       return true;
   }
@@ -271,16 +275,16 @@ Trace::severityLevelFromString(std::string level) {
 string
 Trace::stringFromSeverityLevel(SeverityLevel level) {
   switch (level) {
-    case DEBUG:
-      return "DEBUG";
-    case INFO:
-      return "INFO";
-    case WARN:
-      return "WARN";
-    case ERROR:
-      return "ERROR";
-    default:
-      throw DYNError(Error::GENERAL, InvalidSeverityLevel, static_cast<int> (level));
+  case DEBUG:
+    return "DEBUG";
+  case INFO:
+    return "INFO";
+  case WARN:
+    return "WARN";
+  case ERROR:
+    return "ERROR";
+  default:
+    throw DYNError(Error::GENERAL, InvalidSeverityLevel, static_cast<int>(level));
   }
 }
 

@@ -58,7 +58,7 @@ Criteria::hasCountryFilter() const {
 /////////////////////////////////////////////////
 
 Criteria::component_id_const_iterator::component_id_const_iterator(const Criteria* iterated, bool begin) :
-current_((begin ? iterated->compIds_.begin() : iterated->compIds_.end())) { }
+    current_((begin ? iterated->compIds_.begin() : iterated->compIds_.end())) {}
 
 Criteria::component_id_const_iterator&
 Criteria::component_id_const_iterator::operator++() {
@@ -96,13 +96,11 @@ Criteria::component_id_const_iterator::operator!=(const Criteria::component_id_c
   return current_ != other.current_;
 }
 
-const std::string&
-Criteria::component_id_const_iterator::operator*() const {
+const std::string& Criteria::component_id_const_iterator::operator*() const {
   return *current_;
 }
 
-const std::string*
-Criteria::component_id_const_iterator::operator->() const {
+const std::string* Criteria::component_id_const_iterator::operator->() const {
   return &(*current_);
 }
 

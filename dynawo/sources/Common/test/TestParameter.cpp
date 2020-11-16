@@ -17,8 +17,8 @@
  *
  */
 
-#include "gtest_dynawo.h"
 #include "DYNParameter.h"
+#include "gtest_dynawo.h"
 
 namespace DYN {
 
@@ -42,8 +42,7 @@ class ParameterCommonMock : public ParameterCommon {
   }
 };
 
-ParameterCommonMock::ParameterCommonMock(const std::string& name, const typeVarC_t& valueType, bool mandatory) : ParameterCommon(name, valueType, mandatory) {
-}
+ParameterCommonMock::ParameterCommonMock(const std::string& name, const typeVarC_t& valueType, bool mandatory) : ParameterCommon(name, valueType, mandatory) {}
 
 TEST(CommonTest, testClassParameter) {
   ParameterCommonMock parameter("Parameter1", VAR_TYPE_DOUBLE, true);

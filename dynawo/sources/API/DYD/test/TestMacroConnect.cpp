@@ -17,10 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "DYDMacroConnectFactory.h"
 #include "DYDMacroConnect.h"
+#include "DYDMacroConnectFactory.h"
+#include "gtest_dynawo.h"
 
 namespace dynamicdata {
 
@@ -43,6 +42,5 @@ TEST(APIDYDTest, MacroConnect) {
   ASSERT_EQ(connect->getName1(), "name1");
   ASSERT_EQ(connect->getName2(), "name2");
 }
-
 
 }  // namespace dynamicdata

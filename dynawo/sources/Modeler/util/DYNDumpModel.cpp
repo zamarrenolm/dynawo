@@ -17,31 +17,28 @@
  * @brief Utility for the dump of pins, parameters, variables, output of a model
  *
  */
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <dlfcn.h>
-
-#include <boost/algorithm/string.hpp>
-#include <boost/program_options.hpp>
-#include <boost/shared_ptr.hpp>
-
-#include <xml/sax/formatter/AttributeList.h>
-#include <xml/sax/formatter/Formatter.h>
-
-#include "DYNParameterModeler.h"
 #include "DYNEnumUtils.h"
+#include "DYNFileSystemUtils.h"
+#include "DYNParameterModeler.h"
 #include "DYNSubModel.h"
 #include "DYNSubModelFactory.h"
 #include "DYNVariableAlias.h"
-#include "DYNFileSystemUtils.h"
 
+#include <algorithm>
+#include <boost/algorithm/string.hpp>
+#include <boost/program_options.hpp>
+#include <boost/shared_ptr.hpp>
+#include <dlfcn.h>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <xml/sax/formatter/AttributeList.h>
+#include <xml/sax/formatter/Formatter.h>
 
-using std::string;
-using std::endl;
 using std::cerr;
 using std::cout;
+using std::endl;
+using std::string;
 
 namespace po = boost::program_options;
 
@@ -55,7 +52,8 @@ using xml::sax::formatter::FormatterPtr;
  * @param modelName the model name (for error messages)
  * @param parametersAttributes a map between (lower case) parameter name and XML attributes
  */
-int fillParameterDescription(const DYN::ParameterModeler& parameter, const std::string& modelName, std::map<std::string, AttributeList>& parametersAttributes) {
+int
+fillParameterDescription(const DYN::ParameterModeler& parameter, const std::string& modelName, std::map<std::string, AttributeList>& parametersAttributes) {
   AttributeList attributes;
   attributes.clear();
   attributes.add("name", parameter.getName());
@@ -65,27 +63,26 @@ int fillParameterDescription(const DYN::ParameterModeler& parameter, const std::
 
   if ((parameter.isUnitary()) && (parameter.hasValue())) {
     switch (parameter.getValueType()) {
-      case DYN::VAR_TYPE_DOUBLE: {
-        attributes.add("defaultValue", parameter.getValue<double>());
-        break;
-      }
-      case DYN::VAR_TYPE_INT: {
-        attributes.add("defaultValue", parameter.getValue<int>());
-        break;
-      }
-      case DYN::VAR_TYPE_BOOL: {
-        attributes.add("defaultValue", parameter.getValue<bool>());
-        break;
-      }
-      case DYN::VAR_TYPE_STRING: {
-        attributes.add("defaultValue", parameter.getValue<std::string>());
-        break;
-      }
-      default:
-      {
-        cout << "bad parameter for model " << modelName << " : " << parameter.getName() << " has a bad type" << endl;
-        return 1;
-      }
+    case DYN::VAR_TYPE_DOUBLE: {
+      attributes.add("defaultValue", parameter.getValue<double>());
+      break;
+    }
+    case DYN::VAR_TYPE_INT: {
+      attributes.add("defaultValue", parameter.getValue<int>());
+      break;
+    }
+    case DYN::VAR_TYPE_BOOL: {
+      attributes.add("defaultValue", parameter.getValue<bool>());
+      break;
+    }
+    case DYN::VAR_TYPE_STRING: {
+      attributes.add("defaultValue", parameter.getValue<std::string>());
+      break;
+    }
+    default: {
+      cout << "bad parameter for model " << modelName << " : " << parameter.getName() << " has a bad type" << endl;
+      return 1;
+    }
     }
   }
 
@@ -97,14 +94,13 @@ int fillParameterDescription(const DYN::ParameterModeler& parameter, const std::
 /**
  * @brief main for dump model
  */
-int main(int argc, char ** argv) {
+int
+main(int argc, char** argv) {
   string inputFileName = "";
   string outputFileName = "";
   po::options_description desc;
-  desc.add_options()
-          ("help,h", " produce help message")
-          ("model-file,m", po::value<string>(&inputFileName), "REQUIRED: set model file (path)")
-          ("output-file,o", po::value<string>(&outputFileName), "set output file (path)");
+  desc.add_options()("help,h", " produce help message")("model-file,m", po::value<string>(&inputFileName), "REQUIRED: set model file (path)")(
+      "output-file,o", po::value<string>(&outputFileName), "set output file (path)");
 
   po::positional_options_description positionalOptions;
   positionalOptions.add("model-file", 1);
@@ -112,9 +108,7 @@ int main(int argc, char ** argv) {
 
   po::variables_map vm;
   // parse regular options
-  po::store(po::command_line_parser(argc, argv).options(desc)
-          .positional(positionalOptions).run(),
-          vm);
+  po::store(po::command_line_parser(argc, argv).options(desc).positional(positionalOptions).run(), vm);
   po::notify(vm);
 
   if (vm.count("help")) {
@@ -163,7 +157,7 @@ int main(int argc, char ** argv) {
   attrs.clear();
   formatter->startElement("name", attrs);
   formatter->characters(model->modelType());
-  formatter->endElement();   // name
+  formatter->endElement();  // name
 
   attrs.clear();
   formatter->startElement("elements", attrs);
@@ -202,13 +196,13 @@ int main(int argc, char ** argv) {
     }
   }
 
-  for (std::map<std::string, AttributeList>::const_iterator itAttributes = parametersAttributes.begin();
-       itAttributes != parametersAttributes.end(); ++itAttributes) {
+  for (std::map<std::string, AttributeList>::const_iterator itAttributes = parametersAttributes.begin(); itAttributes != parametersAttributes.end();
+       ++itAttributes) {
     formatter->startElement("parameter", itAttributes->second);
-    formatter->endElement();   // parameter
+    formatter->endElement();  // parameter
   }
 
-  formatter->endElement();   // parameters
+  formatter->endElement();  // parameters
 
   attrs.clear();
   formatter->startElement("variables", attrs);
@@ -219,11 +213,11 @@ int main(int argc, char ** argv) {
     attrs.add("name", itVariable->getName());
     attrs.add("valueType", typeVarC2Str(toCTypeVar(itVariable->getType())));
     formatter->startElement("variable", attrs);
-    formatter->endElement();   // variable
+    formatter->endElement();  // variable
   }
-  formatter->endElement();   // variables
-  formatter->endElement();   // elements
-  formatter->endElement();   // model
+  formatter->endElement();  // variables
+  formatter->endElement();  // elements
+  formatter->endElement();  // model
   formatter->endDocument();
   file.close();
 }

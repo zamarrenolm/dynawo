@@ -17,19 +17,18 @@
  * @brief Dynawo Final State collection XML importer : implementation file
  *
  */
-#include <fstream>
-
-#include <xml/sax/parser/ParserFactory.h>
-#include <xml/sax/parser/ParserException.h>
-
-#include "DYNMacrosMessage.h"
-
 #include "FSXmlImporter.h"
-#include "FSXmlHandler.h"
-#include "DYNExecUtils.h"
 
-using std::string;
+#include "DYNExecUtils.h"
+#include "DYNMacrosMessage.h"
+#include "FSXmlHandler.h"
+
+#include <fstream>
+#include <xml/sax/parser/ParserException.h>
+#include <xml/sax/parser/ParserFactory.h>
+
 using boost::shared_ptr;
+using std::string;
 namespace parser = xml::sax::parser;
 
 namespace finalState {
@@ -47,7 +46,8 @@ XmlImporter::importFromFile(const string& fileName) const {
   }
 }
 
-boost::shared_ptr<FinalStateCollection> XmlImporter::importFromStream(std::istream& stream) const {
+boost::shared_ptr<FinalStateCollection>
+XmlImporter::importFromStream(std::istream& stream) const {
   XmlHandler finalStateHandler;
   xml::sax::parser::ParserFactory parser_factory;
   xml::sax::parser::ParserPtr parser = parser_factory.createParser();
@@ -65,6 +65,5 @@ boost::shared_ptr<FinalStateCollection> XmlImporter::importFromStream(std::istre
 
   return finalStateHandler.getFinalStateCollection();
 }
-
 
 }  // namespace finalState

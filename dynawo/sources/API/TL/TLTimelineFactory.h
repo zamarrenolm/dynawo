@@ -20,9 +20,9 @@
 #ifndef API_TL_TLTIMELINEFACTORY_H_
 #define API_TL_TLTIMELINEFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "TLTimeline.h"
+
+#include <boost/shared_ptr.hpp>
 namespace timeline {
 
 /**

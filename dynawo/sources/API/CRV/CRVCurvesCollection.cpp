@@ -18,17 +18,16 @@
  *
  */
 #include "CRVCurvesCollection.h"
+
 #include "CRVCurve.h"
 
+using boost::shared_ptr;
 using std::string;
 using std::vector;
-using boost::shared_ptr;
 
 namespace curves {
 
-CurvesCollection::CurvesCollection(const string& id) :
-id_(id) {
-}
+CurvesCollection::CurvesCollection(const string& id) : id_(id) {}
 
 void
 CurvesCollection::add(const shared_ptr<Curve>& curve) {
@@ -37,9 +36,7 @@ CurvesCollection::add(const shared_ptr<Curve>& curve) {
 
 void
 CurvesCollection::updateCurves(const double& time) {
-  for (CurvesCollection::iterator iter = begin();
-          iter != end();
-          ++iter) {
+  for (CurvesCollection::iterator iter = begin(); iter != end(); ++iter) {
     (*iter)->update(time);
   }
 }
@@ -55,7 +52,7 @@ CurvesCollection::cend() const {
 }
 
 CurvesCollection::const_iterator::const_iterator(const CurvesCollection* iterated, bool begin) :
-current_((begin ? iterated->curves_.begin() : iterated->curves_.end())) { }
+    current_((begin ? iterated->curves_.begin() : iterated->curves_.end())) {}
 
 CurvesCollection::const_iterator&
 CurvesCollection::const_iterator::operator++() {
@@ -93,13 +90,11 @@ CurvesCollection::const_iterator::operator!=(const CurvesCollection::const_itera
   return current_ != other.current_;
 }
 
-const shared_ptr<Curve>&
-CurvesCollection::const_iterator::operator*() const {
+const shared_ptr<Curve>& CurvesCollection::const_iterator::operator*() const {
   return *current_;
 }
 
-const shared_ptr<Curve>*
-CurvesCollection::const_iterator::operator->() const {
+const shared_ptr<Curve>* CurvesCollection::const_iterator::operator->() const {
   return &(*current_);
 }
 
@@ -113,8 +108,7 @@ CurvesCollection::end() {
   return CurvesCollection::iterator(this, false);
 }
 
-CurvesCollection::iterator::iterator(CurvesCollection* iterated, bool begin) :
-current_((begin ? iterated->curves_.begin() : iterated->curves_.end())) { }
+CurvesCollection::iterator::iterator(CurvesCollection* iterated, bool begin) : current_((begin ? iterated->curves_.begin() : iterated->curves_.end())) {}
 
 CurvesCollection::iterator&
 CurvesCollection::iterator::operator++() {
@@ -152,13 +146,11 @@ CurvesCollection::iterator::operator!=(const CurvesCollection::iterator& other) 
   return current_ != other.current_;
 }
 
-shared_ptr<Curve>&
-CurvesCollection::iterator::operator*() const {
+shared_ptr<Curve>& CurvesCollection::iterator::operator*() const {
   return *current_;
 }
 
-shared_ptr<Curve>*
-CurvesCollection::iterator::operator->() const {
+shared_ptr<Curve>* CurvesCollection::iterator::operator->() const {
   return &(*current_);
 }
 

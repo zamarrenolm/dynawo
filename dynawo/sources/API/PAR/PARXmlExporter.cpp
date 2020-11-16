@@ -17,24 +17,24 @@
  *
  */
 
-#include <fstream>
-#include <vector>
-#include <map>
-#include <xml/sax/formatter/AttributeList.h>
-#include <xml/sax/formatter/Formatter.h>
+#include "PARXmlExporter.h"
 
 #include "DYNMacrosMessage.h"
-
 #include "PARParameter.h"
 #include "PARParametersSet.h"
 #include "PARParametersSetCollection.h"
-#include "PARXmlExporter.h"
 #include "PARReference.h"
 
+#include <fstream>
+#include <map>
+#include <vector>
+#include <xml/sax/formatter/AttributeList.h>
+#include <xml/sax/formatter/Formatter.h>
+
 using std::fstream;
+using std::map;
 using std::string;
 using std::vector;
-using std::map;
 
 using xml::sax::formatter::AttributeList;
 using xml::sax::formatter::Formatter;
@@ -63,17 +63,14 @@ XmlExporter::exportToStream(const boost::shared_ptr<ParametersSetCollection>& co
   formatter->startDocument();
   AttributeList attrs;
   formatter->startElement("parametersSet", attrs);
-  for (ParametersSetCollection::parametersSet_const_iterator itParamSet = collection->cbeginParametersSet();
-          itParamSet != collection->cendParametersSet();
-          ++itParamSet) {
+  for (ParametersSetCollection::parametersSet_const_iterator itParamSet = collection->cbeginParametersSet(); itParamSet != collection->cendParametersSet();
+       ++itParamSet) {
     attrs.clear();
     attrs.add("id", (*itParamSet)->getId());
-    vector <string> paramsExported;  ///< list of already exported parameters, to avoid exporting aliases
+    vector<string> paramsExported;  ///< list of already exported parameters, to avoid exporting aliases
     formatter->startElement("set", attrs);
-     // write parameters
-    for (ParametersSet::parameter_const_iterator itParam = (*itParamSet)->cbeginParameter();
-            itParam != (*itParamSet)->cendParameter();
-            ++itParam) {
+    // write parameters
+    for (ParametersSet::parameter_const_iterator itParam = (*itParamSet)->cbeginParameter(); itParam != (*itParamSet)->cendParameter(); ++itParam) {
       const string paramName = (*itParam)->getName();
       const bool alreadyExported = std::find(paramsExported.begin(), paramsExported.end(), paramName) != paramsExported.end();
 
@@ -86,37 +83,34 @@ XmlExporter::exportToStream(const boost::shared_ptr<ParametersSetCollection>& co
       attrs.clear();
       attrs.add("name", paramName);
       switch ((*itParam)->getType()) {
-        case Parameter::BOOL:
-          attrs.add("type", "BOOL");
-          attrs.add("value", ((*itParam)->getBool() ? "true" : "false"));
-          break;
-        case Parameter::INT:
-          attrs.add("type", "INT");
-          attrs.add("value", (*itParam)->getInt());
-          break;
-        case Parameter::DOUBLE:
-          attrs.add("type", "DOUBLE");
-          attrs.add("value", (*itParam)->getDouble());
-          break;
-        case Parameter::STRING:
-          attrs.add("type", "STRING");
-          attrs.add("value", (*itParam)->getString());
-          break;
-        case Parameter::SIZE_OF_ENUM:
-          throw DYNError(DYN::Error::API, PARXmlSizeOfEnumParamType);
+      case Parameter::BOOL:
+        attrs.add("type", "BOOL");
+        attrs.add("value", ((*itParam)->getBool() ? "true" : "false"));
+        break;
+      case Parameter::INT:
+        attrs.add("type", "INT");
+        attrs.add("value", (*itParam)->getInt());
+        break;
+      case Parameter::DOUBLE:
+        attrs.add("type", "DOUBLE");
+        attrs.add("value", (*itParam)->getDouble());
+        break;
+      case Parameter::STRING:
+        attrs.add("type", "STRING");
+        attrs.add("value", (*itParam)->getString());
+        break;
+      case Parameter::SIZE_OF_ENUM:
+        throw DYNError(DYN::Error::API, PARXmlSizeOfEnumParamType);
       }
       formatter->startElement("par", attrs);
-      formatter->endElement();   // par
+      formatter->endElement();  // par
     }
-     // write references
+    // write references
     map<string, boost::shared_ptr<Reference> > sortedRef;
-    for (ParametersSet::reference_const_iterator itRef = (*itParamSet)->cbeginReference();
-            itRef != (*itParamSet)->cendReference();
-            ++itRef) {
+    for (ParametersSet::reference_const_iterator itRef = (*itParamSet)->cbeginReference(); itRef != (*itParamSet)->cendReference(); ++itRef) {
       sortedRef.insert(std::make_pair((*itRef)->getName(), *itRef));
     }
-    for (map<string, boost::shared_ptr<Reference> >::const_iterator itRef = sortedRef.begin();
-            itRef != sortedRef.end(); ++itRef) {
+    for (map<string, boost::shared_ptr<Reference> >::const_iterator itRef = sortedRef.begin(); itRef != sortedRef.end(); ++itRef) {
       const boost::shared_ptr<Reference>& ref = itRef->second;
       attrs.clear();
       attrs.add("type", ref->getType());
@@ -124,11 +118,11 @@ XmlExporter::exportToStream(const boost::shared_ptr<ParametersSetCollection>& co
       attrs.add("origData", ref->getOrigDataStr());
       attrs.add("origName", ref->getOrigName());
       formatter->startElement("reference", attrs);
-      formatter->endElement();   // ref
+      formatter->endElement();  // ref
     }
-    formatter->endElement();   // set
+    formatter->endElement();  // set
   }
-  formatter->endElement();   // parametersSet
+  formatter->endElement();  // parametersSet
   formatter->endDocument();
 }
 

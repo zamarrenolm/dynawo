@@ -20,14 +20,15 @@
 #define MODELER_DATAINTERFACE_DYNCOMPONENTINTERFACE_HPP_
 
 #include "DYNComponentInterface.h"
+#include "DYNMacrosMessage.h"
 #include "DYNStateVariable.h"
 #include "DYNStaticParameter.h"
-#include "DYNMacrosMessage.h"
 
 namespace DYN {
 
-template <typename T>
-T ComponentInterface::getStaticParameterValue(const std::string& name) const {
+template<typename T>
+T
+ComponentInterface::getStaticParameterValue(const std::string& name) const {
   boost::unordered_map<std::string, StaticParameter>::const_iterator iter = staticParameters_.find(name);
   if (iter != staticParameters_.end()) {
     StaticParameter::StaticParameterType type = iter->second.getType();
@@ -35,17 +36,17 @@ T ComponentInterface::getStaticParameterValue(const std::string& name) const {
       throw DYNError(Error::MODELER, UnaffectedStaticParameter, name, getID());
     } else {
       switch (type) {
-        case StaticParameter::INT:
-          return iter->second.getValue<int>();
-          break;
-        case StaticParameter::DOUBLE:
-          return iter->second.getValue<double>();
-          break;
-        case StaticParameter::BOOL:
-          return iter->second.getValue<bool>();
-          break;
-        default:
-          throw DYNError(Error::MODELER, StaticParameterWrongType, name);
+      case StaticParameter::INT:
+        return iter->second.getValue<int>();
+        break;
+      case StaticParameter::DOUBLE:
+        return iter->second.getValue<double>();
+        break;
+      case StaticParameter::BOOL:
+        return iter->second.getValue<bool>();
+        break;
+      default:
+        throw DYNError(Error::MODELER, StaticParameterWrongType, name);
       }
     }
   } else {
@@ -55,8 +56,9 @@ T ComponentInterface::getStaticParameterValue(const std::string& name) const {
   return T();
 }
 
-template <typename T>
-T ComponentInterface::getValue(const int index) const {
+template<typename T>
+T
+ComponentInterface::getValue(const int index) const {
 #ifdef _DEBUG_
   if (checkStateVariableAreUpdatedBeforeCriteriaCheck_) {
     assert(stateVariables_[index].isNeededForCriteriaCheck() && "Found a variable used in checkCriteria but not updated during model update.");
@@ -66,15 +68,15 @@ T ComponentInterface::getValue(const int index) const {
     throw DYNError(Error::MODELER, UnaffectedStateVariable, stateVariables_[index].getName(), getID());
   } else {
     switch (stateVariables_[index].getType()) {
-      case StateVariable::INT:
-        return stateVariables_[index].getValue<int>();
-        break;
-      case StateVariable::DOUBLE:
-        return stateVariables_[index].getValue<double>();
-        break;
-      case StateVariable::BOOL:
-        return stateVariables_[index].getValue<bool>();
-        break;
+    case StateVariable::INT:
+      return stateVariables_[index].getValue<int>();
+      break;
+    case StateVariable::DOUBLE:
+      return stateVariables_[index].getValue<double>();
+      break;
+    case StateVariable::BOOL:
+      return stateVariables_[index].getValue<bool>();
+      break;
     }
   }
   return T();

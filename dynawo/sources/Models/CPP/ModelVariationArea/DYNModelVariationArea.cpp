@@ -17,31 +17,31 @@
  * @brief
  *
  */
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include <cassert>
+#include "DYNModelVariationArea.h"
 
+#include "DYNCommon.h"
+#include "DYNCommonModeler.h"
+#include "DYNElement.h"
+#include "DYNModelVariationArea.hpp"
+#include "DYNParameter.h"
+#include "DYNSparseMatrix.h"
+#include "DYNVariableForModel.h"
 #include "PARParametersSet.h"
 
-#include "DYNModelVariationArea.h"
-#include "DYNModelVariationArea.hpp"
-#include "DYNSparseMatrix.h"
-#include "DYNElement.h"
-#include "DYNCommonModeler.h"
-#include "DYNCommon.h"
-#include "DYNVariableForModel.h"
-#include "DYNParameter.h"
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <vector>
 
 using std::min;
-using std::vector;
 using std::string;
+using std::vector;
 
-using std::stringstream;
 using std::map;
+using std::stringstream;
 
 using boost::shared_ptr;
 
@@ -52,14 +52,16 @@ using parameters::ParametersSet;
  *
  * @return A pointer to a new instance of ModelVariationaAreaFactory
  */
-extern "C" DYN::SubModelFactory* getFactory() {
+extern "C" DYN::SubModelFactory*
+getFactory() {
   return (new DYN::ModelVariationAreaFactory());
 }
 
 /**
  * @brief ModelVariationAreaFactory destroy method
  */
-extern "C" void deleteFactory(DYN::SubModelFactory* factory) {
+extern "C" void
+deleteFactory(DYN::SubModelFactory* factory) {
   delete factory;
 }
 
@@ -68,31 +70,32 @@ extern "C" void deleteFactory(DYN::SubModelFactory* factory) {
  *
  * @return A pointer to a new instance of ModelVariationArea
  */
-extern "C" DYN::SubModel* DYN::ModelVariationAreaFactory::create() const {
-  DYN::SubModel * model(new DYN::ModelVariationArea());
+extern "C" DYN::SubModel*
+DYN::ModelVariationAreaFactory::create() const {
+  DYN::SubModel* model(new DYN::ModelVariationArea());
   return model;
 }
 
 /**
  * @brief ModelVariationArea destroy method
  */
-extern "C" void DYN::ModelVariationAreaFactory::destroy(DYN::SubModel* model) const {
+extern "C" void
+DYN::ModelVariationAreaFactory::destroy(DYN::SubModel* model) const {
   delete model;
 }
 
 namespace DYN {
 
 ModelVariationArea::ModelVariationArea() :
-ModelCPP("VariationArea"),
-deltaP_(0.),
-deltaQ_(0.),
-startTime_(0.),
-stopTime_(0.),
-nbLoads_(0),
-timeModeOnGoingRaised_(-1),
-timeModeFinishedRaised_(-1),
-stateVariationArea_(NOT_STARTED) {
-}
+    ModelCPP("VariationArea"),
+    deltaP_(0.),
+    deltaQ_(0.),
+    startTime_(0.),
+    stopTime_(0.),
+    nbLoads_(0),
+    timeModeOnGoingRaised_(-1),
+    timeModeFinishedRaised_(-1),
+    stateVariationArea_(NOT_STARTED) {}
 
 void
 ModelVariationArea::init(const double& /*t0*/) {
@@ -112,10 +115,10 @@ ModelVariationArea::initializeStaticData() {
 void
 ModelVariationArea::getSize() {
   sizeF_ = nbLoads_ * 2;  // equation for deltaP and deltaQ by load
-  sizeY_ = nbLoads_ * 2;   // deltaP et deltaQ  by load
-  sizeZ_ = 1;  // automaton running
-  sizeG_ = 2;  // activation/deactivation of load increase
-  sizeMode_ = 2;  // activation/deactivation of load increase
+  sizeY_ = nbLoads_ * 2;  // deltaP et deltaQ  by load
+  sizeZ_ = 1;             // automaton running
+  sizeG_ = 2;             // activation/deactivation of load increase
+  sizeMode_ = 2;          // activation/deactivation of load increase
 
   calculatedVars_.assign(nbCalculatedVars_, 0);
 }
@@ -133,8 +136,8 @@ ModelVariationArea::evalF(double t, propertyF_t type) {
     }
   } else if (stateVariationArea_ == ON_GOING) {  // load increase in progress
     for (int i = 0; i < nbLoads_; ++i) {
-      fLocal_[i * 2] = yLocal_[i * 2] - deltaP_[i] / (stopTime_ - startTime_)*(t - startTime_);
-      fLocal_[i * 2 + 1] = yLocal_[i * 2 + 1] - deltaQ_[i] / (stopTime_ - startTime_)*(t - startTime_);
+      fLocal_[i * 2] = yLocal_[i * 2] - deltaP_[i] / (stopTime_ - startTime_) * (t - startTime_);
+      fLocal_[i * 2 + 1] = yLocal_[i * 2 + 1] - deltaQ_[i] / (stopTime_ - startTime_) * (t - startTime_);
     }
   } else if (stateVariationArea_ == FINISHED) {  // load increase completed
     for (int i = 0; i < nbLoads_; ++i) {
@@ -144,11 +147,10 @@ ModelVariationArea::evalF(double t, propertyF_t type) {
   }
 }
 
-
 // evaluation of root functions
 
 void
-ModelVariationArea::evalG(const double & t) {
+ModelVariationArea::evalG(const double& t) {
   gLocal_[0] = ((t - startTime_) >= 0 && (t - stopTime_) < 0) ? ROOT_UP : ROOT_DOWN;
   gLocal_[1] = (t - stopTime_) >= 0 ? ROOT_UP : ROOT_DOWN;
 }
@@ -161,7 +163,7 @@ ModelVariationArea::setFequations() {
     fEquationIndex_[i * 2] = "deltaP_" + ss.str();
     fEquationIndex_[i * 2 + 1] = "deltaQ_" + ss.str();
   }
-  assert(fEquationIndex_.size() == (unsigned int) sizeF() && "Model VariationArea: fEquationIndex_.size() != fLocal_.size()");
+  assert(fEquationIndex_.size() == (unsigned int)sizeF() && "Model VariationArea: fEquationIndex_.size() != fLocal_.size()");
 }
 
 void
@@ -169,7 +171,7 @@ ModelVariationArea::setGequations() {
   gEquationIndex_[0] = "stopTime > t >= startTime";
   gEquationIndex_[1] = "t >= stopTime";
 
-  assert(gEquationIndex_.size() == (unsigned int) sizeG() && "Model VariationArea: gEquationIndex.size() != gLocal_.size()");
+  assert(gEquationIndex_.size() == (unsigned int)sizeG() && "Model VariationArea: gEquationIndex.size() != gLocal_.size()");
 }
 
 // evaluation of the transpose Jacobian Jt - sparse matrix
@@ -211,7 +213,6 @@ ModelVariationArea::evalZ(const double& /*t*/) {
     stateVariationArea_ = FINISHED;
   }
 }
-
 
 void
 ModelVariationArea::collectSilentZ(bool* silentZTable) {
@@ -313,7 +314,7 @@ ModelVariationArea::setSubModelParameters() {
 }
 
 void
-ModelVariationArea::defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement) {
+ModelVariationArea::defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement) {
   for (int i = 0; i < nbLoads_; ++i) {
     std::stringstream name;
     name << "DeltaPc_load_" << i;

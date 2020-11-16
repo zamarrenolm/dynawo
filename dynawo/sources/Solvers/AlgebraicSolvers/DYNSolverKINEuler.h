@@ -22,13 +22,14 @@
 #ifndef SOLVERS_ALGEBRAICSOLVERS_DYNSOLVERKINEULER_H_
 #define SOLVERS_ALGEBRAICSOLVERS_DYNSOLVERKINEULER_H_
 
-#include <boost/shared_ptr.hpp>
+#include "DYNSolverKINCommon.h"
+
 #include <boost/core/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+#include <sundials/sundials_linearsolver.h>
+#include <sundials/sundials_matrix.h>
 #include <sundials/sundials_nvector.h>
 #include <sundials/sundials_sparse.h>
-#include <sundials/sundials_matrix.h>
-#include <sundials/sundials_linearsolver.h>
-#include "DYNSolverKINCommon.h"
 
 namespace DYN {
 class Model;
@@ -40,7 +41,7 @@ class Model;
  * SolverKINEuler is the implementation of a solver with euler method based on
  * KINSOL solver.
  */
-class SolverKINEuler : public SolverKINCommon, private boost::noncopyable{
+class SolverKINEuler : public SolverKINCommon, private boost::noncopyable {
  public:
   /**
    * @brief Default constructor
@@ -66,7 +67,7 @@ class SolverKINEuler : public SolverKINCommon, private boost::noncopyable{
    * @param printfl level of verbosity of output
    */
   void init(const boost::shared_ptr<Model>& model, const std::string& linearSolverName, double fnormtol, double initialaddtol, double scsteptol,
-          double mxnewtstep, int msbset, int mxiter, int printfl);
+            double mxnewtstep, int msbset, int mxiter, int printfl);
 
   /**
    * @brief set identity of each variable
@@ -128,8 +129,7 @@ class SolverKINEuler : public SolverKINCommon, private boost::noncopyable{
    *
    * @return 0 if successful
    */
-  static int evalJ_KIN(N_Vector yy, N_Vector rr,
-          SUNMatrix JJ, void* data, N_Vector tmp1, N_Vector tmp2);
+  static int evalJ_KIN(N_Vector yy, N_Vector rr, SUNMatrix JJ, void* data, N_Vector tmp1, N_Vector tmp2);
 
   /**
    * @brief Model instance getter
@@ -143,11 +143,11 @@ class SolverKINEuler : public SolverKINCommon, private boost::noncopyable{
  private:
   boost::shared_ptr<Model> model_;  ///< instance of model to interact with
 
-  std::vector<double> y0_;  ///< Initial values of Y variables before call of kinsol
+  std::vector<double> y0_;             ///< Initial values of Y variables before call of kinsol
   std::vector<int> differentialVars_;  ///< index of each differential variables
-  std::vector<double> F_;  ///< current values of residual function
-  std::vector<double> YP_;  ///< calculated values of derivatives
-  double h0_;  ///< Step of the solver to reach
+  std::vector<double> F_;              ///< current values of residual function
+  std::vector<double> YP_;             ///< calculated values of derivatives
+  double h0_;                          ///< Step of the solver to reach
 };
 
 }  // namespace DYN

@@ -32,8 +32,7 @@ class ThreeWTransformerInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~ThreeWTransformerInterface() { }
-
+  virtual ~ThreeWTransformerInterface() {}
 
   /**
    * @brief Add a curent limit interface for side 1

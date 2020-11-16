@@ -22,10 +22,10 @@
 #ifndef MODELER_DATAINTERFACE_IIDM_DYNSHUNTCOMPENSATORINTERFACEIIDM_H_
 #define MODELER_DATAINTERFACE_IIDM_DYNSHUNTCOMPENSATORINTERFACEIIDM_H_
 
-#include <boost/shared_ptr.hpp>
-
-#include "DYNShuntCompensatorInterface.h"
 #include "DYNInjectorInterfaceIIDM.h"
+#include "DYNShuntCompensatorInterface.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace IIDM {
 class ShuntCompensator;
@@ -41,11 +41,7 @@ class ShuntCompensatorInterfaceIIDM : public ShuntCompensatorInterface, public I
   /**
    * @brief defines the index of each state variable
    */
-  typedef enum {
-    VAR_Q = 0,
-    VAR_STATE,
-    VAR_CURRENTSECTION
-  } indexVar_t;
+  typedef enum { VAR_Q = 0, VAR_STATE, VAR_CURRENTSECTION } indexVar_t;
 
  public:
   /**

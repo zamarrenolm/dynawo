@@ -21,13 +21,12 @@
 #ifndef MODELER_MODELMANAGER_DYNMODELMODELICA_H_
 #define MODELER_MODELMANAGER_DYNMODELMODELICA_H_
 
-#include <string>
-#include <map>
-#include <vector>
-
-
 #include "DYNModelManagerCommon.h"  // DYNDATA
 #include "DYNSubModel.h"
+
+#include <map>
+#include <string>
+#include <vector>
 
 #ifdef _ADEPT_
 #include "adept.h"
@@ -52,7 +51,7 @@ class ModelModelica {
   /**
    * @brief default destructor
    */
-  virtual ~ModelModelica() { }
+  virtual ~ModelModelica() {}
 
  public:
   /**
@@ -89,7 +88,7 @@ class ModelModelica {
    * @param t the time for which to check
    * @return @b true if a mode has been trigered, @b false otherwise (for use by ModelManager)
    */
-  virtual modeChangeType_t evalMode(const double & t) const = 0;
+  virtual modeChangeType_t evalMode(const double& t) const = 0;
 
   /**
    * @brief calculates the discretes values of the model
@@ -136,13 +135,12 @@ class ModelModelica {
    */
   virtual void defineParameters(std::vector<ParameterModeler>& parameters) = 0;
 
-
   /**
    * @brief defines the checkSum of the model (in order to check whether it was modified)
    *
    * @param checkSum value of the checkSum
    */
-  virtual void checkSum(std::string & checkSum) = 0;
+  virtual void checkSum(std::string& checkSum) = 0;
 
 #ifdef _ADEPT_
   /**
@@ -152,7 +150,7 @@ class ModelModelica {
    * @param yp values of the derivatives of the continuous variable
    * @param F computes values of the residual functions
    */
-  virtual void evalFAdept(const std::vector<adept::adouble> &y, const std::vector<adept::adouble> &yp, std::vector<adept::adouble> &F) = 0;
+  virtual void evalFAdept(const std::vector<adept::adouble>& y, const std::vector<adept::adouble>& yp, std::vector<adept::adouble>& F) = 0;
 #endif
 
   /**
@@ -219,7 +217,7 @@ class ModelModelica {
    * @param elements vector of each elements contains in the model
    * @param mapElement map associating an element and the index of the elements contains in it
    */
-  virtual void defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement) = 0;
+  virtual void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement) = 0;
 
   /**
    * @brief set shared parameters default values
@@ -253,11 +251,11 @@ class ModelModelica {
    * @param yp values of the derivatives of the continuous variable
    * @return value of the calculated variable
    */
-  virtual adept::adouble evalCalculatedVarIAdept(unsigned iCalculatedVar, unsigned indexOffset, const std::vector<adept::adouble> &y,
-      const std::vector<adept::adouble> &yp) const = 0;
+  virtual adept::adouble evalCalculatedVarIAdept(unsigned iCalculatedVar, unsigned indexOffset, const std::vector<adept::adouble>& y,
+                                                 const std::vector<adept::adouble>& yp) const = 0;
 #endif
 
-/**
+  /**
    * @brief get the index of variables used to define the jacobian associated to a calculated variable
    *
    * @param iCalculatedVar index of the calculated variable

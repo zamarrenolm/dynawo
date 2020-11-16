@@ -20,9 +20,9 @@
 #ifndef API_CSTR_CSTRCONSTRAINTFACTORY_H_
 #define API_CSTR_CSTRCONSTRAINTFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "CSTRConstraint.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace constraints {
 /**

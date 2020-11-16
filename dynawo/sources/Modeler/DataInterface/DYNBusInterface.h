@@ -20,9 +20,9 @@
 #ifndef MODELER_DATAINTERFACE_DYNBUSINTERFACE_H_
 #define MODELER_DATAINTERFACE_DYNBUSINTERFACE_H_
 
-#include <string>
-
 #include "DYNComponentInterface.hpp"
+
+#include <string>
 
 namespace DYN {
 
@@ -31,7 +31,7 @@ class BusInterface : public ComponentInterface {
   /**
    * @brief Destructor
    */
-  virtual ~BusInterface() { }
+  virtual ~BusInterface() {}
 
   /**
    * @brief Getter for the voltage magnitude of the bus

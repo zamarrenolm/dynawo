@@ -21,8 +21,8 @@
 #ifndef COMMON_DYNEXECUTILS_H_
 #define COMMON_DYNEXECUTILS_H_
 
-#include <string>
 #include <sstream>
+#include <string>
 
 /**
  * @brief get the canonical path from a path
@@ -31,7 +31,7 @@
  *
  * @return the canonical path
  */
-std::string prettyPath(const std::string & path);
+std::string prettyPath(const std::string& path);
 
 /**
  * @brief execute a command
@@ -40,7 +40,7 @@ std::string prettyPath(const std::string & path);
  * @param ss log from the executed command
  * @param start_dir optional starting directory (current dir by default)
  */
-void executeCommand(const std::string & command, std::stringstream & ss, const std::string & start_dir = "");
+void executeCommand(const std::string& command, std::stringstream& ss, const std::string& start_dir = "");
 
 /**
  * @brief retrieve a given environment variable

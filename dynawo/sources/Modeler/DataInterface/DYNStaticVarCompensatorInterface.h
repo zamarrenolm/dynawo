@@ -35,18 +35,13 @@ class StaticVarCompensatorInterface : public ComponentInterface {
    */
   // Enumeration in Modelica always begins from 1.
   // To be consistent with Modelica constant in RegulatingMode.mo in SVarC, OFF=1 instead of 0
-  typedef enum {
-    OFF = 1,
-    STANDBY = 2,
-    RUNNING_V = 3,
-    RUNNING_Q = 4
-  } RegulationMode_t;
+  typedef enum { OFF = 1, STANDBY = 2, RUNNING_V = 3, RUNNING_Q = 4 } RegulationMode_t;
 
  public:
   /**
    * @brief Destructor
    */
-  virtual ~StaticVarCompensatorInterface() { }
+  virtual ~StaticVarCompensatorInterface() {}
 
   /**
    * @brief Setter for the staticVarCompensator's bus interface

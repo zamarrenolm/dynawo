@@ -22,9 +22,10 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELHVDCLINK_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELHVDCLINK_H_
 
-#include <boost/shared_ptr.hpp>
-#include "DYNNetworkComponent.h"
 #include "DYNHvdcLineInterface.h"
+#include "DYNNetworkComponent.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class ModelBus;
@@ -42,7 +43,7 @@ class ModelHvdcLink : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelHvdcLink() { }
+  ~ModelHvdcLink() {}
 
   /**
    * @brief list of calculated variables indexes
@@ -58,16 +59,13 @@ class ModelHvdcLink : public NetworkComponent {
   /**
    * @brief index discrete variable
    */
-  typedef enum {
-    state1Num_ = 0,
-    state2Num_ = 1
-  } IndexDiscreteVariable_t;
+  typedef enum { state1Num_ = 0, state2Num_ = 1 } IndexDiscreteVariable_t;
 
   /**
    * @brief set indexes of state variable
    * @param yNum : global offset in the whole vector of state variable
    */
-  void init(int & yNum);
+  void init(int& yNum);
 
   /**
    * @brief init size
@@ -87,7 +85,8 @@ class ModelHvdcLink : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
@@ -97,7 +96,8 @@ class ModelHvdcLink : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::collectSilentZ()
@@ -107,7 +107,8 @@ class ModelHvdcLink : public NetworkComponent {
   /**
    * @brief init size
    */
-  void evalYMat() { /* not needed */ }
+  void evalYMat() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::setFequations( std::map<int,std::string>& fEquationIndex )
@@ -122,7 +123,7 @@ class ModelHvdcLink : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::evalJt(SparseMatrix& jt, const double& cj, const int& rowOffset)
    */
-  void evalJt(SparseMatrix &jt, const double& cj, const int& rowOffset);
+  void evalJt(SparseMatrix& jt, const double& cj, const int& rowOffset);
 
   /**
    * @copydoc NetworkComponent::evalJtPrim(SparseMatrix& jt, const int& rowOffset)
@@ -155,7 +156,7 @@ class ModelHvdcLink : public NetworkComponent {
    * @param numCalculatedVar index of the calculated variable
    * @param numVars index of variables used to define the jacobian associated to a calculated variable
    */
-  void getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, std::vector<int> & numVars) const;
+  void getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, std::vector<int>& numVars) const;
 
   /**
    * @brief evaluate the jacobian associated to a calculated variable
@@ -163,7 +164,7 @@ class ModelHvdcLink : public NetworkComponent {
    * @param numCalculatedVar index of the calculated variable
    * @param res values of the jacobian
    */
-  void evalJCalculatedVarI(unsigned numCalculatedVar, std::vector<double> & res) const;
+  void evalJCalculatedVarI(unsigned numCalculatedVar, std::vector<double>& res) const;
 
   /**
    * @brief evaluate the value of a calculated variable
@@ -189,7 +190,8 @@ class ModelHvdcLink : public NetworkComponent {
   /**
    * @brief reset node injection
    */
-  void resetNodeInjection() { /* not needed */ }
+  void resetNodeInjection() { /* not needed */
+  }
 
   /**
    * @brief evaluate derivatives
@@ -200,7 +202,8 @@ class ModelHvdcLink : public NetworkComponent {
   /**
    * @brief evaluate derivatives prim
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @brief define variables
@@ -231,7 +234,7 @@ class ModelHvdcLink : public NetworkComponent {
    * @param elements
    * @param mapElement map of elements
    */
-  void defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement);
+  void defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement);
 
   /**
    * @copydoc NetworkComponent::setSubModelParameters(const boost::unordered_map<std::string, ParameterModeler>& params)
@@ -494,19 +497,18 @@ class ModelHvdcLink : public NetworkComponent {
 
   State connectionState1_;  ///< "internal" link connection status at point of common coupling 1
   State connectionState2_;  ///< "internal" link connection status at point of common coupling 2
-  bool stateModified_;  ///< true if at least one of the link connection states was modified
+  bool stateModified_;      ///< true if at least one of the link connection states was modified
 
-  double P01_;  ///< initial active power at point of common coupling 1 in pu (generator convention)
-  double P02_;  ///< initial active power at point of common coupling 2 in pu (generator convention)
-  double Q01_;  ///< initial reactive power at point of common coupling 1 in pu (generator convention)
-  double Q02_;  ///< initial reactive power at point of common coupling 1 in pu (generator convention)
+  double P01_;   ///< initial active power at point of common coupling 1 in pu (generator convention)
+  double P02_;   ///< initial active power at point of common coupling 2 in pu (generator convention)
+  double Q01_;   ///< initial reactive power at point of common coupling 1 in pu (generator convention)
+  double Q02_;   ///< initial reactive power at point of common coupling 1 in pu (generator convention)
   double ir01_;  ///< initial current real part at point of common coupling 1
   double ii01_;  ///< initial current imaginary part at point of common coupling 1
   double ir02_;  ///< initial current real part at point of common coupling 2
   double ii02_;  ///< initial current imaginary part at point of common coupling 2
-};  ///< class for Hvdc link model in network
+};               ///< class for Hvdc link model in network
 
 }  // namespace DYN
-
 
 #endif  // MODELS_CPP_MODELNETWORK_DYNMODELHVDCLINK_H_

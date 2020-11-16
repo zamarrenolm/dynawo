@@ -17,9 +17,8 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
 #include "CRVXmlImporter.h"
+#include "gtest_dynawo.h"
 
 namespace curves {
 
@@ -57,10 +56,10 @@ TEST(APICRVTest, testXmlStreamImporter) {
   boost::shared_ptr<XmlImporter> importer = boost::shared_ptr<XmlImporter>(new XmlImporter());
   boost::shared_ptr<CurvesCollection> curves;
   std::istringstream goodInputStream(
-    "<?xml version='1.0' encoding='UTF-8'?>"
-    "<curvesInput xmlns=\"http://www.rte-france.com/dynawo\">"
-    "<curve model=\"CHAN5Y742_EC\" variable=\"P\"/>"
-    "</curvesInput>");
+      "<?xml version='1.0' encoding='UTF-8'?>"
+      "<curvesInput xmlns=\"http://www.rte-france.com/dynawo\">"
+      "<curve model=\"CHAN5Y742_EC\" variable=\"P\"/>"
+      "</curvesInput>");
   std::istream goodStream(goodInputStream.rdbuf());
   ASSERT_NO_THROW(curves = importer->importFromStream(goodStream));
 }

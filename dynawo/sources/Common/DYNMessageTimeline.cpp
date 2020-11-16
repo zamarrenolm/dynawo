@@ -20,13 +20,15 @@
  *  with the boost::format convention
  */
 
-#include <boost/none.hpp>
 #include "DYNMessageTimeline.h"
+
 #include "DYNIoDico.h"
 #include "DYNMacrosMessage.h"
 
-using std::stringstream;
+#include <boost/none.hpp>
+
 using std::string;
+using std::stringstream;
 
 namespace DYN {
 
@@ -56,8 +58,6 @@ MessageTimeline::initialize(const string& key) {
   }
 }
 
-MessageTimeline::MessageTimeline(const MessageTimeline& m) :
-Message(m),
-priority_(m.priority_) { }
+MessageTimeline::MessageTimeline(const MessageTimeline& m) : Message(m), priority_(m.priority_) {}
 
 }  // namespace DYN

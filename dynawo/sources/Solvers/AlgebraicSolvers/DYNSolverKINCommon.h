@@ -20,9 +20,9 @@
 #ifndef SOLVERS_ALGEBRAICSOLVERS_DYNSOLVERKINCOMMON_H_
 #define SOLVERS_ALGEBRAICSOLVERS_DYNSOLVERKINCOMMON_H_
 
+#include <boost/shared_ptr.hpp>
 #include <kinsol/kinsol.h>
 #include <sundials/sundials_nvector.h>
-#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 
@@ -56,8 +56,8 @@ class SolverKINCommon {
    * @param evalF method to evaluate the residuals
    * @param evalJ method to evaluate the Jacobian
    */
-  void initCommon(const std::string& linearSolverName, double fnormtol, double initialaddtol, double scsteptol,
-            double mxnewtstep, int msbset, int mxiter, int printfl, KINSysFn evalF, KINLsJacFn evalJ);
+  void initCommon(const std::string &linearSolverName, double fnormtol, double initialaddtol, double scsteptol, double mxnewtstep, int msbset, int mxiter,
+                  int printfl, KINSysFn evalF, KINLsJacFn evalJ);
 
   /**
    * @brief delete all internal structure allocated by init method
@@ -79,8 +79,7 @@ class SolverKINCommon {
    * @param msg error message
    * @param eh_data unused
    */
-  static void errHandlerFn(int error_code, const char *module, const char *function,
-          char *msg, void *eh_data);
+  static void errHandlerFn(int error_code, const char *module, const char *function, char *msg, void *eh_data);
 
   /**
    * @brief processes info messages from KINSOL solver
@@ -90,15 +89,14 @@ class SolverKINCommon {
    * @param msg information message
    * @param eh_data unused
    */
-  static void infoHandlerFn(const char *module, const char *function,
-          char *msg, void *eh_data);
+  static void infoHandlerFn(const char *module, const char *function, char *msg, void *eh_data);
 
   /**
    * @brief  Analyze the flag returned by KINSOL
    *
    * @param flag flag to analyze
    */
-  void analyseFlag(const int & flag);
+  void analyseFlag(const int &flag);
 
   /**
    * @brief set if solver is in first iteration step or not
@@ -121,7 +119,7 @@ class SolverKINCommon {
    *
    * @return linear solver name
    */
-  inline const std::string& getLinearSolverName() const {
+  inline const std::string &getLinearSolverName() const {
     return linearSolverName_;
   }
 
@@ -132,20 +130,20 @@ class SolverKINCommon {
    * @param nre residual functions call number
    * @param nje Jacobian call number
    */
-  void updateStatistics(long int& nni, long int& nre, long int& nje);
+  void updateStatistics(long int &nni, long int &nre, long int &nje);
 
  protected:
-  void* KINMem_;  ///< KINSOL internal memory structure
-  SUNLinearSolver LS_;  ///< Linear Solver pointer
-  SUNMatrix M_;  ///< sparse SUNMatrix
-  N_Vector yy_;  ///< variables values stored in Sundials structure
-  sunindextype* lastRowVals_;  ///< save of last Jacobian structure, to force symbolic factorization if structure change
+  void *KINMem_;               ///< KINSOL internal memory structure
+  SUNLinearSolver LS_;         ///< Linear Solver pointer
+  SUNMatrix M_;                ///< sparse SUNMatrix
+  N_Vector yy_;                ///< variables values stored in Sundials structure
+  sunindextype *lastRowVals_;  ///< save of last Jacobian structure, to force symbolic factorization if structure change
 
   std::string linearSolverName_;  ///< linear solver name used
-  std::vector<double> vYy_;  ///< Current values of variables during the call of the solver
-  unsigned int nbF_;  ///< number of equations to solve
-  double t0_;  ///< initial time to use
-  bool firstIteration_;  ///< @b true if first iteration, @b false otherwise
+  std::vector<double> vYy_;       ///< Current values of variables during the call of the solver
+  unsigned int nbF_;              ///< number of equations to solve
+  double t0_;                     ///< initial time to use
+  bool firstIteration_;           ///< @b true if first iteration, @b false otherwise
 
   std::vector<double> fScale_;  ///< Scaling vector for residual functions
   std::vector<double> yScale_;  ///< Scaling vector for variables

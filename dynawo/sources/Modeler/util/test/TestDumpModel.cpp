@@ -11,12 +11,12 @@
 // simulation tool for power systems.
 //
 
-#include <boost/algorithm/string.hpp>
-
 #include "DYNCommon.h"
 #include "DYNExecUtils.h"
 #include "DYNFileSystemUtils.h"
 #include "gtest_dynawo.h"
+
+#include <boost/algorithm/string.hpp>
 
 namespace DYN {
 
@@ -26,26 +26,30 @@ TEST(ModelerUtil, TestDumpModel) {
   executeCommand(cmd, ss);
   std::string result = ss.str();
   boost::erase_all(result, "\n");
-  ASSERT_EQ(result, "Executing command : ../dumpModel Model file is required  -h [ --help ]             "
-      "produce help message  -m [ --model-file ] arg  REQUIRED: set model file (path)  -o [ --output-file ] arg set output file (path)");
+  ASSERT_EQ(result,
+            "Executing command : ../dumpModel Model file is required  -h [ --help ]             "
+            "produce help message  -m [ --model-file ] arg  REQUIRED: set model file (path)  -o [ --output-file ] arg set output file (path)");
   ss.str(std::string());
 
   cmd = "../dumpModel -m blah";
   executeCommand(cmd, ss);
   result = ss.str();
   boost::erase_all(result, "\n");
-  ASSERT_EQ(result, "Executing command : ../dumpModel -m blah Default output file used : ./dumpModel.desc.xml  -h [ --help ]             "
+  ASSERT_EQ(
+      result,
+      "Executing command : ../dumpModel -m blah Default output file used : ./dumpModel.desc.xml  -h [ --help ]             "
       "produce help message  -m [ --model-file ] arg  REQUIRED: set model file (path)  -o [ --output-file ] arg set output file (path)blah does not exist ");
   ss.str(std::string());
 
   remove("dumpModel.desc.xml");
-  cmd = "../dumpModel -m ../../../Models/CPP/ModelFrequency/ModelOmegaRef/DYNModelOmegaRef"+std::string(sharedLibraryExtension());
+  cmd = "../dumpModel -m ../../../Models/CPP/ModelFrequency/ModelOmegaRef/DYNModelOmegaRef" + std::string(sharedLibraryExtension());
   executeCommand(cmd, ss);
   result = ss.str();
   boost::erase_all(result, "\n");
-  ASSERT_EQ(result, "Executing command : ../dumpModel -m ../../../Models/CPP/ModelFrequency/ModelOmegaRef/DYNModelOmegaRef"
-   +std::string(sharedLibraryExtension())+" Default output file used : ./dumpModel.desc.xml  -h [ --help ]             "
-      "produce help message  -m [ --model-file ] arg  REQUIRED: set model file (path)  -o [ --output-file ] arg set output file (path)");
+  ASSERT_EQ(result, "Executing command : ../dumpModel -m ../../../Models/CPP/ModelFrequency/ModelOmegaRef/DYNModelOmegaRef" +
+                        std::string(sharedLibraryExtension()) +
+                        " Default output file used : ./dumpModel.desc.xml  -h [ --help ]             "
+                        "produce help message  -m [ --model-file ] arg  REQUIRED: set model file (path)  -o [ --output-file ] arg set output file (path)");
   ss.str(std::string());
   ASSERT_TRUE(exists("dumpModel.desc.xml"));
   std::stringstream ssDiff;
@@ -53,6 +57,5 @@ TEST(ModelerUtil, TestDumpModel) {
   std::cout << ssDiff.str() << std::endl;
   ASSERT_EQ(ssDiff.str(), "Executing command : diff dumpModel.desc.xml res/dumpModel.desc.xml\n");
 }
-
 
 }  // namespace DYN

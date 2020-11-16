@@ -17,9 +17,9 @@
  *
  */
 
-#include "gtest_dynawo.h"
 #include "JOBDynModelsEntry.h"
 #include "JOBDynModelsEntryFactory.h"
+#include "gtest_dynawo.h"
 
 namespace job {
 

@@ -17,12 +17,11 @@
  *
  */
 
-#include "gtest_dynawo.h"
-
-#include "CRVCurvesCollectionFactory.h"
-#include "CRVCurvesCollection.h"
-#include "CRVCurveFactory.h"
 #include "CRVCurve.h"
+#include "CRVCurveFactory.h"
+#include "CRVCurvesCollection.h"
+#include "CRVCurvesCollectionFactory.h"
+#include "gtest_dynawo.h"
 
 namespace curves {
 
@@ -68,9 +67,7 @@ TEST(APICRVTest, CurvesCollectionIterator) {
   curvesCollection1->add(curve2);
 
   int nbPoints = 0;
-  for (CurvesCollection::const_iterator itPt = curvesCollection1->cbegin();
-            itPt != curvesCollection1->cend();
-            ++itPt) {
+  for (CurvesCollection::const_iterator itPt = curvesCollection1->cbegin(); itPt != curvesCollection1->cend(); ++itPt) {
     if (nbPoints == 0) {
       ASSERT_EQ((*itPt), curve1);
     } else if (nbPoints == 1) {
@@ -86,9 +83,7 @@ TEST(APICRVTest, CurvesCollectionIterator) {
   ASSERT_EQ((itPtc--)->get(), curve2.get());
 
   nbPoints = 0;
-  for (CurvesCollection::iterator itPt = curvesCollection1->begin();
-      itPt != curvesCollection1->end();
-      ++itPt) {
+  for (CurvesCollection::iterator itPt = curvesCollection1->begin(); itPt != curvesCollection1->end(); ++itPt) {
     if (nbPoints == 0) {
       ASSERT_EQ((*itPt), curve1);
     } else if (nbPoints == 1) {

@@ -17,8 +17,6 @@
  *
  */
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNElement.h"
 #include "DYNModelSignalN.h"
 #include "DYNModelSignalN.hpp"
@@ -28,12 +26,14 @@
 #include "DYNVariable.h"
 #include "PARParametersSet.h"
 #include "PARParametersSetFactory.h"
-
 #include "gtest_dynawo.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 
-boost::shared_ptr<SubModel> initModelSignalN() {
+boost::shared_ptr<SubModel>
+initModelSignalN() {
   boost::shared_ptr<SubModel> modelSignalN = SubModelFactory::createSubModelFromLib("../DYNModelSignalN" + std::string(sharedLibraryExtension()));
 
   std::vector<ParameterModeler> parameters;

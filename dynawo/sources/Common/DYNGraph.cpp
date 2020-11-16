@@ -17,33 +17,34 @@
  * @brief Encapsulation of boost::graph.
  *
  */
-#include <iostream>
-#include <sstream>
 #include "DYNGraph.h"
+
 #include "DYNMacrosMessage.h"
 
-using std::string;
-using std::vector;
+#include <iostream>
+#include <sstream>
+
+using boost::add_edge;
+using boost::add_vertex;
+using boost::edge;
+using boost::put;
+using std::list;
 using std::map;
 using std::pair;
-using std::list;
+using std::string;
 using std::stringstream;
-using boost::add_vertex;
-using boost::put;
-using boost::edge;
-using boost::add_edge;
+using std::vector;
 
-bool path_length_is_shorter(const PathDescription& path1, const PathDescription& path2) {
+bool
+path_length_is_shorter(const PathDescription& path1, const PathDescription& path2) {
   return (path1.size() < path2.size());
 }
 
 namespace DYN {
 
-Graph::Graph() {
-}
+Graph::Graph() {}
 
-Graph::~Graph() {
-}
+Graph::~Graph() {}
 
 void
 Graph::addVertex(unsigned indexVertex) {
@@ -74,7 +75,7 @@ Graph::setEdgesWeight(const boost::unordered_map<string, float>& edgeWeights) {
 }
 
 bool
-Graph::pathExist(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, const boost::unordered_map<string, float> & edgeWeights) {
+Graph::pathExist(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, const boost::unordered_map<string, float>& edgeWeights) {
   if (vertexOrigin == vertexExtremity)
     return true;
   std::list<PathDescription> paths;
@@ -83,8 +84,8 @@ Graph::pathExist(const unsigned int& vertexOrigin, const unsigned int& vertexExt
 }
 
 void
-Graph::findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, const boost::unordered_map<string, float> & edgeWeights,
-    std::list<PathDescription>& paths, bool stopWhenExtremityReached) {
+Graph::findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, const boost::unordered_map<string, float>& edgeWeights,
+                    std::list<PathDescription>& paths, bool stopWhenExtremityReached) {
   if (vertexOrigin == vertexExtremity)
     return;
 
@@ -120,9 +121,8 @@ Graph::findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertex
 }
 
 bool
-Graph::findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity,
-        PathDescription& currentPath, vector<bool> &encountered, list<PathDescription> &paths, FilteredBoostGraph & filteredGraph,
-        bool stopWhenExtremityReached) {
+Graph::findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, PathDescription& currentPath, vector<bool>& encountered,
+                    list<PathDescription>& paths, FilteredBoostGraph& filteredGraph, bool stopWhenExtremityReached) {
   adjacency_iterator_filtered neighbourIt;
   adjacency_iterator_filtered neighbourEnd;
   boost::tie(neighbourIt, neighbourEnd) = boost::adjacent_vertices(vertices_[vertexOrigin], filteredGraph);
@@ -144,9 +144,8 @@ Graph::findAllPaths(const unsigned int& vertexOrigin, const unsigned int& vertex
 }
 
 bool
-Graph::findAllPaths(const string& edgeId, const unsigned int& vertex, const unsigned int& vertexExtremity,
-                    PathDescription& currentPath, vector<bool> &encountered, list<PathDescription> &paths, FilteredBoostGraph & filteredGraph,
-                    bool stopWhenExtremityReached) {
+Graph::findAllPaths(const string& edgeId, const unsigned int& vertex, const unsigned int& vertexExtremity, PathDescription& currentPath,
+                    vector<bool>& encountered, list<PathDescription>& paths, FilteredBoostGraph& filteredGraph, bool stopWhenExtremityReached) {
   encountered[vertex] = true;
 
   currentPath.push_back(edgeId);
@@ -162,8 +161,8 @@ Graph::findAllPaths(const string& edgeId, const unsigned int& vertex, const unsi
 }
 
 void
-Graph::shortestPath(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity,
-    const boost::unordered_map<string, float> & edgeWeights, PathDescription& path) {
+Graph::shortestPath(const unsigned int& vertexOrigin, const unsigned int& vertexExtremity, const boost::unordered_map<string, float>& edgeWeights,
+                    PathDescription& path) {
   if (vertexOrigin == vertexExtremity)
     return;
 

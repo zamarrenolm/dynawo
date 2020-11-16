@@ -20,11 +20,11 @@
 #ifndef MODELER_DATAINTERFACE_DYNDATAINTERFACE_H_
 #define MODELER_DATAINTERFACE_DYNDATAINTERFACE_H_
 
+#include "CRTCriteriaCollection.h"
+
+#include <boost/shared_ptr.hpp>
 #include <string>
 #include <vector>
-#include <boost/shared_ptr.hpp>
-
-#include "CRTCriteriaCollection.h"
 
 namespace DYN {
 class NetworkInterface;
@@ -35,7 +35,7 @@ class DataInterface {
   /**
    * @brief Destructor
    */
-  virtual ~DataInterface() { }
+  virtual ~DataInterface() {}
 
   /**
    * @brief Getter for the network interface instance

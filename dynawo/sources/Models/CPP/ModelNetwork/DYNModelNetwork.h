@@ -23,11 +23,11 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELNETWORK_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELNETWORK_H_
 
-#include <boost/shared_ptr.hpp>
-#include <boost/core/noncopyable.hpp>
-
 #include "DYNModelCPP.h"
 #include "DYNSubModelFactory.h"
+
+#include <boost/core/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class ModelBusContainer;
@@ -36,7 +36,7 @@ class ModelVoltageLevel;
 class NetworkComponent;
 class DataInterface;
 
-static const double maximumValueCurrentLimit = 5000;   ///< Maximum acceptable value for current limits
+static const double maximumValueCurrentLimit = 5000;  ///< Maximum acceptable value for current limits
 
 /**
  * @brief Network Model factory
@@ -48,12 +48,12 @@ class ModelNetworkFactory : public SubModelFactory {
   /**
    * @brief default constructor
    */
-  ModelNetworkFactory() { }
+  ModelNetworkFactory() {}
 
   /**
    * @brief default destructor
    */
-  ~ModelNetworkFactory() { }
+  ~ModelNetworkFactory() {}
 
   /**
    * @brief ModelNetwork getter
@@ -137,12 +137,12 @@ class ModelNetwork : public ModelCPP, private boost::noncopyable {
   /**
    * @copydoc ModelCPP::evalJt (const double & t,const double & cj, SparseMatrix& jt, const int & rowOffset)
    */
-  void evalJt(const double& t, const double& cj, SparseMatrix& jt, const int & rowOffset);
+  void evalJt(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset);
 
   /**
    * @copydoc ModelCPP::evalJtPrim(const double & t, const double & cj, SparseMatrix& jt, const int& rowOffset)
    */
-  void evalJtPrim(const double& t, const double & cj, SparseMatrix& jt, const int& rowOffset);
+  void evalJtPrim(const double& t, const double& cj, SparseMatrix& jt, const int& rowOffset);
 
   /**
    * @copydoc ModelCPP::evalMode(const double& t)
@@ -242,7 +242,7 @@ class ModelNetwork : public ModelCPP, private boost::noncopyable {
    */
   void setFequations();
 
-   /**
+  /**
    * @copydoc ModelCPP::setFequationsInit()
    */
   void setFequationsInit();
@@ -281,7 +281,7 @@ class ModelNetwork : public ModelCPP, private boost::noncopyable {
    */
   void initParams();
 
-   /**
+  /**
    * @copydoc ModelCPP::initSubBuffers()
    */
   void initSubBuffers();
@@ -327,7 +327,7 @@ class ModelNetwork : public ModelCPP, private boost::noncopyable {
    * @return the vector of network component modeled
    */
   inline std::vector<boost::shared_ptr<NetworkComponent> >& getComponents() {
-    return (isInitModel_) ?  initComponents_ : components_;
+    return (isInitModel_) ? initComponents_ : components_;
   }
 
   /**
@@ -335,7 +335,7 @@ class ModelNetwork : public ModelCPP, private boost::noncopyable {
    * @return the vector of voltage levels modeled
    */
   inline std::vector<boost::shared_ptr<ModelVoltageLevel> >& getVoltageLevels() {
-    return (isInitModel_) ?  vLevelInitComponents_ : vLevelComponents_;
+    return (isInitModel_) ? vLevelInitComponents_ : vLevelComponents_;
   }
 
   /**
@@ -353,18 +353,18 @@ class ModelNetwork : public ModelCPP, private boost::noncopyable {
   void printComponentStats(KeyLog_t::value message, unsigned nbStatic, unsigned nbDynamic) const;
 
  private:
-  double * calculatedVarBuffer_;  ///< calculated variable buffer
+  double* calculatedVarBuffer_;  ///< calculated variable buffer
 
-  bool isInit_;  ///< whether the current process is the initialization process
-  bool isInitModel_;  ///< whether the current model used is the init one
+  bool isInit_;                   ///< whether the current process is the initialization process
+  bool isInitModel_;              ///< whether the current model used is the init one
   bool withNodeBreakerTopology_;  ///< whether at least one voltageLevel has node breaker topology view
 
-  boost::shared_ptr<ModelBusContainer> busContainer_;  ///< all network buses
-  std::vector<boost::shared_ptr<ModelVoltageLevel> > vLevelComponents_;  ///< all voltage level components
+  boost::shared_ptr<ModelBusContainer> busContainer_;                        ///< all network buses
+  std::vector<boost::shared_ptr<ModelVoltageLevel> > vLevelComponents_;      ///< all voltage level components
   std::vector<boost::shared_ptr<ModelVoltageLevel> > vLevelInitComponents_;  ///< all voltage level components  (used for init model)
-  std::vector<boost::shared_ptr<NetworkComponent> > components_;  ///< all network components without dynamic Model
-  std::vector<boost::shared_ptr<NetworkComponent> > initComponents_;  ///< all network components even components with dynamic model
-  std::vector<int> componentIndexByCalculatedVar_;  ///< index of component for each calculated variable
+  std::vector<boost::shared_ptr<NetworkComponent> > components_;             ///< all network components without dynamic Model
+  std::vector<boost::shared_ptr<NetworkComponent> > initComponents_;         ///< all network components even components with dynamic model
+  std::vector<int> componentIndexByCalculatedVar_;                           ///< index of component for each calculated variable
 };
 
 }  // namespace DYN

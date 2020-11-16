@@ -19,6 +19,7 @@
  */
 
 #include "CSTRConstraintFactory.h"
+
 #include "CSTRConstraint.h"
 
 using boost::shared_ptr;

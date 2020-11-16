@@ -31,7 +31,7 @@ class StaticRefInterface {
   /**
    * @brief default destructor.
    */
-  virtual ~StaticRefInterface() { }
+  virtual ~StaticRefInterface() {}
 
   /**
    * @brief set model id
@@ -82,11 +82,10 @@ class StaticRefInterface {
   }
 
  private:
-  std::string modelID_; /**< ID of the model */
-  std::string modelVar_; /**< Var name of the model */
+  std::string modelID_;   /**< ID of the model */
+  std::string modelVar_;  /**< Var name of the model */
   std::string staticVar_; /**< Pin name of the static Device */
-};  ///< interface class for static reference
-
+};                        ///< interface class for static reference
 
 }  // namespace DYN
 

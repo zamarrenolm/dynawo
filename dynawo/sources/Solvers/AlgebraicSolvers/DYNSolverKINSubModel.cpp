@@ -17,48 +17,44 @@
  * @brief Implementation of the solver used to calculate the initial values of the model
  *
  */
+#include "DYNSolverKINSubModel.h"
+
+#include "DYNMacrosMessage.h"
+#include "DYNSolverCommon.h"
+#include "DYNSparseMatrix.h"
+#include "DYNSubModel.h"
+#include "DYNTimer.h"
+#include "DYNTrace.h"
+
+#include <cmath>
+#include <cstring>
+#include <iomanip>
 #include <kinsol/kinsol.h>
-#include <sunlinsol/sunlinsol_klu.h>
-#include <sundials/sundials_types.h>
+#include <map>
+#include <nvector/nvector_serial.h>
 #include <sundials/sundials_math.h>
 #include <sundials/sundials_sparse.h>
-#include <nvector/nvector_serial.h>
-#include <cstring>
+#include <sundials/sundials_types.h>
+#include <sunlinsol/sunlinsol_klu.h>
 #include <vector>
-#include <cmath>
-#include <map>
-#include <iomanip>
 
-#include "DYNSolverKINSubModel.h"
-#include "DYNSolverCommon.h"
-#include "DYNSubModel.h"
-#include "DYNTrace.h"
-#include "DYNMacrosMessage.h"
-#include "DYNSparseMatrix.h"
-#include "DYNTimer.h"
-
-using std::vector;
+using boost::shared_ptr;
 using std::map;
 using std::string;
 using std::stringstream;
-using boost::shared_ptr;
+using std::vector;
 
 namespace DYN {
 
-SolverKINSubModel::SolverKINSubModel() :
-SolverKINCommon(),
-subModel_(NULL),
-yBuffer_(NULL),
-fBuffer_(NULL) {
-}
+SolverKINSubModel::SolverKINSubModel() : SolverKINCommon(), subModel_(NULL), yBuffer_(NULL), fBuffer_(NULL) {}
 
 SolverKINSubModel::~SolverKINSubModel() {
   clean();
 }
 
 void
-SolverKINSubModel::init(SubModel* subModel, const double t0, double* yBuffer, double *fBuffer, int mxiter, double fnormtol, double initialaddtol,
-    double scsteptol, double mxnewtstep, int msbset, int printfl) {
+SolverKINSubModel::init(SubModel* subModel, const double t0, double* yBuffer, double* fBuffer, int mxiter, double fnormtol, double initialaddtol,
+                        double scsteptol, double mxnewtstep, int msbset, int printfl) {
   // (1) Attributes
   // --------------
   clean();
@@ -86,36 +82,35 @@ SolverKINSubModel::init(SubModel* subModel, const double t0, double* yBuffer, do
 }
 
 int
-SolverKINSubModel::evalFInit_KIN(N_Vector yy, N_Vector rr, void *data) {
-  SolverKINSubModel * solv = reinterpret_cast<SolverKINSubModel*> (data);
+SolverKINSubModel::evalFInit_KIN(N_Vector yy, N_Vector rr, void* data) {
+  SolverKINSubModel* solv = reinterpret_cast<SolverKINSubModel*>(data);
   SubModel* subModel = solv->getSubModel();
 
   // evalF has already been called in the scaling part so it doesn't have to be called again for the first iteration
   if (solv->getFirstIteration()) {
     solv->setFirstIteration(false);
   } else {  // update of F
-    realtype *iyy = NV_DATA_S(yy);
+    realtype* iyy = NV_DATA_S(yy);
     int yL = NV_LENGTH_S(yy);
-    std::copy(iyy, iyy+yL, solv->yBuffer_);
+    std::copy(iyy, iyy + yL, solv->yBuffer_);
     subModel->evalF(solv->t0_, UNDEFINED_EQ);
   }
 
   // copy of values in output vector
-  realtype *irr = NV_DATA_S(rr);
+  realtype* irr = NV_DATA_S(rr);
   memcpy(irr, solv->fBuffer_, solv->nbF_ * sizeof(solv->fBuffer_[0]));
 
   return (0);
 }
 
 int
-SolverKINSubModel::evalJInit_KIN(N_Vector yy, N_Vector /*rr*/,
-        SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
-  SolverKINSubModel* solv = reinterpret_cast<SolverKINSubModel*> (data);
+SolverKINSubModel::evalJInit_KIN(N_Vector yy, N_Vector /*rr*/, SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
+  SolverKINSubModel* solv = reinterpret_cast<SolverKINSubModel*>(data);
   SubModel* subModel = solv->getSubModel();
 
-  realtype *iyy = NV_DATA_S(yy);
+  realtype* iyy = NV_DATA_S(yy);
   int yL = NV_LENGTH_S(yy);
-  std::copy(iyy, iyy+yL, solv->yBuffer_);
+  std::copy(iyy, iyy + yL, solv->yBuffer_);
 
   // Sparse matrix
   // -------------
@@ -147,7 +142,7 @@ SolverKINSubModel::solve() {
 
   fScale_.assign(subModel->sizeF(), 1.0);
   for (unsigned int i = 0; i < nbF_; ++i) {
-    if (std::abs(fBuffer_[i])  > 1.)
+    if (std::abs(fBuffer_[i]) > 1.)
       fScale_[i] = 1 / std::abs(fBuffer_[i]);
   }
   yScale_.assign(subModel->sizeY(), 1.0);

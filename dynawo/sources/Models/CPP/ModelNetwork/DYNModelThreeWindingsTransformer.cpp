@@ -19,24 +19,22 @@
  */
 
 #include "DYNModelThreeWindingsTransformer.h"
-#include "DYNModelNetwork.h"
+
+#include "DYNBusInterface.h"
 #include "DYNModelBus.h"
-#include "DYNVariableForModel.h"
+#include "DYNModelNetwork.h"
 #include "DYNParameter.h"
 #include "DYNThreeWTransformerInterface.h"
-#include "DYNBusInterface.h"
+#include "DYNVariableForModel.h"
 
-
-using std::vector;
 using boost::shared_ptr;
-using std::string;
 using std::map;
+using std::string;
+using std::vector;
 
 namespace DYN {
 
-ModelThreeWindingsTransformer::ModelThreeWindingsTransformer(const shared_ptr<ThreeWTransformerInterface>& tfo) :
-NetworkComponent(tfo->getID()) {
-}
+ModelThreeWindingsTransformer::ModelThreeWindingsTransformer(const shared_ptr<ThreeWTransformerInterface>& tfo) : NetworkComponent(tfo->getID()) {}
 
 void
 ModelThreeWindingsTransformer::initSize() {
@@ -94,7 +92,7 @@ ModelThreeWindingsTransformer::evalCalculatedVarI(unsigned numCalculatedVar) con
 
 NetworkComponent::StateChange_t
 ModelThreeWindingsTransformer::evalState(const double& /*time*/) {
-    return NetworkComponent::NO_CHANGE;
+  return NetworkComponent::NO_CHANGE;
 }
 
 void

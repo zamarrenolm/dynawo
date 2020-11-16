@@ -20,11 +20,12 @@
 #ifndef MODELER_COMMON_DYNMODEL_H_
 #define MODELER_COMMON_DYNMODEL_H_
 
-#include <vector>
+#include "DYNEnumUtils.h"
+
+#include <boost/shared_ptr.hpp>
 #include <map>
 #include <string>
-#include <boost/shared_ptr.hpp>
-#include "DYNEnumUtils.h"
+#include <vector>
 
 namespace timeline {
 class Timeline;
@@ -52,7 +53,7 @@ class Model {
   /**
    * @brief default destructor
    */
-  virtual ~Model() { }
+  virtual ~Model() {}
 
   /**
    * @brief evaluate the residual functions of the model
@@ -105,7 +106,7 @@ class Model {
    * @param t current time
    * @param g values of the root functions
    */
-  virtual void evalG(double t, std::vector<state_g> &g) = 0;
+  virtual void evalG(double t, std::vector<state_g>& g) = 0;
 
   /**
    * @brief evaluate the discrete variables of the model based on the variable values contained in the model
@@ -144,7 +145,7 @@ class Model {
    *
    * @param t time to use for the evaluation
    */
-  virtual void checkDataCoherence(const double & t) = 0;
+  virtual void checkDataCoherence(const double& t) = 0;
 
   /**
    * @brief Coherence check on parameters (min/max values, sanity checks)
@@ -162,7 +163,6 @@ class Model {
    */
   virtual void setGequationsModel() = 0;
 
-
   /**
    * @brief retrieve the initial values of the model
    *
@@ -170,7 +170,7 @@ class Model {
    * @param y0 initial values of the variables
    * @param yp0 initial values of the derivatives of the variables
    */
-  virtual void getY0(const double& t0, std::vector<double> &y0, std::vector<double> &yp0) = 0;
+  virtual void getY0(const double& t0, std::vector<double>& y0, std::vector<double>& yp0) = 0;
 
   /**
    * @brief retrieve mode change information
@@ -356,7 +356,7 @@ class Model {
    *
    * @param directory directory where the file of initial values should be printed
    */
-  virtual void printInitValues(const std::string & directory) = 0;
+  virtual void printInitValues(const std::string& directory) = 0;
 
   /**
    * @brief evaluate the calculated variables of the model
@@ -366,7 +366,7 @@ class Model {
    * @param yp current values of the derivative of the continuous variables
    * @param z values of the discrete variables
    */
-  virtual void evalCalculatedVariables(const double & t, const std::vector<double> &y, const std::vector<double> &yp, const std::vector<double> &z) = 0;
+  virtual void evalCalculatedVariables(const double& t, const std::vector<double>& y, const std::vector<double>& yp, const std::vector<double>& z) = 0;
 
   /**
    * @brief update the subset of calculated variables needed for curves
@@ -380,7 +380,7 @@ class Model {
    *
    * @param mapParameters map associating the file where parameters should be dumped with the stream of parameters
    */
-  virtual void dumpParameters(std::map< std::string, std::string> & mapParameters) = 0;
+  virtual void dumpParameters(std::map<std::string, std::string>& mapParameters) = 0;
 
   /**
    * @brief  retrieve the value of a parameter
@@ -390,28 +390,28 @@ class Model {
    * @param value value of the parameter
    * @param found @b true if the parameter exist, @b false else
    */
-  virtual void getModelParameterValue(const std::string & curveModelName, const std::string & curveVariable, double & value, bool & found) = 0;
+  virtual void getModelParameterValue(const std::string& curveModelName, const std::string& curveVariable, double& value, bool& found) = 0;
 
   /**
    * @brief  load the parameters values from a previous dump
    *
    * @param mapParameters map associating the file where parameters should be dumped with the stream of parameters
    */
-  virtual void loadParameters(const std::map< std::string, std::string> & mapParameters) = 0;
+  virtual void loadParameters(const std::map<std::string, std::string>& mapParameters) = 0;
 
   /**
    * @brief export the variables of the model for dump
    *
    * @param mapVariables map associating the file where variables should be dumped with the stream of variables
    */
-  virtual void dumpVariables(std::map< std::string, std::string> & mapVariables) = 0;
+  virtual void dumpVariables(std::map<std::string, std::string>& mapVariables) = 0;
 
   /**
    * @brief  load the variables values from a previous dump
    *
    * @param mapVariables map associating the file where variables should be dumped with the stream of variables
    */
-  virtual void loadVariables(const std::map< std::string, std::string> & mapVariables) = 0;
+  virtual void loadVariables(const std::map<std::string, std::string>& mapVariables) = 0;
 
   /**
    * @brief copy current values in "pre" buffers (need for modelica sub models)
@@ -466,7 +466,7 @@ class Model {
    */
   virtual void setWorkingDirectory(const std::string& workingDirectory) = 0;
 
-   /**
+  /**
    * @brief Print all variables names.
    */
   virtual void printVariableNames() = 0;
@@ -503,7 +503,7 @@ class Model {
    *
    * @param z vector of discrete values from the solver data structure
    */
-  virtual void getCurrentZ(std::vector<double> &z) = 0;
+  virtual void getCurrentZ(std::vector<double>& z) = 0;
 
   /**
    * @brief Copy the discrete variable values from the solver data structure to the model data structure
@@ -513,7 +513,7 @@ class Model {
    *
    * @param z vector of discrete values from the solver data structure
    */
-  virtual void setCurrentZ(const std::vector<double> &z) = 0;
+  virtual void setCurrentZ(const std::vector<double>& z) = 0;
 
   /**
    * @brief Notify that time step is performed in the simulation

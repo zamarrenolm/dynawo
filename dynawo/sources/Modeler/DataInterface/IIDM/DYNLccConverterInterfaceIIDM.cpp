@@ -19,21 +19,20 @@
  *
  */
 //======================================================================
-#include <IIDM/components/LccConverterStation.h>
-
 #include "DYNLccConverterInterfaceIIDM.h"
 
-using std::string;
+#include <IIDM/components/LccConverterStation.h>
+
 using boost::shared_ptr;
+using std::string;
 
 namespace DYN {
 
-LccConverterInterfaceIIDM::~LccConverterInterfaceIIDM() {
-}
+LccConverterInterfaceIIDM::~LccConverterInterfaceIIDM() {}
 
 LccConverterInterfaceIIDM::LccConverterInterfaceIIDM(IIDM::LccConverterStation& lcc) :
-InjectorInterfaceIIDM<IIDM::LccConverterStation>(lcc, lcc.id()),
-lccConverterIIDM_(lcc) {
+    InjectorInterfaceIIDM<IIDM::LccConverterStation>(lcc, lcc.id()),
+    lccConverterIIDM_(lcc) {
   setType(ComponentInterface::LCC_CONVERTER);
 }
 
@@ -43,8 +42,7 @@ LccConverterInterfaceIIDM::getComponentVarIndex(const std::string& /*varName*/) 
 }
 
 void
-LccConverterInterfaceIIDM::exportStateVariablesUnitComponent() {
-}
+LccConverterInterfaceIIDM::exportStateVariablesUnitComponent() {}
 
 void
 LccConverterInterfaceIIDM::importStaticParameters() {

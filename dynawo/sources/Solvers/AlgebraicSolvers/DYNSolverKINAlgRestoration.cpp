@@ -18,37 +18,36 @@
  *
  */
 
-
-#include <kinsol/kinsol.h>
-#include <sunlinsol/sunlinsol_klu.h>
-#include <sundials/sundials_types.h>
-#include <sundials/sundials_math.h>
-#include <sundials/sundials_sparse.h>
-#include <nvector/nvector_serial.h>
-#include <string.h>
-#include <vector>
-#include <cmath>
-#include <map>
-#include <algorithm>
-#include <iomanip>
-
 #include "DYNSolverKINAlgRestoration.h"
-#include "DYNSolverCommon.h"
-#include "DYNTrace.h"
+
 #include "DYNMacrosMessage.h"
 #include "DYNModel.h"
+#include "DYNSolverCommon.h"
 #include "DYNSparseMatrix.h"
+#include "DYNTrace.h"
 
-using std::vector;
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <kinsol/kinsol.h>
+#include <map>
+#include <nvector/nvector_serial.h>
+#include <string.h>
+#include <sundials/sundials_math.h>
+#include <sundials/sundials_sparse.h>
+#include <sundials/sundials_types.h>
+#include <sunlinsol/sunlinsol_klu.h>
+#include <vector>
+
+using boost::shared_ptr;
 using std::map;
 using std::string;
 using std::stringstream;
-using boost::shared_ptr;
+using std::vector;
 
 namespace DYN {
 
-SolverKINAlgRestoration::SolverKINAlgRestoration() :
-mode_(KIN_NORMAL) {
+SolverKINAlgRestoration::SolverKINAlgRestoration() : mode_(KIN_NORMAL) {
   SolverKINCommon();
 }
 
@@ -57,8 +56,8 @@ SolverKINAlgRestoration::~SolverKINAlgRestoration() {
 }
 
 void
-SolverKINAlgRestoration::init(const shared_ptr<Model>& model, modeKin_t mode, double fnormtol, double initialaddtol, double scsteptol,
-                              double mxnewtstep, int msbset, int mxiter, int printfl) {
+SolverKINAlgRestoration::init(const shared_ptr<Model>& model, modeKin_t mode, double fnormtol, double initialaddtol, double scsteptol, double mxnewtstep,
+                              int msbset, int mxiter, int printfl) {
   // (1) Arguments
   // --------------
   clean();
@@ -78,12 +77,12 @@ SolverKINAlgRestoration::init(const shared_ptr<Model>& model, modeKin_t mode, do
   vId_.resize(model->sizeY());
   std::copy(model_->getYType(), model_->getYType() + model->sizeY(), vId_.begin());
   switch (mode) {
-    case KIN_NORMAL:
-      nbF_ = count(fType_.begin(), fType_.end(), DYN::ALGEBRAIC_EQ);  // Only algebraic equation
-      break;
-    case KIN_YPRIM:
-      nbF_ = count(fType_.begin(), fType_.end(), DYN::DIFFERENTIAL_EQ);  // Only differential equation
-      break;
+  case KIN_NORMAL:
+    nbF_ = count(fType_.begin(), fType_.end(), DYN::ALGEBRAIC_EQ);  // Only algebraic equation
+    break;
+  case KIN_YPRIM:
+    nbF_ = count(fType_.begin(), fType_.end(), DYN::DIFFERENTIAL_EQ);  // Only differential equation
+    break;
   }
 
   if (nbF_ == 0)
@@ -97,51 +96,51 @@ SolverKINAlgRestoration::init(const shared_ptr<Model>& model, modeKin_t mode, do
     throw DYNError(Error::SUNDIALS_ERROR, SolverCreateYY);
 
   switch (mode) {
-    case KIN_NORMAL:
-      initCommon("KLU", fnormtol, initialaddtol, scsteptol, mxnewtstep, msbset, mxiter, printfl, evalF_KIN, evalJ_KIN);
-      break;
-    case KIN_YPRIM:
-      initCommon("KLU", fnormtol, initialaddtol, scsteptol, mxnewtstep, msbset, mxiter, printfl, evalF_KIN, evalJPrim_KIN);
-      break;
+  case KIN_NORMAL:
+    initCommon("KLU", fnormtol, initialaddtol, scsteptol, mxnewtstep, msbset, mxiter, printfl, evalF_KIN, evalJ_KIN);
+    break;
+  case KIN_YPRIM:
+    initCommon("KLU", fnormtol, initialaddtol, scsteptol, mxnewtstep, msbset, mxiter, printfl, evalF_KIN, evalJPrim_KIN);
+    break;
   }
 
   // Analyze variables to find differential variables and differential equation
   // depending of the kind of the problem to solve, keep differential variables/equation or algebraic variables/equation
   ignoreY_.clear();  // variables to ignore
   ignoreF_.clear();  // equations to ignore
-  indexY_.clear();  // variables to keep
-  indexF_.clear();  // equations to keep
+  indexY_.clear();   // variables to keep
+  indexF_.clear();   // equations to keep
 
   // As sizeF and sizeY are equal, it is possible to fill F and Y vectors in the same loop
   switch (mode_) {
-    case KIN_NORMAL: {
-      for (int i = 0; i < model_->sizeF(); ++i) {
-        if (fType_[i] > 0)
-          ignoreF_.insert(i);
-        else
-          indexF_.push_back(i);
+  case KIN_NORMAL: {
+    for (int i = 0; i < model_->sizeF(); ++i) {
+      if (fType_[i] > 0)
+        ignoreF_.insert(i);
+      else
+        indexF_.push_back(i);
 
-        if (vId_[i] > 0)
-          ignoreY_.insert(i);
-        else
-          indexY_.push_back(i);
-      }
-      break;
+      if (vId_[i] > 0)
+        ignoreY_.insert(i);
+      else
+        indexY_.push_back(i);
     }
-    case KIN_YPRIM: {
-      for (int i = 0; i < model_->sizeF(); ++i) {
-        if (fType_[i] < 0)
-          ignoreF_.insert(i);
-        else
-          indexF_.push_back(i);
+    break;
+  }
+  case KIN_YPRIM: {
+    for (int i = 0; i < model_->sizeF(); ++i) {
+      if (fType_[i] < 0)
+        ignoreF_.insert(i);
+      else
+        indexF_.push_back(i);
 
-        if (vId_[i] < 0)
-          ignoreY_.insert(i);
-        else
-          indexY_.push_back(i);
-      }
-      break;
+      if (vId_[i] < 0)
+        ignoreY_.insert(i);
+      else
+        indexY_.push_back(i);
     }
+    break;
+  }
   }
 
   if (ignoreF_.size() != ignoreY_.size() || indexF_.size() != indexY_.size())
@@ -149,8 +148,7 @@ SolverKINAlgRestoration::init(const shared_ptr<Model>& model, modeKin_t mode, do
 }
 
 void
-SolverKINAlgRestoration::modifySettings(double fnormtol, double initialaddtol, double scsteptol, double mxnewtstep,
-                  int msbset, int mxiter, int printfl) {
+SolverKINAlgRestoration::modifySettings(double fnormtol, double initialaddtol, double scsteptol, double mxnewtstep, int msbset, int mxiter, int printfl) {
   if (nbF_ == 0)
     return;
 
@@ -190,12 +188,12 @@ SolverKINAlgRestoration::modifySettings(double fnormtol, double initialaddtol, d
 }
 
 int
-SolverKINAlgRestoration::evalF_KIN(N_Vector yy, N_Vector rr, void *data) {
-  SolverKINAlgRestoration * solv = reinterpret_cast<SolverKINAlgRestoration*> (data);
+SolverKINAlgRestoration::evalF_KIN(N_Vector yy, N_Vector rr, void* data) {
+  SolverKINAlgRestoration* solv = reinterpret_cast<SolverKINAlgRestoration*>(data);
   shared_ptr<Model> model = solv->getModel();
 
-  double *irr = NV_DATA_S(rr);
-  double *iyy = NV_DATA_S(yy);
+  double* irr = NV_DATA_S(rr);
+  double* iyy = NV_DATA_S(yy);
 
   // evalF has already been called in the scaling part so it doesn't have to be called again for the first iteration
   if (solv->getFirstIteration()) {
@@ -238,9 +236,8 @@ SolverKINAlgRestoration::evalF_KIN(N_Vector yy, N_Vector rr, void *data) {
 }
 
 int
-SolverKINAlgRestoration::evalJ_KIN(N_Vector /*yy*/, N_Vector /*rr*/,
-         SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
-  SolverKINAlgRestoration* solv = reinterpret_cast<SolverKINAlgRestoration*> (data);
+SolverKINAlgRestoration::evalJ_KIN(N_Vector /*yy*/, N_Vector /*rr*/, SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
+  SolverKINAlgRestoration* solv = reinterpret_cast<SolverKINAlgRestoration*>(data);
   shared_ptr<Model> model = solv->getModel();
 
   double cj = 1;
@@ -259,9 +256,8 @@ SolverKINAlgRestoration::evalJ_KIN(N_Vector /*yy*/, N_Vector /*rr*/,
 }
 
 int
-SolverKINAlgRestoration::evalJPrim_KIN(N_Vector /*yy*/, N_Vector /*rr*/,
-        SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
-  SolverKINAlgRestoration* solv = reinterpret_cast<SolverKINAlgRestoration*> (data);
+SolverKINAlgRestoration::evalJPrim_KIN(N_Vector /*yy*/, N_Vector /*rr*/, SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
+  SolverKINAlgRestoration* solv = reinterpret_cast<SolverKINAlgRestoration*>(data);
   shared_ptr<Model> model = solv->getModel();
 
   double cj = 1;
@@ -299,7 +295,7 @@ SolverKINAlgRestoration::solve(bool noInitSetup, bool evaluateOnlyModeAtFirstIte
   // fScale
   fScale_.assign(indexF_.size(), 1.0);
   for (unsigned int i = 0; i < indexF_.size(); ++i) {
-    if ( std::abs(F_[indexF_[i]]) > RCONST(1.0))
+    if (std::abs(F_[indexF_[i]]) > RCONST(1.0))
       fScale_[i] = 1. / std::abs(F_[indexF_[i]]);
   }
 
@@ -325,40 +321,40 @@ SolverKINAlgRestoration::setInitialValues(const double& t, const vector<double>&
   y0_.assign(y.begin(), y.end());
 
   switch (mode_) {
-    case KIN_NORMAL: {
-      for (unsigned int i = 0; i < indexY_.size(); ++i) {
-        vYy_[i] = y0_[indexY_[i]];
-      }
-      Y_.assign(y0_.begin(), y0_.end());
-      break;
+  case KIN_NORMAL: {
+    for (unsigned int i = 0; i < indexY_.size(); ++i) {
+      vYy_[i] = y0_[indexY_[i]];
     }
-    case KIN_YPRIM: {
-      for (unsigned int i = 0; i < indexY_.size(); ++i) {
-        vYy_[i] = yp0_[indexY_[i]];
-      }
-      YP_.assign(model_->sizeY(), 0.);
-      break;
+    Y_.assign(y0_.begin(), y0_.end());
+    break;
+  }
+  case KIN_YPRIM: {
+    for (unsigned int i = 0; i < indexY_.size(); ++i) {
+      vYy_[i] = yp0_[indexY_[i]];
     }
+    YP_.assign(model_->sizeY(), 0.);
+    break;
+  }
   }
 }
 
 void
 SolverKINAlgRestoration::getValues(vector<double>& y, vector<double>& yp) {
   switch (mode_) {
-    case KIN_NORMAL: {
-      for (unsigned int i = 0; i < indexY_.size(); ++i) {
-        y0_[indexY_[i]] = vYy_[i];
-      }
-      y.assign(y0_.begin(), y0_.end());
-      break;
+  case KIN_NORMAL: {
+    for (unsigned int i = 0; i < indexY_.size(); ++i) {
+      y0_[indexY_[i]] = vYy_[i];
     }
-    case KIN_YPRIM: {
-      for (unsigned int i = 0; i < indexY_.size(); ++i) {
-        yp0_[indexY_[i]] = vYy_[i];
-      }
-      yp.assign(yp0_.begin(), yp0_.end());
-      break;
+    y.assign(y0_.begin(), y0_.end());
+    break;
+  }
+  case KIN_YPRIM: {
+    for (unsigned int i = 0; i < indexY_.size(); ++i) {
+      yp0_[indexY_[i]] = vYy_[i];
     }
+    yp.assign(yp0_.begin(), yp0_.end());
+    break;
+  }
   }
 }
 

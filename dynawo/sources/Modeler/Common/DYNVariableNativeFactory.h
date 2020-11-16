@@ -19,9 +19,9 @@
 #ifndef MODELER_COMMON_DYNVARIABLENATIVEFACTORY_H_
 #define MODELER_COMMON_DYNVARIABLENATIVEFACTORY_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "DYNEnumUtils.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class VariableNative;

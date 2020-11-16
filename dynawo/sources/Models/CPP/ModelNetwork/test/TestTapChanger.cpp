@@ -11,16 +11,16 @@
 // simulation tool for power systems.
 //
 
-#include <boost/shared_ptr.hpp>
-#include <vector>
-
 #include "DYNModelNetwork.h"
-#include "DYNModelTapChangerStep.h"
-#include "DYNModelTapChanger.h"
 #include "DYNModelPhaseTapChanger.h"
 #include "DYNModelRatioTapChanger.h"
+#include "DYNModelTapChanger.h"
+#include "DYNModelTapChangerStep.h"
 #include "TLTimelineFactory.h"
 #include "gtest_dynawo.h"
+
+#include <boost/shared_ptr.hpp>
+#include <vector>
 
 namespace DYN {
 TEST(ModelsModelNetwork, ModelNetworkTapChangerStep) {

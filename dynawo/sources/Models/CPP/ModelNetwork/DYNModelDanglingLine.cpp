@@ -17,40 +17,41 @@
  * @brief
  *
  */
-#include <cmath>
-#include <vector>
-#include <cassert>
-#include "PARParametersSet.h"
-
 #include "DYNModelDanglingLine.h"
-#include "DYNModelConstants.h"
-#include "DYNModelBus.h"
-#include "DYNModelCurrentLimits.h"
-#include "DYNMacrosMessage.h"
-#include "DYNTrace.h"
-#include "DYNVariableForModel.h"
-#include "DYNParameter.h"
-#include "DYNDerivative.h"
-#include "DYNDanglingLineInterface.h"
-#include "DYNCurrentLimitInterface.h"
+
 #include "DYNBusInterface.h"
-#include "DYNSparseMatrix.h"
+#include "DYNCurrentLimitInterface.h"
+#include "DYNDanglingLineInterface.h"
+#include "DYNDerivative.h"
+#include "DYNMacrosMessage.h"
+#include "DYNModelBus.h"
+#include "DYNModelConstants.h"
+#include "DYNModelCurrentLimits.h"
 #include "DYNModelNetwork.h"
 #include "DYNModelVoltageLevel.h"
+#include "DYNParameter.h"
+#include "DYNSparseMatrix.h"
+#include "DYNTrace.h"
+#include "DYNVariableForModel.h"
+#include "PARParametersSet.h"
+
+#include <cassert>
+#include <cmath>
+#include <vector>
 
 using parameters::ParametersSet;
 
-using std::vector;
 using boost::shared_ptr;
 using std::map;
 using std::string;
+using std::vector;
 
 namespace DYN {
 
 ModelDanglingLine::ModelDanglingLine(const shared_ptr<DanglingLineInterface>& line) :
-NetworkComponent(line->getID()),
-stateModified_(false),
-modelType_("DanglingLine")  {
+    NetworkComponent(line->getID()),
+    stateModified_(false),
+    modelType_("DanglingLine") {
   // init data
   double vNom = line->getVNom();
   double r = line->getR();
@@ -86,7 +87,6 @@ modelType_("DanglingLine")  {
 
   currentLimitsDesactivate_ = 0.;
 
-
   double factorPuToA = sqrt(3.) * vNom / (1000. * SNREF);
   // current limits
   vector<shared_ptr<CurrentLimitInterface> > cLimit = line->getCurrentLimitInterfaces();
@@ -99,13 +99,12 @@ modelType_("DanglingLine")  {
       currentLimits_->addLimit(limit, cLimit[0]->getAcceptableDuration());
     }
     for (unsigned int i = 1; i < cLimit.size(); ++i) {
-      if (cLimit[i-1]->getLimit() < maximumValueCurrentLimit) {
-        double limit = cLimit[i-1]->getLimit() / factorPuToA;
+      if (cLimit[i - 1]->getLimit() < maximumValueCurrentLimit) {
+        double limit = cLimit[i - 1]->getLimit() / factorPuToA;
         currentLimits_->addLimit(limit, cLimit[i]->getAcceptableDuration());
       }
     }
   }
-
 
   // calculate voltage at the fictitious node
   // node attributes
@@ -219,7 +218,7 @@ void
 ModelDanglingLine::evalF(propertyF_t type) {
   if (network_->isInitModel())
     return;
-  if (type ==DIFFERENTIAL_EQ)
+  if (type == DIFFERENTIAL_EQ)
     return;
 
   double ur1 = modelBus_->ur();
@@ -252,7 +251,7 @@ ModelDanglingLine::setFequations(std::map<int, std::string>& fEquationIndex) {
     fEquationIndex[1] = std::string("y_[uiFictNum_] localModel:").append(id());
   }
 
-  assert(fEquationIndex.size() == (unsigned int) sizeF_ && "ModelDanglingLine: fEquationIndex.size() != f_.size()");
+  assert(fEquationIndex.size() == (unsigned int)sizeF_ && "ModelDanglingLine: fEquationIndex.size() != f_.size()");
 }
 
 void
@@ -271,7 +270,7 @@ ModelDanglingLine::setGequations(std::map<int, std::string>& gEquationIndex) {
     }
   }
 
-  assert(gEquationIndex.size() == (unsigned int) sizeG_ && "ModelDanglingLine: gEquationIndex.size() != sizeG_");
+  assert(gEquationIndex.size() == (unsigned int)sizeG_ && "ModelDanglingLine: gEquationIndex.size() != sizeG_");
 }
 
 double
@@ -493,7 +492,7 @@ ModelDanglingLine::irLoad_dUr(const double& ur, const double& ui) const {
 double
 ModelDanglingLine::irLoad_dUi(const double& ur, const double& ui) const {
   double ir_dUi = 0.;
-  double U2 = ur * ur + ui*ui;
+  double U2 = ur * ur + ui * ui;
   if (!doubleIsZero(U2))
     ir_dUi = (Q0_ - 2 * ui * (P0_ * ur + Q0_ * ui) / U2) / U2;
 
@@ -503,7 +502,7 @@ ModelDanglingLine::irLoad_dUi(const double& ur, const double& ui) const {
 double
 ModelDanglingLine::iiLoad_dUr(const double& ur, const double& ui) const {
   double ii_dUr = 0.;
-  double U2 = ur * ur + ui*ui;
+  double U2 = ur * ur + ui * ui;
   if (!doubleIsZero(U2))
     ii_dUr = (-Q0_ - 2. * ur * (P0_ * ui - Q0_ * ur) / U2) / U2;
 
@@ -513,7 +512,7 @@ ModelDanglingLine::iiLoad_dUr(const double& ur, const double& ui) const {
 double
 ModelDanglingLine::iiLoad_dUi(const double& ur, const double& ui) const {
   double ii_dUi = 0;
-  double U2 = ur * ur + ui*ui;
+  double U2 = ur * ur + ui * ui;
   if (!doubleIsZero(U2))
     ii_dUi = (P0_ - 2 * ui * (P0_ * ui - Q0_ * ur) / U2) / U2;
 
@@ -656,7 +655,7 @@ ModelDanglingLine::defineVariables(vector<shared_ptr<Variable> >& variables) {
 }
 
 void
-ModelDanglingLine::defineElements(std::vector<Element> &elements, std::map<std::string, int>& mapElement) {
+ModelDanglingLine::defineElements(std::vector<Element>& elements, std::map<std::string, int>& mapElement) {
   string lineName = id_;
   // ===== OUTPUT_I =====
   addElementWithValue(lineName + string("_i"), elements, mapElement);
@@ -701,7 +700,7 @@ ModelDanglingLine::evalZ(const double& t) {
     setCurrentLimitsDesactivate(z_[1]);
     Trace::info() << DYNLog(DeactivateCurrentLimits, id_) << Trace::endline;
   }
-  return (stateModified_)?NetworkComponent::STATE_CHANGE:NetworkComponent::NO_CHANGE;
+  return (stateModified_) ? NetworkComponent::STATE_CHANGE : NetworkComponent::NO_CHANGE;
 }
 
 void
@@ -720,23 +719,23 @@ ModelDanglingLine::evalCalculatedVars() {
   double iiBus = ii1(ur1, ui1, urFict, uiFict);
 
   calculatedVars_[iNum_] = sqrt(irBus * irBus + iiBus * iiBus);
-  calculatedVars_[pNum_] = ur1 * irBus + ui1*iiBus;
-  calculatedVars_[qNum_] = ui1 * irBus - ur1*iiBus;
+  calculatedVars_[pNum_] = ur1 * irBus + ui1 * iiBus;
+  calculatedVars_[qNum_] = ui1 * irBus - ur1 * iiBus;
 }
 
 void
-ModelDanglingLine::getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, vector<int> & numVars) const {
+ModelDanglingLine::getIndexesOfVariablesUsedForCalculatedVarI(unsigned numCalculatedVar, vector<int>& numVars) const {
   switch (numCalculatedVar) {
-    case iNum_:
-    case pNum_:
-    case qNum_:
-      numVars.push_back(modelBus_->urYNum());
-      numVars.push_back(modelBus_->uiYNum());
-      numVars.push_back(urFictYNum_);
-      numVars.push_back(uiFictYNum_);
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+  case iNum_:
+  case pNum_:
+  case qNum_:
+    numVars.push_back(modelBus_->urYNum());
+    numVars.push_back(modelBus_->uiYNum());
+    numVars.push_back(urFictYNum_);
+    numVars.push_back(uiFictYNum_);
+    break;
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
@@ -750,51 +749,51 @@ ModelDanglingLine::evalJCalculatedVarI(unsigned numCalculatedVar, vector<double>
   double Ir1 = ir1(ur1, ui1, ur2, ui2);
   double Ii1 = ii1(ur1, ui1, ur2, ui2);
   switch (numCalculatedVar) {
-    case iNum_: {
-      double I = sqrt(Ii1 * Ii1 + Ir1 * Ir1);
-      if (getConnectionState() == CLOSED && !doubleIsZero(I)) {
-        res[0] = (ii1_dUr_ * Ii1 + ir1_dUr_ * Ir1) / I;   // dI1/dUr1
-        res[1] = (ii1_dUi_ * Ii1 + ir1_dUi_ * Ir1) / I;   // dI1/dUi1
-        res[2] = (ii1_dUrFict_ * Ii1 + ir1_dUrFict_ * Ir1) / I;   // dI1/dUrFict
-        res[3] = (ii1_dUiFict_ * Ii1 + ir1_dUiFict_ * Ir1) / I;   // dI1/dUiFict
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+  case iNum_: {
+    double I = sqrt(Ii1 * Ii1 + Ir1 * Ir1);
+    if (getConnectionState() == CLOSED && !doubleIsZero(I)) {
+      res[0] = (ii1_dUr_ * Ii1 + ir1_dUr_ * Ir1) / I;          // dI1/dUr1
+      res[1] = (ii1_dUi_ * Ii1 + ir1_dUi_ * Ir1) / I;          // dI1/dUi1
+      res[2] = (ii1_dUrFict_ * Ii1 + ir1_dUrFict_ * Ir1) / I;  // dI1/dUrFict
+      res[3] = (ii1_dUiFict_ * Ii1 + ir1_dUiFict_ * Ir1) / I;  // dI1/dUiFict
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
     }
-    case pNum_: {
-      if (getConnectionState() == CLOSED) {
-        res[0] = Ir1 + ur1 * ir1_dUr_ + ui1 * ii1_dUr_;   // dP/dUr1
-        res[1] = ur1 * ir1_dUi_ + Ii1 + ui1 * ii1_dUi_;   // dP/dUi1
-        res[2] = ur1 * ir1_dUrFict_ + ui1 * ii1_dUrFict_;   // dP/dUrFict
-        res[3] = ur1 * ir1_dUiFict_ + ui1 * ii1_dUiFict_;   // dP/dUiFict
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+    break;
+  }
+  case pNum_: {
+    if (getConnectionState() == CLOSED) {
+      res[0] = Ir1 + ur1 * ir1_dUr_ + ui1 * ii1_dUr_;    // dP/dUr1
+      res[1] = ur1 * ir1_dUi_ + Ii1 + ui1 * ii1_dUi_;    // dP/dUi1
+      res[2] = ur1 * ir1_dUrFict_ + ui1 * ii1_dUrFict_;  // dP/dUrFict
+      res[3] = ur1 * ir1_dUiFict_ + ui1 * ii1_dUiFict_;  // dP/dUiFict
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
     }
-    case qNum_: {
-      if (getConnectionState() == CLOSED) {
-        res[0] = ui1 * ir1_dUr_ - Ii1 - ur1 * ii1_dUr_;   // dQ/dUr1
-        res[1] = Ir1 + ui1 * ir1_dUi_ - ur1 * ii1_dUi_;   // dQ/dUi1
-        res[2] = ui1 * ir1_dUrFict_ - ur1 * ii1_dUrFict_;   // dQ/dUrFict
-        res[3] = ui1 * ir1_dUiFict_ - ur1 * ii1_dUiFict_;   // dQ/dUiFict
-      } else {
-        res[0] = 0.;
-        res[1] = 0.;
-        res[2] = 0.;
-        res[3] = 0.;
-      }
-      break;
+    break;
+  }
+  case qNum_: {
+    if (getConnectionState() == CLOSED) {
+      res[0] = ui1 * ir1_dUr_ - Ii1 - ur1 * ii1_dUr_;    // dQ/dUr1
+      res[1] = Ir1 + ui1 * ir1_dUi_ - ur1 * ii1_dUi_;    // dQ/dUi1
+      res[2] = ui1 * ir1_dUrFict_ - ur1 * ii1_dUrFict_;  // dQ/dUrFict
+      res[3] = ui1 * ir1_dUiFict_ - ur1 * ii1_dUiFict_;  // dQ/dUiFict
+    } else {
+      res[0] = 0.;
+      res[1] = 0.;
+      res[2] = 0.;
+      res[3] = 0.;
     }
-    default:
-      throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
+    break;
+  }
+  default:
+    throw DYNError(Error::MODELER, UndefJCalculatedVarI, numCalculatedVar);
   }
 }
 
@@ -808,17 +807,17 @@ ModelDanglingLine::evalCalculatedVarI(unsigned numCalculatedVar) const {
   double Ir1 = ir1(ur1, ui1, ur2, ui2);
   double Ii1 = ii1(ur1, ui1, ur2, ui2);
   switch (numCalculatedVar) {
-    case iNum_:
-      output = sqrt(Ir1 * Ir1 + Ii1 * Ii1);
-      break;
-    case pNum_:
-      output = ur1 * Ir1 + ui1 * Ii1;
-      break;
-    case qNum_:
-      output = ui1 * Ir1 - ur1 * Ii1;
-      break;
-    default:
-      throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
+  case iNum_:
+    output = sqrt(Ir1 * Ir1 + Ii1 * Ii1);
+    break;
+  case pNum_:
+    output = ur1 * Ir1 + ui1 * Ii1;
+    break;
+  case qNum_:
+    output = ui1 * Ir1 - ur1 * Ii1;
+    break;
+  default:
+    throw DYNError(Error::MODELER, UndefCalculatedVarI, numCalculatedVar);
   }
   return output;
 }
@@ -836,7 +835,7 @@ ModelDanglingLine::getY0() {
     y_[1] = 0;
   }
 
-  z_[0] = static_cast<double> (connectionState_);
+  z_[0] = static_cast<double>(connectionState_);
 }
 
 NetworkComponent::StateChange_t

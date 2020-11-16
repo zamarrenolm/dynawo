@@ -20,12 +20,11 @@
 #ifndef MODELER_COMMON_DYNVARIABLENATIVE_H_
 #define MODELER_COMMON_DYNVARIABLENATIVE_H_
 
-#include <string>
-
-#include <boost/optional.hpp>
-
 #include "DYNEnumUtils.h"
 #include "DYNVariable.h"
+
+#include <boost/optional.hpp>
+#include <string>
 
 namespace DYN {
 
@@ -50,7 +49,7 @@ class VariableNative : public Variable {
   /**
    * @brief Destructor
    */
-  ~VariableNative() { }
+  ~VariableNative() {}
 
   /**
    * @brief Setter for variable's index
@@ -101,9 +100,9 @@ class VariableNative : public Variable {
  private:
   VariableNative();  ///< Private default constructor
 
-  const typeVar_t type_;  ///< Type of the variable
-  const bool isState_;  ///< @b whether the variable is a state variable
-  const bool negated_;  ///< @b whether the variable is negated
+  const typeVar_t type_;        ///< Type of the variable
+  const bool isState_;          ///< @b whether the variable is a state variable
+  const bool negated_;          ///< @b whether the variable is negated
   boost::optional<int> index_;  ///< Index of the variable in the vector of variable of same type
 };
 }  // namespace DYN

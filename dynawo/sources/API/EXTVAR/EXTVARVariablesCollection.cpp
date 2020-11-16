@@ -17,9 +17,9 @@
  *
  */
 
-#include "DYNMacrosMessage.h"
-
 #include "EXTVARVariablesCollection.h"
+
+#include "DYNMacrosMessage.h"
 #include "EXTVARIterators.h"
 #include "EXTVARVariable.h"
 
@@ -30,11 +30,12 @@ using boost::shared_ptr;
 
 namespace externalVariables {
 
-void VariablesCollection::addVariable(const shared_ptr<Variable>& variable) {
+void
+VariablesCollection::addVariable(const shared_ptr<Variable>& variable) {
   const string& id = variable->getId();
   // Used instead of variables_[name] = VariableFactory::newvariable(id, type)
   // to avoid necessity to create VariableFactory::Impl default constructor
-  std::pair < map< string, shared_ptr<Variable> >::iterator, bool> ret;
+  std::pair<map<string, shared_ptr<Variable> >::iterator, bool> ret;
 #ifdef LANG_CXX11
   ret = variables_.emplace(id, variable);
 #else

@@ -20,8 +20,8 @@
 #ifndef MODELER_DATAINTERFACE_DYNRATIOTAPCHANGERINTERFACE_H_
 #define MODELER_DATAINTERFACE_DYNRATIOTAPCHANGERINTERFACE_H_
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
+#include <vector>
 
 namespace DYN {
 class StepInterface;
@@ -34,7 +34,7 @@ class RatioTapChangerInterface {
   /**
    * @brief Destructor
    */
-  virtual ~RatioTapChangerInterface() { }
+  virtual ~RatioTapChangerInterface() {}
 
   /**
    * @brief Getter for steps of the ratio tap changer

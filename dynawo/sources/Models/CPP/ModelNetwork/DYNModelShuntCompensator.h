@@ -20,8 +20,9 @@
 #ifndef MODELS_CPP_MODELNETWORK_DYNMODELSHUNTCOMPENSATOR_H_
 #define MODELS_CPP_MODELNETWORK_DYNMODELSHUNTCOMPENSATOR_H_
 
-#include <boost/shared_ptr.hpp>
 #include "DYNNetworkComponent.h"
+
+#include <boost/shared_ptr.hpp>
 
 namespace DYN {
 class ModelBus;
@@ -38,7 +39,7 @@ class ModelShuntCompensator : public NetworkComponent {
   /**
    * @brief destructor
    */
-  ~ModelShuntCompensator() { }
+  ~ModelShuntCompensator() {}
 
   /**
    * @brief  calculated variables type
@@ -51,20 +52,12 @@ class ModelShuntCompensator : public NetworkComponent {
   /**
    * @brief  shunt type (capacitor or reactance)
    */
-  typedef enum {
-    CAPACITOR = 0,
-    REACTANCE = 1
-  } ShuntType_t;
+  typedef enum { CAPACITOR = 0, REACTANCE = 1 } ShuntType_t;
 
   /**
    * @brief index discrete variable
    */
-  typedef enum {
-    connectionStateNum_ = 0,
-    isCapacitorNum_ = 1,
-    isAvailableNum_ = 2,
-    currentSectionNum_ = 3
-  } IndexDiscreteVariable_t;
+  typedef enum { connectionStateNum_ = 0, isCapacitorNum_ = 1, isAvailableNum_ = 2, currentSectionNum_ = 3 } IndexDiscreteVariable_t;
 
   /**
    * @brief set connection status
@@ -97,7 +90,8 @@ class ModelShuntCompensator : public NetworkComponent {
   /**
    * @brief evaluate derivatives prim
    */
-  void evalDerivativesPrim() { /* not needed */ }
+  void evalDerivativesPrim() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalF()
@@ -193,22 +187,26 @@ class ModelShuntCompensator : public NetworkComponent {
   /**
    * @copydoc NetworkComponent::evalYType()
    */
-  void evalYType() { /* not needed */ }
+  void evalYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::updateYType()
    */
-  void updateYType() { /* not needed */ }
+  void updateYType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalFType()
    */
-  void evalFType() { /* not needed */ }
+  void evalFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::updateFType()
    */
-  void updateFType() { /* not needed */ }
+  void updateFType() { /* not needed */
+  }
 
   /**
    * @copydoc NetworkComponent::evalYMat()
@@ -250,7 +248,8 @@ class ModelShuntCompensator : public NetworkComponent {
   /**
    * @brief addBusNeighbors
    */
-  void addBusNeighbors() { /* not needed */ }
+  void addBusNeighbors() { /* not needed */
+  }
 
   /**
    * @brief init size
@@ -331,12 +330,12 @@ class ModelShuntCompensator : public NetworkComponent {
   bool isAvailable() const;
 
   double suscepPerSect_;  ///< The shunt susceptance per section in Siemens
-  int currentSection_;  ///< The current number of connected section of the shunt compensator
-  int maximumSection_;  ///< The maximum number of sections of the shunt compensator
-  double vNom_;  ///< The nominal voltage of the bus where the shunt compensator is connected in kV
-  double suscepPu_;  ///< The shunt current susceptance in pu (based SNREF)
-  double tLastOpening_;  ///< Last shunt opening time
-  ShuntType_t type_;  ///< The type of the shunt compensator (CAPACITOR or REACTANCE)
+  int currentSection_;    ///< The current number of connected section of the shunt compensator
+  int maximumSection_;    ///< The maximum number of sections of the shunt compensator
+  double vNom_;           ///< The nominal voltage of the bus where the shunt compensator is connected in kV
+  double suscepPu_;       ///< The shunt current susceptance in pu (based SNREF)
+  double tLastOpening_;   ///< Last shunt opening time
+  ShuntType_t type_;      ///< The type of the shunt compensator (CAPACITOR or REACTANCE)
 
   boost::shared_ptr<ModelBus> modelBus_;  ///< model bus
 
@@ -345,12 +344,12 @@ class ModelShuntCompensator : public NetworkComponent {
 
   // State variables
   State connectionState_;  ///< "internal" shunt compensator connection status, evaluated at the end of evalZ to detect if the state was modified
-  bool stateModified_;  ///< true if the shunt compensator connection state was modified
+  bool stateModified_;     ///< true if the shunt compensator connection state was modified
 
   // Calculated variables
   double ir0_;  ///< initial real part of the current
   double ii0_;  ///< initial imaginary part of the current
-};  ///< Generic model for Shunt compensator in network
+};              ///< Generic model for Shunt compensator in network
 }  // namespace DYN
 
 #endif  // MODELS_CPP_MODELNETWORK_DYNMODELSHUNTCOMPENSATOR_H_
