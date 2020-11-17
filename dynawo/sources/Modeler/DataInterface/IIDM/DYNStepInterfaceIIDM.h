@@ -22,6 +22,7 @@
 
 #include "DYNStepInterface.h"
 
+#include <IIDM/components/TapChanger.h>
 #include <boost/optional.hpp>
 
 namespace IIDM {

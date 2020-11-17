@@ -22,6 +22,7 @@
 
 #include "DYNBusBarSectionInterface.h"
 
+#include <IIDM/components/BusBarSection.h>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 

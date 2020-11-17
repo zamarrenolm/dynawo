@@ -21,6 +21,7 @@
 #define MODELER_COMMON_DYNCONNECTOR_H_
 
 #include "DYNEnumUtils.h"
+#include "DYNVariable.h"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
