@@ -129,7 +129,7 @@ package BaseClasses_INIT
 
     extends BaseClasses.GeneratorSynchronousParameters;
 
-    protected
+
 
       //Internal parameters (final value used in the equations) in p.u (base UNom, SNom)
       /*For an initialization from internal parameters:

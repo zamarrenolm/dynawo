@@ -49,7 +49,7 @@ model GeneratorSynchronous "Synchronous machine"
     Connectors.ImPin IRotorPu(value(start = IRotor0Pu)) "Rotor current in p.u (base UNom, SNom)";
     Connectors.ImPin thetaInternal(value(start = ThetaInternal0)) "Internal angle in rad";
 
-  protected
+
 
     // Start values calculated by the initialization model
     parameter Types.ActivePowerPu PGen0Pu "Start value of active power at terminal in p.u (base SnRef) (generator convention)";

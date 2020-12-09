@@ -103,7 +103,7 @@ package BaseClasses
     Connectors.ImPin efdPu(value(start = Efd0Pu)) "Input voltage of exciter winding in p.u (user-selected base voltage)";
     // Output variables
     Connectors.ImPin omegaPu(value(start = SystemBase.omega0Pu)) "Angular frequency in p.u.";
-  protected
+
     // Start values given as inputs of the initialization process
     parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude in p.u (base UNom)";
     parameter Types.ActivePowerPu P0Pu "Start value of active power at terminal in p.u (base SnRef) (receptor convention)";
