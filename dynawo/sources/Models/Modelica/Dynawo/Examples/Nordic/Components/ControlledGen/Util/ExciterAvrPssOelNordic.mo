@@ -83,7 +83,6 @@ model ExciterAvrPssOelNordic
   Modelica.Blocks.Continuous.TransferFunction leadLag(a = {20, 1}, b = {10, 1}, initType = Modelica.Blocks.Types.Init.NoInit, x(each fixed = true, each start = Efd0Pu), y_start = Efd0Pu)  annotation(
     Placement(visible = true, transformation(origin = {82, -38}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-
   parameter Modelica.SIunits.PerUnit Efd0Pu(fixed=false);
   parameter Modelica.SIunits.PerUnit UStator0Pu(fixed=false);
   parameter Modelica.SIunits.PerUnit If0Pu(fixed=false);
@@ -102,7 +101,8 @@ equation
     Line(points = {{-80, -88}, {-68, -88}, {-68, -88}, {-68, -88}}, color = {0, 0, 127}));
   connect(dOmega.y, dOmega_filt1.u) annotation(
     Line(points = {{-112, -88}, {-106, -88}, {-106, -88}, {-104, -88}}, color = {0, 0, 127}));
-  efdPu = efdPuPin.value;
+  connect(efdPu, efdPuPin.value) annotation(
+    Line);
   connect(efd_filtInt.y, efdPu) annotation(
     Line(points = {{197, -44}, {219, -44}, {219, -44}, {227, -44}}, color = {0, 0, 127}));
   connect(efd_filtAdd.y, efd_filtGain.u) annotation(

@@ -59,26 +59,26 @@ model smallScaleDynamicTest_Tfo
     Placement(visible = true, transformation(origin = {10, 90}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
   TransformerFixedRatio trafo_g20_4072(BPu = 0, GPu = 0, RPu = 0, XPu = 0.15 * 1.05 ^ 2 * (100 / 4500), rTfoPu = 1.05) annotation(
     Placement(visible = true, transformation(origin = {30, -90}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
-
+  
   //UMonDummySignal(start = 1.0434),
   ControlledTfo.ControlledTfoFrameNordic trafo_71_4071(P10Pu=P0Pu_Load_71, Q10Pu=Q0Pu_Load_71, U10Pu=U0Pu_Load_71, U1Phase0=UPhase0rad_Load_71, tfo = ControlledTfo.Util.ControlledTfoParamRecord.tfoPreset.trafo_71_4071)  annotation(
     Placement(visible = true, transformation(origin = {-70, 32}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
-
+  
   //UMonDummySignal(start = 1.0579),
   ControlledTfo.ControlledTfoFrameNordic trafo_72_4072(P10Pu=P0Pu_Load_72, Q10Pu=Q0Pu_Load_72,U10Pu=U0Pu_Load_72, U1Phase0=UPhase0rad_Load_72, tfo = ControlledTfo.Util.ControlledTfoParamRecord.tfoPreset.trafo_72_4072)  annotation(
     Placement(visible = true, transformation(origin = {-28, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
-
+  
   ShuntB shunt_4071(BPu=BPu_shunt_4071, u0Pu=u0Pu_shunt_4071, s0Pu=s0Pu_shunt_4071, i0Pu=i0Pu_shunt_4071) annotation(
     Placement(visible = true, transformation(origin = {-16, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
-
+  
   NodeFault nodeFault(RPu = 0 / XBase_line_4012_4071, XPu = 100 / XBase_line_4012_4071, tBegin = 10, tEnd = 10.1) annotation(
     Placement(visible = true, transformation(origin = {36, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
+  
   Basics.Step PrefPu_l72(Value0=P0Pu_Load_72, Height=P0Pu_Load_72, tStep=1);
   Basics.SetPoint QrefPu_l72(Value0=Q0Pu_Load_72);
   Basics.SetPoint PrefPu_l71(Value0=P0Pu_Load_71);
   Basics.SetPoint QrefPu_l71(Value0=Q0Pu_Load_71);
-
+  
   Types.ActivePower Check_g20_P;
   Types.ReactivePower Check_g20_Q;
   Types.ActivePower Check_g19_P;
@@ -109,7 +109,7 @@ model smallScaleDynamicTest_Tfo
   Types.ReactivePower Check_t72_Q;
   Types.VoltageModulePu Check_t72_UPu;
   Types.Angle Check_t72_UPhase;
-
+  
 protected
   // Generator g19 init values:
   // P0Pu in SnRef, receptor convention
@@ -118,7 +118,7 @@ protected
   //final parameter Types.ComplexPerUnit s0Pu_Gen_g19 = Complex(P0Pu_Gen_g19, Q0Pu_Gen_g19);
   final parameter Types.PerUnit U0Pu_Gen_g19 = 1.03;
   final parameter Types.Angle UPhase0_Gen_g19 = SIunits.Conversions.from_deg(1.4157);
-
+ 
   // Load 71 init values:
   //s0Pu, i0Pu in SnRef, receptor convention
   final parameter Types.PerUnit P0Pu_Load_71 = 298.5 / SystemBase.SnRef;
@@ -128,7 +128,7 @@ protected
   final parameter Types.Angle UPhase0rad_Load_71 = SIunits.Conversions.from_deg(-6.4499);
   final parameter Types.ComplexPerUnit u0Pu_Load_71 = ComplexMath.fromPolar(U0Pu_Load_71,UPhase0rad_Load_71);
   final parameter Types.ComplexPerUnit i0Pu_Load_71 = ComplexMath.conj(s0Pu_Load_71 / u0Pu_Load_71);
-
+  
   // Load 72 init values:
   //s0Pu, i0Pu in SnRef, receptor convention
   final parameter Types.PerUnit P0Pu_Load_72 = 1998.0 / SystemBase.SnRef;
@@ -139,13 +139,13 @@ protected
   final parameter Types.ComplexPerUnit u0Pu_Load_72 = ComplexMath.fromPolar(U0Pu_Load_71,UPhase0rad_Load_71);
   final parameter Types.ComplexPerUnit i0Pu_Load_72 = ComplexMath.conj(s0Pu_Load_72 / u0Pu_Load_72);
   final parameter Types.ComplexPerUnit u0Pu_Load_4011 = ComplexMath.fromPolar(1.0434, SIunits.Conversions.from_deg(-3.6287));
-
+  
   // Line Bases U2Nom / SnRef
   final parameter SIunits.Impedance XBase_line_4012_4071 = 400 ^ 2 / SystemBase.SnRef;
   final parameter SIunits.Impedance XBase_line_4011_4071 = 400 ^ 2 / SystemBase.SnRef;
   final parameter SIunits.Impedance XBase_line_4071_4072a = 400 ^ 2 / SystemBase.SnRef;
   final parameter SIunits.Impedance XBase_line_4071_4072b = 400 ^ 2 / SystemBase.SnRef;
-
+  
   // Shunt Bases UNom / SnRef ((In the report, neg Qnom relates to inductors;
   // in ShuntB, positive BPu for inductive consumption))
   // BPu = (Qnom / UNom^2)/(XBase^-1)
@@ -158,7 +158,7 @@ protected
   final parameter Types.PerUnit Q0Pu_shunt_4071 = BPu_shunt_4071*U0Pu_shunt_4071^2;
   final parameter Types.ComplexPerUnit s0Pu_shunt_4071 = Complex(0, Q0Pu_shunt_4071);
   final parameter Types.ComplexPerUnit i0Pu_shunt_4071 = ComplexMath.conj(s0Pu_shunt_4071/ u0Pu_shunt_4071);
-
+  
 equation
 
   connect(trafo_72_4072.terminal2, bus_4072.terminal) annotation(
@@ -213,7 +213,7 @@ equation
   trafo_g20_4072.switchOffSignal2.value = false;
   shunt_4071.switchOffSignal1.value = false;
   shunt_4071.switchOffSignal2.value = false;
-
+  
   Check_g20_P = SystemBase.SnRef * ComplexMath.real(g20.terminal.V * ComplexMath.conj(g20.terminal.i));
   Check_g20_Q = SystemBase.SnRef * ComplexMath.imag(g20.terminal.V * ComplexMath.conj(g20.terminal.i));
   Check_g19_P = SystemBase.SnRef * ComplexMath.real(g19.terminal.V * ComplexMath.conj(g19.terminal.i));
@@ -244,11 +244,8 @@ equation
   Check_t72_Q = SystemBase.SnRef * ComplexMath.imag(trafo_72_4072.terminal2.V * ComplexMath.conj(trafo_72_4072.terminal2.i));
   Check_t72_UPu = ComplexMath.'abs'(trafo_72_4072.terminal2.V);
   Check_t72_UPhase = SIunits.Conversions.to_deg(ComplexMath.arg(trafo_72_4072.terminal2.V));
-  annotation(
-    uses(Dynawo(version = "1.0.1")),
-    Diagram(coordinateSystem(extent = {{-100, -150}, {100, 150}})),
-    Icon(coordinateSystem(extent = {{-100, -150}, {100, 150}})),
-    version = "",
-    __OpenModelica_commandLineOptions = "",
-    experiment(StartTime = 0, StopTime = 50, Tolerance = 1e-05, Interval = 0.001));
+
+annotation(
+    experiment(StartTime = 0, StopTime = 50, Tolerance = 1e-06, Interval = 0.001), __OpenModelica_commandLineOptions = "--daemode", __OpenModelica_simulationFlags(lv = "LOG_STATS", noEquidistantTimeGrid = "()", s = "ida"));  
+  
 end smallScaleDynamicTest_Tfo;

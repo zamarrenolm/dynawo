@@ -272,7 +272,7 @@ protected
   final parameter Types.ComplexPerUnit s0Pu_g17 = Complex(P0Pu_g17, Q0Pu_g17);
   final parameter Types.ComplexPerUnit u0Pu_g17 = ComplexMath.fromPolar(U0Pu_g17, UPhase0_g17);
   final parameter Types.ComplexPerUnit i0Pu_g17 = -1 * ComplexMath.conj(s0Pu_g17 / u0Pu_g17);
-
+  
   /*
   // Generator g18 init values:
   // P0Pu, Q0Pu in SnRef, receptor convention
@@ -290,7 +290,7 @@ protected
   // P0Pu, Q0Pu in SnRef, receptor convention
   final parameter Types.PerUnit P0Pu_g18 = -1060.0 / Electrical.SystemBase.SnRef;
   final parameter Types.PerUnit Q0Pu_g18 = -293.4 / Electrical.SystemBase.SnRef;
-
+  
   /*
   // Generator g19 init values:
   // P0Pu, Q0Pu in SnRef, receptor convention
@@ -303,7 +303,7 @@ protected
   final parameter Types.ComplexPerUnit u0Pu_g19 = ComplexMath.fromPolar(U0Pu_g19, UPhase0_g19);
   final parameter Types.ComplexPerUnit i0Pu_g19 = -1 * ComplexMath.conj(s0Pu_g19 / u0Pu_g19);
   */
-
+  
   // Generator g19 init values:
   // P0Pu, Q0Pu in SnRef, receptor convention
   final parameter Types.PerUnit P0Pu_g19 = -300.0 / Electrical.SystemBase.SnRef;
@@ -611,5 +611,7 @@ equation
   g19.omegaRefPu.value = 1;
   */
 
+annotation(
+    experiment(StartTime = 0, StopTime = 1, Tolerance = 1e-06, Interval = 0.002), __OpenModelica_commandLineOptions = "--daemode", __OpenModelica_simulationFlags(lv = "LOG_STATS", noEquidistantTimeGrid = "()", s = "ida"));
 
 end Loadflow_plus2RegGens;

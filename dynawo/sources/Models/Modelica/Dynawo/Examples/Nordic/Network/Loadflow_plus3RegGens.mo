@@ -262,7 +262,7 @@ protected
   final parameter Types.ComplexPerUnit s0Pu_g16 = Complex(P0Pu_g16, Q0Pu_g16);
   final parameter Types.ComplexPerUnit u0Pu_g16 = ComplexMath.fromPolar(U0Pu_g16, UPhase0_g16);
   final parameter Types.ComplexPerUnit i0Pu_g16 = -1 * ComplexMath.conj(s0Pu_g16 / u0Pu_g16);
-
+  
   /*
   // Generator g17 init values:
   // P0Pu, Q0Pu in SnRef, receptor convention
@@ -620,5 +620,7 @@ equation
   g19.omegaRefPu.value = 1;
   */
 
+annotation(
+    experiment(StartTime = 0, StopTime = 1, Tolerance = 1e-06, Interval = 0.002), __OpenModelica_commandLineOptions = "--daemode", __OpenModelica_simulationFlags(lv = "LOG_STATS", noEquidistantTimeGrid = "()", s = "ida"));
 
 end Loadflow_plus3RegGens;

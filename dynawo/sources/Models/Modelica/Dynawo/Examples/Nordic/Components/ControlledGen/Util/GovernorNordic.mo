@@ -96,7 +96,8 @@ equation
     Line(points = {{201, 46}, {215, 46}, {215, -10}, {-117, -10}, {-117, -42}, {-97.5, -42}, {-97.5, -40}, {-94, -40}}, color = {0, 0, 127}));
  connect(GovOut_filt.y, GovOut_filtAdd.u2) annotation(
     Line(points = {{201, 46}, {215, 46}, {215, 26}, {71, 26}, {71, 40}, {81, 40}, {81, 40}}, color = {0, 0, 127}));
- PmPuPin.value = PmPu;
+  connect(PmPuPin.value, PmPu) annotation(
+    Line);
  connect(Pmech.y, PmPu) annotation(
     Line(points = {{159, -40}, {205, -40}, {205, -40}, {213, -40}}, color = {0, 0, 127}));
  connect(HeadWater.y, Pmech.u1) annotation(

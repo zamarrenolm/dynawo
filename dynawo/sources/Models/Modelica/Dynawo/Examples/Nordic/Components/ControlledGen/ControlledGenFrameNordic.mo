@@ -52,14 +52,14 @@ equation
 // Connections
   connect(generatorSynchronous.terminal, terminal) annotation(
     Line);
-  generatorSynchronous.ifPu = exciterAvrPssOelNordic.ifPu;
-  generatorSynchronous.UStatorPu.value = exciterAvrPssOelNordic.UStatorPu;
-  generatorSynchronous.omegaPu.value = exciterAvrPssOelNordic.omegaPu;
-  generatorSynchronous.efdPu.value = exciterAvrPssOelNordic.efdPu;
+  connect(generatorSynchronous.ifPu, exciterAvrPssOelNordic.ifPu);
+  connect(generatorSynchronous.UStatorPu.value, exciterAvrPssOelNordic.UStatorPu);
+  connect(generatorSynchronous.omegaPu.value, exciterAvrPssOelNordic.omegaPu);
+  connect(generatorSynchronous.efdPu.value, exciterAvrPssOelNordic.efdPu);
 //generatorSynchronous.efdPu.value = generatorSynchronous.Efd0Pu;
-  generatorSynchronous.omegaPu.value = governorNordic.omegaPu;
+  connect(generatorSynchronous.omegaPu.value, governorNordic.omegaPu);
   connect(generatorSynchronous.PmPu, governorNordic.PmPuPin);
-  generatorSynchronous.PGenPu = BaseConvChangeSnRef2PNom.u;
+  connect(generatorSynchronous.PGenPu, BaseConvChangeSnRef2PNom.u);
   connect(BaseConvChangeSnRef2PNom.y, governorNordic.PGenPuPNom) annotation(
     Line(points = {{-118, -52}, {-104, -52}, {-104, -52}, {-104, -52}}, color = {0, 0, 127}));
 ////generatorSynchronous.PmPu.value = generatorSynchronous.Pm0Pu;
