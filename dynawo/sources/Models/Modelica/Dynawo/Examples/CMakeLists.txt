@@ -11,7 +11,7 @@
 add_subdirectory(SMIB S)
 add_subdirectory(GridForming G)
 add_subdirectory(HVDC H)
-add_subdirectory(Nordic32TestSystem N)
+add_subdirectory(Nordic N)
 
 set(MODEL_FILES
     package.mo
