@@ -9,11 +9,11 @@
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 
 set(MODEL_FILES
-    ControlledGenFrameParams
-    ExciterAvrPssOelNordic
-    GovernorNordic
-    InitialisedSynchronousGenerator
-    OELFunction
+    ControlledGenFrameParams.mo
+    ExciterAvrPssOelNordic.mo
+    GovernorNordic.mo
+    InitialisedSynchronousGenerator.mo
+    OELFunction.mo
     package.mo
     )
 

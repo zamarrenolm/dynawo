@@ -12,7 +12,6 @@
 set(MODEL_FILES
     package.mo
     ControlledTfoParamRecord.mo
-    InitialisedTapChanger.mo
     InitialisedTransformerVariableTap.mo
     )
 

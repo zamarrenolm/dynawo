@@ -8,10 +8,10 @@
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 
-add_subdirectory(Util)
+add_subdirectory(Util U)
 
 set(MODEL_FILES
-    ControlledTfoFrameNordic
+    ControlledTfoFrameNordic.mo
     package.mo
     )
 
