@@ -870,7 +870,8 @@ class Factory:
                     list_depend.extend( map_dep[name_var_eval] ) # We get the other vars (from *._info.xml)
 
                 eq_mak.set_depend_vars(list_depend)
-                eq_mak.set_diff_eq(name_var_eval in self.reader.derivative_residual_vars or len(list(filter(lambda x,name_var_eval=name_var_eval : x.get_name() == name_var_eval, self.list_vars_der))) > 0)
+                eq_mak.set_diff_eq(name_var_eval in self.reader.derivative_residual_vars or len(list(filter(lambda x,name_var_eval=name_var_eval : x.get_name() == name_var_eval, self.list_vars_der))) > 0
+                                   or "STATE_DER" in str(eq_mak.get_body()))
 
         # Build an equation for each function in the dae *.c file
         for eq_mak in list_eq_maker_16dae_c:
@@ -2787,16 +2788,21 @@ class Factory:
     # @return
     def prepare_for_setytype(self):
         ind = 0
+        diff_external_var = []
+        for eq in self.get_list_eq_syst():
+            for v in itertools.chain(self.reader.fictive_continuous_vars, self.reader.fictive_optional_continuous_vars):
+                if ("der(" + v) in str(eq.get_body()) or ("der (" + v) in str(eq.get_body()):
+                    diff_external_var.append(v)
         for v in self.list_vars_syst:
             if v.get_name() in self.reader.auxiliary_vars_counted_as_variables : continue
             if v in self.reader.list_calculated_vars : continue
             spin = "DIFFERENTIAL"
             var_ext = ""
             if is_alg_var(v) : spin = "ALGEBRAIC"
-            if v.get_name() in self.reader.fictive_continuous_vars:
+            if v.get_name() in self.reader.fictive_continuous_vars and v.get_name() not in diff_external_var:
               spin = "EXTERNAL"
               var_ext = "- external variables"
-            elif v.get_name() in self.reader.fictive_optional_continuous_vars:
+            elif v.get_name() in self.reader.fictive_optional_continuous_vars and v.get_name() not in diff_external_var:
               spin = "OPTIONAL_EXTERNAL"
               var_ext = "- optional external variables"
             line = "   yType[ %s ] = %s;   /* %s (%s) %s */\n" % (str(ind), spin, to_compile_name(v.get_name()), v.get_type(), var_ext)

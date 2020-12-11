@@ -762,7 +762,7 @@ Simulation::calculateIC() {
   Trace::info() << "-----------------------------------------------------------------------" << Trace::endline;
   // ensure globally satisfactory initial values for dynamic models
   solver_->init(model_, tStart_, tStop_);
-  solver_->calculateIC();
+//  solver_->calculateIC();
   model_->getCurrentZ(zCurrent_);
 
   model_->notifyTimeStep();
