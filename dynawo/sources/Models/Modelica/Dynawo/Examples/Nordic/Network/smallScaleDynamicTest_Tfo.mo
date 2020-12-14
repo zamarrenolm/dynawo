@@ -60,18 +60,16 @@ model smallScaleDynamicTest_Tfo
   TransformerFixedRatio trafo_g20_4072(BPu = 0, GPu = 0, RPu = 0, XPu = 0.15 * 1.05 ^ 2 * (100 / 4500), rTfoPu = 1.05) annotation(
     Placement(visible = true, transformation(origin = {30, -90}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
   
-  //UMonDummySignal(start = 1.0434),
-  ControlledTfo.ControlledTfoFrameNordic trafo_71_4071(P10Pu=P0Pu_Load_71, Q10Pu=Q0Pu_Load_71, U10Pu=U0Pu_Load_71, U1Phase0=UPhase0rad_Load_71, tfo = ControlledTfo.Util.ControlledTfoParamRecord.tfoPreset.trafo_71_4071)  annotation(
+  ControlledTfo.ControlledTfoFrameNordic trafo_71_4071(P10Pu=-P0Pu_Load_71, Q10Pu=-Q0Pu_Load_71, U10Pu=U0Pu_Load_71, U1Phase0=UPhase0rad_Load_71, tfo = ControlledTfo.Util.ControlledTfoParamRecord.tfoPreset.trafo_71_4071)  annotation(
     Placement(visible = true, transformation(origin = {-70, 32}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
   
-  //UMonDummySignal(start = 1.0579),
-  ControlledTfo.ControlledTfoFrameNordic trafo_72_4072(P10Pu=P0Pu_Load_72, Q10Pu=Q0Pu_Load_72,U10Pu=U0Pu_Load_72, U1Phase0=UPhase0rad_Load_72, tfo = ControlledTfo.Util.ControlledTfoParamRecord.tfoPreset.trafo_72_4072)  annotation(
+  ControlledTfo.ControlledTfoFrameNordic trafo_72_4072(P10Pu=-P0Pu_Load_72, Q10Pu=-Q0Pu_Load_72,U10Pu=U0Pu_Load_72, U1Phase0=UPhase0rad_Load_72, tfo = ControlledTfo.Util.ControlledTfoParamRecord.tfoPreset.trafo_72_4072)  annotation(
     Placement(visible = true, transformation(origin = {-28, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
   
   ShuntB shunt_4071(BPu=BPu_shunt_4071, u0Pu=u0Pu_shunt_4071, s0Pu=s0Pu_shunt_4071, i0Pu=i0Pu_shunt_4071) annotation(
     Placement(visible = true, transformation(origin = {-16, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   
-  NodeFault nodeFault(RPu = 0 / XBase_line_4012_4071, XPu = 100 / XBase_line_4012_4071, tBegin = 10, tEnd = 10.1) annotation(
+  NodeFault nodeFault(RPu = 0 / XBase_line_4012_4071, XPu = 100 / XBase_line_4012_4071, tBegin = 1000, tEnd = 1000.1) annotation(
     Placement(visible = true, transformation(origin = {36, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   
   Basics.Step PrefPu_l72(Value0=P0Pu_Load_72, Height=P0Pu_Load_72, tStep=1);

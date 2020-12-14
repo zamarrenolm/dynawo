@@ -1,7 +1,6 @@
 within Dynawo.Examples.Nordic.Components.ControlledGen;
 
 model ControlledGenFrameNordic
-
   // Imports
   import Modelica.SIunits;
   import Modelica.ComplexMath;
@@ -14,9 +13,7 @@ model ControlledGenFrameNordic
   import Dynawo.Examples.Nordic.Components.ControlledGen.Util;
   import Dynawo.Examples.Nordic.Components.ControlledGen.Util.ControlledGenFrameParams;
   parameter Util.ControlledGenFrameParams.genFramePreset gen;
-
   extends AdditionalIcons.Machine;
-
   // Blocks
   Util.InitialisedSynchronousGenerator generatorSynchronous(DPu = 1, ExcitationPu = Machines.OmegaRef.BaseClasses.GeneratorSynchronousParameters.ExcitationPuType.NominalStatorVoltageNoLoad, H = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.H], P0Pu = P0Pu, PNomAlt = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.PNom], PNomTurb = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.PNom], Q0Pu = Q0Pu, RTfPu = 0, RaPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.RaPu], SNom = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.SNom], SnTfo = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.SNom], Tpd0 = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.Tpd0], Tppd0 = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.Tppd0], Tppq0 = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.Tppq0], Tpq0 = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.Tpq0], U0Pu = U0Pu, UBaseHV = 15, UBaseLV = 15, UNom = 15, UNomHV = 15, UNomLV = 15, UPhase0 = UPhase0, XTfPu = 0, XdPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XdPu], XlPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XlPu], XpdPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XpdPu], XppdPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XppdPu], XppqPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XppqPu], XpqPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XpqPu], XqPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XqPu], md = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.md], mq = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.mq], nd = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.nd], nq = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.nq], threeWindings = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.isHydroPowerPlant]) annotation(
     Placement(visible = true, transformation(origin = {0, 0}, extent = {{-40, -40}, {40, 40}}, rotation = 0)));
@@ -56,21 +53,15 @@ equation
   connect(generatorSynchronous.UStatorPu.value, exciterAvrPssOelNordic.UStatorPu);
   connect(generatorSynchronous.omegaPu.value, exciterAvrPssOelNordic.omegaPu);
   connect(generatorSynchronous.efdPu.value, exciterAvrPssOelNordic.efdPu);
-//generatorSynchronous.efdPu.value = generatorSynchronous.Efd0Pu;
   connect(generatorSynchronous.omegaPu.value, governorNordic.omegaPu);
   connect(generatorSynchronous.PmPu, governorNordic.PmPuPin);
   connect(generatorSynchronous.PGenPu, BaseConvChangeSnRef2PNom.u);
   connect(BaseConvChangeSnRef2PNom.y, governorNordic.PGenPuPNom) annotation(
     Line(points = {{-118, -52}, {-104, -52}, {-104, -52}, {-104, -52}}, color = {0, 0, 127}));
-////generatorSynchronous.PmPu.value = generatorSynchronous.Pm0Pu;
 //SwitchOff Signals and additional equations
   generatorSynchronous.switchOffSignal1.value = false;
   generatorSynchronous.switchOffSignal2.value = false;
   generatorSynchronous.switchOffSignal3.value = false;
   generatorSynchronous.omegaRefPu.value = SystemBase.omegaRef0Pu;
-  annotation(
-    Diagram(coordinateSystem(initialScale = 0.1)),
-    Icon(graphics = {Rectangle(origin = {0, -80}, lineThickness = 0.75, extent = {{-100, 180}, {100, -20}})}, coordinateSystem(initialScale = 0.1)),
-    uses(Dynawo(version = "1.0.1"), Modelica(version = "3.2.3")),
-    experiment(StartTime = 0, StopTime = 1, Tolerance = 1e-6, Interval = 0.002));
+
 end ControlledGenFrameNordic;

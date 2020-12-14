@@ -13,14 +13,12 @@ model ControlledTfoFrameNordic
 
   parameter Util.ControlledTfoParamRecord.tfoPreset tfo;
 
-  //Real UMonDummySignal(start = 1); // dummy signal for TapChanger.UMonitored;
-
   Electrical.Controls.Transformers.TapChanger tapChanger(
     tap0(fixed=false),
     t1st=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.t1st],
     tNext=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.tNext],
     state0 = Electrical.Controls.Transformers.BaseClasses.BaseTapChangerPhaseShifter.State.Standard,
-  U0=U10Pu,tapMin = 0, tapMax = Util.ControlledTfoParamRecord.NbTap - 1, regulating0=true, UTarget = 1, UDeadBand=0.01, increaseTapToIncreaseValue=true, locked0=false
+  U0=U10Pu,tapMin = 0, tapMax = Util.ControlledTfoParamRecord.NbTap - 1, regulating0=true, UTarget = 1, UDeadBand=0.01, increaseTapToIncreaseValue=false, locked0=false
   ) annotation(
     Placement(visible = true, transformation(origin = {0, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
@@ -47,14 +45,12 @@ initial algorithm
   tapChanger.tap0 := tfoVariableTap.Tap0;
 
 equation
-  //der(UMonDummySignal) = 0;
   connect(tfoVariableTap.terminal1, terminal1) annotation(
     Line(points = {{-10, 0}, {-100, 0}, {-100, 0}, {-100, 0}}, color = {0, 0, 255}));
   connect(tfoVariableTap.terminal2, terminal2) annotation(
     Line(points = {{10, 0}, {98, 0}, {98, 0}, {98, 0}}, color = {0, 0, 255}));
   connect(tapChanger.tap, tfoVariableTap.tap);
-  connect(tfoVariableTap.U2Pu, tapChanger.UMonitored);
-  //connect(tapChanger.UMonitored.value, UMonDummySignal);
+  connect(tfoVariableTap.U1Pu, tapChanger.UMonitored);
   tapChanger.switchOffSignal1.value = false;
   tapChanger.switchOffSignal2.value = false;
   tfoVariableTap.switchOffSignal1.value = false;
