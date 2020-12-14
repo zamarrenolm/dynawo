@@ -34,7 +34,7 @@ record TapChangerPhaseShifterParams
   parameter Integer tapMin "Minimum tap";
   parameter Integer tapMax "Maximum tap";
 
-protected
+//protected
 
   parameter Boolean regulating0 "Whether the tap-changer/phase-shifter is initially regulating";
   parameter Boolean locked0 = not regulating0 "Whether the tap-changer/phase-shifter is initially locked";
@@ -46,7 +46,7 @@ protected
 end TapChangerPhaseShifterParams;
 
 // used for phase-shifterI (applied on current), phase-shifterP (applied on power) and tap-changer (applied on voltage)
-partial model BaseTapChangerPhaseShifter "Base model for tap-changers and phase-shifters"
+model BaseTapChangerPhaseShifter "Base model for tap-changers and phase-shifters"
   import Modelica.Constants;
 
   import Dynawo.Connectors;

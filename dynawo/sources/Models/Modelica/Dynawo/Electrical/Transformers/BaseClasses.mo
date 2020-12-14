@@ -52,7 +52,7 @@ partial model BaseTransformerVariableTap "Base class for ideal and classical tra
   Connectors.ImPin Q1Pu (value (start = Q10Pu)) "Reactive power on side 1";
   Connectors.ImPin U2Pu (value (start = U20Pu)) "Voltage amplitude at terminal 2 in p.u (base U2Nom)";
 
-protected
+//protected
 
   // Parameters coming from the initialization process
   parameter Types.ComplexVoltagePu u10Pu  "Start value of complex voltage at terminal 1 in p.u (base U1Nom)";

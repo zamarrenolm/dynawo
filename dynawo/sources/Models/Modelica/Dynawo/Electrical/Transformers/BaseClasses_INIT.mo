@@ -208,7 +208,7 @@ partial model BaseTransformerVariableTapCommon_INIT "Base model for initializati
     parameter Integer NbTap "Number of taps";
     parameter Types.VoltageModulePu Uc20Pu "Voltage set-point on side 2 in p.u (base U2Nom)";
 
-  protected
+  //protected
     // Transformer start values
     Types.ComplexVoltagePu u20Pu  "Start value of complex voltage at terminal 2 in p.u (base U2Nom)";
     flow Types.ComplexCurrentPu i20Pu  "Start value of complex current at terminal 2 in p.u (base U2Nom, SnRef) (receptor convention)";
