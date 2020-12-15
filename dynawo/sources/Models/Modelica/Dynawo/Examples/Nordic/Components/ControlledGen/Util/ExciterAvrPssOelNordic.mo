@@ -103,6 +103,7 @@ equation
     Line(points = {{-112, -88}, {-106, -88}, {-106, -88}, {-104, -88}}, color = {0, 0, 127}));
   connect(efdPu, efdPuPin.value) annotation(
     Line);
+  //efdPu = efdPuPin.value;
   connect(efd_filtInt.y, efdPu) annotation(
     Line(points = {{197, -44}, {219, -44}, {219, -44}, {227, -44}}, color = {0, 0, 127}));
   connect(efd_filtAdd.y, efd_filtGain.u) annotation(

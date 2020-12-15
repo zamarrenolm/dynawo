@@ -46,7 +46,7 @@ record TapChangerPhaseShifterParams
 end TapChangerPhaseShifterParams;
 
 // used for phase-shifterI (applied on current), phase-shifterP (applied on power) and tap-changer (applied on voltage)
-model BaseTapChangerPhaseShifter "Base model for tap-changers and phase-shifters"
+partial model BaseTapChangerPhaseShifter "Base model for tap-changers and phase-shifters"
   import Modelica.Constants;
 
   import Dynawo.Connectors;
@@ -73,7 +73,7 @@ model BaseTapChangerPhaseShifter "Base model for tap-changers and phase-shifters
     Boolean locked (start = locked0) "Whether the tap-changer/phase-shifter is locked";
     State state(start = state0);
 
-  protected
+  //protected
 
     Boolean valueAboveMax(start = false) "True if the monitored signal is above the maximum limit";
     Boolean lookingToIncreaseTap "True if the tap-changer/phase-shifter wants to increase tap";
@@ -195,7 +195,7 @@ partial model BaseTapChangerPhaseShifter_INTERVAL "Base model for tap-changers a
   public
     parameter Real valueMin (max = valueMax) "Minimum allowed value";
 
-  protected
+  //protected
     Boolean valueUnderMin "True if the monitored signal is under the minimum limit";
     Types.Time tValueUnderMinWhileRunning(start = Constants.inf) "Time when the monitored signal went under the minimum limit and the tap-changer/phase-shifter is running";
 
@@ -274,9 +274,9 @@ equation
   //Transition to "MoveUpN" (only possible from "MoveUp1" or "MoveUpN")
   elsewhen (pre(state) == State.MoveUp1 or  pre(state) == State.MoveUpN)  and time - pre(tTapUp) >= tNext and pre(tap.value) < tapMax then
     state = State.MoveUpN;
-    tap.value = pre(tap.value) + 1;
     tTapUp = time;
     tTapDown = pre(tTapDown);
+    tap.value = pre(tap.value) + 1;
     Timeline.logEvent1(TimelineKeys.TapUp);
   end when;
 

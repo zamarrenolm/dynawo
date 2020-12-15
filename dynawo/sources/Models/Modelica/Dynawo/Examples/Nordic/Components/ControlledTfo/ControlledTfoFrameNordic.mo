@@ -14,11 +14,11 @@ model ControlledTfoFrameNordic
   parameter Util.ControlledTfoParamRecord.tfoPreset tfo;
 
   Electrical.Controls.Transformers.TapChanger tapChanger(
-    tap0(fixed=false),
+    
+  U0=U10Pu, UDeadBand=0.01, UTarget = 1, increaseTapToIncreaseValue=false, locked0=false, regulating0=true,
+    state0 = Electrical.Controls.Transformers.BaseClasses.TapChangerPhaseShifterParams.State.Standard,
     t1st=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.t1st],
-    tNext=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.tNext],
-    state0 = Electrical.Controls.Transformers.BaseClasses.BaseTapChangerPhaseShifter.State.Standard,
-  U0=U10Pu,tapMin = 0, tapMax = Util.ControlledTfoParamRecord.NbTap - 1, regulating0=true, UTarget = 1, UDeadBand=0.01, increaseTapToIncreaseValue=false, locked0=false
+    tNext=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.tNext],tap0(fixed=false), tapMax = Util.ControlledTfoParamRecord.NbTap - 1,tapMin = 0
   ) annotation(
     Placement(visible = true, transformation(origin = {0, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
@@ -58,4 +58,5 @@ equation
   tapChanger.locked = false;
 
 annotation(
-    Icon(graphics = {Rectangle(lineThickness = 0.75, extent = {{-100, 100}, {100, -100}})}));end ControlledTfoFrameNordic;
+    Icon(graphics = {Rectangle(lineThickness = 0.75, extent = {{-100, 100}, {100, -100}})}));
+end ControlledTfoFrameNordic;

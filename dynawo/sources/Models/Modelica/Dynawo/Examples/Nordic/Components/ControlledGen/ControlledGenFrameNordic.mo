@@ -54,8 +54,14 @@ equation
   connect(generatorSynchronous.omegaPu.value, exciterAvrPssOelNordic.omegaPu);
   connect(generatorSynchronous.efdPu.value, exciterAvrPssOelNordic.efdPu);
   connect(generatorSynchronous.omegaPu.value, governorNordic.omegaPu);
-  connect(generatorSynchronous.PmPu, governorNordic.PmPuPin);
   connect(generatorSynchronous.PGenPu, BaseConvChangeSnRef2PNom.u);
+  /*generatorSynchronous.ifPu = exciterAvrPssOelNordic.ifPu;
+  generatorSynchronous.UStatorPu.value = exciterAvrPssOelNordic.UStatorPu;
+  generatorSynchronous.omegaPu.value = exciterAvrPssOelNordic.omegaPu;
+  generatorSynchronous.efdPu.value = exciterAvrPssOelNordic.efdPu;
+  generatorSynchronous.omegaPu.value = governorNordic.omegaPu;
+  generatorSynchronous.PGenPu = BaseConvChangeSnRef2PNom.u;*/
+  connect(generatorSynchronous.PmPu, governorNordic.PmPuPin);  
   connect(BaseConvChangeSnRef2PNom.y, governorNordic.PGenPuPNom) annotation(
     Line(points = {{-118, -52}, {-104, -52}, {-104, -52}, {-104, -52}}, color = {0, 0, 127}));
 //SwitchOff Signals and additional equations
