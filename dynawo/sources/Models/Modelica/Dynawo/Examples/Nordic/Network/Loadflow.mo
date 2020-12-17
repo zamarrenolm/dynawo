@@ -82,7 +82,9 @@ model Loadflow
   Electrical.Machines.OmegaRef.GeneratorPQ g17(PMin = 0, PMax = 9999, PNom = 540.0, u0Pu = u0Pu_g17, i0Pu = i0Pu_g17, PGen0Pu = P0Pu_g17, QGen0Pu = Q0Pu_g17, U0Pu = U0Pu_g17, AlphaPuPNom = 0);
   Electrical.Machines.OmegaRef.GeneratorPQ g18(PMin = 0, PMax = 9999, PNom = 1080.0, u0Pu = u0Pu_g18, i0Pu = i0Pu_g18, PGen0Pu = P0Pu_g18, QGen0Pu = Q0Pu_g18, U0Pu = U0Pu_g18, AlphaPuPNom = 0);
   Electrical.Machines.OmegaRef.GeneratorPQ g19(PMin = 0, PMax = 9999, PNom = 475.0, u0Pu = u0Pu_g19, i0Pu = i0Pu_g19, PGen0Pu = P0Pu_g19, QGen0Pu = Q0Pu_g19, U0Pu = U0Pu_g19, AlphaPuPNom = 0);
-
+  
+  Types.ActivePower Check_g20_P;
+  Types.ReactivePower Check_g20_Q;
 protected
   // Generator g09 init values:
   // P0Pu, Q0Pu in SnRef, generator convention
@@ -593,6 +595,9 @@ equation
   g19.switchOffSignal2.value = false;
   g19.switchOffSignal3.value = false;
   g19.omegaRefPu.value = 1;
+  
+  Check_g20_P = SystemBase.SnRef * ComplexMath.real(slackbus_g20.terminal.V * ComplexMath.conj(slackbus_g20.terminal.i));
+  Check_g20_Q = SystemBase.SnRef * ComplexMath.imag(slackbus_g20.terminal.V * ComplexMath.conj(slackbus_g20.terminal.i));
 
 annotation(
     experiment(StartTime = 0, StopTime = 1, Tolerance = 1e-06, Interval = 0.002), __OpenModelica_commandLineOptions = "--daemode", __OpenModelica_simulationFlags(lv = "LOG_STATS", noEquidistantTimeGrid = "()", s = "ida"));

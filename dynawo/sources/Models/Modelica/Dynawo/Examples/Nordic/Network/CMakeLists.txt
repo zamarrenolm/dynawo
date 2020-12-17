@@ -11,6 +11,9 @@
 set(MODEL_FILES
     StaticNetwork.mo
     Loadflow.mo
+	DynamicModel_fixedTfos.mo
+	smallScaleDynamicTest_Gen.mo
+	smallScaleDynamicTest_Tfo.mo
     package.mo
     )
 

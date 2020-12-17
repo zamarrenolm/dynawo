@@ -17,6 +17,8 @@ model GovernorNordic
   import Dynawo.Connectors;
 
   parameter Real sigma;
+  parameter Real kP;
+  parameter Real kI;
 
   Connectors.ImPin PmPuPin(value(start = Pm0Pu));
 
@@ -46,9 +48,9 @@ model GovernorNordic
     Placement(visible = true, transformation(origin = {190, 46}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add GovOut(k1 = +1, k2 = +1) annotation(
     Placement(visible = true, transformation(origin = {54, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.Gain GovKp(k = 2) annotation(
+  Modelica.Blocks.Math.Gain GovKp(k = kP) annotation(
     Placement(visible = true, transformation(origin = {-10, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.Gain GovKi(k = 0.4) annotation(
+  Modelica.Blocks.Math.Gain GovKi(k = kI) annotation(
     Placement(visible = true, transformation(origin = {-12, 46}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.Integrator GovInt(k = 1, y_start = Pm0Pu) annotation(
     Placement(visible = true, transformation(origin = {18, 46}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));

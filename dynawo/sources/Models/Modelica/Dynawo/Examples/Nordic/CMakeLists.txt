@@ -13,6 +13,7 @@ add_subdirectory(Components C)
 
 set(MODEL_FILES
     package.mo
+	TestCase.mo
     )
 
 #
