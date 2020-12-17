@@ -58,5 +58,6 @@ equation
   tapChanger.locked = false;
 
 annotation(
-    Icon(graphics = {Rectangle(lineThickness = 0.75, extent = {{-100, 100}, {100, -100}})}));
+    Icon(graphics = {Rectangle(lineThickness = 0.75, extent = {{-100, 100}, {100, -100}})}),
+    Documentation(info = "<html><head></head><body>The controlled tfo frame represents the regulated transformer of the Nordic Test System.<div>It consists of a variable tap transformer and an on-load tap changer with 33 positions, keeping the transformer ratios in the interval [0.88, 1.20] and the distribution voltage in the deadband [0.99, 1.01].</div><div><div style=\"font-size: 12px;\">The implementation utilises a transformer preset, which automatically sets the parameters of all elements to those of the corresponding chosen generator.</div><div style=\"font-size: 12px;\">To add another configuration, append a new line to \"tfoParamValues\" in Util/ControlledTfoParamRecord and append a fitting name in the \"tfoPreset\" enumeration.</div></div></body></html>"));
 end ControlledTfoFrameNordic;

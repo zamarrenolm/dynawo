@@ -71,7 +71,7 @@ model GovernorNordic
   Modelica.Blocks.Math.Gain dPmulDroop(k = sigma) annotation(
     Placement(visible = true, transformation(origin = {-86, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-  //protected
+//protected
   parameter Modelica.SIunits.PerUnit Pm0Pu(fixed = false);
 equation
  connect(Pm0Pu_const.y, dP.u1) annotation(
@@ -98,7 +98,7 @@ equation
     Line(points = {{201, 46}, {215, 46}, {215, 26}, {71, 26}, {71, 40}, {81, 40}, {81, 40}}, color = {0, 0, 127}));
  connect(PmPuPin.value, PmPu) annotation(
     Line);
- //PmPuPin.value = PmPu;
+//PmPuPin.value = PmPu;
  connect(Pmech.y, PmPu) annotation(
     Line(points = {{159, -40}, {205, -40}, {205, -40}, {213, -40}}, color = {0, 0, 127}));
  connect(HeadWater.y, Pmech.u1) annotation(
@@ -137,6 +137,7 @@ equation
     Line(points = {{-210, -10}, {-178, -10}}, color = {0, 0, 127}));
 
   annotation(
-    Icon(graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 120}, lineColor = {0, 0, 255}, fillColor = {0, 0, 255}, extent = {{-60, 20}, {60, -20}}, textString = "%name")}, coordinateSystem(initialScale = 0.1)));
+    Icon(graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 120}, lineColor = {0, 0, 255}, fillColor = {0, 0, 255}, extent = {{-60, 20}, {60, -20}}, textString = "%name")}, coordinateSystem(initialScale = 0.1)),
+    Documentation(info = "<html><head></head><body>This model implements the speed control of the hydro-power generator frames in the Nordic Test System.<div>It consists of a turbine model (lower part) and a speed controller (upper part).&nbsp;<br><div>Its design stems from the report.&nbsp;</div></div></body></html>"));
 
 end GovernorNordic;

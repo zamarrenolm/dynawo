@@ -70,4 +70,7 @@ equation
   generatorSynchronous.switchOffSignal3.value = false;
   generatorSynchronous.omegaRefPu.value = SystemBase.omegaRef0Pu;
 
+annotation(
+    Documentation(info = "<html><head></head><body>The controlled generator frame functions as the regulated synchronous generator of the Nordic Test System.<div>It consists of a either a 3 or 4 windings synchronous generator, which models hydro-power or thermal plants respectively.</div><div>The regulating elements comprise overexcitation limitation, automatic voltage regulation, power system stabilisation and speed control.<br>The implementation utilises a generator preset, which automatically sets the parameters of all elements to those of the corresponding chosen generator.</div><div>To add another configuration, append a new line to \"genFrameParamValues\", \"govParamValues\" and \"exAvPsOeParamValues\"&nbsp;in Util/ControlledGenFrameParams and append a fitting name in the \"genFramePreset\" enumeration.</div>
+</body></html>"));
 end ControlledGenFrameNordic;
