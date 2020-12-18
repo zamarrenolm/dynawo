@@ -297,7 +297,7 @@ protected
 
 
 equation
-
+  line_4032_4044.switchOffSignal1.value = false;
   connect(slackbus_g20.terminal, bus_BG20.terminal);
   connect(trafo_1011_4011.terminal1, bus_1011.terminal);
   connect(trafo_1011_4011.terminal2, bus_4011.terminal);
