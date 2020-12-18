@@ -137,7 +137,7 @@ model DynamicModel_fixedTfos
     Placement(visible = true, transformation(origin = {-77, 0}, extent = {{-3, -3}, {3, 3}}, rotation = 0)));
   Nordic.Components.ControlledGen.ControlledGenFrameNordic g11(P0Pu = P0Pu_g11, Q0Pu = Q0Pu_g11, U0Pu = 1.0211, UPhase0 = SIunits.Conversions.from_deg(-29.04), gen = Nordic.Components.ControlledGen.Util.ControlledGenFrameParams.genFramePreset.g11) annotation(
     Placement(visible = true, transformation(origin = {35, 72}, extent = {{-3, -3}, {3, 3}}, rotation = 0)));
-  Nordic.Components.ControlledGen.ControlledGenFrameNordic g13(P0Pu = P0Pu_g13, Q0Pu = Q0Pu_g13, U0Pu = 1.017, UPhase0 = SIunits.Conversions.from_deg(-54.3), gen = Nordic.Components.ControlledGen.Util.ControlledGenFrameParams.genFramePreset.g11) annotation(
+  Nordic.Components.ControlledGen.ControlledGenFrameNordic g13(P0Pu = P0Pu_g13, Q0Pu = Q0Pu_g13, U0Pu = 1.017, UPhase0 = SIunits.Conversions.from_deg(-54.3), gen = Nordic.Components.ControlledGen.Util.ControlledGenFrameParams.genFramePreset.g13) annotation(
     Placement(visible = true, transformation(origin = {-70, -29}, extent = {{-3, -3}, {3, 3}}, rotation = 0)));
   Nordic.Components.ControlledGen.ControlledGenFrameNordic g14(P0Pu = P0Pu_g14, Q0Pu = Q0Pu_g14, U0Pu = 1.0454, UPhase0 = SIunits.Conversions.from_deg(-49.9), gen = Nordic.Components.ControlledGen.Util.ControlledGenFrameParams.genFramePreset.g14) annotation(
     Placement(visible = true, transformation(origin = {50, -30}, extent = {{-3, -3}, {3, 3}}, rotation = 0)));
