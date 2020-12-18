@@ -262,8 +262,8 @@ equation
     Line(points = {{-25, 133}, {-25, 130}, {-30, 130}}, color = {0, 0, 255}));
   connect(trafo_g2_1013.terminal2, bus_1013.terminal) annotation(
     Line(points = {{75, 133}, {75, 130}, {80, 130}}, color = {0, 0, 255}));
-  connect(bus_BG02.terminal, trafo_g2_1013.terminal1) annotation(
-    Line(points = {{75, 145}, {75, 143}}, color = {0, 0, 255}));
+  connect(trafo_g2_1013.terminal1, bus_BG02.terminal) annotation(
+    Line(points = {{75, 143}, {75, 145}}, color = {0, 0, 255}));
   connect(trafo_13_1013.terminal1, bus_B13.terminal) annotation(
     Line(points = {{85, 118}, {85, 115}}, color = {0, 0, 255}));
   connect(trafo_13_1013.terminal2, bus_1013.terminal) annotation(
@@ -276,34 +276,34 @@ equation
     Line(points = {{85, 88}, {85, 85}}, color = {0, 0, 255}));
   connect(trafo_g3_1014.terminal2, bus_1014.terminal) annotation(
     Line(points = {{85, 98}, {85, 100}, {80, 100}}, color = {0, 0, 255}));
-  connect(bus_BG03.terminal, g03.terminal) annotation(
-    Line(points = {{85, 85}, {85, 79}}, color = {0, 0, 255}));
+  connect(g03.terminal, bus_BG03.terminal) annotation(
+    Line(points = {{85, 79}, {85, 85}}, color = {0, 0, 255}));
   connect(trafo_g1_1012.terminal2, bus_1012.terminal) annotation(
     Line(points = {{25, 98}, {25, 100}, {30, 100}}, color = {0, 0, 255}));
   connect(trafo_g1_1012.terminal1, bus_BG01.terminal) annotation(
     Line(points = {{25, 88}, {25, 85}}, color = {0, 0, 255}));
-  connect(bus_B12.terminal, trafo_12_1012.terminal1) annotation(
-    Line(points = {{39, 115}, {39, 113}}, color = {0, 0, 255}));
+  connect(trafo_12_1012.terminal1, bus_B12.terminal) annotation(
+    Line(points = {{39, 113}, {39, 115}}, color = {0, 0, 255}));
   connect(trafo_12_1012.terminal2, bus_1012.terminal) annotation(
     Line(points = {{39, 103}, {39, 100}, {30, 100}}, color = {0, 0, 255}));
   connect(trafo_g10_4012.terminal1, bus_BG10.terminal) annotation(
     Line(points = {{-35, 88}, {-35, 85}}, color = {0, 0, 255}));
   connect(trafo_g10_4012.terminal2, bus_4012.terminal) annotation(
     Line(points = {{-35, 98}, {-35, 100}, {-30, 100}}, color = {0, 0, 255}));
-  connect(bus_BG05.terminal, trafo_g5_1022.terminal1) annotation(
-    Line(points = {{-45, 65}, {-45, 62}}, color = {0, 0, 255}));
+  connect(trafo_g5_1022.terminal1, bus_BG05.terminal) annotation(
+    Line(points = {{-45, 62}, {-45, 65}}, color = {0, 0, 255}));
   connect(trafo_g5_1022.terminal2, bus_1022.terminal) annotation(
     Line(points = {{-45, 52}, {-45, 50}, {-40, 50}}, color = {0, 0, 255}));
-  connect(bus_BG11.terminal, trafo_g11_4021.terminal1) annotation(
+  connect(trafo_g11_4021.terminal1, bus_BG11.terminal) annotation(
     Line(points = {{35, 65}, {35, 63}}, color = {0, 0, 255}));
   connect(trafo_g11_4021.terminal2, bus_4021.terminal) annotation(
     Line(points = {{35, 53}, {35, 50}, {30, 50}}, color = {0, 0, 255}));
-  connect(bus_1011.terminal, trafo_1011_4011.terminal1) annotation(
-    Line(points = {{30, 130}, {16, 130}, {16, 125}, {5, 125}}, color = {0, 0, 255}));
+  connect(trafo_1011_4011.terminal1, bus_1011.terminal) annotation(
+    Line(points = {{5, 125}, {16, 125}, {16, 130}, {30, 130}}, color = {0, 0, 255}));
   connect(trafo_1011_4011.terminal2, bus_4011.terminal) annotation(
     Line(points = {{-5, 125}, {-17, 125}, {-17, 130}, {-30, 130}}, color = {0, 0, 255}));
-  connect(bus_1012.terminal, trafo_1012_4012.terminal1) annotation(
-    Line(points = {{30, 100}, {17, 100}, {17, 96}, {3, 96}}, color = {0, 0, 255}));
+  connect(trafo_1012_4012.terminal1, bus_1012.terminal) annotation(
+    Line(points = {{3, 96}, {17, 96}, {17, 100}, {30, 100}}, color = {0, 0, 255}));
   connect(trafo_1012_4012.terminal2, bus_4012.terminal) annotation(
     Line(points = {{-7, 96}, {-13, 96}, {-13, 100}, {-30, 100}}, color = {0, 0, 255}));
   connect(trafo_1022_4022.terminal1, bus_1022.terminal) annotation(
@@ -320,8 +320,8 @@ equation
     Line(points = {{-4, 33}, {-4, 35}}, color = {0, 0, 255}));
   connect(trafo_g12_4031.terminal2, bus_4031.terminal) annotation(
     Line(points = {{-4, 23}, {-4, 21}, {-13, 21}}, color = {0, 0, 255}));
-  connect(bus_1022.terminal, trafo_22_1022.terminal2) annotation(
-    Line(points = {{-40, 50}, {-40, 48}}, color = {0, 0, 255}));
+  connect(trafo_22_1022.terminal2, bus_1022.terminal) annotation(
+    Line(points = {{-40, 48}, {-40, 50}}, color = {0, 0, 255}));
   connect(trafo_22_1022.terminal1, bus_B22.terminal) annotation(
     Line(points = {{-40, 38}, {-40, 35}}, color = {0, 0, 255}));
   connect(g04.terminal, bus_BG04.terminal) annotation(
@@ -330,8 +330,8 @@ equation
     Line(points = {{-85, 38}, {-85, 35}}, color = {0, 0, 255}));
   connect(trafo_g4_1021.terminal2, bus_1021.terminal) annotation(
     Line(points = {{-85, 48}, {-85, 50}, {-80, 50}}, color = {0, 0, 255}));
-  connect(bus_BG08.terminal, g08.terminal) annotation(
-    Line(points = {{-77, 5}, {-77, 0}}, color = {0, 0, 255}));
+  connect(g08.terminal, bus_BG08.terminal) annotation(
+    Line(points = {{-77, 0}, {-77, 5}}, color = {0, 0, 255}));
   connect(trafo_g8_2032.terminal1, bus_BG08.terminal) annotation(
     Line(points = {{-77, 8}, {-77, 5}}, color = {0, 0, 255}));
   connect(trafo_32_2032.terminal1, bus_B32.terminal) annotation(
@@ -348,14 +348,14 @@ equation
     Line(points = {{-95, -53}, {-95, -50}, {-92, -50}}, color = {0, 0, 255}));
   connect(trafo_61_4061.terminal1, bus_B61.terminal) annotation(
     Line(points = {{-95, -63}, {-95, -65}}, color = {0, 0, 255}));
-  connect(bus_B62.terminal, trafo_62_4062.terminal1) annotation(
-    Line(points = {{-100, -95}, {-100, -97}}, color = {0, 0, 255}));
+  connect(trafo_62_4062.terminal1, bus_B62.terminal) annotation(
+    Line(points = {{-100, -97}, {-100, -95}}, color = {0, 0, 255}));
   connect(trafo_62_4062.terminal2, bus_4062.terminal) annotation(
     Line(points = {{-100, -107}, {-100, -110}, {-87, -110}}, color = {0, 0, 255}));
   connect(g17.terminal, bus_BG17.terminal) annotation(
     Line(points = {{-78, -88}, {-78, -95}}, color = {0, 0, 255}));
-  connect(bus_BG17.terminal, trafo_g17_4062.terminal1) annotation(
-    Line(points = {{-78, -95}, {-78, -97}}, color = {0, 0, 255}));
+  connect(trafo_g17_4062.terminal1, bus_BG17.terminal) annotation(
+    Line(points = {{-78, -97}, {-78, -95}}, color = {0, 0, 255}));
   connect(trafo_g17_4062.terminal2, bus_4062.terminal) annotation(
     Line(points = {{-78, -107}, {-78, -110}, {-87, -110}}, color = {0, 0, 255}));
   connect(trafo_1_1041.terminal2, bus_1041.terminal) annotation(
@@ -378,22 +378,22 @@ equation
     Line(points = {{-81, -12}, {-81, -10}, {-78, -10}}, color = {0, 0, 255}));
   connect(trafo_g13_4041.terminal1, bus_BG13.terminal) annotation(
     Line(points = {{-70, -22}, {-70, -25}}, color = {0, 0, 255}));
-  connect(trafo_41_4041.terminal1, load_41.terminal) annotation(
+  connect(trafo_41_4041.terminal1, bus_B41.terminal) annotation(
     Line(points = {{-81, -22}, {-81, -25}}, color = {0, 0, 255}));
-  connect(bus_BG13.terminal, g13.terminal) annotation(
-    Line(points = {{-70, -25}, {-70, -29}}, color = {0, 0, 255}));
+  connect(g13.terminal, bus_BG13.terminal) annotation(
+    Line(points = {{-70, -29}, {-70, -25}}, color = {0, 0, 255}));
   connect(g07.terminal, bus_BG07.terminal) annotation(
     Line(points = {{-53, -39}, {-53, -45}}, color = {0, 0, 255}));
-  connect(bus_B03.terminal, trafo_3_1043.terminal1) annotation(
-    Line(points = {{-65, -45}, {-65, -48}}, color = {0, 0, 255}));
-  connect(bus_BG07.terminal, trafo_g7_1043.terminal1) annotation(
-    Line(points = {{-53, -45}, {-53, -48}}, color = {0, 0, 255}));
+  connect(trafo_3_1043.terminal1, bus_B03.terminal) annotation(
+    Line(points = {{-65, -48}, {-65, -45}}, color = {0, 0, 255}));
+  connect(trafo_g7_1043.terminal1, bus_BG07.terminal) annotation(
+    Line(points = {{-53, -48}, {-53, -45}}, color = {0, 0, 255}));
   connect(trafo_g7_1043.terminal2, bus_1043.terminal) annotation(
     Line(points = {{-53, -58}, {-53, -60}, {-60, -60}}, color = {0, 0, 255}));
   connect(trafo_3_1043.terminal2, bus_1043.terminal) annotation(
     Line(points = {{-65, -58}, {-65, -60}, {-60, -60}}, color = {0, 0, 255}));
-  connect(bus_B04.terminal, trafo_4_1044.terminal1) annotation(
-    Line(points = {{-25, -45}, {-25, -48}}, color = {0, 0, 255}));
+  connect(trafo_4_1044.terminal1, bus_B04.terminal) annotation(
+    Line(points = {{-25, -48}, {-25, -45}}, color = {0, 0, 255}));
   connect(trafo_4_1044.terminal2, bus_1044.terminal) annotation(
     Line(points = {{-25, -58}, {-25, -60}, {-20, -60}}, color = {0, 0, 255}));
   connect(trafo_1044_4044b.terminal1, bus_1044.terminal) annotation(
@@ -424,14 +424,12 @@ equation
     Line(points = {{35, -82}, {35, -80}, {30, -80}}, color = {0, 0, 255}));
   connect(trafo_2_1042.terminal1, bus_B02.terminal) annotation(
     Line(points = {{35, -92}, {35, -95}}, color = {0, 0, 255}));
-  connect(trafo_g16_4051.terminal2, bus_4051.terminal) annotation(
-    Line(points = {{20, -127}, {20, -130}, {14, -130}}, color = {0, 0, 255}));
-  connect(bus_BG16.terminal, trafo_g16_4051.terminal1) annotation(
-    Line(points = {{20, -115}, {20, -118}}, color = {0, 0, 255}));
+  connect(trafo_g16_4051.terminal1, bus_BG16.terminal) annotation(
+    Line(points = {{20, -118}, {20, -115}}, color = {0, 0, 255}));
   connect(g16.terminal, bus_BG16.terminal) annotation(
     Line(points = {{20, -109}, {20, -115}}, color = {0, 0, 255}));
-  connect(bus_B51.terminal, trafo_51_4051.terminal1) annotation(
-    Line(points = {{35, -115}, {35, -118}}, color = {0, 0, 255}));
+  connect(trafo_51_4051.terminal1, bus_B51.terminal) annotation(
+    Line(points = {{35, -118}, {35, -115}}, color = {0, 0, 255}));
   connect(trafo_51_4051.terminal2, bus_4051.terminal) annotation(
     Line(points = {{35, -128}, {35, -130}, {14, -130}}, color = {0, 0, 255}));
   connect(trafo_5_1045.terminal1, bus_B05.terminal) annotation(
@@ -446,12 +444,12 @@ equation
     Line(points = {{-8, -105}, {-8, -110}, {0, -110}}, color = {0, 0, 255}));
   connect(trafo_1045_4045a.terminal2, bus_4045.terminal) annotation(
     Line(points = {{-14, -105}, {-14, -110}, {0, -110}}, color = {0, 0, 255}));
-  connect(bus_BG15.terminal, trafo_g15_4047.terminal1) annotation(
-    Line(points = {{80, -95}, {80, -98}}, color = {0, 0, 255}));
+  connect(trafo_g15_4047.terminal1, bus_BG15.terminal) annotation(
+    Line(points = {{80, -98}, {80, -95}}, color = {0, 0, 255}));
   connect(trafo_g15_4047.terminal2, bus_4047.terminal) annotation(
     Line(points = {{80, -108}, {80, -110}, {70, -110}}, color = {0, 0, 255}));
-  connect(bus_B47.terminal, trafo_47_4047.terminal1) annotation(
-    Line(points = {{61, -95}, {61, -98}}, color = {0, 0, 255}));
+  connect(trafo_47_4047.terminal1, bus_B47.terminal) annotation(
+    Line(points = {{61, -98}, {61, -95}}, color = {0, 0, 255}));
   connect(trafo_47_4047.terminal2, bus_4047.terminal) annotation(
     Line(points = {{61, -108}, {61, -110}, {70, -110}}, color = {0, 0, 255}));
   connect(g05.terminal, bus_BG05.terminal) annotation(
