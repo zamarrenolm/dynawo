@@ -3,3 +3,4 @@ Loadflow
 DynamicModel_fixedTfos
 smallScaleDynamicTest_Tfo
 smallScaleDynamicTest_Gen
+Loadflow_visual

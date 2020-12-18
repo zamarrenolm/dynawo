@@ -2,13 +2,14 @@ within Dynawo.Examples.Nordic.Network;
 
 model Loadflow_visual
 
-  extends StaticNetwork_visual;
+  extends StaticNetwork;
   
   import Modelica.Constants;
   import Modelica.ComplexMath;
   import Modelica.SIunits;
   import Dynawo;
   import Dynawo.Electrical;
+  import Dynawo.Electrical.SystemBase;
   import Dynawo.Types;
   import Dynawo.Examples.Nordic;
   
@@ -369,6 +370,7 @@ protected
 
 equation
 
+  line_4032_4044.switchOffSignal1.value = false;
   connect(slackbus_g20.terminal, bus_BG20.terminal) annotation(
     Line(points = {{-75, 58}, {-75, 65}}, color = {0, 0, 255}));
   connect(trafo_1011_4011.terminal1, bus_1011.terminal) annotation(
