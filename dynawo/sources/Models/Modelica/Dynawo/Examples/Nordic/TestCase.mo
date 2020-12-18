@@ -29,7 +29,7 @@ equation
   connect(Disconnection.state1, line_4032_4044.switchOffSignal1);
   
   annotation(
-    experiment(StartTime = 0, StopTime = 7, Tolerance = 0.0001, Interval = 0.001),
+    experiment(StartTime = 0, StopTime = 6, Tolerance = 0.0001, Interval = 0.001),
     __OpenModelica_commandLineOptions = " --daemode",
     __OpenModelica_simulationFlags(lv = "LOG_STATS", noEquidistantTimeGrid = "()", s = "ida"));
 end TestCase;
