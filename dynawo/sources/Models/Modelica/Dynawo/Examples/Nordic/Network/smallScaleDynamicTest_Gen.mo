@@ -236,6 +236,8 @@ equation
   Check_t72_UPhase = SIunits.Conversions.to_deg(ComplexMath.arg(trafo_72_4072.terminal2.V));
 
 annotation(
-    experiment(StartTime = 0, StopTime = 10, Tolerance = 1e-06, Interval = 0.001), __OpenModelica_commandLineOptions = "--daemode", __OpenModelica_simulationFlags(lv = "LOG_STATS", noEquidistantTimeGrid = "()", s = "ida"));  
+    experiment(StartTime = 0, StopTime = 10, Tolerance = 1e-06, Interval = 0.001), __OpenModelica_commandLineOptions = "--daemode", __OpenModelica_simulationFlags(lv = "LOG_STATS", noEquidistantTimeGrid = "()", s = "ida"),
+    Diagram(coordinateSystem(extent = {{-100, -150}, {100, 150}})),
+    Icon(coordinateSystem(extent = {{-100, -150}, {100, 150}})));  
   
 end smallScaleDynamicTest_Gen;

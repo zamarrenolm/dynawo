@@ -13,23 +13,23 @@ model ControlledTfoFrameNordic
 
   parameter Util.ControlledTfoParamRecord.tfoPreset tfo;
 
-  Electrical.Controls.Transformers.TapChanger tapChanger(
+  Dynawo.Electrical.Controls.Transformers.TapChanger tapChanger(
     
   U0=U10Pu, UDeadBand=0.01, UTarget = 1, increaseTapToIncreaseValue=false, locked0=false, regulating0=true,
     state0 = Electrical.Controls.Transformers.BaseClasses.TapChangerPhaseShifterParams.State.Standard,
     t1st=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.t1st],
     tNext=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.tNext],tap0(fixed=false), tapMax = Util.ControlledTfoParamRecord.NbTap - 1,tapMin = 0
   ) annotation(
-    Placement(visible = true, transformation(origin = {0, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {2, 58}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-  Util.InitialisedTransformerVariableTap tfoVariableTap(
+  Dynawo.Examples.Nordic.Components.ControlledTfo.Util.InitialisedTransformerVariableTap tfoVariableTap(
     SNom=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.SNom],
     X=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.X],
     Uc20Pu=Util.ControlledTfoParamRecord.tfoParamValues[tfo, Util.ControlledTfoParamRecord.tfoParams.Uc20Pu],
     G=0, B=0, R=0,
     P10Pu=P10Pu, Q10Pu=Q10Pu, U10Pu=U10Pu, U1Phase0=U1Phase0
   ) annotation(
-    Placement(visible = true, transformation(origin = {0, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {4, 2.66454e-15}, extent = {{-50, -50}, {50, 50}}, rotation = 0)));
 
   Connectors.ACPower terminal1 annotation(
     Placement(visible = true, transformation(origin = {-100, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-100, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -46,11 +46,13 @@ initial algorithm
 
 equation
   connect(tfoVariableTap.terminal1, terminal1) annotation(
-    Line(points = {{-10, 0}, {-100, 0}, {-100, 0}, {-100, 0}}, color = {0, 0, 255}));
+    Line(points = {{-46, 0}, {-100, 0}}, color = {0, 0, 255}));
   connect(tfoVariableTap.terminal2, terminal2) annotation(
-    Line(points = {{10, 0}, {98, 0}, {98, 0}, {98, 0}}, color = {0, 0, 255}));
-  connect(tapChanger.tap, tfoVariableTap.tap);
-  connect(tfoVariableTap.U1Pu, tapChanger.UMonitored);
+    Line(points = {{54, 0}, {98, 0}}, color = {0, 0, 255}));
+  connect(tapChanger.tap, tfoVariableTap.tap) annotation(
+    Line);
+  connect(tfoVariableTap.U1Pu, tapChanger.UMonitored) annotation(
+    Line);
   tapChanger.switchOffSignal1.value = false;
   tapChanger.switchOffSignal2.value = false;
   tfoVariableTap.switchOffSignal1.value = false;

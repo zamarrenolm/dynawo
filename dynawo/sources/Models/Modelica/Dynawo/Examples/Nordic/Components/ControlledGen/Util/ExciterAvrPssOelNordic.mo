@@ -148,7 +148,7 @@ equation
     Line(points = {{-98, 22}, {-76, 22}, {-76, 22}, {-76, 22}}, color = {0, 0, 127}));
 
 annotation(
-    Icon(graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 120}, lineColor = {0, 0, 255}, fillColor = {0, 0, 255}, extent = {{-60, 20}, {60, -20}}, textString = "%name")}, coordinateSystem(initialScale = 0.1)),
+    Icon(graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 120}, lineColor = {0, 0, 255}, fillColor = {0, 0, 255}, extent = {{-60, 20}, {60, -20}}, textString = "%name"), Text( extent = {{-97, 117}, {97, -117}}, textString = "AVR, EXC,\nOEL, PSS")}, coordinateSystem(initialScale = 0.1)),
     uses(Modelica(version = "3.2.3")),
   Documentation(info = "<html><head></head><body>This model implements the AVR, PSS and overexcitation limiter for the generator frame of the Nordic Test System.<div>The overexcitation limiter utilises a delayed activation with specifics depending on the generator.&nbsp;</div><div>Certain generators reduce the delay by assigning a linear function to the error signal of the excitation current and its limit, this is implemented in the OELFunction.</div><div>The figure below shows the delay on the limiter with respect to the excitation current for generator g06.<br><div>Its design stems from the report.</div></div></body></html>"));
 

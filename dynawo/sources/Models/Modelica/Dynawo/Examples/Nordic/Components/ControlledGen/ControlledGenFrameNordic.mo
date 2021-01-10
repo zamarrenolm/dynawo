@@ -16,17 +16,19 @@ model ControlledGenFrameNordic
   extends AdditionalIcons.Machine;
   // Blocks
   Util.InitialisedSynchronousGenerator generatorSynchronous(DPu = 1, ExcitationPu = Machines.OmegaRef.BaseClasses.GeneratorSynchronousParameters.ExcitationPuType.NominalStatorVoltageNoLoad, H = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.H], P0Pu = P0Pu, PNomAlt = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.PNom], PNomTurb = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.PNom], Q0Pu = Q0Pu, RTfPu = 0, RaPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.RaPu], SNom = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.SNom], SnTfo = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.SNom], Tpd0 = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.Tpd0], Tppd0 = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.Tppd0], Tppq0 = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.Tppq0], Tpq0 = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.Tpq0], U0Pu = U0Pu, UBaseHV = 15, UBaseLV = 15, UNom = 15, UNomHV = 15, UNomLV = 15, UPhase0 = UPhase0, XTfPu = 0, XdPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XdPu], XlPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XlPu], XpdPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XpdPu], XppdPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XppdPu], XppqPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XppqPu], XpqPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XpqPu], XqPu = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.XqPu], md = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.md], mq = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.mq], nd = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.nd], nq = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.nq], threeWindings = ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.isHydroPowerPlant]) annotation(
-    Placement(visible = true, transformation(origin = {0, 0}, extent = {{-40, -40}, {40, 40}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {52, -22}, extent = {{-40, -40}, {40, 40}}, rotation = 0)));
   // four windings
   Util.ExciterAvrPssOelNordic exciterAvrPssOelNordic(G = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.G], IfLimPu = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.ifLimPu], Kp = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.Kp], L1 = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.L1], L2 = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.L2], T1 = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.T1], T2 = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.T2], Ta = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.Ta], Tb = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.Tb], Tw = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.Tw], f = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.f], r = ControlledGenFrameParams.exAvPsOeParamValues[gen, ControlledGenFrameParams.exAvPsOeParams.r]) annotation(
-    Placement(visible = true, transformation(origin = {-80, 40}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-72, 48}, extent = {{-28, -28}, {28, 28}}, rotation = 0)));
   Util.GovernorNordic governorNordic(sigma = ControlledGenFrameParams.govParamValues[gen,ControlledGenFrameParams.govParams.sigma], kI = ControlledGenFrameParams.govParamValues[gen,ControlledGenFrameParams.govParams.GovKi], kP = ControlledGenFrameParams.govParamValues[gen,ControlledGenFrameParams.govParams.GovKp]) annotation(
-    Placement(visible = true, transformation(origin = {-80, -40}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-73, -33}, extent = {{-27, -27}, {27, 27}}, rotation = 0)));
   Connectors.ACPower terminal annotation(
-    Placement(visible = true, transformation(origin = {1, 101}, extent = {{-23, -23}, {23, 23}}, rotation = 0), iconTransformation(origin = {0, 3.55271e-15}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  // Different bases for PGenPu
-  Blocks.Math.Gain BaseConvChangeSnRef2PNom(k = SystemBase.SnRef / PNom_BaseChange) annotation(
-    Placement(visible = true, transformation(origin = {-130, -52}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-3.55271e-15, 104}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {0, 3.55271e-15}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  // Different bases for PGenPu, ifPu and efdPu
+  Blocks.Math.Gain BaseChangeSnRef2PNom(k = SystemBase.SnRef / PNom_BaseChange) annotation(
+    Placement(visible = true, transformation(origin = {-139, -49}, extent = {{-17, -17}, {17, 17}}, rotation = 0)));
+  Blocks.Math.Gain Reciprocal2NonReciprocalPUSystem(k = generatorSynchronous.MdPPu) annotation(
+    Placement(visible = true, transformation(origin = {-139, 65}, extent = {{-17, -17}, {17, 17}}, rotation = 0)));
 protected
   parameter Real PNom_BaseChange = if not ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.PNom] == 0 then ControlledGenFrameParams.genParamValues[gen, ControlledGenFrameParams.genParams.PNom] else 1;
   parameter Types.ActivePowerPu P0Pu;
@@ -49,28 +51,39 @@ equation
 // Connections
   connect(generatorSynchronous.terminal, terminal) annotation(
     Line);
-  connect(generatorSynchronous.ifPu, exciterAvrPssOelNordic.ifPu);
-  connect(generatorSynchronous.UStatorPu.value, exciterAvrPssOelNordic.UStatorPu);
-  connect(generatorSynchronous.omegaPu.value, exciterAvrPssOelNordic.omegaPu);
-  connect(generatorSynchronous.efdPu.value, exciterAvrPssOelNordic.efdPu);
-  connect(generatorSynchronous.omegaPu.value, governorNordic.omegaPu);
-  connect(generatorSynchronous.PGenPu, BaseConvChangeSnRef2PNom.u);
-  /*generatorSynchronous.ifPu = exciterAvrPssOelNordic.ifPu;
+  connect(generatorSynchronous.ifPu, Reciprocal2NonReciprocalPUSystem.u) annotation (
+  Line);
+  connect(Reciprocal2NonReciprocalPUSystem.y, exciterAvrPssOelNordic.ifPu) annotation(
+    Line);
+  connect(generatorSynchronous.UStatorPu.value, exciterAvrPssOelNordic.UStatorPu) annotation(
+    Line);
+  connect(generatorSynchronous.omegaPu.value, exciterAvrPssOelNordic.omegaPu) annotation(
+    Line);
+  connect(generatorSynchronous.efdPu.value, exciterAvrPssOelNordic.efdPu) annotation(
+    Line);
+  connect(generatorSynchronous.omegaPu.value, governorNordic.omegaPu) annotation(
+    Line);
+  connect(generatorSynchronous.PGenPu, BaseChangeSnRef2PNom.u) annotation(
+    Line);
+/*generatorSynchronous.ifPu = exciterAvrPssOelNordic.ifPu;
   generatorSynchronous.UStatorPu.value = exciterAvrPssOelNordic.UStatorPu;
   generatorSynchronous.omegaPu.value = exciterAvrPssOelNordic.omegaPu;
   generatorSynchronous.efdPu.value = exciterAvrPssOelNordic.efdPu;
   generatorSynchronous.omegaPu.value = governorNordic.omegaPu;
   generatorSynchronous.PGenPu = BaseConvChangeSnRef2PNom.u;*/
-  connect(generatorSynchronous.PmPu, governorNordic.PmPuPin);  
-  connect(BaseConvChangeSnRef2PNom.y, governorNordic.PGenPuPNom) annotation(
-    Line(points = {{-118, -52}, {-104, -52}, {-104, -52}, {-104, -52}}, color = {0, 0, 127}));
+  connect(generatorSynchronous.PmPu, governorNordic.PmPuPin) annotation(
+    Line);
+  connect(BaseChangeSnRef2PNom.y, governorNordic.PGenPuPNom) annotation(
+    Line(points = {{-120, -49}, {-105, -49}}, color = {0, 0, 127}));
 //SwitchOff Signals and additional equations
   generatorSynchronous.switchOffSignal1.value = false;
   generatorSynchronous.switchOffSignal2.value = false;
   generatorSynchronous.switchOffSignal3.value = false;
   generatorSynchronous.omegaRefPu.value = SystemBase.omegaRef0Pu;
+  
 
 annotation(
-    Documentation(info = "<html><head></head><body>The controlled generator frame functions as the regulated synchronous generator of the Nordic Test System.<div>It consists of a either a 3 or 4 windings synchronous generator, which models hydro-power or thermal plants respectively.</div><div>The regulating elements comprise overexcitation limitation, automatic voltage regulation, power system stabilisation and speed control.<br>The implementation utilises a generator preset, which automatically sets the parameters of all elements to those of the corresponding chosen generator.</div><div>To add another configuration, append a new line to \"genFrameParamValues\", \"govParamValues\" and \"exAvPsOeParamValues\"&nbsp;in Util/ControlledGenFrameParams and append a fitting name in the \"genFramePreset\" enumeration.</div>
-</body></html>"));
+    Documentation(info = "<html><head></head><body>The controlled generator frame functions as the regulated synchronous generator of the Nordic Test System.<div>It consists of an either a 3 or 4 windings initialised synchronous generator, which models hydro-power or thermal plants respectively. The regulating elements comprise automatic voltage regulation (AVR), exciter (EXC), overexcitation limitation (OEL), power system stabilisation (PSS) and speed control by a governor (GOV).</div><div>To add another configuration, append a new line to \"genFrameParamValues\", \"govParamValues\" and \"exAvPsOeParamValues\"&nbsp;in Util/ControlledGenFrameParams and append a fitting name in the \"genFramePreset\" enumeration.</div>
+</body></html>"),
+    Icon(graphics = {Rectangle(lineThickness = 0.75, extent = {{-100, 100}, {100, -100}})}));
 end ControlledGenFrameNordic;

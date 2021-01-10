@@ -139,7 +139,7 @@ equation
     Line(points = {{-210, -10}, {-178, -10}}, color = {0, 0, 127}));
 
   annotation(
-    Icon(graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 120}, lineColor = {0, 0, 255}, fillColor = {0, 0, 255}, extent = {{-60, 20}, {60, -20}}, textString = "%name")}, coordinateSystem(initialScale = 0.1)),
+    Icon(graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 120}, lineColor = {0, 0, 255}, fillColor = {0, 0, 255}, extent = {{-60, 20}, {60, -20}}, textString = "%name"), Text( extent = {{-68, 66}, {68, -66}}, textString = "GOV")}, coordinateSystem(initialScale = 0.1)),
     Documentation(info = "<html><head></head><body>This model implements the speed control of the hydro-power generator frames in the Nordic Test System.<div>It consists of a turbine model (lower part) and a speed controller (upper part).&nbsp;<br><div>Its design stems from the report.&nbsp;</div></div></body></html>"));
 
 end GovernorNordic;

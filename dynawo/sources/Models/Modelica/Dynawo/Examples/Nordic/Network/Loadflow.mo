@@ -9,6 +9,7 @@ model Loadflow
   import Modelica.SIunits;
   import Dynawo;
   import Dynawo.Electrical;
+  import Dynawo.Electrical.SystemBase;
   import Dynawo.Types;
   import Dynawo.Examples.Nordic;
   
