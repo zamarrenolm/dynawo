@@ -64,6 +64,7 @@ target_link_libraries(dynawo_DataInterfaceIIDM
     dynawo_Common
     dynawo_ModelerCommon
     dynawo_DataInterface
+	dynawo_API_CRT
     ${CMAKE_DL_LIBS}
   PUBLIC
     IIDM::iidm

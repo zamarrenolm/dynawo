@@ -18,6 +18,8 @@ endif()
 set(package_name       "libxml2")
 set(package_finder     "LibXml2")
 set(package_install_dir  "${CMAKE_INSTALL_PREFIX}/${package_name}")
+file(TO_NATIVE_PATH ${package_install_dir} package_install_dir_windows)
+message("package_install_dir_windows ${package_install_dir_windows}")
 set(package_RequiredVersion 2.9)
 string(TOUPPER "${package_name}" package_uppername)
 
@@ -53,7 +55,7 @@ else()
     ExternalProject_Add(
                           "${package_name}"
 
-      INSTALL_DIR         ${package_install_dir}
+      INSTALL_DIR         ${package_install_dir_windows}
 
       DOWNLOAD_DIR        "${CMAKE_CURRENT_SOURCE_DIR}/${package_name}"
       TMP_DIR             "${TMP_DIR}"
@@ -66,13 +68,15 @@ else()
       BUILD_IN_SOURCE     1
 
       CONFIGURE_COMMAND   cd win32
-                COMMAND   "cscript configure.js compiler=msvc iconv=no prefix=<INSTALL_DIR>"
-                          "debug=$<IF:$<CONFIG:Debug>,yes,no> static=$<IF:$<BOOL:${BUILD_SHARED_LIBS}>,no,yes>"
-                          "cruntime=$<IF:$<BOOL:${MSVC_STATIC_RUNTIME_LIBRARY}>,/MT$<$<CONFIG:Debug>:d>,/MD$<$<CONFIG:Debug>:d>>"
+                COMMAND   cscript configure.js compiler=msvc iconv=no prefix=<INSTALL_DIR>
+                          debug=$<IF:$<CONFIG:Debug>,yes,no> static=$<IF:$<BOOL:${BUILD_SHARED_LIBS}>,no,yes>
+                          cruntime=$<IF:$<BOOL:${MSVC_STATIC_RUNTIME_LIBRARY}>,/MT$<$<CONFIG:Debug>:d>,/MD$<$<CONFIG:Debug>:d>>
 
-      BUILD_COMMAND       nmake /f Makefile.msvc
+      BUILD_COMMAND       cd win32
+	        COMMAND       nmake /f Makefile.msvc
 
-      INSTALL_COMMAND     nmake /f Makefile.msvc install
+      INSTALL_COMMAND     cd win32
+	          COMMAND     nmake /f Makefile.msvc install
     )
   else()
     ExternalProject_Add(

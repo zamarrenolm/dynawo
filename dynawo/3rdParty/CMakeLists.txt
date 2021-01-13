@@ -128,12 +128,16 @@ else()
   set(boost_md5            319C6FFBBECCC366F14BB68767A6DB79)
 endif()
 
+message("boost_version ${boost_version}")
+
 if(CXX11_ENABLED)
- if(${boost_version} STRLESS "1.65.0")
-   set(boost_version "1.65.0")
-   set(boost_md5          d75a27ad1a34cfc7c9b5cb92594410c3)
- endif()
+  if(${boost_version} STRLESS "1.65.0")
+    set(boost_version "1.65.0")
+    set(boost_md5          d75a27ad1a34cfc7c9b5cb92594410c3)
+  endif()
 endif(CXX11_ENABLED)
+
+message("boost_version ${boost_version}")
 
 string(REPLACE "." "_" boost_version_ ${boost_version})
 set(boost_name           boost_${boost_version_}.tar.gz)
