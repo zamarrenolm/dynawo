@@ -873,14 +873,14 @@ ModelLine::evalZ(const double& t) {
   State currState = static_cast<State>(static_cast<int>(z_[0]));
   if (currState != getConnectionState()) {
     if (currState == CLOSED && knownBus_ != BUS1_BUS2) {
-      Trace::error() << DYNLog(UnableToCloseLine, id_) << Trace::endline;
+      ::TraceError() << DYNLog(UnableToCloseLine, id_) << Trace::endline;
     } else if (currState == CLOSED_1 && knownBus_ == BUS2) {
-      Trace::error() << DYNLog(UnableToCloseLineSide1, id_) << Trace::endline;
+      ::TraceError() << DYNLog(UnableToCloseLineSide1, id_) << Trace::endline;
     } else if (currState == CLOSED_2 && knownBus_ == BUS1) {
-      Trace::error() << DYNLog(UnableToCloseLineSide2, id_) << Trace::endline;
+      ::TraceError() << DYNLog(UnableToCloseLineSide2, id_) << Trace::endline;
     } else {
       topologyModified_ = true;
-      Trace::info() << DYNLog(LineStateChange, id_, getConnectionState(), currState) << Trace::endline;
+      ::TraceInfo() << DYNLog(LineStateChange, id_, getConnectionState(), currState) << Trace::endline;
       switch (currState) {
       // z_[0] represents the actual state
       // getConnectionState() represents the previous state
