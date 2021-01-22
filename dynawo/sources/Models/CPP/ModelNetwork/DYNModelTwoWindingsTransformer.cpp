@@ -1171,14 +1171,14 @@ ModelTwoWindingsTransformer::evalZ(const double& t) {
   State currState = static_cast<State>(static_cast<int>(z_[connectionStateNum_]));
   if (currState != connectionState_) {
     if (currState == CLOSED && knownBus_ != BUS1_BUS2) {
-      ::TraceError() << DYNLog(UnableToCloseTfo, id_) << Trace::endline;
+      Trace::error() << DYNLog(UnableToCloseTfo, id_) << Trace::endline;
     } else if (currState == CLOSED_1 && knownBus_ == BUS2) {
-      ::TraceError() << DYNLog(UnableToCloseTfoSide1, id_) << Trace::endline;
+      Trace::error() << DYNLog(UnableToCloseTfoSide1, id_) << Trace::endline;
     } else if (currState == CLOSED_2 && knownBus_ == BUS1) {
-      ::TraceError() << DYNLog(UnableToCloseTfoSide2, id_) << Trace::endline;
+      Trace::error() << DYNLog(UnableToCloseTfoSide2, id_) << Trace::endline;
     } else {
       topologyModified_ = true;
-      ::TraceInfo() << DYNLog(TfoStateChange, id_, getConnectionState(), currState) << Trace::endline;
+      Trace::info() << DYNLog(TfoStateChange, id_, getConnectionState(), currState) << Trace::endline;
       switch (currState) {
       // z_[0] represents the actual state
       // getConnectionState() represents the previous state
@@ -1717,7 +1717,7 @@ ModelTwoWindingsTransformer::setSubModelParameters(const boost::unordered_map<st
       }
     }
   } catch (const DYN::Error& e) {
-    ::TraceError() << e.what() << Trace::endline;
+    Trace::error() << e.what() << Trace::endline;
     throw DYNError(Error::MODELER, NetworkParameterNotFoundFor, id_);
   }
 }

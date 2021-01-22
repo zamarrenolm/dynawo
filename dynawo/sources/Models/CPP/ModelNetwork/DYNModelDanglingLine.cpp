@@ -685,7 +685,7 @@ ModelDanglingLine::evalZ(const double& t) {
 
   State currState = static_cast<State>(static_cast<int>(z_[0]));
   if (currState != connectionState_) {
-    ::TraceInfo() << DYNLog(DanglingLineStateChange, id_, connectionState_, currState) << Trace::endline;
+    Trace::info() << DYNLog(DanglingLineStateChange, id_, connectionState_, currState) << Trace::endline;
     stateModified_ = true;
     if (connectionState_ == CLOSED) {
       DYNAddTimelineEvent(network_, id_, DanglingLineConnected);
