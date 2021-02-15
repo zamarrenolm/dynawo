@@ -17,24 +17,19 @@
  * @brief IoDicos class implementation
  *
  */
-#include <limits.h>
-#include <stdlib.h>
 #include <sstream>
 #include <fstream>
 #include <vector>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/predicate.hpp>
 
 #include "DYNIoDico.h"
-#include "DYNExecUtils.h"
 #include "DYNMacrosMessage.h"
 using std::string;
 using std::ifstream;
 using boost::shared_ptr;
 using std::stringstream;
 using std::vector;
-
 
 namespace DYN {
 
@@ -65,13 +60,13 @@ bool IoDicos::hasIoDico_(const string& dicoName) {
   return (dicos_.find(dicoName) != dicos_.end());
 }
 
-boost::shared_ptr<IoDico> IoDicos::getIoDico(const string& dicoName) {
+IoDico& IoDicos::getIoDico(const string& dicoName) {
   return instance().getIoDico_(dicoName);
 }
 
-boost::shared_ptr<IoDico> IoDicos::getIoDico_(const string& dicoName) {
+IoDico& IoDicos::getIoDico_(const string& dicoName) {
   if (hasIoDico_(dicoName)) {
-    return dicos_[dicoName];
+    return *dicos_[dicoName];
   } else {
     throw MessageError("Unknown dictionary '" + dicoName + "'");
   }
@@ -139,8 +134,8 @@ void IoDicos::addDico_(const string& name, const string& baseName, const string&
   string file = files[0];
 
   if (hasIoDico_(name)) {
-    boost::shared_ptr<IoDico> dico = getIoDico_(name);
-    dico->readFile(file);  // new key/sentence added to the existing dico
+    IoDico& dico = getIoDico_(name);
+    dico.readFile(file);  // new key/sentence added to the existing dico
   } else {
     boost::shared_ptr<IoDico> dico(new IoDico(name));
     dico->readFile(file);
