@@ -189,10 +189,8 @@ SolverKINCommon::initCommon(const std::string& linearSolverName, double fnormtol
 
 int
 SolverKINCommon::solveCommon() {
-  N_Vector fScaleNV = N_VNew_Serial(fScale_.size());
-  N_Vector yScaleNV = N_VNew_Serial(yScale_.size());
-  memcpy(NV_DATA_S(fScaleNV), &fScale_[0], fScale_.size() * sizeof (fScale_[0]));
-  memcpy(NV_DATA_S(yScaleNV), &yScale_[0], yScale_.size() * sizeof (yScale_[0]));
+  N_Vector fScaleNV = N_VMake_Serial(fScale_.size(), fScale_.data());
+  N_Vector yScaleNV = N_VMake_Serial(yScale_.size(), yScale_.data());
 
   int flag = KINSol(KINMem_, yy_, KIN_NONE, yScaleNV, fScaleNV);
   analyseFlag(flag);
