@@ -57,7 +57,7 @@ SolverKINSubModel::~SolverKINSubModel() {
 }
 
 void
-SolverKINSubModel::init(SubModel* subModel, const double t0, double* yBuffer, double *fBuffer, int mxiter, double fnormtol, double initialaddtol,
+SolverKINSubModel::init(SubModel* subModel, double t0, double* yBuffer, double* fBuffer, int mxiter, double fnormtol, double initialaddtol,
     double scsteptol, double mxnewtstep, int msbset, int printfl) {
   // (1) Attributes
   // --------------
@@ -83,10 +83,15 @@ SolverKINSubModel::init(SubModel* subModel, const double t0, double* yBuffer, do
   initCommon("KLU", fnormtol, initialaddtol, scsteptol, mxnewtstep, msbset, mxiter, printfl, evalFInit_KIN, evalJInit_KIN);
 
   vYy_.assign(yBuffer, yBuffer + nbF_);
+
+  smj_.init(nbF_, nbF_);
+  SM_INDEXPTRS_S(M_) = &smj_.Ap_[0];
+  SM_INDEXVALS_S(M_) = &smj_.Ai_[0];
+  SM_DATA_S(M_) = &smj_.Ax_[0];
 }
 
 int
-SolverKINSubModel::evalFInit_KIN(N_Vector yy, N_Vector rr, void *data) {
+SolverKINSubModel::evalFInit_KIN(N_Vector yy, N_Vector rr, void* data) {
   SolverKINSubModel * solv = reinterpret_cast<SolverKINSubModel*> (data);
   SubModel* subModel = solv->getSubModel();
 
@@ -94,14 +99,14 @@ SolverKINSubModel::evalFInit_KIN(N_Vector yy, N_Vector rr, void *data) {
   if (solv->getFirstIteration()) {
     solv->setFirstIteration(false);
   } else {  // update of F
-    realtype *iyy = NV_DATA_S(yy);
+    realtype* iyy = NV_DATA_S(yy);
     int yL = NV_LENGTH_S(yy);
     std::copy(iyy, iyy+yL, solv->yBuffer_);
     subModel->evalF(solv->t0_, UNDEFINED_EQ);
   }
 
   // copy of values in output vector
-  realtype *irr = NV_DATA_S(rr);
+  realtype* irr = NV_DATA_S(rr);
   memcpy(irr, solv->fBuffer_, solv->nbF_ * sizeof(solv->fBuffer_[0]));
 
   return (0);
@@ -112,6 +117,7 @@ SolverKINSubModel::evalJInit_KIN(N_Vector yy, N_Vector /*rr*/,
         SUNMatrix JJ, void* data, N_Vector /*tmp1*/, N_Vector /*tmp2*/) {
   SolverKINSubModel* solv = reinterpret_cast<SolverKINSubModel*> (data);
   SubModel* subModel = solv->getSubModel();
+  SparseMatrix& smj = solv->getMatrix();
 
   realtype *iyy = NV_DATA_S(yy);
   int yL = NV_LENGTH_S(yy);
@@ -119,14 +125,13 @@ SolverKINSubModel::evalJInit_KIN(N_Vector yy, N_Vector /*rr*/,
 
   // Sparse matrix
   // -------------
-  SparseMatrix smj;
   int size = subModel->sizeY();
   smj.init(size, size);
 
   // Arbitrary value for cj
-  double cj = 1;
+  double cj = 1.;
   subModel->evalJt(solv->t0_, cj, smj, 0);
-  SolverCommon::propagateMatrixStructureChangeToKINSOL(smj, JJ, size, &solv->lastRowVals_, solv->LS_, solv->linearSolverName_, false);
+  SolverCommon::propagateMatrixStructureChangeToKINSOL(smj, JJ, solv->lastRowVals_, solv->LS_, solv->linearSolverName_, false);
 
   return (0);
 }
@@ -145,12 +150,12 @@ SolverKINSubModel::solve() {
   subModel->evalF(t0_, UNDEFINED_EQ);
   firstIteration_ = true;
 
-  fScale_.assign(subModel->sizeF(), 1.0);
+  fScale_.assign(subModel->sizeF(), 1.);
   for (unsigned int i = 0; i < nbF_; ++i) {
     if (std::abs(fBuffer_[i])  > 1.)
-      fScale_[i] = 1 / std::abs(fBuffer_[i]);
+      fScale_[i] = 1. / std::abs(fBuffer_[i]);
   }
-  yScale_.assign(subModel->sizeY(), 1.0);
+  yScale_.assign(subModel->sizeY(), 1.);
 
   // SubModel initialization can fail, especially on switch currents.
   // This failure shouldn't be stopping the simulation.

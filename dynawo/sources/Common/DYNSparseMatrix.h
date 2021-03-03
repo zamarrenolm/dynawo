@@ -23,6 +23,7 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_set.hpp>
+#include <sundials/sundials_types.h>
 
 namespace DYN {
 class Model;
@@ -85,14 +86,14 @@ class SparseMatrix {
    * @param nbRow number row of the matrix
    * @param nbCol number columns of the matrix
    */
-  void init(const int& nbRow, const int& nbCol);
+  void init(int nbRow, int nbCol);
 
   /**
    * @brief reserve structure memory
    *
    * @param nbCol number columns that will be use in the matrix
    */
-  void reserve(const int& nbCol);
+  void reserve(int nbCol);
 
   /**
    * @brief change the column currently used when filling the matrix
@@ -106,7 +107,7 @@ class SparseMatrix {
    * @param row row of the term in the matrix
    * @param val new value to add in the matrix
    */
-  void addTerm(const int& row, const double& val);
+  void addTerm(int row, double val);
 
   /**
    * @brief print the Frobenius norm of the matrix
@@ -151,7 +152,7 @@ class SparseMatrix {
    * @param columns columns to erase
    * @param M new matrix allocated
    */
-  void erase(const boost::unordered_set<int> & rows, const boost::unordered_set<int> & columns, SparseMatrix &M);
+  void erase(const boost::unordered_set<int>& rows, const boost::unordered_set<int>& columns, SparseMatrix& M);
 
   /**
    * @brief Get the row and colum indices from a position in the data array
@@ -232,7 +233,7 @@ class SparseMatrix {
    * @return a new matrix
    * @warning should not be used
    */
-  SparseMatrix & operator=(const SparseMatrix & M);
+  SparseMatrix& operator=(const SparseMatrix& M);
 
   /**
    * @brief constructor by copy
@@ -243,9 +244,9 @@ class SparseMatrix {
   SparseMatrix(const SparseMatrix & M);
 
  public:
-  std::vector<unsigned> Ap_;  ///< for each column, first non null element index in Ai and Ax
-  std::vector<unsigned> Ai_;  ///< row index for each non null element
-  std::vector<double> Ax_;  ///< non null element value;
+  std::vector<sunindextype> Ap_;  ///< for each column, first non null element index in Ai and Ax
+  std::vector<sunindextype> Ai_;  ///< row index for each non null element
+  std::vector<realtype> Ax_;  ///< non null element value;
 
  private:
   bool withoutNan_;  ///< @b true if there isn't any NaN value in the Sparse Matrix

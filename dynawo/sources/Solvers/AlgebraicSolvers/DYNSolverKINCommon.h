@@ -24,6 +24,7 @@
 #include <sundials/sundials_nvector.h>
 #include <boost/shared_ptr.hpp>
 #include <vector>
+#include "DYNSparseMatrix.h"
 
 namespace DYN {
 
@@ -80,8 +81,8 @@ class SolverKINCommon {
    * @param msg error message
    * @param eh_data unused
    */
-  static void errHandlerFn(int error_code, const char *module, const char *function,
-          char *msg, void *eh_data);
+  static void errHandlerFn(int error_code, const char* module, const char* function,
+          char* msg, void* eh_data);
 
   /**
    * @brief processes info messages from KINSOL solver
@@ -91,15 +92,15 @@ class SolverKINCommon {
    * @param msg information message
    * @param eh_data unused
    */
-  static void infoHandlerFn(const char *module, const char *function,
-          char *msg, void *eh_data);
+  static void infoHandlerFn(const char* module, const char* function,
+          char* msg, void* eh_data);
 
   /**
    * @brief  Analyze the flag returned by KINSOL
    *
    * @param flag flag to analyze
    */
-  void analyseFlag(const int & flag);
+  void analyseFlag(const int flag);
 
   /**
    * @brief set if solver is in first iteration step or not
@@ -140,7 +141,7 @@ class SolverKINCommon {
   SUNLinearSolver LS_;  ///< Linear Solver pointer
   SUNMatrix M_;  ///< sparse SUNMatrix
   N_Vector yy_;  ///< variables values stored in Sundials structure
-  sunindextype* lastRowVals_;  ///< save of last Jacobian structure, to force symbolic factorization if structure change
+  std::vector<sunindextype> lastRowVals_;  ///< save of last Jacobian structure, to force symbolic factorization if structure change
 
   std::string linearSolverName_;  ///< linear solver name used
   std::vector<double> vYy_;  ///< Current values of variables during the call of the solver

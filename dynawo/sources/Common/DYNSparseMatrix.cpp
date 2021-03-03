@@ -66,7 +66,7 @@ SparseMatrix::changeCol() {
 }
 
 void
-SparseMatrix::addTerm(const int& row, const double& val) {
+SparseMatrix::addTerm(int row, double val) {
   if (!doubleIsZero(val)) {
     assert(row < nbRow_);
     // To deal with exploding matrix sizes
@@ -88,7 +88,7 @@ SparseMatrix::addTerm(const int& row, const double& val) {
 }
 
 void
-SparseMatrix::init(const int& nbRow, const int& nbCol) {
+SparseMatrix::init(int nbRow, int nbCol) {
   free();
 
   if (nbRow == 0) return;
@@ -111,7 +111,7 @@ SparseMatrix::init(const int& nbRow, const int& nbCol) {
 }
 
 void
-SparseMatrix::reserve(const int& nbCol) {
+SparseMatrix::reserve(int nbCol) {
   free();
 
   if (nbCol == 0) return;
@@ -303,7 +303,7 @@ double SparseMatrix::infinityNorm() const {
 
 void SparseMatrix::getRowColIndicesFromPosition(unsigned int position, int& iRow, int& jCol) const {
   assert(position < static_cast<unsigned int>(nbTerm_) && "Position must be lower than number of terms");
-  std::vector<unsigned>::const_iterator lower = std::upper_bound(Ap_.begin(), Ap_.end(), position);
+  std::vector<sunindextype>::const_iterator lower = std::upper_bound(Ap_.begin(), Ap_.end(), position);
   iRow = Ai_[position];
   jCol = (lower-Ap_.begin()) - 1;
 }

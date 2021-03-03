@@ -98,7 +98,7 @@ class SolverIDA : public Solver::Impl {
   /**
    * @copydoc Solver::init(const boost::shared_ptr<Model> & model, const double & t0, const double & tEnd)
    */
-  void init(const boost::shared_ptr<Model> & model, const double & t0, const double & tEnd);
+  void init(const boost::shared_ptr<Model>& model, double t0, double tEnd);
 
   /**
    * @copydoc Solver::reinit()
@@ -238,6 +238,18 @@ class SolverIDA : public Solver::Impl {
    */
   bool initAlgRestoration(modeChangeType_t modeChangeType);
 
+  inline SparseMatrix& getMatrix() {
+    return smj_;
+  }
+
+  inline std::vector<state_g>& getG() {
+    return G_;
+  }
+
+  inline std::vector<double>& getGIDA() {
+    return gIDA_;
+  }
+
  private:
   void* IDAMem_;  ///< IDA internal memory structure
   SUNLinearSolver LS_;  ///< Linear Solver pointer
@@ -256,7 +268,11 @@ class SolverIDA : public Solver::Impl {
   bool flagInit_;  ///< @b true if the solver is in initialization mode
   int nbLastTimeSimulated_;  ///< nb times of simulation of the latest time (to see if the solver succeed to pass through event at one point)
 
-  sunindextype* lastRowVals_;  ///< save of last Jacobian structure, to force symbolic factorization if structure change
+  std::vector<sunindextype> lastRowVals_;  ///< save of last Jacobian structure, to force symbolic factorization if structure change
+
+  SparseMatrix smj_;  ///<
+  std::vector<state_g> G_;  ///<
+  std::vector<double> gIDA_;  ///<
 };
 
 }  // end of namespace DYN

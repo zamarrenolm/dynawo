@@ -40,7 +40,7 @@ class Model;
  * SolverKINEuler is the implementation of a solver with euler method based on
  * KINSOL solver.
  */
-class SolverKINEuler : public SolverKINCommon, private boost::noncopyable{
+class SolverKINEuler : public SolverKINCommon, private boost::noncopyable {
  public:
   /**
    * @brief Default constructor
@@ -103,7 +103,7 @@ class SolverKINEuler : public SolverKINCommon, private boost::noncopyable{
    * @param h step to reach
    * @param y initial variables values
    */
-  void setInitialValues(const double& t, const double& h, const std::vector<double>& y);
+  void setInitialValues(const double t, const double h, const std::vector<double>& y);
 
   /**
    * @brief calculated F(u) for a given value of u
@@ -140,6 +140,10 @@ class SolverKINEuler : public SolverKINCommon, private boost::noncopyable{
     return model_;
   }
 
+  inline SparseMatrix& getMatrix() {
+    return smj_;
+  }
+
  private:
   boost::shared_ptr<Model> model_;  ///< instance of model to interact with
 
@@ -148,6 +152,8 @@ class SolverKINEuler : public SolverKINCommon, private boost::noncopyable{
   std::vector<double> F_;  ///< current values of residual function
   std::vector<double> YP_;  ///< calculated values of derivatives
   double h0_;  ///< Step of the solver to reach
+
+  SparseMatrix smj_;  ///<
 };
 
 }  // namespace DYN
