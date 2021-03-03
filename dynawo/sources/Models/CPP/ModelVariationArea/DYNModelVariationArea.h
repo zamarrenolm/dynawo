@@ -274,7 +274,7 @@ class ModelVariationArea : public ModelCPP::Impl {
   /**
    * @brief Coherence check on data (asserts, min/max values, sanity checks)
    */
-  void checkDataCoherence(const double& /*t*/) { /* not needed */ }
+  void checkDataCoherence(const double /*t*/) { /* not needed */ }
 
  private:
   // parameters

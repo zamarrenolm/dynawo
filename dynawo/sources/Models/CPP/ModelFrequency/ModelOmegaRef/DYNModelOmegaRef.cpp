@@ -564,7 +564,7 @@ ModelOmegaRef::setFequations() {
 }
 
 void
-ModelOmegaRef::checkDataCoherence(const double& /*t*/) {
+ModelOmegaRef::checkDataCoherence(const double /*t*/) {
   for (int i = 0; i < nbMaxCC; ++i) {
     if (doubleEquals(yLocal_[i], omegaRef0_[i]))
       continue;
