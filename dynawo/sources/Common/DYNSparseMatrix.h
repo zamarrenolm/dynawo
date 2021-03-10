@@ -23,6 +23,7 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_set.hpp>
+#include <sundials/sundials_types.h>
 
 namespace DYN {
 class Model;
@@ -213,6 +214,30 @@ class SparseMatrix {
    */
   CheckError check() const;
 
+  inline const std::vector<sunindextype>& getAp() const {
+    return Ap_;
+  }
+
+  inline const std::vector<sunindextype>& getAi() const {
+    return Ai_;
+  }
+
+  inline const std::vector<realtype>& getAx() const {
+    return Ax_;
+  }
+
+  inline std::vector<sunindextype>& getNonCstAp() {
+    return const_cast<std::vector<sunindextype>&>(getAp());
+  }
+
+  inline std::vector<sunindextype>& getNonCstAi() {
+    return const_cast<std::vector<sunindextype>&>(getAi());
+  }
+
+  inline std::vector<realtype>& getNonCstAx() {
+    return const_cast<std::vector<realtype>&>(getAx());
+  }
+
  private:
   /**
    * @brief delete all allocated memory of the matrix
@@ -242,11 +267,6 @@ class SparseMatrix {
    */
   SparseMatrix(const SparseMatrix & M);
 
- public:
-  std::vector<unsigned> Ap_;  ///< for each column, first non null element index in Ai and Ax
-  std::vector<unsigned> Ai_;  ///< row index for each non null element
-  std::vector<double> Ax_;  ///< non null element value;
-
  private:
   bool withoutNan_;  ///< @b true if there isn't any NaN value in the Sparse Matrix
   bool withoutInf_;  ///< @b true if there isn't any infinite value in the Sparse Matrix
@@ -259,6 +279,10 @@ class SparseMatrix {
   int iAx_;  ///< current index in the Ax_ array
   int nbTerm_;  ///< current number of values stored in the matrix
   int currentMaxTerm_;  ///< current maximum number of term that could be stored in the matrix without increasing the size of arrays
+
+  std::vector<sunindextype> Ap_;  ///< for each column, first non null element index in Ai and Ax
+  std::vector<sunindextype> Ai_;  ///< row index for each non null element
+  std::vector<realtype> Ax_;  ///< non null element value;
 };
 
 }  // end of namespace DYN
