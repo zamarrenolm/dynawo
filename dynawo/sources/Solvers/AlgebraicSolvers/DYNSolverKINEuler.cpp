@@ -145,7 +145,7 @@ SolverKINEuler::evalJ_KIN(N_Vector /*yy*/, N_Vector /*rr*/,
 
   // Sparse matrix version
   // ----------------------
-  int size = model.sizeY();
+  const int size = model.sizeY();
   smj.init(size, size);
   model.evalJt(solver->t0_ + h0, cj, smj);
   SolverCommon::propagateMatrixStructureChangeToKINSOL(smj, JJ, solver->lastRowVals_, solver->linearSolver_, solver->linearSolverName_, true);

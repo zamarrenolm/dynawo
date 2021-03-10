@@ -242,8 +242,8 @@ SolverKINAlgRestoration::evalF_KIN(N_Vector yy, N_Vector rr, void *data) {
   SolverKINAlgRestoration* solver = reinterpret_cast<SolverKINAlgRestoration*> (data);
   Model& model = solver->getModel();
 
-  double *irr = NV_DATA_S(rr);
-  double *iyy = NV_DATA_S(yy);
+  double* irr = NV_DATA_S(rr);
+  double* iyy = NV_DATA_S(yy);
 
   // evalF has already been called in the scaling part so it doesn't have to be called again for the first iteration
   if (solver->getFirstIteration()) {
@@ -351,13 +351,13 @@ SolverKINAlgRestoration::evalJPrim_KIN(N_Vector /*yy*/, N_Vector /*rr*/,
   SparseMatrix& smj = solver->getMatrix();
   SparseMatrix& smjKin = solver->getMatrixAlgebraic();
 
-  double cj = 1.;
+  const double cj = 1.;
 
   smj.init(model.sizeY(), model.sizeY());
   model.evalJtPrim(solver->t0_, cj, smj);
 
   // Erase useless values in the jacobian
-  int size = static_cast<int>(solver->indexY_.size());
+  const int size = static_cast<int>(solver->indexY_.size());
   smjKin.reserve(size);
   smj.erase(solver->ignoreY_, solver->ignoreF_, smjKin);
   SolverCommon::propagateMatrixStructureChangeToKINSOL(smjKin, JJ, solver->lastRowVals_, solver->linearSolver_, solver->linearSolverName_, true);

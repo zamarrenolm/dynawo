@@ -106,9 +106,9 @@ class SolverSIM : public Solver::Impl {
   std::string solverType() const;
 
   /**
-   * @copydoc Solver::init(const boost::shared_ptr<Model> & model, const double & t0, const double & tEnd)
+   * @copydoc Solver::init(const boost::shared_ptr<Model>& model, const double t0, const double tEnd)
    */
-  void init(const boost::shared_ptr<Model> &model, const double & t0, const double & tEnd);
+  void init(const boost::shared_ptr<Model>& model, const double t0, const double tEnd);
 
   /**
    * @copydoc Solver::reinit()
@@ -168,7 +168,7 @@ class SolverSIM : public Solver::Impl {
    * @param flag the flag obtained after the call to the algebraic solver
    * @return the current status of the solver
    */
-  SolverStatus_t analyzeResult(int& flag);
+  SolverStatus_t analyzeResult(int flag);
 
   /**
    * @brief update the discrete variables values and the mode of the equations
@@ -226,7 +226,7 @@ class SolverSIM : public Solver::Impl {
   /**
    * @copydoc Solver::Impl::solveStep(double tAim, double &tNxt)
    */
-  void solveStep(double tAim, double &tNxt);
+  void solveStep(double tAim, double& tNxt);
 
   /**
    * @copydoc Solver::setupNewAlgRestoration(modeChangeType_t modeChangeType)
