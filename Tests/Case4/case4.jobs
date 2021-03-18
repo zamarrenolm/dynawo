@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<dyn:jobs xmlns:dyn="http://www.rte-france.com/dynawo">
+ <dyn:job name="Test Case 4 IDA solver">
+      <dyn:solver lib="dynawo_SolverIDA" parFile="case4.par" parId="IDAOrder2"/>
+      <dyn:modeler compileDir="outputs_Case4IDA/compilation">
+        <dyn:dynModels dydFile="case4.dyd"/>
+        <dyn:precompiledModels useStandardModels="true"/>
+        <dyn:modelicaModels useStandardModels="true">
+          <dyn:directory path="." recursive="false"/>
+        </dyn:modelicaModels>
+      </dyn:modeler>
+      <dyn:simulation startTime="0" stopTime="100"/>
+      <dyn:outputs directory="outputs_Case4IDA">
+        <dyn:curves inputFile="case4.crv" exportMode="CSV"/>
+        <dyn:logs>
+          <dyn:appender tag="" file="dynawo.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="MODELER" file="modeler.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="COMPILE" file="compile.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="EQUATIONS" file="equations.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="VARIABLES" file="variables.log" lvlFilter="DEBUG"/>
+        </dyn:logs>
+      </dyn:outputs>
+  </dyn:job>  
+  <!--<dyn:job name="Test Case 4 SIM solver"> 
+      <dyn:solver lib="dynawo_SolverSIM" parFile="solvers.par" parId="SIMpar"/>
+      <dyn:modeler compileDir="outputs_Case4SIM/compilation">
+        <dyn:dynModels dydFile="case4.dyd"/>
+        <dyn:precompiledModels useStandardModels="true"/>
+        <dyn:modelicaModels useStandardModels="true">
+          <dyn:directory path="." recursive="false"/>
+        </dyn:modelicaModels>
+      </dyn:modeler>
+      <dyn:simulation startTime="0" stopTime="110"/>
+      <dyn:outputs directory="outputs_Case4SIM">
+        <dyn:curves inputFile="case4.crv" exportMode="CSV"/>
+        <dyn:logs>
+          <dyn:appender tag="" file="dynawo.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="MODELER" file="modeler.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="COMPILE" file="compile.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="EQUATIONS" file="equations.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="VARIABLES" file="variables.log" lvlFilter="DEBUG"/>
+        </dyn:logs>
+      </dyn:outputs>
+  </dyn:job> --> 
+</dyn:jobs>
+  
+

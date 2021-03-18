@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dyn:dynamicModelsArchitecture xmlns:dyn="http://www.rte-france.com/dynawo">
+
+  <dyn:blackBoxModel id="InfiniteBus" lib="InfiniteBus" parFile="case1.par" parId="InfiniteBus"/>
+  <dyn:blackBoxModel id="Line1" lib="Line" parFile="case1.par" parId="Line1"/>
+  
+  <dyn:modelicaModel id="SG">
+    <dyn:unitDynamicModel id="gen" name="Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronous" initName="Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronousExt_4E_INIT" parFile="case1.par" parId="SynchronousMachine"/>
+      
+    <dyn:unitDynamicModel id="Governor" name="TGOV1" moFile="TGOV1.mo" parFile="case1.par" parId="tgov1"/>
+    
+    <dyn:unitDynamicModel id="Exciter" name="SEXS" moFile="SEXS.mo" parFile="case1.par" parId="sexs"/>
+    
+    <dyn:unitDynamicModel id="omega" name="Dynawo.Electrical.Controls.Basics.SetPoint" parFile="case1.par" parId="SetPointOmegaRef"/>
+    
+    <dyn:unitDynamicModel id="VS" name="Dynawo.Electrical.Controls.Basics.SetPoint"  parFile="case1.par" parId="SetPointVs"/>
+    
+    <dyn:unitDynamicModel id="REFL" name="Dynawo.Electrical.Controls.Basics.SetPoint"  parFile="case1.par" parId="SetPointRefL"/>
+     
+    <dyn:unitDynamicModel id="VREF" name="Dynawo.Electrical.Controls.Basics.Step"  parFile="case1.par" parId="StepVref"/>
+    
+    <dyn:connect id1="gen" var1="PmPu.value" id2="Governor" var2="Pmec"/>
+    <dyn:connect id1="gen" var1="omegaPu.value" id2="Governor" var2="w"/>
+    <dyn:connect id1="gen" var1="efdPu.value" id2="Exciter" var2="Efd"/>
+    <dyn:connect id1="gen" var1="UStatorPu.value" id2="Exciter" var2="Vc"/>
+    <dyn:connect id1="gen" var1="omegaRefPu" id2="omega" var2="setPoint"/>
+    
+    <dyn:connect id1="Governor" var1="RefL" id2="REFL" var2="setPoint.value"/>
+    <dyn:connect id1="Exciter" var1="Vs" id2="VS" var2="setPoint.value"/>
+    <dyn:connect id1="Exciter" var1="Vref" id2="VREF" var2="step.value"/>
+       
+  </dyn:modelicaModel>
+  
+  <dyn:blackBoxModel id="OpenLine" lib="EventSetPointBoolean" parFile="case1.par" parId="LineOpening"/>
+  <!-- Connections -->
+  <dyn:connect id1="InfiniteBus" var1="infiniteBus_terminal" id2="Line1" var2="line_terminal1"/>
+  <dyn:connect id1="Line1" var1="line_terminal2" id2="SG" var2="gen_terminal"/>
+  <dyn:connect id1="OpenLine" var1="event_state1" id2="Line1" var2="line_switchOffSignal2"/>
+</dyn:dynamicModelsArchitecture>
+
+<!-- Is it possible to have the terminal of the SM disconnected? As an external variable, it must be connected somewhere at initialization I guess.
+Tried to simulate with the terminal disconnected but couldnt launch the simulation. log file-->
