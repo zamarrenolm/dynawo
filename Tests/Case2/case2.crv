@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+
+<curvesInput xmlns="http://www.rte-france.com/dynawo">
+
+  <curve model="SG" variable="gen_PmPu"/>
+
+  <curve model="SG" variable="gen_efdPu"/>
+  <curve model="SG" variable="gen_omegaPu"/>
+ 
+  <curve model="SG" variable="gen_PGenPu"/>
+  <curve model="SG" variable="gen_QGenPu"/>
+
+  <curve model="SG" variable="gen_UPu"/>
+
+  <curve model="SG" variable="gen_UStatorPu"/>
+
+  <curve model="SG" variable="Governor_Pmec"/>
+  <curve model="SG" variable="Exciter_Efd"/>
+</curvesInput>

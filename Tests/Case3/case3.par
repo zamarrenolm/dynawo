@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parametersSet xmlns="http://www.rte-france.com/dynawo">
+  <!-- InfiniteBus -->
+  <set id="InfiniteBus">
+    <par type="DOUBLE" name="infiniteBus_UPu" value="1.0"/>
+    <par type="DOUBLE" name="infiniteBus_UPhase" value="0.0"/>
+  </set>
+  
+
+  
+  <set id="Line1">
+    <par type="DOUBLE" name="line_RPu" value="0.004378"/>
+    <par type="DOUBLE" name="line_XPu" value="0.04378"/>
+    <par type="DOUBLE" name="line_BPu" value="0.0"/>
+    <par type="DOUBLE" name="line_GPu" value="0.0"/>
+  </set>
+  <!-- tfo -->
+  <set id="Transformer">
+    <par type="DOUBLE" name="transformer_RPu" value="0.526683"/>
+    <par type="DOUBLE" name="transformer_XPu" value="0.178825"/>
+    <par type="DOUBLE" name="transformer_BPu" value="0.0"/>
+    <par type="DOUBLE" name="transformer_GPu" value="0.0"/>
+    <par type="DOUBLE" name="transformer_rTfoPu" value="1"/>
+  </set>
+  
+  <set id="Load">
+    <par type="DOUBLE" name="load_PPu" value="1"/>
+    <par type="DOUBLE" name="load_QPu" value="0.1"/>
+    <par type="DOUBLE" name="load_P0Pu" value="1"/>
+    <par type="DOUBLE" name="load_Q0Pu" value="0.1"/>
+    <par type="DOUBLE" name="load_U0Pu" value="1"/>
+    <par type="DOUBLE" name="load_UPhase0" value="0"/>
+  </set>
+  
+
+  
+  
+  <!-- Synchronous machine external parameters -->
+  <set id="SynchronousMachine">
+    <par type="DOUBLE" name="md" value="0"/>
+    <par type="DOUBLE" name="mq" value="0"/>
+    <par type="DOUBLE" name="nd" value="0"/>
+    <par type="DOUBLE" name="nq" value="0"/>
+    <par type="INT" name="ExcitationPu" value="1"/>
+    <par type="DOUBLE" name="MdPuEfd" value="0"/>
+    <par type="DOUBLE" name="H" value="4"/>
+    <par type="DOUBLE" name="DPu" value="0.0"/>
+    <par type="DOUBLE" name="RaPu" value="0"/>
+    <par type="DOUBLE" name="XlPu" value="0.15"/>
+    <par type="DOUBLE" name="XdPu" value="2"/>
+    <par type="DOUBLE" name="XpdPu" value="0.35"/>
+    <par type="DOUBLE" name="XppdPu" value="0.25"/>
+    <par type="DOUBLE" name="Tpd0" value="5.143"/>
+    <par type="DOUBLE" name="Tppd0" value="0.042"/>
+    <par type="DOUBLE" name="XqPu" value="1.8"/>
+    <par type="DOUBLE" name="XpqPu" value="0.5"/>
+    <par type="DOUBLE" name="XppqPu" value="0.3"/>
+    <par type="DOUBLE" name="Tpq0" value="2.16"/>
+    <par type="DOUBLE" name="Tppq0" value="0.083"/>
+    <par type="DOUBLE" name="UNom" value="21"/>
+    <par type="DOUBLE" name="SNom" value="500"/>
+    <par type="DOUBLE" name="PNomTurb" value="500"/>
+    <par type="DOUBLE" name="PNomAlt" value="475"/>
+    <par type="DOUBLE" name="SnTfo" value="500"/>
+    <par type="DOUBLE" name="UNomHV" value="21"/>
+    <par type="DOUBLE" name="UNomLV" value="21"/>
+    <par type="DOUBLE" name="UBaseHV" value="21"/>
+    <par type="DOUBLE" name="UBaseLV" value="21"/>
+    <par type="DOUBLE" name="RTfPu" value="0"/>
+    <par type="DOUBLE" name="XTfPu" value="0"/>
+    <par type="DOUBLE" name="P0Pu" value="1"/>
+    <par type="DOUBLE" name="Q0Pu" value="0.1"/>
+    <par type="DOUBLE" name="U0Pu" value="1"/>
+    <par type="DOUBLE" name="UPhase0" value="0"/>
+    <par type="DOUBLE" name="UStator0Pu" value="1"/>
+  </set>
+  
+  <set id="Fault">
+    <par type="DOUBLE" name="fault_tBegin" value="40"/>
+    <par type="DOUBLE" name="fault_tEnd" value="40.1"/>
+    <par type="DOUBLE" name="fault_RPu" value="0.002"/>
+    <par type="DOUBLE" name="fault_XPu" value="0.0"/>
+  </set>
+  
+    <!-- Vref Step -->
+  <set id="SetPointVref">
+    <par type="DOUBLE" name="Value0" value="1"/>
+  </set>
+  
+  <!-- PSS2A -->
+  <set id="pss">
+    <par type="DOUBLE" name="Tw1" value="2"/>
+    <par type="DOUBLE" name="Tw2" value="2"/>
+    <par type="DOUBLE" name="Tw3" value="2"/>
+    <par type="DOUBLE" name="Tw4" value="0"/>
+    <par type="DOUBLE" name="T1" value="0.25"/>
+    <par type="DOUBLE" name="T2" value="0.03"/>
+    <par type="DOUBLE" name="T3" value="0.15"/>
+    <par type="DOUBLE" name="T4" value="0.015"/>
+    
+    <par type="DOUBLE" name="T6" value="0"/>
+    <par type="DOUBLE" name="T7" value="2"/>
+    <par type="DOUBLE" name="T8" value="0.5"/>
+    <par type="DOUBLE" name="T9" value="0.1"/>
+    <par type="DOUBLE" name="Ks1" value="10"/>
+    <par type="DOUBLE" name="Ks2" value="0.1564"/>
+    <par type="DOUBLE" name="Ks3" value="1"/>
+    <par type="DOUBLE" name="Vstmin" value="-0.1"/>
+    <par type="DOUBLE" name="Vstmax" value="0.1"/>
+  
+  </set>
+  
+   <!-- Governor -->
+  <set id="tgov1">
+    <par type="DOUBLE" name="R" value="0.05"/>
+    <par type="DOUBLE" name="T1" value="0.5"/>
+    <par type="DOUBLE" name="T2" value="3"/>
+    <par type="DOUBLE" name="T3" value="10"/>
+    <par type="DOUBLE" name="Dt" value="0"/>
+    <par type="DOUBLE" name="Vmin" value="0"/>
+    <par type="DOUBLE" name="Vmax" value="1"/>
+
+  
+  </set>
+  <!-- Exciter -->
+  <set id="sexs">
+    <par type="DOUBLE" name="Ta" value="3"/>
+    <par type="DOUBLE" name="Tb" value="10"/>
+    <par type="DOUBLE" name="Te" value="0.05"/>
+    <par type="DOUBLE" name="Emin" value="0"/>
+    <par type="DOUBLE" name="Emax" value="4"/>
+    <par type="DOUBLE" name="K" value="200"/>
+
+  </set>
+  
+  <!-- OmegaRef -->
+  <set id="SetPointOmegaRef">
+    <par type="DOUBLE" name="Value0" value="1"/>
+  </set>
+
+  
+ 
+
+  
+
+  <!-- IDA order 2 solver -->
+  <set id="IDAOrder2">
+    <par type="INT" name="order" value="2"/>
+    <par type="DOUBLE" name="initStep" value="1"/>
+    <par type="DOUBLE" name="minStep" value="0.000001"/>
+    <par type="DOUBLE" name="maxStep" value="10"/>
+    <par type="DOUBLE" name="absAccuracy" value="1e-4"/>
+    <par type="DOUBLE" name="relAccuracy" value="1e-3"/>
+  </set>
+</parametersSet>

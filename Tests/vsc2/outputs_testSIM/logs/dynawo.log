@@ -1,0 +1,25 @@
+2021-03-18 16:49:31 | INFO |  ============================================================ 
+2021-03-18 16:49:31 | INFO | DYNAWO VERSION  :     1.3.0
+2021-03-18 16:49:31 | INFO | DYNAWO REVISION :    master-a5ca9fee
+2021-03-18 16:49:31 | INFO |  ============================================================ 
+2021-03-18 16:49:31 | INFO | 
+2021-03-18 16:49:31 | INFO | -----------------------------------------------------------------------
+2021-03-18 16:49:31 | INFO | building model from input files
+2021-03-18 16:49:31 | INFO | -----------------------------------------------------------------------
+2021-03-18 16:50:57 | INFO | model was built successfully
+2021-03-18 16:50:57 | INFO | -----------------------------------------------------------------------
+2021-03-18 16:50:57 | INFO | 
+2021-03-18 16:50:57 | INFO | -----------------------------------------------------------------------
+2021-03-18 16:50:57 | INFO | starting local initialization
+2021-03-18 16:50:57 | INFO | -----------------------------------------------------------------------
+2021-03-18 16:50:57 | INFO | end of local initialization
+2021-03-18 16:50:57 | INFO | -----------------------------------------------------------------------
+2021-03-18 16:50:57 | INFO | 
+2021-03-18 16:50:57 | INFO | -----------------------------------------------------------------------
+2021-03-18 16:50:57 | INFO | starting global initialization
+2021-03-18 16:50:57 | INFO | -----------------------------------------------------------------------
+2021-03-18 16:50:57 | DEBUG | initialization of SIM solver : ok
+2021-03-18 16:50:57 | DEBUG | calculate initial condition of the DAE
+2021-03-18 16:50:57 | DEBUG | Algebraic mode change for model CONVERTER at t = 0
+2021-03-18 16:50:57 | INFO | Algebraic mode change at t = 0
+2021-03-18 16:50:57 | ERROR | the number of algebraic/differential variables is different from the number of algebraic/differential equations in the simulated problem ( DYNSolverKINAlgRestoration.cpp:149 )
