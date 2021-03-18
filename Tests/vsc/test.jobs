@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+    Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+    See AUTHORS.txt
+    All rights reserved.
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, you can obtain one at http://mozilla.org/MPL/2.0/.
+    SPDX-License-Identifier: MPL-2.0
+
+    This file is part of Dynawo, an hybrid C++/Modelica open source time domain
+    simulation tool for power systems.
+-->
+<dyn:jobs xmlns:dyn="http://www.rte-france.com/dynawo">
+  
+  
+  <dyn:job name="PQ set point tracking VSC SIM solver">
+      <dyn:solver lib="dynawo_SolverSIM" parFile="solvers.par" parId="solverparam"/>
+      <dyn:modeler compileDir="outputs_testSIM/compilation">
+        <dyn:dynModels dydFile="test.dyd"/>
+        <dyn:precompiledModels useStandardModels="true"/>
+        <dyn:modelicaModels useStandardModels="true">
+          <dyn:directory path="." recursive="false"/>
+        </dyn:modelicaModels>
+      </dyn:modeler>
+      <dyn:simulation startTime="0" stopTime="1"/>
+      <dyn:outputs directory="outputs_testSIM">
+        <dyn:curves inputFile="test.crv" exportMode="CSV"/>
+        <dyn:dumpInitValues local="true" global="true"/>
+        <dyn:constraints exportMode="TXT"/>
+        <dyn:timeline exportMode="TXT"/>
+        <dyn:logs>
+          <dyn:appender tag="" file="dynawo.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="NETWORK" file="network.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="PARAMETERS" file="param.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="MODELER" file="modeler.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="COMPILE" file="compile.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="EQUATIONS" file="equations.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="VARIABLES" file="variables.log" lvlFilter="DEBUG"/>
+        </dyn:logs>
+      </dyn:outputs>
+  </dyn:job>
+ <!--  <dyn:job name="PQ set point tracking VSC IDA solver">
+      <dyn:solver lib="dynawo_SolverIDA" parFile="test.par" parId="IDAOrder2"/>
+      <dyn:modeler compileDir="outputs_testIDA/compilation">
+        <dyn:dynModels dydFile="test.dyd"/>
+        <dyn:precompiledModels useStandardModels="true"/>
+        <dyn:modelicaModels useStandardModels="true">
+          <dyn:directory path="." recursive="false"/>
+        </dyn:modelicaModels>
+      </dyn:modeler>
+      <dyn:simulation startTime="0" stopTime="1"/>
+      <dyn:outputs directory="outputs_testIDA">
+        <dyn:curves inputFile="test.crv" exportMode="CSV"/>
+        <dyn:dumpInitValues local="true" global="true"/>
+        <dyn:constraints exportMode="TXT"/>
+        <dyn:timeline exportMode="TXT"/>
+        <dyn:logs>
+          <dyn:appender tag="" file="dynawo.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="NETWORK" file="network.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="PARAMETERS" file="param.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="MODELER" file="modeler.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="COMPILE" file="compile.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="EQUATIONS" file="equations.log" lvlFilter="DEBUG"/>
+          <dyn:appender tag="VARIABLES" file="variables.log" lvlFilter="DEBUG"/>
+        </dyn:logs>
+      </dyn:outputs>
+  </dyn:job>-->
+</dyn:jobs>
