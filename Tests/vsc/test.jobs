@@ -14,7 +14,7 @@
 <dyn:jobs xmlns:dyn="http://www.rte-france.com/dynawo">
   
   
-  <dyn:job name="PQ set point tracking VSC SIM solver">
+ <!--   <dyn:job name="PQ set point tracking VSC SIM solver">
       <dyn:solver lib="dynawo_SolverSIM" parFile="solvers.par" parId="solverparam"/>
       <dyn:modeler compileDir="outputs_testSIM/compilation">
         <dyn:dynModels dydFile="test.dyd"/>
@@ -39,8 +39,8 @@
           <dyn:appender tag="VARIABLES" file="variables.log" lvlFilter="DEBUG"/>
         </dyn:logs>
       </dyn:outputs>
-  </dyn:job>
- <!--  <dyn:job name="PQ set point tracking VSC IDA solver">
+  </dyn:job>-->
+  <dyn:job name="PQ set point tracking VSC IDA solver">
       <dyn:solver lib="dynawo_SolverIDA" parFile="test.par" parId="IDAOrder2"/>
       <dyn:modeler compileDir="outputs_testIDA/compilation">
         <dyn:dynModels dydFile="test.dyd"/>
@@ -65,5 +65,5 @@
           <dyn:appender tag="VARIABLES" file="variables.log" lvlFilter="DEBUG"/>
         </dyn:logs>
       </dyn:outputs>
-  </dyn:job>-->
+  </dyn:job>
 </dyn:jobs>
