@@ -1,4 +1,3 @@
-
 model OuterLoop2
   import Modelica;
   parameter Modelica.SIunits.Time tc = 0.001;
@@ -7,17 +6,12 @@ model OuterLoop2
   parameter Modelica.SIunits.Time Wf = 60;
   parameter Modelica.SIunits.PerUnit Kvdroop = 0.0;
   parameter Modelica.SIunits.PerUnit Kfdroop = 0.0;
-
-  Modelica.Blocks.Interfaces.RealInput Pref annotation(
-    Placement(visible = true, transformation(origin = {-120, 80}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, 60}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Modelica.Blocks.Math.Add addP(k1 = +1, k2 = +1) annotation(
     Placement(visible = true, transformation(origin = {78, 100}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback fa annotation(
     Placement(visible = true, transformation(origin = {0, 100}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.Integrator kia(k = 1 / ( to * vzq), y_start = 0) annotation(
     Placement(visible = true, transformation(origin = {42, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput Qref annotation(
-    Placement(visible = true, transformation(origin = {-120, -54}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, -100}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Modelica.Blocks.Math.Gain kpr(k = tc / ( to * vzq)) annotation(
     Placement(visible = true, transformation(origin = {42, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add addQ(k1 = +1, k2 = +1) annotation(
@@ -50,7 +44,7 @@ model OuterLoop2
     Placement(visible = true, transformation(origin = {-148, 120}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant omegaRefPu(k = 1) annotation(
     Placement(visible = true, transformation(origin = {-188, 120}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.Gain gain4(k = -0.05) annotation(
+  Modelica.Blocks.Math.Gain gain4(k = Kfdroop) annotation(
     Placement(visible = true, transformation(origin = {-110, 120}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput omegaPu annotation(
     Placement(visible = true, transformation(origin = {-176, 80}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, 100}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
@@ -64,7 +58,7 @@ model OuterLoop2
     Placement(visible = true, transformation(origin = {-156, -90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.FirstOrder firstOrder(T = 1 / Wf, k = 1) annotation(
     Placement(visible = true, transformation(origin = {-156, -130}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.Gain gain6(k = -0.05) annotation(
+  Modelica.Blocks.Math.Gain gain6(k = Kvdroop)  annotation(
     Placement(visible = true, transformation(origin = {-98, -90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = 0.1, uMin = -0.1) annotation(
     Placement(visible = true, transformation(origin = {-70, -90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -76,6 +70,10 @@ model OuterLoop2
     Placement(visible = true, transformation(origin = {18, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput Qc annotation(
     Placement(visible = true, transformation(origin = {20, -20}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Sources.Step Qref(height = 0.05, offset = 0, startTime = 0.6)  annotation(
+    Placement(visible = true, transformation(origin = {-148, -54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Sources.Step Pref(height = 0.1, offset = 0, startTime = 0.3)  annotation(
+    Placement(visible = true, transformation(origin = {-112, 84}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(addP.u2, kia.y) annotation(
     Line(points = {{66, 94}, {60, 94}, {60, 82}, {53, 82}}, color = {0, 0, 127}));
@@ -89,8 +87,6 @@ equation
     Line(points = {{98, -60}, {92, -60}}, color = {0, 0, 127}));
   connect(fa.u1, add.y) annotation(
     Line(points = {{-8, 100}, {-14, 100}}, color = {0, 0, 127}));
-  connect(add.u2, Pref) annotation(
-    Line(points = {{-38, 94}, {-50, 94}, {-50, 80}, {-120, 80}}, color = {0, 0, 127}));
   connect(limiter.y, add.u1) annotation(
     Line(points = {{-55, 120}, {-48, 120}, {-48, 106}, {-38, 106}}, color = {0, 0, 127}));
   connect(omegaRefPu.y, feedback.u1) annotation(
@@ -133,8 +129,6 @@ equation
     Line(points = {{-120, 46}, {-70, 46}, {-70, -14}, {-58, -14}}, color = {0, 0, 127}));
   connect(product1.u2, id) annotation(
     Line(points = {{-58, -26}, {-120, -26}}, color = {0, 0, 127}));
-  connect(Qref, add1.u1) annotation(
-    Line(points = {{-120, -54}, {-42, -54}}, color = {0, 0, 127}));
   connect(iqref, gain.y) annotation(
     Line(points = {{174, 100}, {122, 100}}, color = {0, 0, 127}));
   connect(idref, gain1.y) annotation(
@@ -147,6 +141,10 @@ equation
     Line(points = {{-34, -20}, {20, -20}}, color = {0, 0, 127}));
   connect(fr.u2, product1.y) annotation(
     Line(points = {{0, -52}, {0, -20}, {-34, -20}}, color = {0, 0, 127}));
+  connect(Qref.y, add1.u1) annotation(
+    Line(points = {{-136, -54}, {-42, -54}}, color = {0, 0, 127}));
+  connect(Pref.y, add.u2) annotation(
+    Line(points = {{-100, 84}, {-66, 84}, {-66, 94}, {-38, 94}}, color = {0, 0, 127}));
   annotation(
     uses(Modelica(version = "3.2.3")));
 end OuterLoop2;

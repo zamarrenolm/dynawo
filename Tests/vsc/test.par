@@ -4,8 +4,8 @@
     
 
   <set id="InfiniteBus">
-    <par type="DOUBLE" name="infiniteBus_UPu" value="1"/>
-    <par type="DOUBLE" name="infiniteBus_UPhase" value="0.0"/>
+    <par type="DOUBLE" name="UPu" value="1"/>
+    <par type="DOUBLE" name="UPhase" value="0.0"/>
   </set>
   
 
