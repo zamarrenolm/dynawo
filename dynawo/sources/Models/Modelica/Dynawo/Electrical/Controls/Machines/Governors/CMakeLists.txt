@@ -16,6 +16,8 @@ set(MODEL_FILES
   GoverProportional.mo
   GoverProportional.extvar
   Governor_INIT.mo
+  IEEE_TGOV1.mo
+  IEEE_TGOV1.extvar
   )
 
 #
