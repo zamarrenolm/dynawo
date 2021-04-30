@@ -22,32 +22,7 @@
         </dyn:logs>
       </dyn:outputs>
   </dyn:job>
-  
-  <!--<dyn:job name="Test Case 2 SIM solver">
-      <dyn:solver lib="dynawo_SolverSIM" parFile="solvers.par" parId="SIMpar"/>
-      <dyn:modeler compileDir="outputs_Case2SIM/compilation">
-        <dyn:dynModels dydFile="case2.dyd"/>
-        <dyn:precompiledModels useStandardModels="true"/>
-        <dyn:modelicaModels useStandardModels="true">
-          <dyn:directory path="." recursive="false"/>
-        </dyn:modelicaModels>
-      </dyn:modeler>
-      <dyn:simulation startTime="0" stopTime="70"/>
-      <dyn:outputs directory="outputs_Case2SIM">
-        <dyn:curves inputFile="case2.crv" exportMode="CSV"/>
-        <dyn:logs>
-          <dyn:appender tag="" file="dynawo.log" lvlFilter="DEBUG"/>
-          <dyn:appender tag="MODELER" file="modeler.log" lvlFilter="DEBUG"/>
-          <dyn:appender tag="COMPILE" file="compile.log" lvlFilter="DEBUG"/>
-          <dyn:appender tag="EQUATIONS" file="equations.log" lvlFilter="DEBUG"/>
-          <dyn:appender tag="VARIABLES" file="variables.log" lvlFilter="DEBUG"/>
-        </dyn:logs>
-      </dyn:outputs>
-  </dyn:job> -->
-  
-  
-  
-</dyn:jobs>  
+</dyn:jobs>
 
-  
+
 

@@ -1,58 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <dyn:dynamicModelsArchitecture xmlns:dyn="http://www.rte-france.com/dynawo">
-  
-
-  
-  
-  <dyn:blackBoxModel id="Load1" lib="LoadPQ" parFile="case2.par" parId="Load1"/>
-  <dyn:blackBoxModel id="Load2" lib="LoadPQ" parFile="case2.par" parId="Load2"/>
-
-
-  <dyn:modelicaModel id="SG">
+  <dyn:modelicaModel id="Load">
+    <dyn:unitDynamicModel id="load" name="Dynawo.Electrical.Loads.LoadAlphaBeta" initName="Dynawo.Electrical.Loads.Load_INIT" parFile="case2.par" parId="Load"/>
+    <dyn:unitDynamicModel id="step" name="Dynawo.Electrical.Controls.Basics.Step" parFile="case2.par" parId="PRef"/>
+    <dyn:connect id1="load" var1="PRefPu" id2="step" var2="step.value"/>
+  </dyn:modelicaModel>
+  <dyn:modelicaModel id="SynchronousGenerator">
     <dyn:unitDynamicModel id="gen" name="Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronous" initName="Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronousExt_4E_INIT" parFile="case2.par" parId="SynchronousMachine"/>
-    
-
-    
     <dyn:unitDynamicModel id="Governor" name="TGOV1" moFile="TGOV1.mo" parFile="case2.par" parId="tgov1"/>
-    
     <dyn:unitDynamicModel id="Exciter" name="SEXS" moFile="SEXS.mo" parFile="case2.par" parId="sexs"/>
-    
     <dyn:unitDynamicModel id="omega" name="Dynawo.Electrical.Controls.Basics.SetPoint" parFile="case2.par" parId="SetPointOmegaRef"/>
-    
     <dyn:unitDynamicModel id="VS" name="Dynawo.Electrical.Controls.Basics.SetPoint"  parFile="case2.par" parId="SetPointVs"/>
-    
     <dyn:unitDynamicModel id="RefL" name="Dynawo.Electrical.Controls.Basics.SetPoint"  parFile="case2.par" parId="SetPointRefL"/>
-     
     <dyn:unitDynamicModel id="VREF" name="Dynawo.Electrical.Controls.Basics.SetPoint"  parFile="case2.par" parId="SetPointVref"/>
-    
-    <dyn:unitDynamicModel id="efd" name="Dynawo.Electrical.Controls.Basics.SetPoint" initName="Dynawo.Electrical.Controls.Basics.SetPoint_INIT" parFile="case2.par" parId="SetPointVoltageRegulator"/>
-    
-    <dyn:initConnect id1="gen" var1="Efd0Pu" id2="efd" var2="Value0"/>
     <dyn:connect id1="gen" var1="PmPu.value" id2="Governor" var2="Pmec"/>
     <dyn:connect id1="gen" var1="omegaPu.value" id2="Governor" var2="w"/>
     <dyn:connect id1="gen" var1="efdPu.value" id2="Exciter" var2="Efd"/>
     <dyn:connect id1="gen" var1="UStatorPu.value" id2="Exciter" var2="Vc"/>
     <dyn:connect id1="gen" var1="omegaRefPu" id2="omega" var2="setPoint"/>
-    
- 
     <dyn:connect id1="Exciter" var1="Vs" id2="VS" var2="setPoint.value"/>
     <dyn:connect id1="Exciter" var1="Vref" id2="VREF" var2="setPoint.value"/>
     <dyn:connect id1="Governor" var1="RefL" id2="RefL" var2="setPoint.value"/>
-    
   </dyn:modelicaModel>
-  
-  <dyn:blackBoxModel id="CloseSwitch" lib="EventSetPointBoolean" parFile="case2.par" parId="SwitchClosing"/>
-  
   <!-- Connections -->
-  <dyn:connect id1="Load1" var1="load_terminal" id2="SG" var2="gen_terminal"/>
-  <dyn:connect id1="Load2" var1="load_terminal" id2="SG" var2="gen_terminal"/>
-
-  <dyn:connect id1="CloseSwitch" var1="event_state1" id2="Load2" var2="load_switchOffSignal1"/>
- 
+  <dyn:connect id1="Load" var1="load_terminal" id2="SynchronousGenerator" var2="gen_terminal"/>
 </dyn:dynamicModelsArchitecture>
-
-
-<!-- We want a step change in the load value at the SM terminal. It is possible to have a closing switch? Only able to switch off a line, switch. 
-To deal with it, I have set a negative load and afterwards open the switch-->
 
