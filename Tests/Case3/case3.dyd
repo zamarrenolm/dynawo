@@ -1,30 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <dyn:dynamicModelsArchitecture xmlns:dyn="http://www.rte-france.com/dynawo">
-
   <dyn:blackBoxModel id="InfiniteBus" lib="InfiniteBus" parFile="case3.par" parId="InfiniteBus"/>
   <dyn:blackBoxModel id="Transformer" lib="TransformerFixedRatio" parFile="case3.par" parId="Transformer"/>
   <dyn:blackBoxModel id="Line1" lib="Line" parFile="case3.par" parId="Line1"/>
-  <dyn:blackBoxModel id="Load" lib="LoadPQ" parFile="case3.par" parId="Load"/>
-  
-  <dyn:modelicaModel id="SG">
-  
-
-    
+  <dyn:blackBoxModel id="Load" lib="LoadAlphaBeta" parFile="case3.par" parId="Load"/>
+  <dyn:modelicaModel id="SynchronousGenerator">
     <dyn:unitDynamicModel id="gen" name="Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronous" initName="Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronousExt_4E_INIT" parFile="case3.par" parId="SynchronousMachine"/>
-    
     <dyn:unitDynamicModel id="Governor" name="TGOV1" moFile="TGOV1.mo" parFile="case3.par" parId="tgov1"/>
-    
     <dyn:unitDynamicModel id="Exciter" name="SEXS" moFile="SEXS.mo" parFile="case3.par" parId="sexs"/>
-    
     <dyn:unitDynamicModel id="PSS" name="PSS2A" moFile="PSS2A.mo" parFile="case3.par" parId="pss"/>
-    
     <dyn:unitDynamicModel id="omega" name="Dynawo.Electrical.Controls.Basics.SetPoint" parFile="case3.par" parId="SetPointOmegaRef"/>
-    
-  
-     
     <dyn:unitDynamicModel id="VREF" name="Dynawo.Electrical.Controls.Basics.SetPoint"  parFile="case3.par" parId="SetPointVref"/>
-    
     <dyn:connect id1="gen" var1="PmPu.value" id2="Governor" var2="Pmec"/>
     <dyn:connect id1="gen" var1="omegaPu.value" id2="Governor" var2="w"/>
     <dyn:connect id1="gen" var1="efdPu.value" id2="Exciter" var2="Efd"/>
@@ -34,17 +21,12 @@
     <dyn:connect id1="gen" var1="omegaPu.value" id2="PSS" var2="w"/>
     <dyn:connect id1="gen" var1="PGenPu" id2="PSS" var2="Pgen"/>
     <dyn:connect id1="Exciter" var1="Vref" id2="VREF" var2="setPoint.value"/>
-    
-    
   </dyn:modelicaModel>
   <dyn:blackBoxModel id="Fault" lib="NodeFault" parFile="case3.par" parId="Fault"/>
-  
   <!-- Connections -->
   <dyn:connect id1="Load" var1="load_terminal" id2="Transformer" var2="transformer_terminal1"/>
   <dyn:connect id1="Line1" var1="line_terminal1" id2="InfiniteBus" var2="infiniteBus_terminal"/>
   <dyn:connect id1="Transformer" var1="transformer_terminal1" id2="Line1" var2="line_terminal2"/>
   <dyn:connect id1="Transformer" var1="transformer_terminal1" id2="Fault" var2="fault_terminal"/>
-  <dyn:connect id1="Transformer" var1="transformer_terminal2" id2="SG" var2="gen_terminal"/>
-  
-  
+  <dyn:connect id1="Transformer" var1="transformer_terminal2" id2="SynchronousGenerator" var2="gen_terminal"/>
 </dyn:dynamicModelsArchitecture>
