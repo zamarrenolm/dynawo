@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<curvesInput xmlns="http://www.rte-france.com/dynawo">
+  <curve model="SynchronousGenerator" variable="generatorSynchronous_efdPu"/>
+  <curve model="SynchronousGenerator" variable="generatorSynchronous_omegaPu"/>
+  <curve model="SynchronousGenerator" variable="generatorSynchronous_UPu"/>
+  <curve model="SynchronousGenerator" variable="generatorSynchronous_UStatorPu"/>
+  <curve model="SynchronousGenerator" variable="step_step"/>
+</curvesInput>

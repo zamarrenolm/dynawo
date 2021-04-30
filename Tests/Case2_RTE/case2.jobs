@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<dyn:jobs xmlns:dyn="http://www.rte-france.com/dynawo">
+ <dyn:job name="Test Case 2 IDA solver with RTE implementation">
+      <dyn:solver lib="dynawo_SolverIDA" parFile="case2.par" parId="IDAOrder2"/>
+      <dyn:modeler compileDir="outputs_Case1IDA/compilation">
+        <dyn:dynModels dydFile="case2.dyd"/>
+        <dyn:precompiledModels useStandardModels="true"/>
+        <dyn:modelicaModels useStandardModels="true">
+          <dyn:directory path="." recursive="false"/>
+        </dyn:modelicaModels>
+      </dyn:modeler>
+      <dyn:simulation startTime="0" stopTime="15"/>
+      <dyn:outputs directory="outputs_Case2IDA">
+        <dyn:curves inputFile="case2.crv" exportMode="CSV"/>
+      </dyn:outputs>
+  </dyn:job>
+</dyn:jobs>

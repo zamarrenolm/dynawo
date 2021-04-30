@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dyn:dynamicModelsArchitecture xmlns:dyn="http://www.rte-france.com/dynawo">
+  <dyn:modelicaModel id="SynchronousGenerator">
+    <dyn:unitDynamicModel id="generatorSynchronous" name="Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronous" initName="Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronousInt_INIT" parFile="case2.par" parId="SynchronousMachine"/>
+    <dyn:unitDynamicModel id="avr" name="Dynawo.Electrical.Controls.Machines.VoltageRegulators.IEEE_SEXS" parFile="case2.par" parId="avr"/>
+    <dyn:unitDynamicModel id="governor" name="Dynawo.Electrical.Controls.Machines.Governors.IEEE_TGOV1" parFile="case2.par" parId="governor"/>
+    <dyn:unitDynamicModel id="upss" name="Dynawo.Electrical.Controls.Basics.SetPoint" parFile="case2.par" parId="upss"/>
+    <dyn:unitDynamicModel id="usref" name="Dynawo.Electrical.Controls.Basics.SetPoint" parFile="case2.par" parId="usref"/>
+    <dyn:connect id1="generatorSynchronous" var1="omegaRefPu" id2="generatorSynchronous" var2="omegaPu"/>
+    <dyn:connect id1="generatorSynchronous" var1="omegaPu.value" id2="governor" var2="omegaPu"/>
+    <dyn:connect id1="generatorSynchronous" var1="PmPu.value" id2="governor" var2="PmPu"/>
+    <dyn:connect id1="generatorSynchronous" var1="UStatorPu.value" id2="avr" var2="UsPu"/>
+    <dyn:connect id1="generatorSynchronous" var1="efdPu.value" id2="avr" var2="EfdPu"/>
+    <dyn:connect id1="avr" var1="UpssPu" id2="upss" var2="setPoint.value"/>
+    <dyn:connect id1="avr" var1="UsRefPu" id2="usref" var2="setPoint.value"/>
+  </dyn:modelicaModel>
+  <dyn:modelicaModel id="Load">
+    <dyn:unitDynamicModel id="load" name="Dynawo.Electrical.Loads.LoadAlphaBeta" initName="Dynawo.Electrical.Loads.Load_INIT" parFile="case2.par" parId="Load"/>
+    <dyn:unitDynamicModel id="step" name="Dynawo.Electrical.Controls.Basics.Step" parFile="case2.par" parId="PRef"/>
+    <dyn:connect id1="load" var1="PRefPu" id2="step" var2="step.value"/>
+  </dyn:modelicaModel>
+  <dyn:connect id1="Load" var1="load_terminal" id2="SynchronousGenerator" var2="generatorSynchronous_terminal"/>
+</dyn:dynamicModelsArchitecture>
