@@ -47,3 +47,33 @@ case_description = "IEEE57 - Fault on generator 12"
 job_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "examples", "DynaSwing", "IEEE57", "IEEE57_Fault", "IEEE57.jobs")
 
 test_cases.append((case_name, case_description, job_file, 2, standardReturnCodeType, standardReturnCode))
+
+###############################################
+#     ENTSO-E Test Case 1                     #
+###############################################
+
+case_name = "DynaSwing - ENTSO-E - Test Case 1"
+case_description = "Voltage reference step on the synchronous machine (and its regulations) connected to a zero current bus"
+job_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "examples", "DynaSwing", "ENTSOE", "TestCase1", "TestCase1.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+###############################################
+#     ENTSO-E Test Case 2                     #
+###############################################
+
+case_name = "DynaSwing - ENTSO-E - Test Case 2"
+case_description = "Active power variation on the load"
+job_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "examples", "DynaSwing", "ENTSOE", "TestCase2", "TestCase2.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+###############################################
+#     ENTSO-E Test Case 3                     #
+###############################################
+
+case_name = "DynaSwing - ENTSO-E - Test Case 3"
+case_description = "Bolted three-phase short circuit at the high-level side of the transformer"
+job_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "examples", "DynaSwing", "ENTSOE", "TestCase3", "TestCase3.jobs")
+
+test_cases.append((case_name, case_description, job_file, 1, standardReturnCodeType, standardReturnCode))

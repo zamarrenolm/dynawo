@@ -1,7 +1,7 @@
 within Dynawo.NonElectrical.Blocks.Continuous;
 
 /*
-* Copyright (c) 2015-2021, RTE (http://www.rte-france.com)
+* Copyright (c) 2021, RTE (http://www.rte-france.com) and UPC/Citcea (https://www.citcea.upc.edu/)
 * See AUTHORS.txt
 * All rights reserved.
 * This Source Code Form is subject to the terms of the Mozilla Public
@@ -48,7 +48,7 @@ model LeadLag "Simple lead-lag filter"
   connect(gain.y, y) annotation(
     Line(points = {{14, 0}, {102, 0}, {102, 0}, {110, 0}}, color = {0, 0, 127}));
 
-  annotation(
+  annotation(preferredView = "diagram",
     Icon(coordinateSystem(grid = {0.1, 0.1}, initialScale = 0.1), graphics = {Rectangle(lineColor = {0, 0, 127}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {14, -36}, extent = {{-60, 22}, {60, -22}}, textString = "1 + sT2"), Line(origin = {4, 0}, points = {{-64, 0}, {86, 0}}), Text(origin = {12, 32}, extent = {{-60, 22}, {60, -22}}, textString = "1 + sT1"), Text(origin = {-56, -4}, extent = {{-60, 22}, {12, -12}}, textString = "k")}),
     Diagram(coordinateSystem(extent = {{-160, -100}, {160, 100}}, initialScale = 0.1)),
   Documentation(info = "<html><head></head><body>Lead-lag filter (no output limitations):<div><br></div><div><span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>y<span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>&nbsp; &nbsp;&nbsp;1 + s*T1</div><div><span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>- = K * ----------------</div><div><span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>u<span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>&nbsp; &nbsp;&nbsp;1 + s*T2</div><div><br></div><div>Neither output limitation nor anti-windup are implemented.</div><div><br></div><div>Both T1 and T2 need to be strictly positive.</div></body></html>"));

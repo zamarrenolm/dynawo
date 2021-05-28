@@ -1,7 +1,7 @@
 within Dynawo.NonElectrical.Blocks.Continuous;
 
 /*
-* Copyright (c) 2015-2021, RTE (http://www.rte-france.com)
+* Copyright (c) 2021, RTE (http://www.rte-france.com) and UPC/Citcea (https://www.citcea.upc.edu/)
 * See AUTHORS.txt
 * All rights reserved.
 * This Source Code Form is subject to the terms of the Mozilla Public
@@ -26,12 +26,8 @@ block FirstOrderLimiter "First order filter with non-windup limiter"
   parameter Real yMin = -yMax "Lower limits of output signal";
   parameter Real y_start = 0 "Initial or guess value of output (= state)" annotation(
     Dialog(group = "Initialization"));
-  parameter Boolean strict = false "= true, if strict limits with noEvent(..)" annotation(
-    Evaluate = true,
-    choices(checkBox = true),
-    Dialog(tab = "Advanced"));
 
-  Modelica.Blocks.Nonlinear.Limiter lim(limitsAtInit = true, strict = strict, uMax = yMax, uMin = yMin) annotation(
+  Modelica.Blocks.Nonlinear.Limiter lim(limitsAtInit = true, strict = false, uMax = yMax, uMin = yMin) annotation(
     Placement(visible = true, transformation(origin = {52, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback annotation(
     Placement(visible = true, transformation(origin = {-56, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -56,10 +52,9 @@ equation
   connect(I.y, lim.u) annotation(
     Line(points = {{27, 0}, {40, 0}}, color = {0, 0, 127}));
 
-  // The simplified model has no saturation, to make the controller equations linear
-  I.u = homotopy(actual = if G.y >= 0 and lim.u > lim.uMax or G.y <= 0 and lim.u < lim.uMin then 0 else G.y, simplified = G.y);
+  I.u = if G.y >= 0 and lim.u > lim.uMax or G.y <= 0 and lim.u < lim.uMin then 0 else G.y;
 
-  annotation(
+  annotation(preferredView = "diagram",
     Icon(coordinateSystem(grid = {0.1, 0.1}, initialScale = 0.1), graphics = {Line(origin = {0, 1.05741}, points = {{-80, -121.057}, {-40, -121.057}, {42, 118.943}, {80, 118.943}}), Rectangle(lineColor = {0, 0, 127}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {12, 28}, extent = {{-44, 34}, {26, -16}}, textString = "k"), Text(origin = {2, -44}, extent = {{-60, 22}, {60, -22}}, textString = "1 + sT"), Line(origin = {4, 0}, points = {{-86, 0}, {86, 0}})}),
     Diagram(coordinateSystem(extent = {{-200, -100}, {200, 100}}, initialScale = 0.1), graphics = {Line(origin = {-12.32, -0.16}, points = {{-12, 0}, {12, 0}}, color = {0, 0, 127}, pattern = LinePattern.Dash), Text(origin = {-27, 34}, extent = {{-87, 34}, {137, -28}}, textString = "I.u = if (G.y >= 0 and lim.u > lim.uMax) or (G.y <= 0 and lim.u < lim.uMin) then 0 else G.y
 

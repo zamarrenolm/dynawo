@@ -1,7 +1,7 @@
 within Dynawo.Examples.ENTSOE;
 
 /*
-* Copyright (c) 2015-2021, RTE (http://www.rte-france.com)
+* Copyright (c) 2021, RTE (http://www.rte-france.com)
 * See AUTHORS.txt
 * All rights reserved.
 * This Source Code Form is subject to the terms of the Mozilla Public
@@ -12,24 +12,14 @@ within Dynawo.Examples.ENTSOE;
 * This file is part of Dynawo, an hybrid C++/Modelica open source suite of simulation tools for power systems.
 */
 
-model TestCase3 "Synchronous machine connected to an infinite bus, with governor, PSS and AVR"
+model TestCase3 "Bolted three-phase short circuit at the high-level side of the transformer"
 
   import Modelica;
   import Dynawo;
 
   extends Modelica.Icons.Example;
 
-  // Grid with impedance
-  Dynawo.Electrical.Buses.InfiniteBus infiniteBus(UPhase = 0.000242, UPu = 0.952859) annotation(
-    Placement(visible = true, transformation(origin = {-132, 0}, extent = {{-16, -16}, {16, 16}}, rotation = -90)));
-  Dynawo.Electrical.Lines.Line gridImpedance(BPu = 0, GPu = 0, RPu = 0.0036, XPu = 0.036) annotation(
-    Placement(visible = true, transformation(origin = {-100, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-
-  // Transformer
-  Dynawo.Electrical.Transformers.TransformerFixedRatio transformer(BPu = 0, GPu = 0, RPu = 0.0003, XPu = 0.032, rTfoPu = 1) annotation(
-    Placement(visible = true, transformation(origin = {-32, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-
-  // Generator
+  // Generator and regulations
   BaseClasses.GeneratorSynchronousInterfaces generatorSynchronous(
    Ce0Pu = 0.95,
    Cm0Pu = 1,
@@ -104,24 +94,31 @@ model TestCase3 "Synchronous machine connected to an infinite bus, with governor
    nq = 0) annotation(
     Placement(visible = true, transformation(origin = {20, 1.9984e-15}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Dynawo.Electrical.Controls.Basics.SetPoint Omega0Pu(Value0 = 1);
+  Dynawo.Electrical.Controls.Machines.Governors.IEEE.TGOV1 governor(Dt = 0, Pm0Pu = generatorSynchronous.Pm0Pu, R = 0.05, Tg1 = 0.5, Tg2 = 3, Tg3 = 10, VMax = 1, VMin = 0) annotation(
+    Placement(visible = true, transformation(origin = {90, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Dynawo.Electrical.Controls.Machines.PowerSystemStabilizers.IEEE.PSS2A pss(IC1 = 1, IC2 = 3, Ks1 = 10, Ks2 = 0.1564, Ks3 = 1, PGen0Pu = generatorSynchronous.P0Pu, PNomAlt = generatorSynchronous.PNomAlt, T1 = 0.25, T2 = 0.03, T3 = 0.15, T4 = 0.015, T6 = 1e-5, T7 = 2, T8 = 0.5, T9 = 0.1, Tw1 = 2, Tw2 = 2, Tw3 = 2, Tw4 = 1e-5, Upss0Pu = 0, VstMax = 0.1, VstMin = -0.1) annotation(
+    Placement(visible = true, transformation(origin = {90, 0}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
+  Dynawo.Electrical.Controls.Machines.VoltageRegulators.IEEE.SEXS avr(EMax = 4, EMin = 0, Efd0Pu = generatorSynchronous.Efd0Pu, K = 200, Ta = 3, Tb = 10, Te = 0.05, Upss0Pu = 0, Us0Pu = 0.992, UsRef0Pu = 1.00453945) annotation(
+    Placement(visible = true, transformation(origin = {130, 18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Sources.Constant const(k = 1.00453945) annotation(
+    Placement(visible = true, transformation(origin = {10, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Sources.Constant PmRefPu(k = generatorSynchronous.Pm0Pu);
 
-  // Load
+ // Network
+  Dynawo.Electrical.Buses.InfiniteBus infiniteBus(UPhase = 0.000242, UPu = 0.952859) annotation(
+    Placement(visible = true, transformation(origin = {-132, 0}, extent = {{-16, -16}, {16, 16}}, rotation = -90)));
+  Dynawo.Electrical.Lines.Line gridImpedance(BPu = 0, GPu = 0, RPu = 0.0036, XPu = 0.036) annotation(
+    Placement(visible = true, transformation(origin = {-100, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Dynawo.Electrical.Transformers.TransformerFixedRatio transformer(BPu = 0, GPu = 0, RPu = 0.0003, XPu = 0.032, rTfoPu = 1) annotation(
+    Placement(visible = true, transformation(origin = {-32, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Dynawo.Electrical.Loads.LoadAlphaBeta load(alpha = 2, beta = 2, u0Pu = Complex(0.952267, 0)) annotation(
     Placement(visible = true, transformation(origin = {-80, -38}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Dynawo.Electrical.Controls.Basics.SetPoint PRefPu(Value0 = 4.75);
   Dynawo.Electrical.Controls.Basics.SetPoint QRefPu(Value0 = 0.76);
+
+  // Three-phase short circuit
   Dynawo.Electrical.Events.NodeFault nodeFault(RPu = 0.000173, XPu = 0, tBegin = 0.1, tEnd = 0.2) annotation(
     Placement(visible = true, transformation(origin = {-52, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
-  // Regulations
-  Dynawo.Electrical.Controls.Machines.Governors.IEEE_TGOV1 governor(Dt = 0, Pm0Pu = generatorSynchronous.Pm0Pu, R = 0.05, Tg1 = 0.5, Tg2 = 3, Tg3 = 10, VMax = 1, VMin = 0) annotation(
-    Placement(visible = true, transformation(origin = {90, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Dynawo.Electrical.Controls.Machines.PowerSystemStabilizers.IEEE_PSS2A pss(IC1 = 1, IC2 = 3, Ks1 = 10, Ks2 = 0.1564, Ks3 = 1, PGen0Pu = -generatorSynchronous.P0Pu, PNomAlt = generatorSynchronous.PNomAlt, T1 = 0.25, T2 = 0.03, T3 = 0.15, T4 = 0.015, T6 = 1e-5, T7 = 2, T8 = 0.5, T9 = 0.1, Tw1 = 2, Tw2 = 2, Tw3 = 2, Tw4 = 1e-5, Upss0Pu = 0, VstMax = 0.1, VstMin = -0.1) annotation(
-    Placement(visible = true, transformation(origin = {90, 0}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
-  Dynawo.Electrical.Controls.Machines.VoltageRegulators.IEEE_SEXS avr(EMax = 4, EMin = 0, Efd0Pu = generatorSynchronous.Efd0Pu, K = 200, Ta = 3, Tb = 10, Te = 0.05, Upss0Pu = 0, Us0Pu = 0.992) annotation(
-    Placement(visible = true, transformation(origin = {130, 18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const(k = avr.UsRef0Pu) annotation(
-    Placement(visible = true, transformation(origin = {10, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
   connect(transformer.terminal2, generatorSynchronous.terminal) annotation(
@@ -134,12 +131,11 @@ equation
     Line(points = {{-80, -38}, {-80, 0}}, color = {0, 0, 255}));
   connect(generatorSynchronous.omegaRefPu, Omega0Pu.setPoint) annotation(
     Line);
-  connect(load.PRefPu, PRefPu.setPoint) annotation(
-    Line);
-  connect(load.QRefPu, QRefPu.setPoint) annotation(
-    Line);
+  connect(governor.PmRefPu, PmRefPu.y);
   connect(nodeFault.terminal, transformer.terminal1) annotation(
     Line(points = {{-52, 50}, {-52, 0}}, color = {0, 0, 255}));
+  load.PRefPu = PRefPu.setPoint.value;
+  load.QRefPu = QRefPu.setPoint.value;
   gridImpedance.switchOffSignal1.value = false;
   gridImpedance.switchOffSignal2.value = false;
   transformer.switchOffSignal1.value = false;
@@ -170,5 +166,23 @@ equation
     experiment(StartTime = 0, StopTime = 10, Tolerance = 1e-06),
     __OpenModelica_simulationFlags(initialStepSize = "0.001", lv = "LOG_STATS", nls = "kinsol", s = "ida", nlsLS = "klu", maxIntegrationOrder = "2", maxStepSize = "10", emit_protected = "()"),
   Diagram(coordinateSystem(extent = {{-160, -100}, {160, 100}})),
-  Icon);
+  Icon,
+  Documentation(info = "<html><head></head><body><span style=\"left: 118.2px; top: 339.49px; font-family: sans-serif;\">The purpose of the third test case is to compare the dynamic behaviour</span><span style=\"left: 706.595px; top: 339.49px; font-family: sans-serif;\"> of the model for the </span><span style=\"left: 118.2px; top: 363.686px; font-family: sans-serif;\">synchronous </span><span style=\"left: 231.599px; top: 363.686px; font-family: sans-serif;\">machine</span><span style=\"left: 300.802px; top: 363.686px; font-family: sans-serif;\">  with  its  whole </span><span style=\"left: 436.796px; top: 363.686px; font-family: sans-serif;\">control</span><span style=\"left: 491.996px; top: 363.686px; font-family: sans-serif;\">  in  operation  during  and  after  a  three</span><span style=\"left: 818.191px; top: 363.686px; font-family: sans-serif;\">-phase </span><span style=\"left: 118.2px; top: 388.286px; font-family: sans-serif;\">short</span><span style=\"left: 158.993px; top: 388.286px; font-family: sans-serif;\">-circuit</span><span style=\"left: 213.199px; top: 388.286px; font-family: sans-serif;\">  by </span><span style=\"left: 254.802px; top: 388.286px; font-family: sans-serif;\">analysing</span><span style=\"left: 332.597px; top: 388.286px; font-family: sans-serif;\">  the  terminal  voltage</span><span style=\"left: 577.4px; top: 388.29px; font-family: sans-serif;\">,  the  excitation  voltage  inside  the  </span><span style=\"left: 118.191px; top: 417.086px; font-family: sans-serif;\">generator</span><span style=\"left: 233.4px; top: 417.09px; font-family: sans-serif;\">, the active and reactive power of the </span><span style=\"left: 539.006px; top: 417.09px; font-family: sans-serif;\">synchronous machine</span><span style=\"left: 812.6px; top: 417.09px; font-family: sans-serif;\">&nbsp;as well </span><span style=\"left: 118.202px; top: 446.088px; font-family: sans-serif;\">as  speed</span><span style=\"left: 203.35333333333332px; top: 446.2357029144049px; font-family: sans-serif;\">.</span><div><span style=\"left: 118.222px; top: 580.87px; font-family: sans-serif;\">At the event</span><span style=\"left: 216.827px; top: 580.87px; font-family: sans-serif;\">-time a </span><span style=\"left: 278.835px; top: 580.87px; font-family: sans-serif;\">bolted </span><span style=\"left: 334.238px; top: 580.87px; font-family: sans-serif;\">three-</span><span style=\"left: 382.446px; top: 580.87px; font-family: sans-serif;\">phase short circuit occurs at the </span><span style=\"left: 648.638px; top: 580.87px; font-family: sans-serif;\">high</span><span style=\"left: 683.23px; top: 580.87px; font-family: sans-serif;\">-voltage side of the </span><span style=\"left: 844.838px; top: 580.87px; font-family: sans-serif;\">unit&nbsp;</span><span style=\"left: 118.24px; top: 605.268px; font-family: sans-serif;\">transformer</span><span style=\"left: 322.241px; top: 605.268px; font-family: sans-serif;\">.  After the fault duration of </span><span style=\"left: 590.485px; top: 606.393px; font-family: serif;\">0.1 s</span><span style=\"left: 639.6px; top: 605.29px; font-family: sans-serif;\">&nbsp;the </span><span style=\"left: 678.608px; top: 605.29px; font-family: sans-serif;\">initial  system  conditions  </span><span style=\"left: 118.199px; top: 634.086px; font-family: sans-serif;\">are </span><span style=\"left: 149.792px; top: 634.086px; font-family: sans-serif;\">restored.</span><font face=\"sans-serif\"><br></font><span style=\"left: 226.8px; top: 446.09px; font-size: 18.4px; font-family: sans-serif; transform: scaleX(0.815219);\"></span><div><span style=\"left: 203.35333333333332px; top: 446.2357029144049px; font-family: sans-serif;\"><br></span></div></div><div><span style=\"left: 203.35333333333332px; top: 446.2357029144049px; font-family: sans-serif;\">The results obtained match perfectly the results presented in the report.</span></div>
+
+    <figure>
+    <img width=\"450\" src=\"modelica://Dynawo/Examples/ENTSOE/Resources/UPuTestCase3.png\">
+    </figure>
+
+    <figure>
+    <img width=\"450\" src=\"modelica://Dynawo/Examples/ENTSOE/Resources/EfdPuTestCase3.png\">
+    </figure>
+
+    <figure>
+    <img width=\"450\" src=\"modelica://Dynawo/Examples/ENTSOE/Resources/OmegaPuTestCase3.png\">
+    </figure>
+
+    <figure>
+    <img width=\"450\" src=\"modelica://Dynawo/Examples/ENTSOE/Resources/UpssPuTestCase3.png\">
+    </figure>
+</body></html>"));
 end TestCase3;

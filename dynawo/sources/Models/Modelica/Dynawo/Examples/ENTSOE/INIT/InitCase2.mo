@@ -1,7 +1,7 @@
 within Dynawo.Examples.ENTSOE.INIT;
 
 /*
-* Copyright (c) 2015-2021, RTE (http://www.rte-france.com)
+* Copyright (c) 2021, RTE (http://www.rte-france.com)
 * See AUTHORS.txt
 * All rights reserved.
 * This Source Code Form is subject to the terms of the Mozilla Public
@@ -12,7 +12,7 @@ within Dynawo.Examples.ENTSOE.INIT;
 * This file is part of Dynawo, an hybrid C++/Modelica open source suite of simulation tools for power systems.
 */
 
-model InitCase2 "Synchronous generator starting at 380MW and 0MVar"
+model InitCase2 "Synchronous generator starting at 380 MW and 0 MVar - Start values and parameters calculation from internal parameters"
 
   import Dynawo;
 

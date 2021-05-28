@@ -1,4 +1,4 @@
-# Copyright (c) 2015-2021, RTE (http://www.rte-france.com)
+# Copyright (c) 2021, RTE (http://www.rte-france.com) and UPC/Citcea (https://www.citcea.upc.edu/)
 # See AUTHORS.txt
 # All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -8,13 +8,13 @@
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source suite of time domain simulation tools for power systems.
 
-# Protection models
+# Power system stabilizers models
+
+add_subdirectory(IEEE I)
 
 set(MODEL_FILES
   package.mo
   package.order
-  IEEE_PSS2A.mo
-  IEEE_PSS2A.extvar
   )
 
 #

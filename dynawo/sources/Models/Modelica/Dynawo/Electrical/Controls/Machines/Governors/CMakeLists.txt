@@ -10,14 +10,13 @@
 
 # Governors models
 
+add_subdirectory(IEEE I)
+add_subdirectory(Simplified S)
+
 set(MODEL_FILES
   package.mo
   package.order
-  GoverProportional.mo
-  GoverProportional.extvar
   Governor_INIT.mo
-  IEEE_TGOV1.mo
-  IEEE_TGOV1.extvar
   )
 
 #
