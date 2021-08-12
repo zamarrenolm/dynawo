@@ -15,6 +15,12 @@ within Dynawo.NonElectrical.Blocks.Continuous;
 block IntegratorVariableLimits "Anti windup proportional integral controller"
 
   import Modelica;
+  import Dynawo;
+  import Modelica.Blocks.Interfaces;
+  import Modelica.Blocks.Icons.Block;
+  import Modelica.Constants;
+
+  extends Block;
 
 /*Parameters*/
   parameter Real k(unit="1")=1  "Integrator gain";

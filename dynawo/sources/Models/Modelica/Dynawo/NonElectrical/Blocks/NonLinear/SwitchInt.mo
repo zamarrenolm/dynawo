@@ -2,6 +2,8 @@ within Dynawo.NonElectrical.Blocks.NonLinear;
 
 block SwitchInt
 
+  import Modelica;
+
   Modelica.Blocks.Interfaces.IntegerInput u0 "Connector of second Real input signal" annotation(
     Placement(visible = true, transformation(origin = {-120, 50}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.IntegerInput u1 "Connector of first Real input signal" annotation(

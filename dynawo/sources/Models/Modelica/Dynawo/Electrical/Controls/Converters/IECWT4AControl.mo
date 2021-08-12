@@ -146,9 +146,9 @@ model IECWT4AControl "IEC Wind Turbine type 4A Control"
     Placement(visible = true, transformation(origin = {-160, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-40, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 270)));
   Modelica.Blocks.Interfaces.RealInput uWtImPu(start = u0Pu.im) "Imaginary component of the voltage at the wind turbine (electrical system) terminals in p.u (base UNom) " annotation(
     Placement(visible = true, transformation(origin = {-160, -20}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-80, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 270)));
-  Modelica.Blocks.Interfaces.RealInput PrefPu(start = -P0Pu * SystemBase.SnRef / SNom ) "Active power reference at the wind turbine terminals in p.u (SNom) in generator convention" annotation(
+  Modelica.Blocks.Interfaces.RealInput PRefPu(start = -P0Pu * SystemBase.SnRef / SNom ) "Active power reference at the wind turbine terminals in p.u (SNom) in generator convention" annotation(
     Placement(visible = true, transformation(origin = {-161, 114}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 53}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput QrefPu(start = -P0Pu * SystemBase.SnRef / SNom ) "Reactive power reference at the wind turbine terminals in p.u (SNom) in generator convention" annotation(
+  Modelica.Blocks.Interfaces.RealInput QRefPu(start = -P0Pu * SystemBase.SnRef / SNom ) "Reactive power reference at the wind turbine terminals in p.u (SNom) in generator convention" annotation(
     Placement(visible = true, transformation(origin = {-160, -113}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -48}, extent = {{-10, 10}, {10, -10}}, rotation = 180)));
   /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput ipCmdPu(start = -P0Pu * SystemBase.SnRef / (SNom * sqrt(u0Pu.re * u0Pu.re + u0Pu.im * u0Pu.im))) "d-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) in generator convention" annotation(
@@ -239,9 +239,9 @@ equation
     Line(points = {{46, -95}, {55, -95}, {55, -148}, {-87, -148}, {-87, -137}, {-72, -137}}, color = {255, 127, 0}));
   connect(const.y, iECWT4AMeasures.fsysPu) annotation(
     Line(points = {{-124, -86}, {-115, -86}, {-115, -55}, {-140, -55}, {-140, -43}, {-128, -43}, {-128, -40}}, color = {0, 0, 127}));
-  connect(PrefPu, iECWT4APControl.pWTRefPu) annotation(
+  connect(PRefPu, iECWT4APControl.pWTRefPu) annotation(
     Line(points = {{-161, 114}, {77, 114}, {77, 115}, {78, 115}}, color = {0, 0, 127}));
-  connect(QrefPu, iECWT4AQControl.xWTRefPu) annotation(
+  connect(QRefPu, iECWT4AQControl.xWTRefPu) annotation(
     Line(points = {{-160, -113}, {-105, -113}, {-105, -103}, {2, -103}, {2, -103}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-150, -150}, {150, 150}})),

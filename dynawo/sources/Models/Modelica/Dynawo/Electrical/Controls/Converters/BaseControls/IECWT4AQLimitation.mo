@@ -16,6 +16,7 @@ model IECWT4AQLimitation "IEC WT type 4A Reactive power limitation"
 
   import Modelica;
   import Dynawo.Types;
+  import Dynawo;
 
   extends Dynawo.Electrical.Controls.Converters.Parameters.Params_QLimit;
 

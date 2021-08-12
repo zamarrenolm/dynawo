@@ -15,6 +15,8 @@ within Dynawo.NonElectrical.Blocks.NonLinear;
 
 block MultiSwitchFive
 
+  import Modelica;
+
   Modelica.Blocks.Interfaces.RealInput u0 "Connector of first Real input signal" annotation(
     Placement(visible = true, transformation(origin = {-120, 80}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput u1 "Connector of second Real input signal" annotation(

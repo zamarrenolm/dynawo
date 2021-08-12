@@ -14,6 +14,10 @@ within Dynawo.NonElectrical.Blocks.NonLinear;
 
 block DelayFlag
 
+  import Modelica;
+  import Dynawo;
+  import Dynawo.Types;
+
   parameter Types.PerUnit Ts "Delay flag time constant, specifies how much time F0 will keep the value 2";
   parameter Types.PerUnit Td "Delay flag exponential time constant";
 

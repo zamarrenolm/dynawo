@@ -14,6 +14,8 @@ within Dynawo.NonElectrical.Blocks.NonLinear;
 
 block MultiSwitchThree
 
+  import Modelica;
+
   extends Modelica.Blocks.Icons.PartialBooleanBlock;
 
   Modelica.Blocks.Interfaces.RealInput u0 "Connector of first Real input signal" annotation(

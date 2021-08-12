@@ -17,6 +17,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
 
   import Modelica;
   import Dynawo.Types;
+  import Dynawo;
 
   extends Dynawo.Electrical.Controls.Converters.Parameters.Params_CurrentLimit;
 
