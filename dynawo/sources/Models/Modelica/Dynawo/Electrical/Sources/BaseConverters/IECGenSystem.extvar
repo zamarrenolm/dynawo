@@ -17,6 +17,5 @@
   <variable id="ipMaxPu" type="continuous" />
   <variable id="iqMaxPu" type="continuous" />
   <variable id="iqMinPu" type="continuous" />
-  <variable id="uWTPu" type="continuous" />
   <variable id="theta" type="continuous" />
 </external_variables>

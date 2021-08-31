@@ -23,32 +23,29 @@ model IECWT4APControl "IEC Wind turbine active power control"
   /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
   /*Control parameters*/
-  parameter Types.PerUnit upDip "Voltage dip threshold for P control. Part of WT control, often different from converter thershold" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit Tpordp4A "Time constant in power order lag" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit TpWTref4A "Time constant in reference power order lag" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit dprefmax4A "Maximum WT reference power ramp rate" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit dprefmin4A "Minimum WT reference power ramp rate" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit dpmaxp4A "Maximum WT power ramp rate" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit MpUscale "Voltage scaling for power reference during voltage dip (0: no scaling - 1: u scaling)" annotation(Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.Time TpOrdp4A "Time constant in power order lag in seconds" annotation(Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.PerUnit DpMaxp4A "Maximum WT power ramp rate" annotation(Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.Time TpWTRef4A "Time constant in reference power order lag in seconds" annotation(Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.PerUnit DpRefMax4A "Maximum WT reference power ramp rate in p.u/s (base SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.PerUnit DpRefMin4A "Minimum WT reference power ramp rate in p.u/s (base SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Pcontrol"));
+  parameter Boolean MpUScale "Voltage scaling for power reference during voltage dip (0: no scaling, 1: u scaling)" annotation(Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.PerUnit UpDip "Voltage dip threshold for P control in p.u (base UNom). Part of WT control, often different from converter thersholds" annotation(Dialog(group = "group", tab = "Pcontrol"));
   /*Parameters for initialization from load flow*/
+  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(Dialog(group = "group", tab = "Operating point"));
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)" annotation(Dialog(group = "group", tab = "Operating point"));
   /*Parameters for internal initialization*/
-  parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom)" annotation(Dialog(group = "group", tab = "Operating point"));
-  final parameter Types.PerUnit uWTC0Pu = sqrt(u0Pu.re*u0Pu.re + u0Pu.im*u0Pu.im) "Initial value of the WT terminal voltage in p.u (Ubase)";
-  final parameter Types.PerUnit pWTRef0Pu = -P0Pu*SystemBase.SnRef / SNom "Initial value of the active power reference at PCC in p.u. (SNom) (generator convention)";
-  final parameter Types.PerUnit ipCmd0Pu = pWTRef0Pu/uWTC0Pu "Initial value of the d-axis reference current at the generator system module terminals (converter) in p.u (Ubase,SNom) (generator convention)";
+  parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Operating point"));
   /*Inputs*/
-  Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = uWTC0Pu) "Filtered voltage measurement for WT control (Ubase)" annotation(
+  Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = U0Pu) "Voltage measurement (filtered) at wind turbine terminals in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-110, 85}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -25}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput uWTCPu(start = uWTC0Pu) "Module of the voltage at wind turbine terminals in p.u (base UNom)" annotation(
+  Modelica.Blocks.Interfaces.RealInput uWTCPu(start = U0Pu) "Module of the voltage at wind turbine terminals in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-110, 45}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 25}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput ipMaxPu(start = IpMax0Pu) "Maximum active current (Ibase)" annotation(
+  Modelica.Blocks.Interfaces.RealInput ipMaxPu(start = IpMax0Pu) "Maximum active current in p.u (base UNom, SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-110, 65}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -75}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput pWTRefPu(start = pWTRef0Pu) "WTT active power reference in p.u. (SNom, generator convention)" annotation(
+  Modelica.Blocks.Interfaces.RealInput pWTRefPu(start = -P0Pu*SystemBase.SnRef / SNom ) "WTT active power reference in p.u. (base SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-110, -63}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 75}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   /*Outputs*/
-  Modelica.Blocks.Interfaces.RealOutput ipCmdPu(start = ipCmd0Pu) "Active current command to generator system (Ibase)" annotation(
+  Modelica.Blocks.Interfaces.RealOutput ipCmdPu(start = -P0Pu*SystemBase.SnRef / (SNom * U0Pu)) "Active current command to generator system in p.u (base UNom, SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {110, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   /*Blocks*/
   Modelica.Blocks.Logical.Switch switch1 annotation(
@@ -59,24 +56,22 @@ model IECWT4APControl "IEC Wind turbine active power control"
     Placement(visible = true, transformation(origin = {-45, 3}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Logical.And and1 annotation(
     Placement(visible = true, transformation(origin = {-15, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const1(k = upDip) annotation(
+  Modelica.Blocks.Sources.Constant const1(k = UpDip) annotation(
     Placement(visible = true, transformation(origin = {-75, -5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Product product1 annotation(
     Placement(visible = true, transformation(origin = {0, 55}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = 100, uMin = 0.01)  annotation(
+  Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = 999, uMin = 0.01)  annotation(
     Placement(visible = true, transformation(origin = {0, 85}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const2(k = -100) annotation(
+  Modelica.Blocks.Sources.Constant const2(k = -999) annotation(
     Placement(visible = true, transformation(origin = {15, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const(k = MpUscale) annotation(
-    Placement(visible = true, transformation(origin = {-75, 29}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.RealToBoolean realToBoolean annotation(
-    Placement(visible = true, transformation(origin = {-45, 29}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Division division annotation(
     Placement(visible = true, transformation(origin = {85, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimit(DuMax = dpmaxp4A, DuMin = -100, T = Tpordp4A, k = 1, y_start = pWTRef0Pu)  annotation(
+  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimit(DuMax = DpMaxp4A, DuMin = -999, T = TpOrdp4A, k = 1, y_start = -P0Pu*SystemBase.SnRef / SNom)  annotation(
     Placement(visible = true, transformation(origin = {50, -55}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRamp firstOrderRamp(DuMax = dprefmax4A, DuMin = dprefmin4A, T = TpWTref4A, k = 1, y_start = pWTRef0Pu)  annotation(
+  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRamp firstOrderRamp(DuMax = DpRefMax4A, DuMin = DpRefMin4A, T = TpWTRef4A, k = 1, y_start = -P0Pu*SystemBase.SnRef / SNom)  annotation(
     Placement(visible = true, transformation(origin = {-75, -63}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Sources.BooleanConstant booleanConstant(k = MpUScale)  annotation(
+    Placement(visible = true, transformation(origin = {-74, 28}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(uWTCfiltPu, limiter1.u) annotation(
     Line(points = {{-110, 85}, {-13, 85}, {-13, 85}, {-12, 85}}, color = {0, 0, 127}));
@@ -84,10 +79,6 @@ equation
     Line(points = {{-110, 65}, {-32, 65}, {-32, 61}, {-12, 61}, {-12, 61}}, color = {0, 0, 127}));
   connect(uWTCPu, product1.u2) annotation(
     Line(points = {{-110, 45}, {-32, 45}, {-32, 49}, {-12, 49}, {-12, 49}}, color = {0, 0, 127}));
-  connect(const.y, realToBoolean.u) annotation(
-    Line(points = {{-64, 29}, {-57, 29}}, color = {0, 0, 127}));
-  connect(realToBoolean.y, and1.u1) annotation(
-    Line(points = {{-34, 29}, {-31, 29}, {-31, 19}, {-27, 19}, {-27, 20}}, color = {255, 0, 255}));
   connect(less.y, and1.u2) annotation(
     Line(points = {{-34, 3}, {-31, 3}, {-31, 11}, {-27, 11}, {-27, 12}}, color = {255, 0, 255}));
   connect(const1.y, less.u2) annotation(
@@ -118,6 +109,8 @@ equation
     Line(points = {{-61, -63}, {-52, -63}, {-52, -41}, {-42, -41}, {-42, -41}}, color = {0, 0, 127}));
   connect(product.y, switch1.u1) annotation(
     Line(points = {{-19, -35}, {-12, -35}, {-12, -47}, {3, -47}, {3, -47}}, color = {0, 0, 127}));
+  connect(booleanConstant.y, and1.u1) annotation(
+    Line(points = {{-63, 28}, {-47, 28}, {-47, 21}, {-27, 21}, {-27, 20}}, color = {255, 0, 255}));
   annotation(
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-100, -100}, {100, 100}})),
     preferredView = "diagram",

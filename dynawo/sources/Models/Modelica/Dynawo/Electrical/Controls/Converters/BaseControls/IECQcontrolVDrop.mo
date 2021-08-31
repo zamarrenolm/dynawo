@@ -1,5 +1,17 @@
 within Dynawo.Electrical.Controls.Converters.BaseControls;
 
+/*
+* Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+* See AUTHORS.txt
+* All rights reserved.
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, you can obtain one at http://mozilla.org/MPL/2.0/.
+* SPDX-License-Identifier: MPL-2.0
+*
+* This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+*/
+
 block IECQcontrolVDrop
 
   import Modelica;
@@ -7,28 +19,31 @@ block IECQcontrolVDrop
   import Dynawo.Types;
   import Dynawo.Electrical.SystemBase;
 
+  /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
-  parameter Types.PerUnit Rdrop "Resistive component of voltage drop impedance";
-  parameter Types.PerUnit Xdrop "Inductive component of voltage drop impedance";
-  parameter Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
+  /*Control parameters*/
+  parameter Types.PerUnit RDrop "Resistive component of voltage drop impedance in p.u (base SNom, UNom)";
+  parameter Types.PerUnit XDrop "Reactive component of voltage drop impedance in p.u (base SNom, UNom)";
+  /*Parameters for initialization from load flow*/
+  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)";
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)";
-  parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" ;
-  final parameter Types.PerUnit uWTC0Pu = sqrt(u0Pu.re * u0Pu.re + u0Pu.im * u0Pu.im) "Initial value of the WT terminal voltage in p.u (Ubase)";
-  final parameter Types.PerUnit uPcc0 = sqrt((uWTC0Pu + Rdrop* P0Pu * SystemBase.SnRef /(uWTC0Pu * SNom) + Xdrop* Q0Pu * SystemBase.SnRef/(uWTC0Pu * SNom))^2 + (Xdrop* P0Pu * SystemBase.SnRef /(uWTC0Pu * SNom) - Rdrop* Q0Pu * SystemBase.SnRef /(uWTC0Pu * SNom))^2) "Initial value of the WT terminal voltage in p.u (Ubase)";
-
-  Modelica.Blocks.Interfaces.RealInput pWTCfiltPu(start = -P0Pu * SystemBase.SnRef / SNom) "Filtered WTT active power (SNom)" annotation(
-    Placement(visible = true, transformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput qWTCfiltPu(start = -Q0Pu * SystemBase.SnRef/SNom) "Filtered WTT reactive power (SNom)" annotation(
+  parameter Types.ActivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)";
+  /*Parameters for internal initialization*/
+  final parameter Types.PerUnit Uint0 = sqrt((U0Pu + RDrop * P0Pu * SystemBase.SnRef / (U0Pu * SNom) + XDrop * Q0Pu * SystemBase.SnRef / (U0Pu * SNom))^2 + (XDrop * P0Pu * SystemBase.SnRef / (U0Pu * SNom) - RDrop * Q0Pu * SystemBase.SnRef / (U0Pu * SNom))^2) "Initial value of the voltage at the point of control of WT in p.u (base UNom)";
+  /*Inputs*/
+  Modelica.Blocks.Interfaces.RealInput pWTCfiltPu(start = -P0Pu * SystemBase.SnRef / SNom) "Filtered active power at PCC in p.u (base SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-120, 70}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = sqrt(u0Pu.re^2 + u0Pu.im^2)) "Filtered WTT voltage phasor in power system coordinates (Ubase)" annotation(
+  Modelica.Blocks.Interfaces.RealInput qWTCfiltPu(start = -Q0Pu * SystemBase.SnRef/SNom) "Filtered reactive power at PCC in p.u (base SNom) (generator convention)" annotation(
+    Placement(visible = true, transformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = U0Pu) "Filtered voltage amplitude at wind turbine terminals in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-120, -70}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, -70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
-  Modelica.Blocks.Interfaces.RealOutput uWTCfiltDropPu(start = uPcc0) "Filtered WTT voltage droop in power system coordinates (Ubase)" annotation(
+  /*Outputs*/
+  Modelica.Blocks.Interfaces.RealOutput uWTCfiltDropPu(start = Uint0) "Calculated voltage at the point of control in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {120, 4.44089e-16}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
 
-  uWTCfiltDropPu = sqrt((uWTCfiltPu - Rdrop*pWTCfiltPu/uWTCfiltPu - Xdrop*qWTCfiltPu/uWTCfiltPu)^2 + (Xdrop*pWTCfiltPu/uWTCfiltPu - Rdrop*qWTCfiltPu/uWTCfiltPu)^2);
+  uWTCfiltDropPu = sqrt((uWTCfiltPu - RDrop * pWTCfiltPu / uWTCfiltPu - XDrop * qWTCfiltPu / uWTCfiltPu)^2 + (XDrop * pWTCfiltPu / uWTCfiltPu - RDrop * qWTCfiltPu / uWTCfiltPu)^2);
 
 annotation(
     Icon(coordinateSystem(initialScale = 0.1), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {-23, 23}, extent = {{-61, 49}, {107, -91}}, textString = "Voltage Droop")}));

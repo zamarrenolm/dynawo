@@ -1,4 +1,4 @@
-within Dynawo.Examples.IECWT4AIB;
+within Dynawo.Examples.IECWT4ANeplan;
 
 /*
 * Copyright (c) 2015-2020, RTE (http://www.rte-france.com)

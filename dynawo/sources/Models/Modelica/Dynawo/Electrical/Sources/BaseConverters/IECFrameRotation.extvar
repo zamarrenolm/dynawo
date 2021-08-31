@@ -14,6 +14,5 @@
 <external_variables xmlns="http://www.rte-france.com/dynawo">
   <variable id="ipCmdPu" type="continuous" />
   <variable id="iqCmdPu" type="continuous" />
-  <variable id="uWTPu" type="continuous" />
   <variable id="theta" type="continuous" />
 </external_variables>

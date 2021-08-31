@@ -13,7 +13,7 @@ add_subdirectory(GridForming G)
 add_subdirectory(HVDC H)
 add_subdirectory(SVarC SV)
 add_subdirectory(VSCIB V)
-add_subdirectory(IECWT4AIB W)
+add_subdirectory(IECWT4ANeplan N)
 
 set(MODEL_FILES
   package.mo
