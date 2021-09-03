@@ -16,6 +16,7 @@ set(MODEL_FILES
   IntegratorVariableLimits.mo
   PIAntiWindup.mo
   PIAntiWindupVariableLimits.mo
+  LeadLag.mo
   )
 
 #

@@ -22,6 +22,7 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
 
   /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
+
   /*Control parameters*/
   parameter Types.Time Ts "Integration time step";
   parameter Types.PerUnit RDrop "Resistive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
@@ -76,6 +77,7 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
     Dialog(group = "group", tab = "Qcontrol"));
   parameter Integer MqG "General Q control mode (0-4): Voltage control (0), Reactive power control (1), Power factor control (3)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
+
   /*Parameters for initialization from load flow*/
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
     Dialog(group = "group", tab = "Operating point"));
@@ -83,11 +85,13 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
+
   /*Parameters for internal initialization*/
   parameter Types.PerUnit QMax0Pu "Start value maximum reactive power in p.u (base SNom)" annotation(
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.PerUnit QMin0Pu "Start value minimum reactive power in p.u (base SNom)" annotation(
     Dialog(group = "group", tab = "Operating point"));
+
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput xWTRefPu(start = -Q0Pu * SystemBase.SnRef / SNom)"Reactive power loop reference: reactive power or voltage reference depending on the Q control mode (MqG)" annotation(
     Placement(visible = true, transformation(origin = {-310, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -17.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -101,6 +105,7 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
     Placement(visible = true, transformation(origin = {-310, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -82.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = U0Pu) "Filtered voltage amplitude at wind turbine terminals in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-310, -75}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 82.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
   /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput iqBaseHook(start = -Q0Pu * SystemBase.SnRef / (SNom * U0Pu)) "Reactive current commmand in normal operation in p.u (base SNom, UNom)" annotation(
     Placement(visible = true, transformation(origin = {310, 145}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 75}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -110,6 +115,7 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
     Placement(visible = true, transformation(origin = {310, -125}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -25}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput iqCmdPu(start = -Q0Pu * SystemBase.SnRef / (SNom * U0Pu)) "Reactive current command to generator system in p.u (base SNom, UNom)" annotation(
     Placement(visible = true, transformation(origin = {310, -200}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -75}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
   /*Blocks*/
   Modelica.Blocks.Sources.IntegerConstant integerConstantMqG(k = MqG) annotation(
     Placement(visible = true, transformation(origin = {-283, 283}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -241,6 +247,7 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
     Placement(visible = true, transformation(origin = {-101, 67}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback1 annotation(
     Placement(visible = true, transformation(origin = {-138, 68}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
 equation
 /*Connectors*/
   connect(switchXref.y, variableLimiter1.u) annotation(
@@ -468,5 +475,5 @@ equation
   annotation(
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-300, -300}, {300, 300}})),
     preferredView = "diagram",
-    Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(origin = {0, 0.5}, extent = {{-100, -100}, {100, 100}}), Text(origin = {0, 30}, extent = {{-100, -30}, {100, 30}}, textString = "IEC WT 4A"), Text(origin = {0, -30}, extent = {{-100, -30}, {100, 30}}, textString = "QControl")}));
+    Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(origin = {0, 0.5}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, -100}, {100, 99}}), Text(origin = {-7, 35}, extent = {{-88, -25}, {100, 30}}, textString = "IEC WT 4A"), Text(origin = {-6, -41}, extent = {{-85, -24}, {100, 30}}, textString = "QControl")}));
 end IECWT4AQControl;

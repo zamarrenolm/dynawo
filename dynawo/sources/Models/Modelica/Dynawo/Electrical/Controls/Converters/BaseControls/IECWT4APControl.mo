@@ -22,19 +22,32 @@ model IECWT4APControl "IEC Wind turbine active power control"
 
   /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
+
   /*Control parameters*/
-  parameter Types.Time TpOrdp4A "Time constant in power order lag in seconds" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit DpMaxp4A "Maximum WT power ramp rate" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.Time TpWTRef4A "Time constant in reference power order lag in seconds" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit DpRefMax4A "Maximum WT reference power ramp rate in p.u/s (base SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit DpRefMin4A "Minimum WT reference power ramp rate in p.u/s (base SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Boolean MpUScale "Voltage scaling for power reference during voltage dip (0: no scaling, 1: u scaling)" annotation(Dialog(group = "group", tab = "Pcontrol"));
-  parameter Types.PerUnit UpDip "Voltage dip threshold for P control in p.u (base UNom). Part of WT control, often different from converter thersholds" annotation(Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.Time TpOrdp4A "Time constant in power order lag in seconds" annotation(
+  Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.PerUnit DpMaxp4A "Maximum WT power ramp rate" annotation(
+  Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.Time TpWTRef4A "Time constant in reference power order lag in seconds" annotation(
+  Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.PerUnit DpRefMax4A "Maximum WT reference power ramp rate in p.u/s (base SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.PerUnit DpRefMin4A "Minimum WT reference power ramp rate in p.u/s (base SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Pcontrol"));
+  parameter Boolean MpUScale "Voltage scaling for power reference during voltage dip (0: no scaling, 1: u scaling)" annotation(
+  Dialog(group = "group", tab = "Pcontrol"));
+  parameter Types.PerUnit UpDip "Voltage dip threshold for P control in p.u (base UNom). Part of WT control, often different from converter thersholds" annotation(
+  Dialog(group = "group", tab = "Pcontrol"));
+
   /*Parameters for initialization from load flow*/
-  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(Dialog(group = "group", tab = "Operating point"));
+  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
   /*Parameters for internal initialization*/
-  parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Operating point"));
+  parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = U0Pu) "Voltage measurement (filtered) at wind turbine terminals in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-110, 85}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -25}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -44,9 +57,11 @@ model IECWT4APControl "IEC Wind turbine active power control"
     Placement(visible = true, transformation(origin = {-110, 65}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -75}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput pWTRefPu(start = -P0Pu*SystemBase.SnRef / SNom ) "WTT active power reference in p.u. (base SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-110, -63}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 75}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
   /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput ipCmdPu(start = -P0Pu*SystemBase.SnRef / (SNom * U0Pu)) "Active current command to generator system in p.u (base UNom, SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {110, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
   /*Blocks*/
   Modelica.Blocks.Logical.Switch switch1 annotation(
     Placement(visible = true, transformation(origin = {15, -55}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -62,7 +77,7 @@ model IECWT4APControl "IEC Wind turbine active power control"
     Placement(visible = true, transformation(origin = {0, 55}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = 999, uMin = 0.01)  annotation(
     Placement(visible = true, transformation(origin = {0, 85}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const2(k = -999) annotation(
+  Modelica.Blocks.Sources.Constant const2(k = 0) annotation(
     Placement(visible = true, transformation(origin = {15, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Division division annotation(
     Placement(visible = true, transformation(origin = {85, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -72,6 +87,7 @@ model IECWT4APControl "IEC Wind turbine active power control"
     Placement(visible = true, transformation(origin = {-75, -63}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.BooleanConstant booleanConstant(k = MpUScale)  annotation(
     Placement(visible = true, transformation(origin = {-74, 28}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
 equation
   connect(uWTCfiltPu, limiter1.u) annotation(
     Line(points = {{-110, 85}, {-13, 85}, {-13, 85}, {-12, 85}}, color = {0, 0, 127}));
@@ -114,6 +130,6 @@ equation
   annotation(
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-100, -100}, {100, 100}})),
     preferredView = "diagram",
-    Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(origin = {0, 0.5}, extent = {{-100, -100}, {100, 100}}), Text(origin = {0, 30}, extent = {{-100, -30}, {100, 30}}, textString = "IEC WT 4A"), Text(origin = {0, -30}, extent = {{-100, -30}, {100, 30}}, textString = "PControl")}));
+    Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(origin = {0, 0.5}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, -100}, {100, 100}}), Text(origin = {-9, 32}, extent = {{-83, -19}, {100, 30}}, textString = "IEC WT 4A"), Text(origin = {-11, -34}, extent = {{-77, -16}, {100, 30}}, textString = "PControl")}));
 
 end IECWT4APControl;

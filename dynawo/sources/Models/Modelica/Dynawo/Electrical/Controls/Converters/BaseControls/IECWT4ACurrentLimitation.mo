@@ -22,6 +22,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
 
   /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
+
   /*Current Limiter Parameters*/
   parameter Types.PerUnit IMax "Maximum continuous current at the WT terminals in p.u (base UNom, SNom) (generator convention)"  annotation(
     Dialog(group = "group", tab = "CurrentLimit"));
@@ -40,14 +41,22 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
   parameter Types.PerUnit Kpqu "Partial derivative of reactive current limits vs. voltage" annotation(
     Dialog(group = "group", tab = "CurrentLimit"));
   /*Parameters for initialization from load flow*/
-  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.Angle UPhase0 "Start value of voltage angle at plan terminal (PCC) in radians" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(Dialog(group = "group", tab = "Operating point"));
+  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.Angle UPhase0 "Start value of voltage angle at plan terminal (PCC) in radians" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
   /*Parameters for internal initialization*/
-  parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.PerUnit IqMax0Pu "Start value of the maximum reactive current in p.u (base UNom, SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.PerUnit IqMin0Pu "Start value of the minimum reactive current in p.u (base UNom, SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Operating point"));
+  parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.PerUnit IqMax0Pu "Start value of the maximum reactive current in p.u (base UNom, SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.PerUnit IqMin0Pu "Start value of the minimum reactive current in p.u (base UNom, SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput ipCmdPu(start = -P0Pu*SystemBase.SnRef / (SNom*U0Pu)) "d-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-270, 160}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-200, 160}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
@@ -55,10 +64,11 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {-270, -120}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-200, -160}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
    Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = U0Pu) "Filtered voltage measurement for WT control (Ubase)" annotation(
     Placement(visible = true, transformation(origin = {-270, -50}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = { -200, 80}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput OmegaPu(start = 1) "Convereter frequency in p.u" annotation(
+  Modelica.Blocks.Interfaces.RealInput OmegaPu(start = SystemBase.omegaRef0Pu) "Convereter frequency in p.u" annotation(
   Placement(visible = true, transformation(origin = {-270, 130}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-200, 0}, extent = {{20, -20}, {-20, 20}}, rotation = 180)));
-  Modelica.Blocks.Interfaces.IntegerInput Ffrt annotation(
+  Modelica.Blocks.Interfaces.IntegerInput Ffrt(start = 0) annotation(
     Placement(visible = true, transformation(origin = {-270, 225}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-200, -80}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+
   /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput ipMaxPu(start = IpMax0Pu) "Maximum active current (Ibase)" annotation(
     Placement(visible = true, transformation(origin = {270, -75}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {200, 120}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
@@ -66,6 +76,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {270, 200}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {200, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput iqMinPu(start = IqMin0Pu) "Minimum reactive current (Ibase)" annotation(
     Placement(visible = true, transformation(origin = {270, 100}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {200, -120}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+
   /*Blocks*/
   Modelica.Blocks.Logical.Switch switch11 annotation(
     Placement(visible = true, transformation(origin = {230, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -162,7 +173,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {-98, 116}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter4(limitsAtInit = true, uMax = 999, uMin = 0.001) annotation(
     Placement(visible = true, transformation(origin = {-72, 150}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Nonlinear.Limiter limiter5(limitsAtInit = true, uMax = 999, uMin = 0.01) annotation(
+  Modelica.Blocks.Nonlinear.Limiter limiter5(limitsAtInit = true, uMax = 999, uMin = 0.001) annotation(
     Placement(visible = true, transformation(origin = {-166, 142}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(iqMaxPu, switch11.y) annotation(

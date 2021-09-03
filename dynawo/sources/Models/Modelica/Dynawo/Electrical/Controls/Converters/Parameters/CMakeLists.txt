@@ -14,6 +14,8 @@ set(MODEL_FILES
   package.order
   Params_CurrentLimit.mo
   Params_QLimit.mo
+  Params_PControl.mo
+  Params_QControl.mo
   )
 
 #

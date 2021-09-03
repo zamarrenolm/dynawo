@@ -25,6 +25,8 @@ set(MODEL_FILES
   GridFormingControlDispatchableVirtualOscillatorControl.extvar
   IECWT4AControl.mo
   IECWT4AControl.extvar
+  IECWP4AControl.mo
+  IECWP4AControl.extvar
   GridFollowingControl_INIT.mo
   GridFormingControl_INIT.mo
   )

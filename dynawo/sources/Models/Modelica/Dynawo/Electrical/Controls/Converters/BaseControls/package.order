@@ -9,6 +9,14 @@ IECWT4AQLimitation
 IECWT4ACurrentLimitation
 IECQcontrolVDrop
 IECWT4AMeasures
+IECWT4APll
+IECWP4APControl
+IECWP4AQControl
+IECWT4ACurrentControl
+IECWP4ALinearCommunicationPD
+IECWP4ALinearCommunicationWPM
+IECWP4ALinearCommunicationWPRef
+IECWP4AControlModel
 CurrentLoop
 VoltageLoop
 DCVoltageControl

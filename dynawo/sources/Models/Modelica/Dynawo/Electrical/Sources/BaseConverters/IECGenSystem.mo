@@ -16,14 +16,19 @@ model IECGenSystem
   /*
   Equivalent circuit and conventions:
   */
+
   import Modelica;
   import Dynawo;
   import Dynawo.Types;
   import Dynawo.Electrical.SystemBase;
+
    /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
-  parameter Types.PerUnit Ges "Electrical system shunt conductance in p.u (base UNom, SNom)" annotation(Dialog(group = "group", tab = "Electrical"));
-  parameter Types.PerUnit Bes "Electrical system shunt susceptance in p.u (base UNom, SNom)" annotation(Dialog(group = "group", tab = "Electrical"));
+  parameter Types.PerUnit Ges "Electrical system shunt conductance in p.u (base UNom, SNom)" annotation(
+  Dialog(group = "group", tab = "Electrical"));
+  parameter Types.PerUnit Bes "Electrical system shunt susceptance in p.u (base UNom, SNom)" annotation(
+  Dialog(group = "group", tab = "Electrical"));
+
   /*Control parameters*/
   parameter Types.Time Tg "Current generation time constant in seconds" annotation(
     Dialog(group = "group", tab = "Generator"));
@@ -33,11 +38,17 @@ model IECGenSystem
     Dialog(group = "group", tab = "Generator"));
   parameter Types.PerUnit DiqMin "Minimum reactive current ramp rate in p.u (base UNom, SNom)" annotation(
     Dialog(group = "group", tab = "Generator"));
+
   /*Parameters for initialization from load flow*/
-  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.Angle UPhase0 "Start value of voltage angle at plan terminal (PCC) in radians" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(Dialog(group = "group", tab = "Operating point"));
+  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.Angle UPhase0 "Start value of voltage angle at plan terminal (PCC) in radians" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+
   /*Parameters for internal initialization*/
   parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom) (generator convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
@@ -45,10 +56,12 @@ model IECGenSystem
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.PerUnit IqMin0Pu "Start value of the minimum reactive current in p.u (base UNom, SNom) (generator convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
+
   final parameter Types.ComplexPerUnit u0Pu = ComplexMath.fromPolar(U0Pu, UPhase0) "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
   final parameter Types.ComplexPerUnit i0Pu = ComplexMath.conj(Complex(P0Pu, Q0Pu) / u0Pu) "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef) (receptor convention)";
   final parameter Types.PerUnit IGsRe0Pu = (-i0Pu.re * SystemBase.SnRef / SNom) + (u0Pu.re * Ges - u0Pu.im * Bes) "Start value of the real component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
   final parameter Types.PerUnit IGsIm0Pu = (-i0Pu.im * SystemBase.SnRef / SNom) + (u0Pu.re * Bes + u0Pu.im * Ges) "Start value of the imaginary component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
+
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput ipCmdPu(start = -P0Pu * SystemBase.SnRef / (SNom * U0Pu)) "d-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-70, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
@@ -67,6 +80,7 @@ model IECGenSystem
     Placement(visible = true, transformation(origin = {70, 27.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealOutput iGsImPu(start = IGsIm0Pu) "Imaginary component of the current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {70, -5}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
+
   /*Blocks*/
   Dynawo.Electrical.Sources.BaseConverters.IECFrameRotation iECFrameRotation(P0Pu = P0Pu, Q0Pu = Q0Pu, SNom = SNom, U0Pu = U0Pu, UPhase0 = UPhase0) annotation(
     Placement(visible = true, transformation(origin = {34.65, 10.8333}, extent = {{-9.65, -32.1667}, {9.65, 32.1667}}, rotation = 0)));
@@ -106,5 +120,5 @@ equation
   annotation(
     preferredView = "text",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-60, -60}, {60, 60}})),
-    Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 30}, extent = {{-100, -20}, {100, 20}}, textString = "Generator"), Text(origin = {0, -30}, extent = {{-100, -20}, {100, 20}}, textString = "System")}));
+    Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 30}, extent = {{-100, -20}, {100, 20}}, textString = "Generator"), Text(origin = {0, -30}, extent = {{-100, -20}, {100, 20}}, textString = "System")}));
 end IECGenSystem;

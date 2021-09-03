@@ -34,6 +34,22 @@ set(MODEL_FILES
   IECQcontrolVDrop.extvar
   IECWT4AMeasures.mo
   IECWT4AMeasures.extvar
+  IECWT4APll.mo
+  IECWT4APll.extvar
+  IECWP4APControl.mo
+  IECWP4APControl.extvar
+  IECWP4AQControl.mo
+  IECWP4AQControl.extvar
+  IECWP4ALinearCommunicationPD.mo
+  IECWP4ALinearCommunicationPD.extvar
+  IECWP4ALinearCommunicationWPM.mo
+  IECWP4ALinearCommunicationWPM.extvar
+  IECWP4ALinearCommunicationWPRef.mo
+  IECWP4ALinearCommunicationWPRef.extvar
+  IECWP4AControlModel.mo
+  IECWP4AControlModel.extvar
+  IECWT4ACurrentControl.mo
+  IECWT4ACurrentControl.extvar
   CurrentLoop.mo
   CurrentLoop.extvar
   VoltageLoop.mo

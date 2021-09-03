@@ -12,9 +12,9 @@
     simulation tool for power systems.
 -->
 <dyn:dynamicModelsArchitecture xmlns:dyn="http://www.rte-france.com/dynawo">
-  <dyn:modelicaModel id="IECWT4AControl">
+  <dyn:modelicaModel id="IECWP4AControl">
     <dyn:unitDynamicModel id="converter" name="Dynawo.Electrical.Sources.WT4AIECelec"/>
-    <dyn:unitDynamicModel id="control" name="Dynawo.Electrical.Controls.Converters.IECWT4AControl"/>
+    <dyn:unitDynamicModel id="control" name="Dynawo.Electrical.Controls.Converters.IECWP4AControl"/>
     <dyn:unitDynamicModel id="PRefPu" name="Dynawo.Electrical.Controls.Basics.SetPoint"/>
     <dyn:unitDynamicModel id="QRefPu" name="Dynawo.Electrical.Controls.Basics.SetPoint"/>
     <dyn:unitDynamicModel id="omegaRefPu" name="Dynawo.Electrical.Controls.Basics.SetPoint"/>

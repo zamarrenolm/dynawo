@@ -27,7 +27,6 @@ set(MODEL_FILES
   VSCIdcSource.extvar
   WT4AIECelec.mo
   WT4AIECelec.extvar
-  WTModel.mo
   )
 
 #

@@ -13,24 +13,37 @@ within Dynawo.Electrical.Sources.BaseConverters;
 */
 
 model IECElecSystem
+
   /*
   Equivalent circuit and conventions:
   */
+
   import Modelica;
   import Dynawo;
   import Dynawo.Types;
   import Dynawo.Electrical.SystemBase;
+
   /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
-  parameter Types.PerUnit Res "Electrical system serial resistance in p.u (base UNom, SNom)" annotation(Dialog(group = "group", tab = "Electrical"));
-  parameter Types.PerUnit Xes "Electrical system serial reactance in p.u (base UNom, SNom)" annotation(Dialog(group = "group", tab = "Electrical"));
-  parameter Types.PerUnit Ges "Electrical system shunt conductance in p.u (base UNom, SNom)" annotation(Dialog(group = "group", tab = "Electrical"));
-  parameter Types.PerUnit Bes "Electrical system shunt susceptance in p.u (base UNom, SNom)"annotation(Dialog(group = "group", tab = "Electrical"));
+  parameter Types.PerUnit Res "Electrical system serial resistance in p.u (base UNom, SNom)" annotation(
+  Dialog(group = "group", tab = "Electrical"));
+  parameter Types.PerUnit Xes "Electrical system serial reactance in p.u (base UNom, SNom)" annotation(
+  Dialog(group = "group", tab = "Electrical"));
+  parameter Types.PerUnit Ges "Electrical system shunt conductance in p.u (base UNom, SNom)" annotation(
+  Dialog(group = "group", tab = "Electrical"));
+  parameter Types.PerUnit Bes "Electrical system shunt susceptance in p.u (base UNom, SNom)"annotation(
+  Dialog(group = "group", tab = "Electrical"));
+
   /*Parameters for initialization from load flow*/
-  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.Angle UPhase0 "Start value of voltage angle at plan terminal (PCC) in radians" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(Dialog(group = "group", tab = "Operating point"));
+  parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.Angle UPhase0 "Start value of voltage angle at plan terminal (PCC) in radians" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+
   /*Parameters for internal initialization*/
   final parameter Types.ComplexPerUnit u0Pu = ComplexMath.fromPolar(U0Pu, UPhase0) "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
   final parameter Types.ComplexPerUnit i0Pu = ComplexMath.conj(Complex(P0Pu, Q0Pu) / u0Pu) "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef) (receptor convention)";
@@ -38,6 +51,7 @@ model IECElecSystem
   final parameter Types.PerUnit UGsIm0Pu = u0Pu.im - Res * (i0Pu.im* SystemBase.SnRef / SNom) - Xes * (i0Pu.re* SystemBase.SnRef / SNom) "Start value of the imaginary component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
   final parameter Types.PerUnit IGsRe0Pu = (-i0Pu.re * SystemBase.SnRef / SNom) + (u0Pu.re * Ges - u0Pu.im * Bes) "Start value of the real component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
   final parameter Types.PerUnit IGsIm0Pu = (-i0Pu.im * SystemBase.SnRef / SNom) + (u0Pu.re * Bes + u0Pu.im * Ges) "Start value of the imaginary component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
+
   /*Inputs*/
   Modelica.Blocks.Interfaces.BooleanInput running(start = true) "FOCB in the IEC standart which is the breaker position" annotation(
         Placement(visible = true, transformation(origin = {-70, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {0, 110}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
@@ -45,6 +59,7 @@ model IECElecSystem
         Placement(visible = true, transformation(origin = {-70, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealInput iGsImPu(start = IGsIm0Pu) "Imaginary component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)" annotation(
         Placement(visible = true, transformation(origin = {-70, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
+
   /*Ouputs*/
   Modelica.Blocks.Interfaces.RealOutput uWtRePu(start = u0Pu.re) "Real component of the voltage at the wind turbine terminals (electrical system) in p.u (base UNom)" annotation(
         Placement(visible = true, transformation(origin = {70, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {40, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
@@ -54,16 +69,20 @@ model IECElecSystem
         Placement(visible = true, transformation(origin = {70, -25}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-80, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
   Modelica.Blocks.Interfaces.RealOutput iWtImPu(start = -i0Pu.im* SystemBase.SnRef / SNom) "Imaginary component of the current at the wind turbine terminals in p.u (Ubase, SNom) (generator convention)" annotation(
         Placement(visible = true, transformation(origin = {70, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-40, -110}, extent = {{10, 10}, {-10, -10}}, rotation = 90)));
+
   /*Other calculated variables*/
   Types.PerUnit uGsRePu(start = UGsRe0Pu) "Real component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
   Types.PerUnit uGsImPu(start = UGsIm0Pu) "Imaginary component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
   Types.PerUnit uGsPu(start = sqrt(UGsRe0Pu^2 + UGsIm0Pu^2)) "Module of the voltage at converter side in p.u (base UNom)";
   Types.PerUnit iGsPu(start = sqrt(IGsRe0Pu^2 + IGsIm0Pu^2)) "Module of the current at converter side in p.u (base UNom, SNom)";
+
   /*Blocks*/
   Dynawo.Connectors.ACPower terminal(V(re(start = u0Pu.re), im(start = u0Pu.im)), i(re(start = i0Pu.re), im(start = i0Pu.im))) "Connector used to connect the converter to the grid" annotation(
         Placement(visible = true, transformation(extent = {{0, 0}, {0, 0}}, rotation = 0), iconTransformation(origin = {-105, -1}, extent = {{-5, -5}, {5, 5}}, rotation = 0)));
 //
+
 equation
+
   /* Voltage at WT terminals (before breaker, so grid side) */
   uWtRePu = terminal.V.re;
   uWtImPu = terminal.V.im;
@@ -91,8 +110,10 @@ equation
     uGsPu=0;
     iGsPu=0;
   end if;
-  annotation(
+
+annotation(
         preferredView = "text",
         Diagram(coordinateSystem(grid = {1, 1}, extent = {{-60, -60}, {60, 60}})),
-        Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 30}, extent = {{-100, -20}, {100, 20}}, textString = "Electrical"), Text(origin = {0, -30}, extent = {{-100, -20}, {100, 20}}, textString = "System")}));
+        Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 30}, extent = {{-100, -20}, {100, 20}}, textString = "Electrical"), Text(origin = {0, -30}, extent = {{-100, -20}, {100, 20}}, textString = "System")}));
+
 end IECElecSystem;
