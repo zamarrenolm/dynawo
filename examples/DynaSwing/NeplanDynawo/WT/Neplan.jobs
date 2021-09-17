@@ -19,9 +19,10 @@
       <dyn:precompiledModels useStandardModels="true"/>
       <dyn:modelicaModels useStandardModels="true"/>
     </dyn:modeler>
-    <dyn:simulation startTime="0" stopTime="2"/>
+    <dyn:simulation startTime="0" stopTime="16"/>
     <dyn:outputs directory="outputs">
       <dyn:curves inputFile="Neplan.crv" exportMode="CSV"/>
+      <dyn:dumpInitValues local="true" global="true"/>
       <dyn:logs>
         <dyn:appender tag="" file="dynawo.log" lvlFilter="INFO"/>
       </dyn:logs>

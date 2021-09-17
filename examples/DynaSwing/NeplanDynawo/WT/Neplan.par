@@ -14,36 +14,43 @@
 <parametersSet xmlns="http://www.rte-france.com/dynawo">
    <!-- InfiniteBus -->
   <set id="InfiniteBus">
-    <par type="DOUBLE" name="UPu" value="1"/>
-    <par type="DOUBLE" name="UPhase" value="0.0"/>
+    <par type="DOUBLE" name="UPu" value="1.0678"/>
+    <par type="DOUBLE" name="UPhase" value="-0.04"/>
   </set>
   <!-- Line-->
   <set id="Line">
-    <par type="DOUBLE" name="RPu" value="0.0149"/>
+    <par type="DOUBLE" name="RPu" value="0.015"/>
     <par type="DOUBLE" name="XPu" value="0.025"/>
-    <par type="DOUBLE" name="BPu" value="0.01"/>
+    <par type="DOUBLE" name="BPu" value="0.005"/>
     <par type="DOUBLE" name="GPu" value="0"/>
   </set>
   <!-- Line2-->
   <set id="Line2">
     <par type="DOUBLE" name="RPu" value="0.01"/>
     <par type="DOUBLE" name="XPu" value="0.1"/>
-    <par type="DOUBLE" name="BPu" value="0.000449"/>
+    <par type="DOUBLE" name="BPu" value="0.01"/>
     <par type="DOUBLE" name="GPu" value="0.0"/>
   </set>
   <!-- Line3A-->
   <set id="Line3A">
     <par type="DOUBLE" name="RPu" value="0.005"/>
     <par type="DOUBLE" name="XPu" value="0.05"/>
-    <par type="DOUBLE" name="BPu" value="0.000225"/>
+    <par type="DOUBLE" name="BPu" value="0.005"/>
     <par type="DOUBLE" name="GPu" value="0.0"/>
   </set>
   <!-- Line3B-->
   <set id="Line3B">
     <par type="DOUBLE" name="RPu" value="0.005"/>
     <par type="DOUBLE" name="XPu" value="0.05"/>
-    <par type="DOUBLE" name="BPu" value="0.000225"/>
+    <par type="DOUBLE" name="BPu" value="0.005"/>
     <par type="DOUBLE" name="GPu" value="0.0"/>
+  </set>
+  <!-- Line4-->
+  <set id="Line4">
+    <par type="DOUBLE" name="RPu" value="0"/>
+    <par type="DOUBLE" name="XPu" value="0.0457"/>
+    <par type="DOUBLE" name="BPu" value="0"/>
+    <par type="DOUBLE" name="GPu" value="0"/>
   </set>
     <!-- tfo1 -->
   <set id="tfo1">
@@ -56,7 +63,7 @@
     <!-- tfo2 -->
   <set id="tfo2">
     <par type="DOUBLE" name="RPu" value="0"/>
-    <par type="DOUBLE" name="XPu" value="0.05"/>
+    <par type="DOUBLE" name="XPu" value="0.1"/>
     <par type="DOUBLE" name="BPu" value="0"/>
     <par type="DOUBLE" name="GPu" value="0"/>
     <par type="DOUBLE" name="rTfoPu" value="1"/>
@@ -65,15 +72,32 @@
     <par type="DOUBLE" name="setPoint_Value0" value="1"/>
   </set>
   <set id="Fault">
-    <par type="DOUBLE" name="fault_RPu" value="5"/>
-    <par type="DOUBLE" name="fault_XPu" value="5"/>
-    <par type="DOUBLE" name="fault_tBegin" value="1.5"/>
-    <par type="DOUBLE" name="fault_tEnd" value="1.6"/>
+    <par type="DOUBLE" name="fault_RPu" value="0"/>
+    <par type="DOUBLE" name="fault_XPu" value="1"/>
+    <par type="DOUBLE" name="fault_tBegin" value="6"/>
+    <par type="DOUBLE" name="fault_tEnd" value="6.25"/>
+  </set>
+  <set id="Fault2">
+    <par type="DOUBLE" name="RPu" value="0"/>
+    <par type="DOUBLE" name="XPu" value="0.05"/>
+    <par type="DOUBLE" name="tBegin" value="12"/>
+    <par type="DOUBLE" name="tEnd" value="12.15"/>
+  </set>
+  <set id="PRef">
+    <par type="DOUBLE" name="step_Height" value="-0.5"/>
+    <par type="DOUBLE" name="step_tStep" value="2"/>
+    <par type="DOUBLE" name="step_Value0" value="1"/>
+  </set>
+  <set id="QRef">
+    <par type="DOUBLE" name="step_Height" value="0.2"/>
+    <par type="DOUBLE" name="step_tStep" value="4"/>
+    <par type="DOUBLE" name="step_Value0" value="-0.21"/>
   </set>
   <set id="IDAOrder2">
     <par type="INT" name="order" value="2"/>
     <par type="DOUBLE" name="initStep" value="0.00000001"/>
     <par type="DOUBLE" name="minStep" value="0.00001"/>
+        <par type="DOUBLE" name="minimalAcceptableStep" value="0.000000001"/>
     <par type="DOUBLE" name="maxStep" value="10"/>
     <par type="DOUBLE" name="absAccuracy" value="1e-7"/>
     <par type="DOUBLE" name="relAccuracy" value="1e-7"/>
@@ -93,20 +117,20 @@
     <par type="DOUBLE" name="control_Kpqu" value="20"/>
     <par type="DOUBLE" name="control_Kpu" value="2"/>
     <par type="DOUBLE" name="control_Kpufrt" value="2"/>
-    <par type="DOUBLE" name="control_Kqv" value="2"/>
+    <par type="DOUBLE" name="control_Kqv" value="-2"/>
     <par type="BOOL" name="control_Mdfslim" value="false"/>
     <par type="BOOL" name="control_MpUScale" value="false"/>
     <par type="DOUBLE" name="control_P0Pu" value="-1"/>
     <par type="DOUBLE" name="control_Q0Pu" value="0.21"/>
-    <par type="DOUBLE" name="control_QMax0Pu" value="0.33"/>
-    <par type="DOUBLE" name="control_QMin0Pu" value="-0.33"/>
-    <par type="DOUBLE" name="control_QMax" value="0.33"/>
-    <par type="DOUBLE" name="control_QMin" value="-0.33"/>
+    <par type="DOUBLE" name="control_QMax0Pu" value="0.8"/>
+    <par type="DOUBLE" name="control_QMin0Pu" value="-0.8"/>
+    <par type="DOUBLE" name="control_QMax" value="0.8"/>
+    <par type="DOUBLE" name="control_QMin" value="-0.8"/>
     <par type="DOUBLE" name="control_RDrop" value="0"/>
     <par type="DOUBLE" name="control_SNom" value="100"/>
     <par type="DOUBLE" name="control_TanPhi" value="0.3"/>
     <par type="DOUBLE" name="control_Td" value="0"/>
-    <par type="DOUBLE" name="control_Ts" value="0"/>
+    <par type="DOUBLE" name="control_Ts" value="0.0001"/>
     <par type="DOUBLE" name="control_Tffilt" value="0.01"/>
     <par type="DOUBLE" name="control_Tpfilt" value="0.01"/>
     <par type="DOUBLE" name="control_Tqfilt" value="0.01"/>
