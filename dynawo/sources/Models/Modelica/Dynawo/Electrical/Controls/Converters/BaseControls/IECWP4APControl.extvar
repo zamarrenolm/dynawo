@@ -12,7 +12,7 @@
     simulation tool for power systems.
 -->
 <external_variables xmlns="http://www.rte-france.com/dynawo">
-  <variable id="Fwpfrt" type="continuous" />
+  <variable id="Fwpfrt" type="boolean" />
   <variable id="pWPRefComPu" type="continuous" />
   <variable id="omegaRefPu" type="continuous" />
   <variable id="pWPfiltComPu" type="continuous" />

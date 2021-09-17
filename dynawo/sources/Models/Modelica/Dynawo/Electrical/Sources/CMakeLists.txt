@@ -27,6 +27,10 @@ set(MODEL_FILES
   VSCIdcSource.extvar
   WT4AIECelec.mo
   WT4AIECelec.extvar
+  WT4AIECelec_INIT.mo
+  WT4AIECelecVs.mo
+  WT4AIECelecVs.extvar
+  WT4AIECelecVs_INIT.mo
   )
 
 #

@@ -81,14 +81,15 @@ model IECWT4APControl "IEC Wind turbine active power control"
     Placement(visible = true, transformation(origin = {15, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Division division annotation(
     Placement(visible = true, transformation(origin = {85, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimit(DuMax = DpMaxp4A, DuMin = -999, T = TpOrdp4A, k = 1, y_start = -P0Pu*SystemBase.SnRef / SNom)  annotation(
+  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimit(DuMax = DpMaxp4A, DuMin = -999, GainAW = 1000, T = TpOrdp4A, k = 1, y_start = -P0Pu*SystemBase.SnRef / SNom)  annotation(
     Placement(visible = true, transformation(origin = {50, -55}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRamp firstOrderRamp(DuMax = DpRefMax4A, DuMin = DpRefMin4A, T = TpWTRef4A, k = 1, y_start = -P0Pu*SystemBase.SnRef / SNom)  annotation(
-    Placement(visible = true, transformation(origin = {-75, -63}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-74, -63}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.BooleanConstant booleanConstant(k = MpUScale)  annotation(
     Placement(visible = true, transformation(origin = {-74, 28}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
+
   connect(uWTCfiltPu, limiter1.u) annotation(
     Line(points = {{-110, 85}, {-13, 85}, {-13, 85}, {-12, 85}}, color = {0, 0, 127}));
   connect(ipMaxPu, product1.u1) annotation(
@@ -116,13 +117,13 @@ equation
   connect(division.y, ipCmdPu) annotation(
     Line(points = {{96, -60}, {103, -60}, {103, -60}, {110, -60}}, color = {0, 0, 127}));
   connect(firstOrderRamp.y, switch1.u3) annotation(
-    Line(points = {{-61, -63}, {3, -63}, {3, -63}, {3, -63}}, color = {0, 0, 127}));
+    Line(points = {{-60, -63}, {3, -63}}, color = {0, 0, 127}));
   connect(pWTRefPu, firstOrderRamp.u) annotation(
-    Line(points = {{-110, -63}, {-89, -63}, {-89, -63}, {-89, -63}}, color = {0, 0, 127}));
+    Line(points = {{-110, -63}, {-88, -63}}, color = {0, 0, 127}));
   connect(uWTCPu, product.u1) annotation(
     Line(points = {{-110, 45}, {-97, 45}, {-97, -28}, {-42, -28}, {-42, -29}}, color = {0, 0, 127}));
   connect(firstOrderRamp.y, product.u2) annotation(
-    Line(points = {{-61, -63}, {-52, -63}, {-52, -41}, {-42, -41}, {-42, -41}}, color = {0, 0, 127}));
+    Line(points = {{-60, -63}, {-52, -63}, {-52, -41}, {-42, -41}}, color = {0, 0, 127}));
   connect(product.y, switch1.u1) annotation(
     Line(points = {{-19, -35}, {-12, -35}, {-12, -47}, {3, -47}, {3, -47}}, color = {0, 0, 127}));
   connect(booleanConstant.y, and1.u1) annotation(

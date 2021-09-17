@@ -3,6 +3,8 @@ within Dynawo.Electrical.Controls.Converters.BaseControls;
 model IECWP4ALinearCommunicationWPM
   import Modelica;
   import Dynawo.Types;
+  import Dynawo;
+
   /*Nominal Parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
 

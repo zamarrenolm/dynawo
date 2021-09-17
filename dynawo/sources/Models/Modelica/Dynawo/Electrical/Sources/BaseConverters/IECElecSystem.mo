@@ -45,12 +45,12 @@ model IECElecSystem
   Dialog(group = "group", tab = "Operating point"));
 
   /*Parameters for internal initialization*/
-  final parameter Types.ComplexPerUnit u0Pu = ComplexMath.fromPolar(U0Pu, UPhase0) "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
-  final parameter Types.ComplexPerUnit i0Pu = ComplexMath.conj(Complex(P0Pu, Q0Pu) / u0Pu) "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef) (receptor convention)";
-  final parameter Types.PerUnit UGsRe0Pu = u0Pu.re - Res * (i0Pu.re* SystemBase.SnRef / SNom) + Xes * (i0Pu.im* SystemBase.SnRef / SNom) "Start value of the real component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
-  final parameter Types.PerUnit UGsIm0Pu = u0Pu.im - Res * (i0Pu.im* SystemBase.SnRef / SNom) - Xes * (i0Pu.re* SystemBase.SnRef / SNom) "Start value of the imaginary component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
-  final parameter Types.PerUnit IGsRe0Pu = (-i0Pu.re * SystemBase.SnRef / SNom) + (u0Pu.re * Ges - u0Pu.im * Bes) "Start value of the real component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
-  final parameter Types.PerUnit IGsIm0Pu = (-i0Pu.im * SystemBase.SnRef / SNom) + (u0Pu.re * Bes + u0Pu.im * Ges) "Start value of the imaginary component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
+  parameter Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
+  parameter Types.ComplexPerUnit i0Pu "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef) (receptor convention)";
+  parameter Types.PerUnit UGsRe0Pu "Start value of the real component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
+  parameter Types.PerUnit UGsIm0Pu "Start value of the imaginary component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
+  parameter Types.PerUnit IGsRe0Pu "Start value of the real component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
+  parameter Types.PerUnit IGsIm0Pu "Start value of the imaginary component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
 
   /*Inputs*/
   Modelica.Blocks.Interfaces.BooleanInput running(start = true) "FOCB in the IEC standart which is the breaker position" annotation(
@@ -62,17 +62,19 @@ model IECElecSystem
 
   /*Ouputs*/
   Modelica.Blocks.Interfaces.RealOutput uWtRePu(start = u0Pu.re) "Real component of the voltage at the wind turbine terminals (electrical system) in p.u (base UNom)" annotation(
-        Placement(visible = true, transformation(origin = {70, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {40, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
+        Placement(visible = true, transformation(origin = {70, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-20, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
   Modelica.Blocks.Interfaces.RealOutput uWtImPu(start = u0Pu.im) "Imaginary component of the voltage at the wind turbine terminals (electrical system) in p.u (base UNom) " annotation(
-        Placement(visible = true, transformation(origin = {70, 25}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {80, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
+        Placement(visible = true, transformation(origin = {70, 25}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {20, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
   Modelica.Blocks.Interfaces.RealOutput iWtRePu(start = -i0Pu.re* SystemBase.SnRef / SNom) "Real component of the current at the wind turbine terminals in p.u (Ubase, SNom) (generator convention)" annotation(
-        Placement(visible = true, transformation(origin = {70, -25}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-80, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
+        Placement(visible = true, transformation(origin = {70, -25}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-90, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
   Modelica.Blocks.Interfaces.RealOutput iWtImPu(start = -i0Pu.im* SystemBase.SnRef / SNom) "Imaginary component of the current at the wind turbine terminals in p.u (Ubase, SNom) (generator convention)" annotation(
-        Placement(visible = true, transformation(origin = {70, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-40, -110}, extent = {{10, 10}, {-10, -10}}, rotation = 90)));
+        Placement(visible = true, transformation(origin = {70, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-55, -110}, extent = {{10, 10}, {-10, -10}}, rotation = 90)));
+  Modelica.Blocks.Interfaces.RealOutput uGsRePu(start = UGsRe0Pu) "Real component of the current at the wind turbine terminals in p.u (Ubase, SNom) (generator convention)" annotation(
+        Placement(visible = true, transformation(origin = {70, -25}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {90, -110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
+  Modelica.Blocks.Interfaces.RealOutput uGsImPu(start = UGsIm0Pu) "Imaginary component of the current at the wind turbine terminals in p.u (Ubase, SNom) (generator convention)" annotation(
+        Placement(visible = true, transformation(origin = {70, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {55, -110}, extent = {{10, 10}, {-10, -10}}, rotation = 90)));
 
   /*Other calculated variables*/
-  Types.PerUnit uGsRePu(start = UGsRe0Pu) "Real component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
-  Types.PerUnit uGsImPu(start = UGsIm0Pu) "Imaginary component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
   Types.PerUnit uGsPu(start = sqrt(UGsRe0Pu^2 + UGsIm0Pu^2)) "Module of the voltage at converter side in p.u (base UNom)";
   Types.PerUnit iGsPu(start = sqrt(IGsRe0Pu^2 + IGsIm0Pu^2)) "Module of the current at converter side in p.u (base UNom, SNom)";
 

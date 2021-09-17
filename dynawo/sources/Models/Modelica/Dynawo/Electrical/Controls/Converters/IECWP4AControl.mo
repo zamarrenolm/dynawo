@@ -16,6 +16,7 @@ model IECWP4AControl "IEC Wind Turbine type 4A Control"
   import Modelica;
   import Dynawo;
   import Dynawo.Types;
+  import Dynawo.Connectors;
   import Dynawo.Electrical.SystemBase;
 
   /*Constructive parameters*/
@@ -122,6 +123,7 @@ model IECWP4AControl "IEC Wind Turbine type 4A Control"
   Dialog(group = "group", tab = "Qlimit"));
   parameter Types.PerUnit QMin "Fixed value of the minimum reactive power (base SNom) (generator convention)" annotation(
   Dialog(group = "group", tab = "Qlimit"));
+
   /*Grid Measurement Parameters*/
   parameter Types.Time Tpfilt "Time constant in active power measurement filter" annotation(
     Dialog(group = "group", tab = "GridMeasurement"));
@@ -207,7 +209,8 @@ model IECWP4AControl "IEC Wind Turbine type 4A Control"
   /*Parameters for initialization from load flow*/
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
   Dialog(group = "group", tab = "Operating point"));
-  parameter Types.Angle UPhase0  "Start value of voltage angle at plan terminal (PCC) in rad" annotation(Dialog(group = "group", tab = "Operating point"));
+  parameter Types.Angle UPhase0  "Start value of voltage angle at plan terminal (PCC) in rad" annotation(
+  Dialog(group = "group", tab = "Operating point"));
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
@@ -224,8 +227,9 @@ model IECWP4AControl "IEC Wind Turbine type 4A Control"
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.PerUnit QMin0Pu "Start value minimum reactive power (Sbase)" annotation(
     Dialog(group = "group", tab = "Operating point"));
-  final parameter Types.ComplexPerUnit u0Pu = ComplexMath.fromPolar(U0Pu, UPhase0) "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
-  final parameter Types.ComplexPerUnit i0Pu = ComplexMath.conj(Complex(P0Pu, Q0Pu) / u0Pu) "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef)";
+
+  parameter Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
+  parameter Types.ComplexPerUnit i0Pu "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef)";
 
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput iWtRePu(start = -i0Pu.re * SystemBase.SnRef / SNom) "Real component of the current at the wind turbine terminals in p.u (Ubase,SNom) in generator convention" annotation(
@@ -257,11 +261,14 @@ model IECWP4AControl "IEC Wind Turbine type 4A Control"
   Modelica.Blocks.Interfaces.RealOutput theta(start = UPhase0) "Phase shift between the converter's rotating frame and the grid rotating frame in radians" annotation(
     Placement(visible = true, transformation(origin = {-170, 109.5}, extent = {{-20, -20}, {20, 20}}, rotation = 180), iconTransformation(origin = {0, 110}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
 
- Dynawo.Electrical.Controls.Converters.IECWT4AControl iECWT4AControl(DpMaxp4A = DpMaxp4A, DpRefMax4A = DpRefMax4A, DpRefMin4A = DpRefMin4A, IMax = IMax, IMaxDip = IMaxDip, IMaxHookPu = IMaxHookPu, IdfHook = IdfHook, IpMax0Pu = IpMax0Pu, IpfHook = IpfHook, IqH1 = IqH1, IqMax = IqMax, IqMax0Pu = IqMax0Pu, IqMaxHook = IqMaxHook, IqMin = IqMin, IqMin0Pu = IqMin0Pu, IqPost = IqPost, Kiq = Kiq, Kiu = Kiu, Kpq = Kpq, Kpqu = Kpqu, Kpu = Kpu, Kpufrt = Kpufrt, Kqv = Kqv, Mdfslim = Mdfslim, MpUScale = MpUScale, MqG = MqG, Mqfrt = Mqfrt, Mqpri = Mqpri, P0Pu = P0Pu, Q0Pu = Q0Pu, QMax = QMax, QMax0Pu = QMax0Pu, QMin = QMin, QMin0Pu = QMin0Pu, QlConst = QlConst, RDrop = RDrop, SNom = SNom, TanPhi = TanPhi, Td = Td, Tffilt = Tffilt, TpOrdp4A = TpOrdp4A, TpWTRef4A = TpWTRef4A, Tpfilt = Tpfilt, Tpll = Tpll, TqOrd = TqOrd, Tqfilt = Tqfilt, Ts = Ts, Tufilt = Tufilt, Tuss = Tuss, U0Pu = U0Pu, UMax = UMax, UMin = UMin, UPhase0 = UPhase0, UdbOne = UdbOne, UdbTwo = UdbTwo, UpDip = UpDip, Upll1 = Upll1, Upll2 = Upll2, UpquMax = UpquMax, UqDip = UqDip, UqRise = UqRise, XDrop = XDrop) annotation(
+  Dynawo.Electrical.Controls.Converters.IECWT4AControl iECWT4AControl(DpMaxp4A = DpMaxp4A, DpRefMax4A = DpRefMax4A, DpRefMin4A = DpRefMin4A, IMax = IMax, IMaxDip = IMaxDip, IMaxHookPu = IMaxHookPu, IdfHook = IdfHook, IpMax0Pu = IpMax0Pu, IpfHook = IpfHook, IqH1 = IqH1, IqMax = IqMax, IqMax0Pu = IqMax0Pu, IqMaxHook = IqMaxHook, IqMin = IqMin, IqMin0Pu = IqMin0Pu, IqPost = IqPost, Kiq = Kiq, Kiu = Kiu, Kpq = Kpq, Kpqu = Kpqu, Kpu = Kpu, Kpufrt = Kpufrt, Kqv = Kqv, Mdfslim = Mdfslim, MpUScale = MpUScale, MqG = MqG, Mqfrt = Mqfrt, Mqpri = Mqpri, P0Pu = P0Pu, Q0Pu = Q0Pu, QMax = QMax, QMax0Pu = QMax0Pu, QMin = QMin, QMin0Pu = QMin0Pu, QlConst = QlConst, RDrop = RDrop, SNom = SNom, TanPhi = TanPhi, Td = Td, Tffilt = Tffilt, TpOrdp4A = TpOrdp4A, TpWTRef4A = TpWTRef4A, Tpfilt = Tpfilt, Tpll = Tpll, TqOrd = TqOrd, Tqfilt = Tqfilt, Ts = Ts, Tufilt = Tufilt, Tuss = Tuss, U0Pu = U0Pu, UMax = UMax, UMin = UMin, UPhase0 = UPhase0, UdbOne = UdbOne, UdbTwo = UdbTwo, UpDip = UpDip, Upll1 = Upll1, Upll2 = Upll2, UpquMax = UpquMax, UqDip = UqDip, UqRise = UqRise, XDrop = XDrop, i0Pu = i0Pu, u0Pu = u0Pu) annotation(
     Placement(visible = true, transformation(origin = {-74.5, -0.5}, extent = {{-45.5, -45.5}, {45.5, 45.5}}, rotation = 0)));
-  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4AControlModel IECWP4AControlModel(Kiwpp = Kiwpp, Kiwpx = Kiwpx, Kpwpp = Kpwpp, Kpwpx = Kpwpx, Kwppref = Kwppref, Kwpqref = Kwpqref, Kwpqu = Kwpqu, Mwpqmode = Mwpqmode, P0Pu = P0Pu, Q0Pu = Q0Pu, RDrop = RDrop, SNom = SNom, Tffilt = Tffilt, Tlag = Tlag, Tlead = Tlead, Tpfilt = Tpfilt, Tqfilt = Tqfilt, Tufilt = Tufilt, Tuqfilt = Tuqfilt, U0Pu = U0Pu, UPhase0 = UPhase0, XDrop = XDrop, dpRefMax = dpRefMax, dpRefMin = dpRefMin, dpWPRefMax = dpWPRefMax, dpWPRefMin = dpWPRefMin, dxRefMax = dxRefMax, dxRefMin = dxRefMin, pErrMax = pErrMax, pErrMin = pErrMin, pKIWPpMax = pKIWPpMax, pKIWPpMin = pKIWPpMin, pRefMax = pRefMax, pRefMin = pRefMin, pWPHookPu = pWPHookPu, uWPqdip = uWPqdip, uWPqrise = uWPqrise, xKIWPxMax = xKIWPxMax, xKIWPxMin = xKIWPxMin, xRefMax = xRefMax, xRefMin = xRefMin, xerrmax = xerrmax, xerrmin = xerrmin)  annotation(
+
+  BaseControls.IECWP4AControlModel iECWP4AControlModel(Kiwpp = Kiwpp, Kiwpx = Kiwpx, Kpwpp = Kpwpp, Kpwpx = Kpwpx, Kwppref = Kwppref, Kwpqref = Kwpqref, Kwpqu = Kwpqu, Mwpqmode = Mwpqmode, P0Pu = P0Pu, Q0Pu = Q0Pu, RDrop = RDrop, SNom = SNom, Tffilt = Tffilt, Tlag = Tlag, Tlead = Tlead, Tpfilt = Tpfilt, Tqfilt = Tqfilt, Tufilt = Tufilt, Tuqfilt = Tuqfilt, U0Pu = U0Pu, UPhase0 = UPhase0, XDrop = XDrop, dpRefMax = dpRefMax, dpRefMin = dpRefMin, dpWPRefMax = dpWPRefMax, dpWPRefMin = dpWPRefMin, dxRefMax = dxRefMax, dxRefMin = dxRefMin, i0Pu = i0Pu, pErrMax = pErrMax, pErrMin = pErrMin, pKIWPpMax = pKIWPpMax, pKIWPpMin = pKIWPpMin, pRefMax = pRefMax, pRefMin = pRefMin, pWPHookPu = pWPHookPu, u0Pu = u0Pu, uWPqdip = uWPqdip, uWPqrise = uWPqrise, xKIWPxMax = xKIWPxMax, xKIWPxMin = xKIWPxMin, xRefMax = xRefMax, xRefMin = xRefMin, xerrmax = xerrmax, xerrmin = xerrmin) annotation(
     Placement(visible = true, transformation(origin = {64.3, -0.5625}, extent = {{-64.3, -40.1875}, {64.3, 40.1875}}, rotation = 0)));
+
 equation
+
   connect(iECWT4AControl.theta, theta) annotation(
     Line(points = {{-74.5, 50}, {-74.5, 110}, {-170, 110}}, color = {0, 0, 127}));
   connect(iECWT4AControl.ipMaxPu, ipMaxPu) annotation(
@@ -274,38 +281,37 @@ equation
     Line(points = {{-125, -19}, {-140, -19}, {-140, -70}, {-170, -70}}, color = {0, 0, 127}));
   connect(iECWT4AControl.iqCmdPu, iqCmdPu) annotation(
     Line(points = {{-125, -37}, {-130, -37}, {-130, -112}, {-170, -112}, {-170, -113}}, color = {0, 0, 127}));
-  connect(IECWP4AControlModel.pPDRefComPu, iECWT4AControl.PRefPu) annotation(
-    Line(points = {{-4, 16}, {-13, 16}, {-13, 23}, {-24, 23}, {-24, 24}}, color = {0, 0, 127}));
-  connect(IECWP4AControlModel.xPDRefComPu, iECWT4AControl.QRefPu) annotation(
-    Line(points = {{-4, -17}, {-13, -17}, {-13, -22}, {-24, -22}, {-24, -22}}, color = {0, 0, 127}));
   connect(uWtImPu, iECWT4AControl.uWtImPu) annotation(
     Line(points = {{-80, -169}, {-81, -169}, {-81, -120}, {-111, -120}, {-111, -51}}, color = {0, 0, 127}));
-  connect(uWtImPu, IECWP4AControlModel.uWTImPu) annotation(
-    Line(points = {{-80, -169}, {-81, -169}, {-81, -120}, {16, -120}, {16, -45}}, color = {0, 0, 127}));
   connect(uWtRePu, iECWT4AControl.uWtRePu) annotation(
     Line(points = {{-40, -169}, {-40, -100}, {-93, -100}, {-93, -51}}, color = {0, 0, 127}));
-  connect(uWtRePu, IECWP4AControlModel.uWTRePu) annotation(
-    Line(points = {{-40, -169}, {-40, -100}, {40, -100}, {40, -45}}, color = {0, 0, 127}));
   connect(iWtImPu, iECWT4AControl.iWtImPu) annotation(
     Line(points = {{1, -169}, {0, -169}, {0, -80}, {-55, -80}, {-55, -51}, {-56, -51}}, color = {0, 0, 127}));
-  connect(iWtImPu, IECWP4AControlModel.iWTImPu) annotation(
-    Line(points = {{1, -169}, {0, -169}, {0, -80}, {65, -80}, {65, -45}, {64, -45}}, color = {0, 0, 127}));
   connect(iWtRePu, iECWT4AControl.iWtRePu) annotation(
     Line(points = {{40, -170}, {40, -140}, {-20, -140}, {-20, -66}, {-38, -66}, {-38, -51}}, color = {0, 0, 127}));
-  connect(iWtRePu, IECWP4AControlModel.iWTRePu) annotation(
-    Line(points = {{40, -170}, {40, -170}, {40, -140}, {88, -140}, {88, -45}, {88, -45}}, color = {0, 0, 127}));
-  connect(omegaRefPu, IECWP4AControlModel.omegaRefPu) annotation(
-    Line(points = {{80, -169}, {80, -169}, {80, -60}, {113, -60}, {113, -45}, {113, -45}}, color = {0, 0, 127}));
   connect(omegaRefPu, iECWT4AControl.omegaRefPu) annotation(
     Line(points = {{80, -169}, {80, -169}, {80, -60}, {-10, -60}, {-10, 0}, {-24, 0}, {-24, 0}}, color = {0, 0, 127}));
-  connect(PRefPu, IECWP4AControlModel.pWPRefPu) annotation(
-    Line(points = {{169, 40}, {134, 40}, {134, 16}, {133, 16}}, color = {0, 0, 127}));
-  connect(QRefPu, IECWP4AControlModel.xWPRefPu) annotation(
+  connect(QRefPu, iECWP4AControlModel.xWPRefPu) annotation(
     Line(points = {{169, -40}, {134, -40}, {134, -17}, {133, -17}}, color = {0, 0, 127}));
+  connect(PRefPu, iECWP4AControlModel.pWPRefPu) annotation(
+    Line(points = {{169, 40}, {134, 40}, {134, 16}, {133, 16}}, color = {0, 0, 127}));
+  connect(omegaRefPu, iECWP4AControlModel.omegaRefPu) annotation(
+    Line(points = {{80, -169}, {80, -169}, {80, -60}, {113, -60}, {113, -45}, {113, -45}}, color = {0, 0, 127}));
+  connect(iWtRePu, iECWP4AControlModel.iWTRePu) annotation(
+    Line(points = {{40, -170}, {40, -170}, {40, -140}, {88, -140}, {88, -45}, {88, -45}}, color = {0, 0, 127}));
+  connect(iWtImPu, iECWP4AControlModel.iWTImPu) annotation(
+    Line(points = {{1, -169}, {0, -169}, {0, -80}, {65, -80}, {65, -45}, {64, -45}}, color = {0, 0, 127}));
+  connect(uWtRePu, iECWP4AControlModel.uWTRePu) annotation(
+    Line(points = {{-40, -169}, {-40, -100}, {40, -100}, {40, -45}}, color = {0, 0, 127}));
+  connect(uWtImPu, iECWP4AControlModel.uWTImPu) annotation(
+    Line(points = {{-80, -169}, {-81, -169}, {-81, -120}, {16, -120}, {16, -45}}, color = {0, 0, 127}));
+  connect(iECWP4AControlModel.xPDRefComPu, iECWT4AControl.QRefPu) annotation(
+    Line(points = {{-4, -17}, {-13, -17}, {-13, -22}, {-24, -22}, {-24, -22}}, color = {0, 0, 127}));
+  connect(iECWP4AControlModel.pPDRefComPu, iECWT4AControl.PRefPu) annotation(
+    Line(points = {{-4, 16}, {-13, 16}, {-13, 23}, {-24, 23}, {-24, 24}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-150, -150}, {150, 150}})),
     preferredView = "diagram",
     Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 30}, extent = {{-90, -30}, {90, 30}}, textString = "IEC WP4A"), Text(origin = {0, -30}, extent = {{-90, -30}, {90, 30}}, textString = "Control")}));
-
 
 end IECWP4AControl;

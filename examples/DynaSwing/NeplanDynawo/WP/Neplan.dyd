@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2015-2020, RTE (http://www.rte-france.com)
+    See AUTHORS.txt
+    All rights reserved.
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, you can obtain one at http://mozilla.org/MPL/2.0/.
+    SPDX-License-Identifier: MPL-2.0
+
+    This file is part of Dynawo, an hybrid C++/Modelica open source time domain
+    simulation tool for power systems.
+-->
+<dyn:dynamicModelsArchitecture xmlns:dyn="http://www.rte-france.com/dynawo">
+  <!-- Generator model -->
+    <dyn:blackBoxModel id="GEN____1_SM" lib="IECWP4AControl" parFile="Neplan.par" parId="IECGridFollowingParameters"/>
+  <!-- Network model -->
+    <dyn:modelicaModel id="Network">
+     <dyn:unitDynamicModel id="busInf" name="Dynawo.Electrical.Buses.InfiniteBus" parFile="Neplan.par" parId="InfiniteBus"/>
+     <dyn:unitDynamicModel id="line" name="Dynawo.Electrical.Lines.Line" parFile="Neplan.par" parId="Line"/>
+     <dyn:unitDynamicModel id="line2" name="Dynawo.Electrical.Lines.Line" parFile="Neplan.par" parId="Line2"/>
+     <dyn:unitDynamicModel id="line3A" name="Dynawo.Electrical.Lines.Line" parFile="Neplan.par" parId="Line3A"/>
+     <dyn:unitDynamicModel id="line3B" name="Dynawo.Electrical.Lines.Line" parFile="Neplan.par" parId="Line3B"/>
+     <dyn:unitDynamicModel id="tfo1" name="Dynawo.Electrical.Transformers.TransformerFixedRatio" parFile="Neplan.par" parId="tfo1"/>
+     <dyn:unitDynamicModel id="tfo2" name="Dynawo.Electrical.Transformers.TransformerFixedRatio" parFile="Neplan.par" parId="tfo2"/>
+     <dyn:connect id1="busInf" var1="terminal" id2="line3B" var2="terminal2"/>
+     <dyn:connect id1="line3B" var1="terminal1" id2="line3A" var2="terminal2"/>
+     <dyn:connect id1="line3A" var1="terminal1" id2="tfo1" var2="terminal1"/>
+     <dyn:connect id1="busInf" var1="terminal" id2="line2" var2="terminal2"/>
+     <dyn:connect id1="line2" var1="terminal1" id2="tfo1" var2="terminal1"/>
+     <dyn:connect id1="tfo1" var1="terminal2" id2="line" var2="terminal2"/>
+     <dyn:connect id1="line" var1="terminal1" id2="tfo2" var2="terminal2"/>
+   </dyn:modelicaModel>
+  <!-- Others -->
+   <dyn:blackBoxModel id="OmegaRef" lib="SetPoint" parFile="Neplan.par" parId="OmegaRef"/>
+   <dyn:blackBoxModel id="FAULT_GEN_1" lib="NodeFault" parFile="Neplan.par" parId="Fault"/>
+  <!-- Connections -->
+   <dyn:connect id1="Network" var1="tfo2_terminal1" id2="GEN____1_SM" var2="converter_terminal"/>
+   <dyn:connect id1="FAULT_GEN_1" var1="fault_terminal" id2="Network" var2="tfo2_terminal1"/>
+</dyn:dynamicModelsArchitecture>

@@ -3,7 +3,10 @@ within Dynawo.Electrical.Controls.Converters.BaseControls;
 model IECWP4APControl
 
   import Modelica;
+  import Dynawo;
   import Dynawo.Types;
+  import Dynawo.Connectors;
+  import Dynawo.Electrical.SystemBase;
 
   extends Dynawo.Electrical.Controls.Converters.Parameters.Params_PControl;
 
@@ -45,6 +48,7 @@ model IECWP4APControl
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)";
   parameter Types.ActivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)";
 
+  /*Inputs*/
   Modelica.Blocks.Interfaces.BooleanInput Fwpfrt(start = true)  annotation(
     Placement(visible = true, transformation(origin = {-160, -80}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-150, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput pWPRefComPu(start = -P0Pu * SystemBase.SnRef / SNom ) "WP reference active power" annotation(
@@ -54,6 +58,7 @@ model IECWP4APControl
   Modelica.Blocks.Interfaces.RealInput pWPfiltComPu(start = -P0Pu * SystemBase.SnRef / SNom )"WP filtered frequency measurement communicated to WP (Sbase)" annotation(
     Placement(visible = true, transformation(origin = {-160, -40}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-150, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
+  /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput pPDRefPu(start = -P0Pu * SystemBase.SnRef / SNom ) "PD active power reference communicated to PD (Sbase)" annotation(
     Placement(visible = true, transformation(origin = {160, -1.22125e-15}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {151, -1}, extent = {{-11, -11}, {11, 11}}, rotation = 0)));
 
@@ -68,7 +73,7 @@ model IECWP4APControl
   Modelica.Blocks.Math.Add add2 annotation(
     Placement(visible = true, transformation(origin = {50, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = pRefMax, uMin = pRefMin)  annotation(
-    Placement(visible = true, transformation(origin = {120, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {118, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter2(limitsAtInit = true, uMax = pErrMax, uMin = pErrMin) annotation(
     Placement(visible = true, transformation(origin = {-40, -1.55431e-15}, extent = {{-6, -6}, {6, 6}}, rotation = 0)));
   Modelica.Blocks.Math.Add add3 annotation(
@@ -84,18 +89,20 @@ model IECWP4APControl
   Modelica.Blocks.Nonlinear.Limiter limiter4(limitsAtInit = true, uMax = pKIWPpMax, uMin = pKIWPpMin) annotation(
     Placement(visible = true, transformation(origin = {22, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Continuous.Integrator integrator(k = Kiwpp, y_start = -P0Pu * SystemBase.SnRef / SNom)  annotation(
-    Placement(visible = true, transformation(origin = {-2, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-4, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Logical.Switch switch1 annotation(
-    Placement(visible = true, transformation(origin = {-35, -55}, extent = {{-9, -9}, {9, 9}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-30, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const1(k = 0)  annotation(
-    Placement(visible = true, transformation(origin = {-100, -54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Logical.Or or1 annotation(
-    Placement(visible = true, transformation(origin = {-100, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Logical.Greater greater annotation(
-    Placement(visible = true, transformation(origin = {70, -60}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-86, -24}, extent = {{-6, -6}, {6, 6}}, rotation = 0)));
+  Modelica.Blocks.Math.Add add4(k2 = -1)  annotation(
+    Placement(visible = true, transformation(origin = {70, -70}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+  Modelica.Blocks.Math.Add add5(k1 = -100)  annotation(
+    Placement(visible = true, transformation(origin = {-30, -60}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+
 equation
+
   connect(limiter1.y, pPDRefPu) annotation(
-    Line(points = {{131, 0}, {160, 0}}, color = {0, 0, 127}));
+    Line(points = {{129, 0}, {160, 0}}, color = {0, 0, 127}));
   connect(add1.y, feedback.u1) annotation(
     Line(points = {{-85, 0}, {-70, 0}}, color = {0, 0, 127}));
   connect(feedback.y, limiter2.u) annotation(
@@ -109,7 +116,7 @@ equation
   connect(gain1.y, add3.u1) annotation(
     Line(points = {{21, 60}, {68, 60}, {68, 6}, {76, 6}}, color = {0, 0, 127}));
   connect(add3.y, limiter1.u) annotation(
-    Line(points = {{99, 0}, {108, 0}}, color = {0, 0, 127}));
+    Line(points = {{99, 0}, {106, 0}}, color = {0, 0, 127}));
   connect(pWPfiltComPu, feedback.u2) annotation(
     Line(points = {{-160, -40}, {-64, -40}, {-64, -6}}, color = {0, 0, 127}));
   connect(add1.y, gain1.u) annotation(
@@ -129,23 +136,24 @@ equation
   connect(limiter4.y, add2.u2) annotation(
     Line(points = {{31, -30}, {32, -30}, {32, -6}, {38, -6}}, color = {0, 0, 127}));
   connect(integrator.y, limiter4.u) annotation(
-    Line(points = {{7, -30}, {12, -30}}, color = {0, 0, 127}));
+    Line(points = {{5, -30}, {12, -30}}, color = {0, 0, 127}));
   connect(switch1.y, integrator.u) annotation(
-    Line(points = {{-25, -55}, {-20, -55}, {-20, -30}, {-12, -30}}, color = {0, 0, 127}));
-  connect(limiter2.y, switch1.u3) annotation(
-    Line(points = {{-34, 0}, {-28, 0}, {-28, -36}, {-58, -36}, {-58, -62}, {-46, -62}}, color = {0, 0, 127}));
+    Line(points = {{-21, -30}, {-14, -30}}, color = {0, 0, 127}));
   connect(const1.y, switch1.u1) annotation(
-    Line(points = {{-88, -54}, {-80, -54}, {-80, -48}, {-46, -48}, {-46, -48}}, color = {0, 0, 127}));
-  connect(Fwpfrt, or1.u1) annotation(
-    Line(points = {{-160, -80}, {-112, -80}}, color = {255, 0, 255}));
-  connect(limiter1.y, greater.u2) annotation(
-    Line(points = {{132, 0}, {134, 0}, {134, -68}, {82, -68}, {82, -68}}, color = {0, 0, 127}));
-  connect(greater.y, or1.u2) annotation(
-    Line(points = {{58, -60}, {0, -60}, {0, -96}, {-72, -96}, {-72, -88}, {-112, -88}}, color = {255, 0, 255}));
-  connect(add3.y, greater.u1) annotation(
-    Line(points = {{100, 0}, {102, 0}, {102, -60}, {82, -60}, {82, -60}}, color = {0, 0, 127}));
-  connect(or1.y, switch1.u2) annotation(
-    Line(points = {{-88, -80}, {-68, -80}, {-68, -56}, {-46, -56}, {-46, -54}}, color = {255, 0, 255}));
+    Line(points = {{-79, -24}, {-40, -24}}, color = {0, 0, 127}));
+  connect(Fwpfrt, switch1.u2) annotation(
+    Line(points = {{-160, -80}, {-60, -80}, {-60, -30}, {-40, -30}, {-40, -30}}, color = {255, 0, 255}));
+  connect(limiter1.y, add4.u2) annotation(
+    Line(points = {{129, 0}, {134, 0}, {134, -76}, {82, -76}}, color = {0, 0, 127}));
+  connect(add3.y, add4.u1) annotation(
+    Line(points = {{100, 0}, {100, 0}, {100, -64}, {82, -64}, {82, -64}}, color = {0, 0, 127}));
+  connect(add4.y, add5.u1) annotation(
+    Line(points = {{58, -70}, {40, -70}, {40, -54}, {-18, -54}, {-18, -54}}, color = {0, 0, 127}));
+  connect(limiter2.y, add5.u2) annotation(
+    Line(points = {{-34, 0}, {-28, 0}, {-28, -14}, {-56, -14}, {-56, -80}, {0, -80}, {0, -66}, {-18, -66}, {-18, -66}}, color = {0, 0, 127}));
+  connect(add5.y, switch1.u3) annotation(
+    Line(points = {{-42, -60}, {-48, -60}, {-48, -36}, {-40, -36}, {-40, -36}}, color = {0, 0, 127}));
+
   annotation(
     Diagram(coordinateSystem(extent = {{-140, -100}, {140, 100}})),
     Icon(coordinateSystem(extent = {{-140, -100}, {140, 100}}, initialScale = 0.1), graphics = {Rectangle(origin = {1, -1}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-141, 101}, {139, -99}}), Text(origin = {44, 24}, extent = {{-86, 52}, {-2, 6}}, textString = "WP"), Text(origin = {-10, 0}, extent = {{-94, 60}, {116, -54}}, textString = "P Control"), Text(origin = {22, -92}, extent = {{-94, 60}, {48, 12}}, textString = "module")}));

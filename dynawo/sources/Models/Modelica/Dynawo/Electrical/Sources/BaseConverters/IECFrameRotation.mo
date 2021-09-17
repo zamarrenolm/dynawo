@@ -32,23 +32,19 @@ model IECFrameRotation
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
   Dialog(group = "group", tab = "Operating point"));
 
-  /*Parameters for internal initialization*/
-  final parameter Types.PerUnit IpCmd0Pu = -P0Pu * SystemBase.SnRef / (SNom * U0Pu) "Start value of the d-axis reference current at the generator system module (converter) terminal in p.u (Ubase, SNom) (generator convention)";
-  final parameter Types.PerUnit IqCmd0Pu = Q0Pu * SystemBase.SnRef / (SNom * U0Pu) "Start value of the q-axis reference current at the generator system module (converter) terminal in p.u  in p.u (Ubase, SNom) (generator convention)";
-
   /*Inputs*/
-  Modelica.Blocks.Interfaces.RealInput ipCmdPu(start = IpCmd0Pu) "d-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
-    Placement(visible = true, transformation(origin = {-90, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-40, 90}, extent = {{10, -10}, {-10, 10}}, rotation = 180)));
-  Modelica.Blocks.Interfaces.RealInput iqCmdPu(start = IqCmd0Pu) "q-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
-    Placement(visible = true, transformation(origin = {-90, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-40, 0}, extent = {{10, -10}, {-10, 10}}, rotation = 180)));
+  Modelica.Blocks.Interfaces.RealInput ipCmdPu(start = -P0Pu * SystemBase.SnRef / (SNom * U0Pu)) "d-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
+    Placement(visible = true, transformation(origin = {-100, 60}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-40, 90}, extent = {{10, -10}, {-10, 10}}, rotation = 180)));
+  Modelica.Blocks.Interfaces.RealInput iqCmdPu(start = Q0Pu * SystemBase.SnRef / (SNom * U0Pu)) "q-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
+    Placement(visible = true, transformation(origin = {-100, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-40, 0}, extent = {{10, -10}, {-10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealInput theta(start = UPhase0) "Phase shift between the converter's rotating frame and the grid rotating frame in radians" annotation(
-    Placement(visible = true, transformation(origin = {-90, -90}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-40, -90}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-100, -60}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-40, -90}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
 
   /*Ouputs*/
-  Modelica.Blocks.Interfaces.RealOutput iGsRePu(start = IpCmd0Pu*cos(UPhase0) - IqCmd0Pu*sin(UPhase0)) "Real component of the current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
-    Placement(visible = true, transformation(origin = {90, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {40, 50}, extent = {{10, -10}, {-10, 10}}, rotation = 180)));
-  Modelica.Blocks.Interfaces.RealOutput iGsImPu(start = IpCmd0Pu*sin(UPhase0) + IqCmd0Pu*cos(UPhase0)) "Imaginary component of the current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
-    Placement(visible = true, transformation(origin = {90, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {40, -50}, extent = {{10, -10}, {-10, 10}}, rotation = 180)));
+  Modelica.Blocks.Interfaces.RealOutput iGsRePu(start = (-P0Pu * SystemBase.SnRef / (SNom * U0Pu))*cos(UPhase0) - (Q0Pu * SystemBase.SnRef / (SNom * U0Pu))*sin(UPhase0)) "Real component of the current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
+    Placement(visible = true, transformation(origin = {100, 50}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {40, 50}, extent = {{10, -10}, {-10, 10}}, rotation = 180)));
+  Modelica.Blocks.Interfaces.RealOutput iGsImPu(start = (-P0Pu * SystemBase.SnRef / (SNom * U0Pu))*sin(UPhase0) + (Q0Pu * SystemBase.SnRef / (SNom * U0Pu))*cos(UPhase0)) "Imaginary component of the current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
+    Placement(visible = true, transformation(origin = {100, -50}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {40, -50}, extent = {{10, -10}, {-10, 10}}, rotation = 180)));
   //
 equation
   /*Reference frame transformation*/

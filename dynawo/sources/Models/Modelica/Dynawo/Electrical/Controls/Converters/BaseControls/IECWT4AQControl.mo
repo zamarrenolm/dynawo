@@ -1,19 +1,17 @@
 within Dynawo.Electrical.Controls.Converters.BaseControls;
 
-/*
-* Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
-* See AUTHORS.txt
-* All rights reserved.
-* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, you can obtain one at http://mozilla.org/MPL/2.0/.
-* SPDX-License-Identifier: MPL-2.0
-*
-* This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-*/
-
 model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
-
+  /*
+  * Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+  * See AUTHORS.txt
+  * All rights reserved.
+  * This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, you can obtain one at http://mozilla.org/MPL/2.0/.
+  * SPDX-License-Identifier: MPL-2.0
+  *
+  * This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+  */
   import Modelica;
   import Dynawo;
   import Dynawo.Types;
@@ -93,7 +91,7 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
     Dialog(group = "group", tab = "Operating point"));
 
   /*Inputs*/
-  Modelica.Blocks.Interfaces.RealInput xWTRefPu(start = -Q0Pu * SystemBase.SnRef / SNom)"Reactive power loop reference: reactive power or voltage reference depending on the Q control mode (MqG)" annotation(
+  Modelica.Blocks.Interfaces.RealInput xWTRefPu(start = -Q0Pu * SystemBase.SnRef / SNom) "Reactive power loop reference: reactive power or voltage reference depending on the Q control mode (MqG)" annotation(
     Placement(visible = true, transformation(origin = {-310, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -17.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput pWTCfiltPu(start = -P0Pu * SystemBase.SnRef / SNom) "Filtered active power at PCC in p.u (base SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-310, 150}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -127,7 +125,7 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
   Dynawo.NonElectrical.Blocks.NonLinear.MultiSwitchFive switch1 annotation(
     Placement(visible = true, transformation(origin = {-23, 195}, extent = {{-16, -16}, {16, 16}}, rotation = 0)));
   //PIq
-  Modelica.Blocks.Nonlinear.VariableLimiter variableLimiter1 annotation(
+  Modelica.Blocks.Nonlinear.VariableLimiter variableLimiter1(limitsAtInit = true)  annotation(
     Placement(visible = true, transformation(origin = {-204, 194}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback annotation(
     Placement(visible = true, transformation(origin = {-175, 194}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -225,9 +223,7 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
   Modelica.Blocks.Math.Gain gainKqv(k = Kqv) annotation(
     Placement(visible = true, transformation(origin = {0, -180}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.DeadZone deadZone(deadZoneAtInit = true, uMax = UdbTwo, uMin = UdbOne) annotation(
-    Placement(visible = true, transformation(origin = {-50, -180}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.Derivative derivative(T = Tuss, k = Tuss, x_start = U0Pu, y_start = 0) annotation(
-    Placement(visible = true, transformation(origin = {-100, -180}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-65, -180}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   //Freeze
   Modelica.Blocks.Logical.Greater greater1 annotation(
     Placement(visible = true, transformation(origin = {125, -15}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -247,7 +243,10 @@ model IECWT4AQControl "IEC Wind Turbine type 4A Reactive power Control"
     Placement(visible = true, transformation(origin = {-101, 67}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback1 annotation(
     Placement(visible = true, transformation(origin = {-138, 68}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
+  Modelica.Blocks.Math.Add add1(k2 = -1)  annotation(
+    Placement(visible = true, transformation(origin = {-116, -180}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Continuous.FirstOrder firstOrder(T = Tuss, y_start = U0Pu)  annotation(
+    Placement(visible = true, transformation(origin = {-187, -186}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
 /*Connectors*/
   connect(switchXref.y, variableLimiter1.u) annotation(
@@ -371,11 +370,7 @@ equation
   connect(gainKqv.y, switchFfrt1.u0) annotation(
     Line(points = {{11, -180}, {89, -180}, {89, -189}, {105, -189}}, color = {0, 0, 127}));
   connect(deadZone.y, gainKqv.u) annotation(
-    Line(points = {{-39, -180}, {-11, -180}, {-11, -180}, {-12, -180}}, color = {0, 0, 127}));
-  connect(uWTCfiltPu, derivative.u) annotation(
-    Line(points = {{-310, -75}, {-243, -75}, {-243, -180}, {-112, -180}, {-112, -180}}, color = {0, 0, 127}));
-  connect(derivative.y, deadZone.u) annotation(
-    Line(points = {{-89, -180}, {-59, -180}, {-59, -181}, {-62, -181}, {-62, -180}}, color = {0, 0, 127}));
+    Line(points = {{-54, -180}, {-12, -180}}, color = {0, 0, 127}));
   connect(limiter2.y, switchIqBaseHook.u4) annotation(
     Line(points = {{182, 60}, {203, 60}, {203, 131}, {242, 131}, {242, 132}}, color = {0, 0, 127}));
   connect(switchIqBaseHook.y, switchIqCmdPu.u0) annotation(
@@ -472,6 +467,14 @@ equation
     Line(points = {{-90, 67}, {-54, 67}, {-54, 67}, {-53, 67}}, color = {0, 0, 127}));
   connect(switchXref.y, feedback1.u1) annotation(
     Line(points = {{-228, 194}, {-224, 194}, {-224, 69}, {-146, 69}, {-146, 68}}, color = {0, 0, 127}));
+  connect(uWTCfiltPu, add1.u1) annotation(
+    Line(points = {{-310, -75}, {-243, -75}, {-243, -150}, {-150, -150}, {-150, -174}, {-128, -174}}, color = {0, 0, 127}));
+  connect(firstOrder.y, add1.u2) annotation(
+    Line(points = {{-176, -186}, {-128, -186}}, color = {0, 0, 127}));
+  connect(add1.y, deadZone.u) annotation(
+    Line(points = {{-105, -180}, {-77, -180}}, color = {0, 0, 127}));
+  connect(uWTCfiltPu, firstOrder.u) annotation(
+    Line(points = {{-310, -75}, {-243, -75}, {-243, -186}, {-199, -186}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-300, -300}, {300, 300}})),
     preferredView = "diagram",

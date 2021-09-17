@@ -3,6 +3,7 @@ within Dynawo.Electrical.Controls.Converters.BaseControls;
 model IECWP4ALinearCommunicationWPRef
 
   import Modelica;
+  import Dynawo;
   import Dynawo.Types;
 
   /*Nominal Parameters*/

@@ -13,6 +13,7 @@ set(MODEL_FILES
   package.mo
   IECWP4A.mo
   IECWT4A.mo
+  IECWT4AVs.mo
   )
 
 #

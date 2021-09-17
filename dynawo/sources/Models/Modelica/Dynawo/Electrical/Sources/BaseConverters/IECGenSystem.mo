@@ -22,7 +22,7 @@ model IECGenSystem
   import Dynawo.Types;
   import Dynawo.Electrical.SystemBase;
 
-   /*Constructive parameters*/
+  /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
   parameter Types.PerUnit Ges "Electrical system shunt conductance in p.u (base UNom, SNom)" annotation(
   Dialog(group = "group", tab = "Electrical"));
@@ -57,15 +57,15 @@ model IECGenSystem
   parameter Types.PerUnit IqMin0Pu "Start value of the minimum reactive current in p.u (base UNom, SNom) (generator convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
 
-  final parameter Types.ComplexPerUnit u0Pu = ComplexMath.fromPolar(U0Pu, UPhase0) "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
-  final parameter Types.ComplexPerUnit i0Pu = ComplexMath.conj(Complex(P0Pu, Q0Pu) / u0Pu) "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef) (receptor convention)";
-  final parameter Types.PerUnit IGsRe0Pu = (-i0Pu.re * SystemBase.SnRef / SNom) + (u0Pu.re * Ges - u0Pu.im * Bes) "Start value of the real component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
-  final parameter Types.PerUnit IGsIm0Pu = (-i0Pu.im * SystemBase.SnRef / SNom) + (u0Pu.re * Bes + u0Pu.im * Ges) "Start value of the imaginary component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
+  parameter Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
+  parameter Types.ComplexPerUnit i0Pu "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef) (receptor convention)";
+  parameter Types.PerUnit IGsRe0Pu "Start value of the real component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
+  parameter Types.PerUnit IGsIm0Pu "Start value of the imaginary component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)";
 
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput ipCmdPu(start = -P0Pu * SystemBase.SnRef / (SNom * U0Pu)) "d-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-70, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
-  Modelica.Blocks.Interfaces.RealInput iqCmdPu(start = Q0Pu * SystemBase.SnRef / (SNom * U0Pu)) "q-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
+  Modelica.Blocks.Interfaces.RealInput iqCmdPu(start = -Q0Pu * SystemBase.SnRef / (SNom * U0Pu)) "q-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-70, 5}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealInput ipMaxPu(start = IpMax0Pu) "Maximal d-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-70, 55}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
@@ -84,12 +84,14 @@ model IECGenSystem
   /*Blocks*/
   Dynawo.Electrical.Sources.BaseConverters.IECFrameRotation iECFrameRotation(P0Pu = P0Pu, Q0Pu = Q0Pu, SNom = SNom, U0Pu = U0Pu, UPhase0 = UPhase0) annotation(
     Placement(visible = true, transformation(origin = {34.65, 10.8333}, extent = {{-9.65, -32.1667}, {9.65, 32.1667}}, rotation = 0)));
-  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimitIp(DuMax = DipMax, DuMin = -999, T = Tg, k = 1, y_start = -P0Pu * SystemBase.SnRef / (SNom * U0Pu)) annotation(
+  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimitIp(DuMax = DipMax, DuMin = -999, GainAW = 100, T = Tg, k = 1, y_start = -P0Pu * SystemBase.SnRef / (SNom * U0Pu)) annotation(
     Placement(visible = true, transformation(origin = {-13, 40}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
-  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimitIq(DuMax = DiqMax, DuMin = DiqMin, T = Tg, k = 1, y_start = Q0Pu * SystemBase.SnRef / (SNom * U0Pu)) annotation(
+  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimitIq(DuMax = DiqMax, DuMin = DiqMin, GainAW = 100, T = Tg, k = 1, y_start = -Q0Pu * SystemBase.SnRef / (SNom * U0Pu)) annotation(
     Placement(visible = true, transformation(origin = {-36, 5}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const(k = -10) annotation(
+  Modelica.Blocks.Sources.Constant const(k = -999) annotation(
     Placement(visible = true, transformation(origin = {-43.5, 28.5}, extent = {{-5.5, -5.5}, {5.5, 5.5}}, rotation = 0)));
+            Modelica.Blocks.Math.Gain gain(k = -1)  annotation(
+    Placement(visible = true, transformation(origin = {-5, 5}, extent = {{-5, -5}, {5, 5}}, rotation = 0)));
   //
 equation
 /*Connectors*/
@@ -111,12 +113,14 @@ equation
     Line(points = {{-70, -10}, {-56, -10}, {-56, -2}, {-47, -2}, {-47, -2}}, color = {0, 0, 127}));
   connect(theta, iECFrameRotation.theta) annotation(
     Line(points = {{-70, -55}, {-2, -55}, {-2, -18}, {22, -18}, {22, -18}}, color = {0, 0, 127}));
-  connect(firstOrderRampLimitIq.y, iECFrameRotation.iqCmdPu) annotation(
-    Line(points = {{-25, 5}, {-7, 5}, {-7, 12}, {22, 12}, {22, 11}}, color = {0, 0, 127}));
   connect(iECFrameRotation.iGsImPu, iGsImPu) annotation(
     Line(points = {{48, -5}, {66, -5}, {66, -5}, {70, -5}}, color = {0, 0, 127}));
   connect(iECFrameRotation.iGsRePu, iGsRePu) annotation(
     Line(points = {{48, 27}, {64, 27}, {64, 28}, {70, 28}}, color = {0, 0, 127}));
+  connect(firstOrderRampLimitIq.y, gain.u) annotation(
+    Line(points = {{-25, 5}, {-12, 5}, {-12, 5}, {-11, 5}}, color = {0, 0, 127}));
+  connect(gain.y, iECFrameRotation.iqCmdPu) annotation(
+    Line(points = {{1, 5}, {10, 5}, {10, 11}, {22, 11}, {22, 11}}, color = {0, 0, 127}));
   annotation(
     preferredView = "text",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-60, -60}, {60, 60}})),

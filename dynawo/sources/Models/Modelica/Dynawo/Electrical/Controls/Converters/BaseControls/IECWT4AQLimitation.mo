@@ -22,19 +22,28 @@ model IECWT4AQLimitation "IEC WT type 4A Reactive power limitation"
 
   /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
+
   /*Parameters for initialization from load flow*/
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
+
   /*Parameters for internal initialization*/
-  parameter Types.PerUnit QMax0Pu "Start value of the maximum reactive power (base SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Operating point"));
-  parameter Types.PerUnit QMin0Pu "Start value of the minimum reactive power (base SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Operating point"));
+  parameter Types.PerUnit QMax0Pu "Start value of the maximum reactive power (base SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+  parameter Types.PerUnit QMin0Pu "Start value of the minimum reactive power (base SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Operating point"));
+
   /*Control parameters*/
   parameter Types.Time Ts "Integration time step";
-  parameter Boolean QlConst "Fixed reactive power limits (1), 0 otherwise" annotation(Dialog(group = "group", tab = "Qlimit"));
-  parameter Types.PerUnit QMax "Fixed value of the maximum reactive power (base SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Qlimit"));
-  parameter Types.PerUnit QMin "Fixed value of the minimum reactive power (base SNom) (generator convention)" annotation(Dialog(group = "group", tab = "Qlimit"));
+  parameter Boolean QlConst "Fixed reactive power limits (1), 0 otherwise" annotation(
+  Dialog(group = "group", tab = "Qlimit"));
+  parameter Types.PerUnit QMax "Fixed value of the maximum reactive power (base SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Qlimit"));
+  parameter Types.PerUnit QMin "Fixed value of the minimum reactive power (base SNom) (generator convention)" annotation(
+  Dialog(group = "group", tab = "Qlimit"));
+
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = U0Pu) "Filtered voltage amplitude at wind turbine terminals in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-160, 32}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -42,11 +51,13 @@ model IECWT4AQLimitation "IEC WT type 4A Reactive power limitation"
     Placement(visible = true, transformation(origin = {-160, -88}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.IntegerInput Ffrt(start = 0) "Function of FRT state (0-2): Normal operation (0), Fault (1), Post fault (2)" annotation(
     Placement(visible = true, transformation(origin = {-160, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
   /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput qWTMaxPu(start = QMax0Pu) "Maximum WTT reactive power in p.u (base SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {110, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput qWTMinPu(start = QMin0Pu) "Maximum WTT reactive power in p.u (base SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {110, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
   /*Blocks*/
   Modelica.Blocks.Logical.Switch switch1 annotation(
     Placement(visible = true, transformation(origin = {80,60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -80,7 +91,9 @@ model IECWT4AQLimitation "IEC WT type 4A Reactive power limitation"
     Placement(visible = true, transformation(origin = {-100, -40}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.FixedDelay fixedDelay(delayTime = Ts)  annotation(
     Placement(visible = true, transformation(origin = {-100, 80}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+
 equation
+
   connect(switch.y, qWTMinPu) annotation(
     Line(points = {{92, -60}, {106, -60}, {106, -60}, {110, -60}}, color = {0, 0, 127}));
   connect(booleanConstant.y, switch1.u2) annotation(

@@ -77,9 +77,6 @@ model GridFollowingControl "Grid following control"
     Placement(visible = true, transformation(origin = {110, -15}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {105, -35}, extent = {{-5, -5}, {5, 5}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput IdcSourcePu(start = IdcSource0Pu) "DC source injected current in p.u (base UNom, SNom)" annotation(
     Placement(visible = true, transformation(origin = {110, -65}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {105, -65}, extent = {{-5, -5}, {5, 5}}, rotation = 0)));
-
-  Dynawo.Electrical.Controls.Converters.BaseControls.PLL pll(KiPll = KiPll, KpPll = KpPll, Theta0 = Theta0)  annotation(
-    Placement(visible = true, transformation(origin = {-60, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Dynawo.Electrical.Controls.Converters.BaseControls.Modulation modulation(UdConv0Pu = UdConv0Pu, Udc0Pu = Udc0Pu, UqConv0Pu = UqConv0Pu)  annotation(
     Placement(visible = true, transformation(origin = {69, -1}, extent = {{-16, -16}, {16, 16}}, rotation = 0)));
   Dynawo.Electrical.Controls.Converters.BaseControls.CurrentLoop currentControl(IdConv0Pu = IdConv0Pu, IqConv0Pu = IqConv0Pu, Kic = Kic, Kpc = Kpc, Lfilter = Lfilter, Rfilter = Rfilter, UdConv0Pu = UdConv0Pu, UdFilter0Pu = UdFilter0Pu, UqConv0Pu = UqConv0Pu)  annotation(
@@ -89,16 +86,14 @@ model GridFollowingControl "Grid following control"
   Dynawo.Electrical.Controls.Converters.BaseControls.PControl pControl(DroopFP = DroopFP,IdConv0Pu = IdConv0Pu, PMaxPu = PMaxPu, PRef0Pu = PRef0Pu, RPmaxPu = RPmaxPu, UdFilter0Pu = UdFilter0Pu, tauIdRef = tauIdRef) annotation(
     Placement(visible = true, transformation(origin = {-60, 13}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Dynawo.Electrical.Controls.Converters.BaseControls.CurrentLimitation currentLimitation(IMaxPu = IMaxPu,IdConv0Pu = IdConv0Pu, IqConv0Pu = IqConv0Pu, PMaxPu = PMaxPu, UdFilter0Pu = UdFilter0Pu) annotation(
-    Placement(visible = true, transformation(origin = {-22, -1}, extent = {{-16, -16}, {16, 16}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-23, -1}, extent = {{-16, -16}, {16, 16}}, rotation = 0)));
   Dynawo.Electrical.Controls.Converters.BaseControls.QControl qControl(DroopUQ = DroopUQ, IqConv0Pu = IqConv0Pu, QMaxPu = QMaxPu, QRef0Pu = QRef0Pu, UdFilter0Pu = UdFilter0Pu, tauIqRef = tauIqRef) annotation(
     Placement(visible = true, transformation(origin = {-60, -13}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput UFilterRefPu(start = UdFilter0Pu) annotation(
     Placement(visible = true, transformation(origin = {-110, -35}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-105, 20}, extent = {{-5, -5}, {5, 5}}, rotation = 0)));
-
+  BaseControls.PLLGF pllGF(KiPll = KiPll, KpPll = KpPll, Theta0 = Theta0) annotation(
+    Placement(visible = true, transformation(origin = {-60, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
-
-  connect(omegaRefPu, pll.omegaRefPu) annotation(
-    Line(points = {{-110, 75}, {-71, 75}}, color = {0, 0, 127}));
   connect(UdcPu, dCCurrentControl.UdcPu) annotation(
     Line(points = {{25, -90}, {25, -77}, {48.5, -77}}, color = {0, 0, 127}));
   connect(UdcRefPu, dCCurrentControl.UdcRefPu) annotation(
@@ -107,18 +102,6 @@ equation
     Line(points = {{-25, -90}, {-25, -53}, {48.5, -53}}, color = {0, 0, 127}));
   connect(dCCurrentControl.IdcSourcePu, IdcSourcePu) annotation(
     Line(points = {{82, -65}, {110, -65}}, color = {0, 0, 127}));
-  connect(uqFilterPu, pll.uqFilterPu) annotation(
-    Line(points = {{-110, 55}, {-88, 55}, {-88, 64}, {-71, 64}}, color = {0, 0, 127}));
-  connect(pll.omegaPu, currentControl.omegaPu) annotation(
-    Line(points = {{-49, 65}, {-3, 65}, {-3, 9}, {6, 9}}, color = {0, 0, 127}));
-  connect(udFilterPu, currentControl.udFilterPu) annotation(
-    Line(points = {{-110, 35}, {12, 35}, {12, 16}}, color = {0, 0, 127}));
-  connect(uqFilterPu, currentControl.uqFilterPu) annotation(
-    Line(points = {{-110, 55}, {19, 55}, {19, 16}}, color = {0, 0, 127}));
-  connect(pll.omegaPu, omegaPu) annotation(
-    Line(points = {{-49, 65}, {67, 65}, {67, 45}, {110, 45}}, color = {0, 0, 127}));
-  connect(pll.theta, theta) annotation(
-    Line(points = {{-49, 75}, {110, 75}}, color = {0, 0, 127}));
   connect(omegaRefPu, pControl.omegaRefPu) annotation(
     Line(points = {{-110, 75}, {-83, 75}, {-83, 16}, {-71, 16}}, color = {0, 0, 127}));
   connect(udFilterPu, pControl.udFilterPu) annotation(
@@ -128,7 +111,7 @@ equation
   connect(UFilterRefPu, qControl.UFilterRefPu) annotation(
     Line(points = {{-110, -35}, {-90, -35}, {-90, -21}, {-71, -21}}, color = {0, 0, 127}));
   connect(iqConvPu, currentControl.iqConvPu) annotation(
-    Line(points = {{-110, -75}, {-36, -75}, {-36, -26}, {19, -26}, {19, -18}}, color = {0, 0, 127}));
+    Line(points = {{-110, -75}, {-36, -75}, {-36, -26}, {36, -26}, {36, -19}}, color = {0, 0, 127}));
   connect(UdcPu, modulation.UdcPu) annotation(
     Line(points = {{25, -90}, {25, -35}, {51, -35}, {51, -12}}, color = {0, 0, 127}));
   connect(modulation.udConvPu, udConvPu) annotation(
@@ -136,32 +119,45 @@ equation
   connect(modulation.uqConvPu, uqConvPu) annotation(
     Line(points = {{87, -9}, {90, -9}, {90, -15}, {110, -15}}, color = {0, 0, 127}));
   connect(pControl.idConvRefNLPu, currentLimitation.idConvRefNLPu) annotation(
-    Line(points = {{-49, 18}, {-40, 18}, {-40, 9}}, color = {0, 0, 127}));
+    Line(points = {{-49, 18}, {-41, 18}, {-41, 9}}, color = {0, 0, 127}));
   connect(qControl.iqConvRefNLPu, currentLimitation.iqConvRefNLPu) annotation(
-    Line(points = {{-49, -13}, {-44.5, -13}, {-44.5, -11}, {-40, -11}}, color = {0, 0, 127}));
+    Line(points = {{-49, -13}, {-44.5, -13}, {-44.5, -11}, {-41, -11}}, color = {0, 0, 127}));
   connect(pControl.idMaxPu, currentLimitation.idMaxPu) annotation(
-    Line(points = {{-49, 9}, {-44, 9}, {-44, -1}, {-40, -1}}, color = {0, 0, 127}));
+    Line(points = {{-49, 9}, {-44, 9}, {-44, -1}, {-41, -1}}, color = {0, 0, 127}));
   connect(currentControl.uqConvRefPu, modulation.uqConvRefPu) annotation(
-    Line(points = {{40, -6}, {44, -6}, {44, 4}, {51, 4}, {51, 4}}, color = {0, 0, 127}));
+    Line(points = {{41, -15}, {44, -15}, {44, 4}, {51, 4}}, color = {0, 0, 127}));
   connect(currentControl.udConvRefPu, modulation.udConvRefPu) annotation(
-    Line(points = {{40, 4}, {41, 4}, {41, 10}, {51, 10}, {51, 10}}, color = {0, 0, 127}));
+    Line(points = {{41, 13}, {41, 10}, {51, 10}}, color = {0, 0, 127}));
   connect(UdcRefPu, modulation.UdcRefPu) annotation(
     Line(points = {{0, -90}, {0, -90}, {0, -30}, {47, -30}, {47, -6}, {51, -6}, {51, -6}}, color = {0, 0, 127}));
   connect(currentLimitation.idConvRefPu, currentControl.idConvRefPu) annotation(
-    Line(points = {{-4, 5}, {0, 5}, {0, -1}, {6, -1}, {6, -1}}, color = {0, 0, 127}));
+    Line(points = {{-5, 5}, {0, 5}, {0, 13}, {5, 13}}, color = {0, 0, 127}));
   connect(currentLimitation.iqConvRefPu, currentControl.iqConvRefPu) annotation(
-    Line(points = {{-4, -8}, {0, -8}, {0, -10}, {6, -10}, {6, -10}}, color = {0, 0, 127}));
+    Line(points = {{-5, -8}, {0, -8}, {0, -15}, {5, -15}}, color = {0, 0, 127}));
   connect(PRefPu, pControl.PRefPu) annotation(
     Line(points = {{-110, 15}, {-85, 15}, {-85, 5}, {-71, 5}}, color = {0, 0, 127}));
   connect(uqFilterPu, qControl.uqFilterPu) annotation(
     Line(points = {{-110, 55}, {-88, 55}, {-88, -10}, {-71, -10}}, color = {0, 0, 127}));
-  connect(idConvPu, currentControl.idConvPu) annotation(
-    Line(points = {{-110, -55}, {-43, -55}, {-43, -21}, {12, -21}, {12, -18}}, color = {0, 0, 127}));
-  connect(pll.omegaPu, pControl.omegaPu) annotation(
-    Line(points = {{-49, 65}, {-44, 65}, {-44, 30}, {-74, 30}, {-74, 21}, {-71, 21}, {-71, 21}}, color = {0, 0, 127}));
   connect(QRefPu, qControl.QRefPu) annotation(
     Line(points = {{-110, -15}, {-71, -15}, {-71, -16}, {-71, -16}}, color = {0, 0, 127}));
-
+  connect(pllGF.theta, omegaPu) annotation(
+    Line(points = {{-49, 64}, {61, 64}, {61, 45}, {110, 45}, {110, 45}}, color = {0, 0, 127}));
+  connect(pllGF.theta, theta) annotation(
+    Line(points = {{-49, 64}, {10, 64}, {10, 76}, {110, 76}, {110, 75}}, color = {0, 0, 127}));
+  connect(pllGF.omegaPu, pControl.omegaPu) annotation(
+    Line(points = {{-49, 75}, {-44, 75}, {-44, 30}, {-74, 30}, {-74, 21}, {-71, 21}}, color = {0, 0, 127}));
+  connect(pllGF.omegaPu, currentControl.omegaPu) annotation(
+    Line(points = {{-49, 75}, {-3, 75}, {-3, -1}, {5, -1}}, color = {0, 0, 127}));
+  connect(uqFilterPu, pllGF.uqFilterPu) annotation(
+    Line(points = {{-110, 55}, {-88, 55}, {-88, 65}, {-71, 65}}, color = {0, 0, 127}));
+  connect(omegaRefPu, pllGF.omegaRefPu) annotation(
+    Line(points = {{-110, 75}, {-71, 75}}, color = {0, 0, 127}));
+  connect(udFilterPu, currentControl.udFilterPu) annotation(
+    Line(points = {{-110, 35}, {11, 35}, {11, -19}, {10, -19}}, color = {0, 0, 127}));
+  connect(uqFilterPu, currentControl.uqFilterPu) annotation(
+    Line(points = {{-110, 55}, {17, 55}, {17, -19}}, color = {0, 0, 127}));
+  connect(idConvPu, currentControl.idConvPu) annotation(
+    Line(points = {{-110, -55}, {-50, -55}, {-50, -39}, {30, -39}, {30, -19}, {29, -19}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-100, -80}, {100, 80}})),
     preferredView = "diagram",

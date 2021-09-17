@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    Copyright (c) 2015-2020, RTE (http://www.rte-france.com)
+    See AUTHORS.txt
+    All rights reserved.
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, you can obtain one at http://mozilla.org/MPL/2.0/.
+    SPDX-License-Identifier: MPL-2.0
+
+    This file is part of Dynawo, an hybrid C++/Modelica open source time domain
+    simulation tool for power systems.
+-->
+<curvesInput xmlns="http://www.rte-france.com/dynawo">
+  <!--Curves for scenario-->
+  <curve model="GEN____1_SM" variable="converter_PGenPu"/>
+  <curve model="GEN____1_SM" variable="converter_QGenPu"/>
+  <curve model="GEN____1_SM" variable="converter_IECElecSystem_PGenPuBaseSNom"/>
+  <curve model="GEN____1_SM" variable="converter_IECElecSystem_QGenPuBaseSNom"/>
+  <curve model="GEN____1_SM" variable="converter_uWtRePu"/>
+  <curve model="GEN____1_SM" variable="converter_uWtImPu"/>
+  <curve model="GEN____1_SM" variable="converter_iWtRePu"/>
+  <curve model="GEN____1_SM" variable="converter_iWtImPu"/>
+  <curve model="GEN____1_SM" variable="control_ipCmdPu"/>
+  <curve model="GEN____1_SM" variable="control_iqCmdPu"/>
+  <curve model="GEN____1_SM" variable="control_theta"/>
+</curvesInput>

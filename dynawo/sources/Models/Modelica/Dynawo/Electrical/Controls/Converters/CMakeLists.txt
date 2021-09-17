@@ -27,8 +27,13 @@ set(MODEL_FILES
   IECWT4AControl.extvar
   IECWP4AControl.mo
   IECWP4AControl.extvar
+  IECWT4AControlVs.mo
+  IECWT4AControlVs.extvar
   GridFollowingControl_INIT.mo
   GridFormingControl_INIT.mo
+  IECWT4AControl_INIT.mo
+  IECWP4AControl_INIT.mo
+  IECWT4AControlVs_INIT.mo
   )
 
 #

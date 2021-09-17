@@ -29,6 +29,8 @@ block FirstOrderRampLimit "Anti windup proportional integral controller"
   parameter Real k(unit = "1") = 1 "Integrator gain";
   parameter Real y_start "Initial or guess value of output (= state)";
   parameter Modelica.Blocks.Types.Init initType = Modelica.Blocks.Types.Init.InitialState "Type of initialization (1: no init, 2: steady state, 3,4: initial output)";
+  parameter Types.PerUnit GainAW;
+
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput u annotation(
     Placement(visible = true, transformation(origin = {-90, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -46,7 +48,7 @@ block FirstOrderRampLimit "Anti windup proportional integral controller"
     Placement(visible = true, transformation(origin = {20, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add add1(k1 = 1, k2 = -1) annotation(
     Placement(visible = true, transformation(origin = {-60, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Dynawo.NonElectrical.Blocks.Continuous.IntegratorVariableLimits integratorVariableLimits(y_start = y_start) annotation(
+  Dynawo.NonElectrical.Blocks.Continuous.IntegratorVariableLimits integratorVariableLimits(GainAW = GainAW, y_start = y_start) annotation(
     Placement(visible = true, transformation(origin = {60, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   //
 equation
@@ -58,15 +60,15 @@ equation
   connect(gain.y, limiter.u) annotation(
     Line(points = {{-8, 0}, {8, 0}, {8, 0}, {8, 0}}, color = {0, 0, 127}));
   connect(limiter.y, integratorVariableLimits.u) annotation(
-    Line(points = {{32, 0}, {48, 0}, {48, 0}, {50, 0}}, color = {0, 0, 127}));
+    Line(points = {{32, 0}, {49, 0}}, color = {0, 0, 127}));
   connect(uMin, integratorVariableLimits.uMin) annotation(
-    Line(points = {{-90, -60}, {44, -60}, {44, -8}, {50, -8}, {50, -6}}, color = {0, 0, 127}));
+    Line(points = {{-90, -60}, {42, -60}, {42, -8}, {49, -8}, {49, -7}}, color = {0, 0, 127}));
   connect(uMax, integratorVariableLimits.uMax) annotation(
-    Line(points = {{-90, 60}, {42, 60}, {42, 8}, {50, 8}, {50, 8}}, color = {0, 0, 127}));
+    Line(points = {{-90, 60}, {42, 60}, {42, 7}, {49, 7}}, color = {0, 0, 127}));
   connect(integratorVariableLimits.y, y) annotation(
-    Line(points = {{72, 0}, {84, 0}, {84, 0}, {90, 0}}, color = {0, 0, 127}));
+    Line(points = {{71, 0}, {90, 0}}, color = {0, 0, 127}));
   connect(integratorVariableLimits.y, add1.u2) annotation(
-    Line(points = {{72, 0}, {74, 0}, {74, -20}, {-78, -20}, {-78, -6}, {-72, -6}, {-72, -6}}, color = {0, 0, 127}));
+    Line(points = {{71, 0}, {74, 0}, {74, -20}, {-78, -20}, {-78, -6}, {-72, -6}}, color = {0, 0, 127}));
 //
 //
   annotation(

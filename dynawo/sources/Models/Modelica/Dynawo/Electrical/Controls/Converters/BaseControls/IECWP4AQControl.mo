@@ -3,7 +3,10 @@ within Dynawo.Electrical.Controls.Converters.BaseControls;
 model IECWP4AQControl
 
   import Modelica;
+  import Dynawo;
   import Dynawo.Types;
+  import Dynawo.Connectors;
+  import Dynawo.Electrical.SystemBase;
 
   extends Dynawo.Electrical.Controls.Converters.Parameters.Params_QControl;
 
@@ -52,6 +55,7 @@ model IECWP4AQControl
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)";
   parameter Types.ActivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)";
 
+  /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput xWPRefComPu(start = -Q0Pu * SystemBase.SnRef / SNom) annotation(
     Placement(visible = true, transformation(origin = {-300, 120}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-300, 140}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput pWPfiltComPu(start = -P0Pu * SystemBase.SnRef / SNom ) "Filtered WTT active power measurement communicated to WP (Sbase)" annotation(
@@ -61,11 +65,13 @@ model IECWP4AQControl
   Modelica.Blocks.Interfaces.RealInput uWPfiltComPu(start = U0Pu) "Filtered WTT voltage measurement communicated to WP (Ubase)" annotation(
     Placement(visible = true, transformation(origin = {-300, -140}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-300, -140}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
 
+  /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput xPDRef(start = -Q0Pu * SystemBase.SnRef / SNom) "Reference reactive power/voltage transmitted to WT" annotation(
     Placement(visible = true, transformation(origin = {300, 110}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {300, -60}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Modelica.Blocks.Interfaces.BooleanOutput Fwpfrt(start = true) annotation(
     Placement(visible = true, transformation(origin = {300, -120}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {300, 60}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
 
+  /*Blocks*/
   Modelica.Blocks.Tables.CombiTable1D combiTable1D(table = tableQwpMaxPwpfiltCom)  annotation(
     Placement(visible = true, transformation(origin = {-170, 170}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Tables.CombiTable1D combiTable1D1(table = tableQwpMinPwpfiltCom)  annotation(
@@ -81,7 +87,7 @@ model IECWP4AQControl
   Modelica.Blocks.Math.Gain gain1(k = Kpwpx) annotation(
     Placement(visible = true, transformation(origin = {70, 140}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.Integrator integrator(k = Kiwpx, y_start = -Q0Pu * SystemBase.SnRef / SNom)  annotation(
-    Placement(visible = true, transformation(origin = {58, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {79,79}, extent = {{-7, -7}, {7, 7}}, rotation = 0)));
   Modelica.Blocks.Math.Add add annotation(
     Placement(visible = true, transformation(origin = {120, 110}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add add1 annotation(
@@ -99,7 +105,7 @@ model IECWP4AQControl
   Modelica.Blocks.Continuous.FirstOrder firstOrder(T = Tuqfilt, y_start = -Q0Pu * SystemBase.SnRef / SNom)  annotation(
     Placement(visible = true, transformation(origin = {-164, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Logical.Or or1 annotation(
-    Placement(visible = true, transformation(origin = {140, -120}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {120, -120}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Modelica.Blocks.Logical.Greater greater annotation(
     Placement(visible = true, transformation(origin = {-10, -110}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Logical.Greater greater1 annotation(
@@ -111,7 +117,7 @@ model IECWP4AQControl
   Modelica.Blocks.Sources.Constant const2(k = 0)  annotation(
     Placement(visible = true, transformation(origin = {-164, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter2(limitsAtInit = true, uMax = xKIWPxMax, uMin = xKIWPxMin) annotation(
-    Placement(visible = true, transformation(origin = {88, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {99, 79}, extent = {{-7, -7}, {7, 7}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.SlewRateLimiter slewRateLimiter(Falling = dxRefMin, Rising = dxRefMax, y_start = -Q0Pu * SystemBase.SnRef / SNom)  annotation(
     Placement(visible = true, transformation(origin = {250, 110}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter3(limitsAtInit = true, uMax = xerrmax, uMin = xerrmin) annotation(
@@ -127,6 +133,14 @@ model IECWP4AQControl
 
   Dynawo.NonElectrical.Blocks.NonLinear.MultiSwitchFour switch11 annotation(
     Placement(visible = true, transformation(origin = {-4, 116}, extent = {{-12, -12}, {12, 12}}, rotation = 0)));
+  Modelica.Blocks.Sources.Constant constant1(k = 0) annotation(
+    Placement(visible = true, transformation(origin = {45, 97}, extent = {{-5, 5}, {5, -5}}, rotation = 0)));
+  Modelica.Blocks.Logical.Switch switch annotation(
+    Placement(visible = true, transformation(origin = {59, 79}, extent = {{-7, -7}, {7, 7}}, rotation = 0)));
+  Modelica.Blocks.Math.Add add2(k2 = -100)  annotation(
+    Placement(visible = true, transformation(origin = {31, 79}, extent = {{-7, -7}, {7, 7}}, rotation = 0)));
+  Modelica.Blocks.Math.Add add3(k2 = -1)  annotation(
+    Placement(visible = true, transformation(origin = {110, 30}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
 
 equation
 
@@ -147,11 +161,11 @@ equation
   connect(combiTable1D2.y[1], firstOrder.u) annotation(
     Line(points = {{-183, 40}, {-176, 40}}, color = {0, 0, 127}));
   connect(or1.y, Fwpfrt) annotation(
-    Line(points = {{162, -120}, {300, -120}}, color = {255, 0, 255}));
+    Line(points = {{142, -120}, {300, -120}}, color = {255, 0, 255}));
   connect(integrator.y, limiter2.u) annotation(
-    Line(points = {{69, 80}, {76, 80}}, color = {0, 0, 127}));
+    Line(points = {{87, 79}, {91, 79}}, color = {0, 0, 127}));
   connect(limiter2.y, add.u2) annotation(
-    Line(points = {{99, 80}, {104, 80}, {104, 104}, {108, 104}}, color = {0, 0, 127}));
+    Line(points = {{107, 79}, {104, 79}, {104, 104}, {108, 104}}, color = {0, 0, 127}));
   connect(feedback.y, switch11.u0) annotation(
     Line(points = {{-26, 112}, {-22, 112}, {-22, 126}, {-17, 126}}, color = {0, 0, 127}));
   connect(feedback.y, switch11.u1) annotation(
@@ -187,9 +201,7 @@ equation
   connect(switch11.y, limiter3.u) annotation(
     Line(points = {{10, 116}, {14, 116}}, color = {0, 0, 127}));
   connect(limiter3.y, gain1.u) annotation(
-    Line(points = {{33, 116}, {40, 116}, {40, 140}, {58, 140}}, color = {0, 0, 127}));
-  connect(limiter3.y, integrator.u) annotation(
-    Line(points = {{33, 116}, {40, 116}, {40, 80}, {46, 80}}, color = {0, 0, 127}));
+    Line(points = {{33, 116}, {38, 116}, {38, 140}, {58, 140}}, color = {0, 0, 127}));
   connect(product.y, switch1.u1) annotation(
     Line(points = {{-173, 88}, {-140, 88}}, color = {0, 0, 127}));
   connect(add.y, add1.u2) annotation(
@@ -215,9 +227,9 @@ equation
   connect(slewRateLimiter.y, xPDRef) annotation(
     Line(points = {{262, 110}, {286, 110}, {286, 110}, {300, 110}}, color = {0, 0, 127}));
   connect(greater.y, or1.u1) annotation(
-    Line(points = {{2, -110}, {60, -110}, {60, -120}, {116, -120}, {116, -120}}, color = {255, 0, 255}));
+    Line(points = {{2, -110}, {60, -110}, {60, -120}, {96, -120}}, color = {255, 0, 255}));
   connect(greater1.y, or1.u2) annotation(
-    Line(points = {{2, -150}, {62, -150}, {62, -136}, {116, -136}, {116, -136}}, color = {255, 0, 255}));
+    Line(points = {{2, -150}, {62, -150}, {62, -136}, {96, -136}}, color = {255, 0, 255}));
   connect(pWPfiltComPu, product.u2) annotation(
     Line(points = {{-300, 80}, {-202, 80}, {-202, 80}, {-200, 80}}, color = {0, 0, 127}));
   connect(integerConstant.y, switch1.M) annotation(
@@ -226,8 +238,24 @@ equation
     Line(points = {{-258, 160}, {-4, 160}, {-4, 130}, {-4, 130}}, color = {255, 127, 0}));
   connect(xWPRefComPu, switch1.u0) annotation(
     Line(points = {{-300, 120}, {-160, 120}, {-160, 98}, {-140, 98}, {-140, 98}}, color = {0, 0, 127}));
+  connect(constant1.y, switch.u1) annotation(
+    Line(points = {{50.5, 97}, {51, 97}, {51, 85}}, color = {0, 0, 127}));
+  connect(or1.y, switch.u2) annotation(
+    Line(points = {{142, -120}, {180, -120}, {180, -2}, {44, -2}, {44, 79}, {51, 79}}, color = {255, 0, 255}));
+  connect(switch.y, integrator.u) annotation(
+    Line(points = {{67, 79}, {71, 79}}, color = {0, 0, 127}));
+  connect(add2.y, switch.u3) annotation(
+    Line(points = {{39, 79}, {42, 79}, {42, 73}, {51, 73}}, color = {0, 0, 127}));
+  connect(limiter3.y, add2.u1) annotation(
+    Line(points = {{32, 116}, {38, 116}, {38, 94}, {20, 94}, {20, 82}, {23, 82}, {23, 83}}, color = {0, 0, 127}));
+  connect(add3.y, add2.u2) annotation(
+    Line(points = {{99, 30}, {20, 30}, {20, 76}, {23, 76}, {23, 75}}, color = {0, 0, 127}));
+  connect(limiter.y, add3.u2) annotation(
+    Line(points = {{222, 110}, {228, 110}, {228, 24}, {122, 24}}, color = {0, 0, 127}));
+  connect(add1.y, add3.u1) annotation(
+    Line(points = {{182, 110}, {188, 110}, {188, 36}, {122, 36}}, color = {0, 0, 127}));
 
-annotation(
+  annotation(
     Diagram(coordinateSystem(extent = {{-280, -180}, {280, 180}})),
     Icon(coordinateSystem(extent = {{-280, -180}, {280, 180}}, initialScale = 0.1), graphics = {Rectangle(origin = {0, -1}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-280, 181}, {280, -179}}), Text(origin = {1, -103}, extent = {{-99, 59}, {99, -59}}, textString = "module"), Text(origin = {-55, 63}, extent = {{-101, 61}, {205, -181}}, textString = "Q Control"), Text(origin = {-13, 119}, extent = {{-71, 33}, {99, -59}}, textString = "WP")}));
 

@@ -3,23 +3,21 @@ within Dynawo.Electrical.Controls.Converters.BaseControls;
 model IECWT4AMeasures
   // PLL
   /*
-    * Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
-    * See AUTHORS.txt
-    * All rights reserved.
-    * This Source Code Form is subject to the terms of the Mozilla Public
-    * License, v. 2.0. If a copy of the MPL was not distributed with this
-    * file, you can obtain one at http://mozilla.org/MPL/2.0/.
-    * SPDX-License-Identifier: MPL-2.0
-    *
-    * This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-    */
+      * Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+      * See AUTHORS.txt
+      * All rights reserved.
+      * This Source Code Form is subject to the terms of the Mozilla Public
+      * License, v. 2.0. If a copy of the MPL was not distributed with this
+      * file, you can obtain one at http://mozilla.org/MPL/2.0/.
+      * SPDX-License-Identifier: MPL-2.0
+      *
+      * This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+      */
   import Modelica;
   import Dynawo.Types;
   import Dynawo.Electrical.SystemBase;
-
   /*Nominal Parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
-
   /*Grid Measurement Parameters*/
   parameter Types.Time Tpfilt "Time constant in active power measurement filter" annotation(
     Dialog(group = "group", tab = "GridMeasurement"));
@@ -31,7 +29,6 @@ model IECWT4AMeasures
     Dialog(group = "group", tab = "GridMeasurement"));
   parameter Types.Time Tffilt "Time constant in frequency measurement filter" annotation(
     Dialog(group = "group", tab = "GridMeasurement"));
-
   /*Operational Parameters*/
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
     Dialog(group = "group", tab = "Operating point"));
@@ -41,9 +38,8 @@ model IECWT4AMeasures
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
-
-  final parameter Types.ComplexPerUnit u0Pu = ComplexMath.fromPolar(U0Pu, UPhase0) "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
-  final parameter Types.ComplexPerUnit i0Pu = ComplexMath.conj(Complex(P0Pu, Q0Pu) / u0Pu) "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef)";
+  parameter Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
+  parameter Types.ComplexPerUnit i0Pu "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef)";
 
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput iWtRePu(start = -i0Pu.re * SystemBase.SnRef / SNom) "WTT active current phasor in power system coordinates (Ubase)" annotation(
@@ -59,18 +55,17 @@ model IECWT4AMeasures
 
   /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput pWTCfiltPu(start = -P0Pu * SystemBase.SnRef / SNom) "Filtered WTT active power (Sbase)" annotation(
-    Placement(visible = true, transformation(origin = {120, 100}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {120, 110}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput qWTCfiltPu(start = -Q0Pu * SystemBase.SnRef / SNom) "Filtered WTT reactive power (Sbase)" annotation(
-    Placement(visible = true, transformation(origin = {120, 60}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, -82.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {120, 70}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, -90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput uWTCPu(start = U0Pu) "WTT voltage phasor in power system coordinates (Ubase)" annotation(
-    Placement(visible = true, transformation(origin = {120, 19.5}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 82.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {120, 29.5}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput uWTCfiltPu(start = U0Pu) "Filtered WTT voltage phasor in power system coordinates (Ubase)" annotation(
-    Placement(visible = true, transformation(origin = {120, -19.5}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {120, -29.5}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput theta(start = UPhase0) "Phase shift between the converter's rotating frame and the grid rotating frame in radians" annotation(
-    Placement(visible = true, transformation(origin = {120, -60}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, -17.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {120, -60}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput omegaRefFiltPu(start = SystemBase.omegaRef0Pu) "Filtered global power system grid frequency applied for frequency measurements because angles are calculated in the corresponding stationary reference frame" annotation(
-    Placement(visible = true, transformation(origin = {120, -100.5}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 17.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
+    Placement(visible = true, transformation(origin = {120, -100.5}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   /*Other calculated variables*/
   Types.PerUnit PGenPu(start = -P0Pu) "Active power generated by the converter at the PCC in p.u (base UNom, SnRef) (generator convention)";
   Types.PerUnit QGenPu(start = -Q0Pu) "Reactive power generated by the converter at the PCC in p.u (base UNom, SnRef) (generator convention)";
@@ -78,14 +73,13 @@ model IECWT4AMeasures
   Types.PerUnit QGenPuBaseSNom(start = -Q0Pu * (SystemBase.SnRef / SNom)) "Reactive power generated by the converter at the PCC in p.u (base UNom, SNom) (generator convention) ";
   Types.PerUnit IWtPu(start = sqrt(P0Pu ^ 2 + Q0Pu ^ 2) * SystemBase.SnRef / (SNom * U0Pu)) "Module of the current at PCC in p.u (base UNom, SNom)";
   Types.PerUnit uWtPu(start = U0Pu) "Module of the voltage at PCC in p.u (base UNom, SNom)";
-
   /*Blocks*/
   Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = Tpfilt, y_start = -P0Pu * SystemBase.SnRef / SNom) annotation(
     Placement(visible = true, transformation(origin = {60, 100}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.FirstOrder firstOrder1(T = Tqfilt, y_start = -Q0Pu * SystemBase.SnRef / SNom) annotation(
     Placement(visible = true, transformation(origin = {60, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Continuous.FirstOrder firstOrder3(T = Tufilt, y_start = U0Pu) annotation(
-    Placement(visible = true, transformation(origin = {60, -19.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {60, -29.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add add1 annotation(
     Placement(visible = true, transformation(origin = {10, 100}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add add2(k2 = -1) annotation(
@@ -114,7 +108,7 @@ equation
   PGenPu = PGenPuBaseSNom * SNom / SystemBase.SnRef;
   QGenPu = QGenPuBaseSNom * SNom / SystemBase.SnRef;
   connect(firstOrder1.y, qWTCfiltPu) annotation(
-    Line(points = {{71, 60}, {120, 60}}, color = {0, 0, 127}));
+    Line(points = {{71, 60}, {95.5, 60}, {95.5, 70}, {120, 70}}, color = {0, 0, 127}));
   connect(add2.y, firstOrder1.u) annotation(
     Line(points = {{21, 60}, {48, 60}}, color = {0, 0, 127}));
   connect(add.y, omegaRefFiltPu) annotation(
@@ -132,9 +126,9 @@ equation
   connect(uWtRePu, rectangularToPolar1.u_re) annotation(
     Line(points = {{-120, 0}, {-60, 0}, {-60, -38}, {-52, -38}}, color = {0, 0, 127}));
   connect(rectangularToPolar1.y_abs, firstOrder3.u) annotation(
-    Line(points = {{-29, -38}, {0, -38}, {0, -19.5}, {48, -19.5}}, color = {0, 0, 127}));
+    Line(points = {{-29, -38}, {0, -38}, {0, -29.5}, {48, -29.5}}, color = {0, 0, 127}));
   connect(firstOrder3.y, uWTCfiltPu) annotation(
-    Line(points = {{71, -19.5}, {120, -19.5}}, color = {0, 0, 127}));
+    Line(points = {{71, -29.5}, {120, -29.5}}, color = {0, 0, 127}));
   connect(uWtImPu, rectangularToPolar1.u_im) annotation(
     Line(points = {{-120, -50}, {-52, -50}}, color = {0, 0, 127}));
   connect(derivative.y, add.u1) annotation(
@@ -144,7 +138,7 @@ equation
   connect(uWtImPu, product2.u2) annotation(
     Line(points = {{-120, -50}, {-70, -50}, {-70, 42}, {-52, 42}, {-52, 43}}, color = {0, 0, 127}));
   connect(firstOrder2.y, pWTCfiltPu) annotation(
-    Line(points = {{72, 100}, {120, 100}}, color = {0, 0, 127}));
+    Line(points = {{72, 100}, {96, 100}, {96, 110}, {120, 110}}, color = {0, 0, 127}));
   connect(add1.y, firstOrder2.u) annotation(
     Line(points = {{22, 100}, {46, 100}, {46, 100}, {48, 100}}, color = {0, 0, 127}));
   connect(product3.y, add2.u2) annotation(
@@ -164,7 +158,7 @@ equation
   connect(rectangularToPolar1.y_arg, derivative.u) annotation(
     Line(points = {{-28, -50}, {-20, -50}, {-20, -80}, {-2, -80}, {-2, -81.5}}, color = {0, 0, 127}));
   connect(rectangularToPolar1.y_abs, uWTCPu) annotation(
-    Line(points = {{-28, -38}, {0, -38}, {0, 20}, {120, 20}, {120, 19.5}}, color = {0, 0, 127}));
+    Line(points = {{-28, -38}, {0, -38}, {0, 30}, {120, 30}, {120, 30}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(extent = {{-100, -120}, {100, 120}}, initialScale = 0.1)),
     Icon(coordinateSystem(initialScale = 0.1), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, -100}, {100, 100}}), Text(origin = {16, -23}, extent = {{-108, -24}, {76, 10}}, textString = "Module"), Text(origin = {8, 35}, extent = {{-100, -30}, {88, 20}}, textString = "Measurement")}));

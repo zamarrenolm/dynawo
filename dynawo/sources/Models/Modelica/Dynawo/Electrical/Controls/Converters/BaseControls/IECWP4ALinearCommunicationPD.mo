@@ -4,6 +4,7 @@ model IECWP4ALinearCommunicationPD
 
   import Modelica;
   import Dynawo.Types;
+  import Dynawo;
 
   /*Nominal Parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";

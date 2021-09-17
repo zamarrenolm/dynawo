@@ -12,6 +12,7 @@ set(MODEL_FILES
   # Converter control elements models
   package.mo
   package.order
+  PLLGF.mo
   PLL.mo
   PLL.extvar
   Modulation.mo

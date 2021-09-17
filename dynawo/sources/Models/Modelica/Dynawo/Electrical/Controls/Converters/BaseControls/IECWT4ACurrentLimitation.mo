@@ -40,6 +40,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Dialog(group = "group", tab = "CurrentLimit"));
   parameter Types.PerUnit Kpqu "Partial derivative of reactive current limits vs. voltage" annotation(
     Dialog(group = "group", tab = "CurrentLimit"));
+
   /*Parameters for initialization from load flow*/
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
   Dialog(group = "group", tab = "Operating point"));
@@ -49,6 +50,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
   Dialog(group = "group", tab = "Operating point"));
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
   Dialog(group = "group", tab = "Operating point"));
+
   /*Parameters for internal initialization*/
   parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom) (generator convention)" annotation(
   Dialog(group = "group", tab = "Operating point"));
@@ -80,8 +82,6 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
   /*Blocks*/
   Modelica.Blocks.Logical.Switch switch11 annotation(
     Placement(visible = true, transformation(origin = {230, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Blocks.Logical.Greater greater annotation(
-    Placement(visible = true, transformation(origin = {190, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 //Modelica.Blocks.Logical.Less less annotation(
   //  Placement(visible = true, transformation(origin = {190, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Min min2 annotation(
@@ -101,14 +101,12 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {70, 108}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Sqrt sqrt14 annotation(
     Placement(visible = true, transformation(origin = {35, 118}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = 999, uMin = 0)  annotation(
+  Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = 999, uMin = 0.001)  annotation(
     Placement(visible = true, transformation(origin = {0, 118}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback4 annotation(
-    Placement(visible = true, transformation(origin = {-25, 118}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
-  Modelica.Blocks.Math.Sqrt sqrt13 annotation(
-    Placement(visible = true, transformation(origin = {-40, 150}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-29, 118}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
   Modelica.Blocks.Math.Min min4 annotation(
-    Placement(visible = true, transformation(origin = {-106, 150}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-98, 150}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Division division annotation(
     Placement(visible = true, transformation(origin = {-136, 155}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Logical.Switch switch13 annotation(
@@ -124,12 +122,10 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {-100, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.MathInteger.Product product2(nu = 2)  annotation(
     Placement(visible = true, transformation(origin = {-60, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.Sqrt sqrt12 annotation(
-    Placement(visible = true, transformation(origin = {-60, 117}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback2 annotation(
     Placement(visible = true, transformation(origin = {-125, 95}, extent = {{-10, 10}, {10, -10}}, rotation = 90)));
   Modelica.Blocks.Sources.Constant const6(k = IMaxHookPu) annotation(
-    Placement(visible = true, transformation(origin = {-150, 95}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-150, 91}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Dynawo.NonElectrical.Blocks.NonLinear.MultiSwitchThree switch15 annotation(
     Placement(visible = true, transformation(origin = {-150, 45}, extent = {{-12, -12}, {12, 12}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const1(k = IMaxDip) annotation(
@@ -146,7 +142,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {50, -123}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Sqrt sqrt11 annotation(
     Placement(visible = true, transformation(origin = {10, -130}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Nonlinear.Limiter limiter(limitsAtInit = true, uMax = 999, uMin = 0)  annotation(
+  Modelica.Blocks.Nonlinear.Limiter limiter(limitsAtInit = true, uMax = 999, uMin = 0.001)  annotation(
     Placement(visible = true, transformation(origin = {-30, -130}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback3 annotation(
     Placement(visible = true, transformation(origin = {-70, -114}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
@@ -155,10 +151,6 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {-225, -120}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Min min annotation(
     Placement(visible = true, transformation(origin = {-185, -114}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.Sqrt sqrt1 annotation(
-    Placement(visible = true, transformation(origin = {-105, -114}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Nonlinear.Limiter limiter3(limitsAtInit = true, uMax = 999, uMin = 0) annotation(
-    Placement(visible = true, transformation(origin = {-144, -114}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 
   Modelica.Blocks.Sources.Constant const5(k = IqMaxHook)  annotation(
@@ -169,21 +161,20 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {-200, -1}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback5 annotation(
     Placement(visible = true, transformation(origin = {-160, -1}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Nonlinear.Limiter limiter2(limitsAtInit = true, uMax = 999, uMin = 0) annotation(
-    Placement(visible = true, transformation(origin = {-98, 116}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Nonlinear.Limiter limiter4(limitsAtInit = true, uMax = 999, uMin = 0.001) annotation(
-    Placement(visible = true, transformation(origin = {-72, 150}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter5(limitsAtInit = true, uMax = 999, uMin = 0.001) annotation(
     Placement(visible = true, transformation(origin = {-166, 142}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Math.Product product1 annotation(
+    Placement(visible = true, transformation(origin = {-90, 110}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Math.Product product3 annotation(
+    Placement(visible = true, transformation(origin = {-110, -114}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Math.Product product4 annotation(
+    Placement(visible = true, transformation(origin = {-50, 150}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Logical.Greater greater annotation(
+    Placement(visible = true, transformation(origin = {190, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
 equation
   connect(iqMaxPu, switch11.y) annotation(
     Line(points = {{270, 200}, {241, 200}}, color = {0, 0, 127}));
-  connect(greater.y, switch11.u2) annotation(
-    Line(points = {{202, 200}, {218, 200}}, color = {255, 0, 255}));
-  connect(min2.y, greater.u1) annotation(
-    Line(points = {{162, 226}, {168, 226}, {168, 200}, {178, 200}, {178, 200}}, color = {0, 0, 127}));
-  connect(min2.y, switch11.u1) annotation(
-    Line(points = {{162, 226}, {210, 226}, {210, 208}, {218, 208}}, color = {0, 0, 127}));
   connect(gain.y, min2.u1) annotation(
     Line(points = {{122, 232}, {134, 232}, {134, 232}, {138, 232}, {138, 232}}, color = {0, 0, 127}));
   connect(feedback.y, gain.u) annotation(
@@ -192,10 +183,6 @@ equation
     Line(points = {{42, 232}, {64, 232}, {64, 232}, {62, 232}}, color = {0, 0, 127}));
   connect(gain1.y, iqMinPu) annotation(
     Line(points = {{162, 100}, {258, 100}, {258, 100}, {270, 100}}, color = {0, 0, 127}));
-  connect(gain1.y, switch11.u3) annotation(
-    Line(points = {{162, 100}, {210, 100}, {210, 192}, {218, 192}}, color = {0, 0, 127}));
-  connect(gain1.y, greater.u2) annotation(
-    Line(points = {{162, 100}, {170, 100}, {170, 190}, {178, 190}, {178, 192}}, color = {0, 0, 127}));
   connect(switch12.y, gain1.u) annotation(
     Line(points = {{124, 100}, {136, 100}, {136, 100}, {138, 100}}, color = {0, 0, 127}));
   connect(min3.y, switch12.u0) annotation(
@@ -205,13 +192,11 @@ equation
   connect(limiter1.y, sqrt14.u) annotation(
     Line(points = {{11, 118}, {23, 118}}, color = {0, 0, 127}));
   connect(feedback4.y, limiter1.u) annotation(
-    Line(points = {{-16, 118}, {-12, 118}}, color = {0, 0, 127}));
-  connect(sqrt13.y, feedback4.u2) annotation(
-    Line(points = {{-29, 150}, {-25, 150}, {-25, 126}}, color = {0, 0, 127}));
+    Line(points = {{-20, 118}, {-12, 118}}, color = {0, 0, 127}));
   connect(ipCmdPu, division.u1) annotation(
     Line(points = {{-270, 160}, {-148, 160}, {-148, 161}}, color = {0, 0, 127}));
   connect(division.y, min4.u1) annotation(
-    Line(points = {{-125, 155}, {-118, 155}, {-118, 156}}, color = {0, 0, 127}));
+    Line(points = {{-125, 155}, {-110, 155}, {-110, 156}}, color = {0, 0, 127}));
   connect(booleanConstant.y, switch13.u2) annotation(
     Line(points = {{-222, 110}, {-216, 110}, {-216, 122}, {-205, 122}}, color = {255, 0, 255}));
   connect(constant1.y, switch13.u3) annotation(
@@ -224,10 +209,8 @@ equation
     Line(points = {{-48, 200}, {110, 200}, {110, 114}, {110, 114}, {110, 114}}, color = {255, 127, 0}));
   connect(Ffrt, product2.u[2]) annotation(
     Line(points = {{-270, 226}, {-80, 226}, {-80, 202}, {-70, 202}, {-70, 200}}, color = {255, 127, 0}));
-  connect(sqrt12.y, feedback4.u1) annotation(
-    Line(points = {{-49, 117}, {-33, 117}, {-33, 118}}, color = {0, 0, 127}));
   connect(const6.y, feedback2.u2) annotation(
-    Line(points = {{-138, 96}, {-132, 96}, {-132, 96}, {-132, 96}}, color = {0, 0, 127}));
+    Line(points = {{-139, 91}, {-135, 91}, {-135, 96}, {-132, 96}}, color = {0, 0, 127}));
   connect(switch15.y, feedback2.u1) annotation(
     Line(points = {{-136, 46}, {-126, 46}, {-126, 88}, {-124, 88}}, color = {0, 0, 127}));
   connect(const1.y, switch15.u1) annotation(
@@ -260,14 +243,6 @@ equation
     Line(points = {{-214, -120}, {-198, -120}, {-198, -120}, {-196, -120}}, color = {0, 0, 127}));
   connect(iqCmdPu, abs1.u) annotation(
     Line(points = {{-270, -120}, {-236, -120}, {-236, -120}, {-236, -120}}, color = {0, 0, 127}));
-  connect(min.y, limiter3.u) annotation(
-    Line(points = {{-174, -114}, {-156, -114}}, color = {0, 0, 127}));
-  connect(limiter3.y, sqrt1.u) annotation(
-    Line(points = {{-133, -114}, {-116, -114}}, color = {0, 0, 127}));
-  connect(sqrt1.y, feedback3.u2) annotation(
-    Line(points = {{-94, -114}, {-76, -114}, {-76, -114}, {-78, -114}}, color = {0, 0, 127}));
-  connect(sqrt12.y, feedback3.u1) annotation(
-    Line(points = {{-48, 118}, {-42, 118}, {-42, -94}, {-70, -94}, {-70, -106}}, color = {0, 0, 127}));
   connect(uWTCfiltPu, feedback.u2) annotation(
     Line(points = {{-270, -50}, {84, -50}, {84, 212}, {68, 212}, {68, 224}, {70, 224}}, color = {0, 0, 127}));
   connect(uWTCfiltPu, combiTable1D.u[1]) annotation(
@@ -292,22 +267,44 @@ equation
     Line(points = {{-150, 0}, {46, 0}, {46, 92}, {92, 92}, {92, 100}, {96, 100}, {96, 100}}, color = {0, 0, 127}));
   connect(switch12.y, min2.u2) annotation(
     Line(points = {{124, 100}, {132, 100}, {132, 220}, {138, 220}, {138, 220}}, color = {0, 0, 127}));
-  connect(limiter2.y, sqrt12.u) annotation(
-    Line(points = {{-86, 116}, {-72, 116}, {-72, 118}, {-72, 118}}, color = {0, 0, 127}));
-  connect(feedback2.y, limiter2.u) annotation(
-    Line(points = {{-124, 104}, {-124, 104}, {-124, 116}, {-110, 116}, {-110, 116}}, color = {0, 0, 127}));
   connect(combiTable1D1.y[1], min4.u2) annotation(
-    Line(points = {{-188, -80}, {-122, -80}, {-122, 144}, {-118, 144}}, color = {0, 0, 127}));
-  connect(limiter4.y, sqrt13.u) annotation(
-    Line(points = {{-61, 150}, {-52, 150}}, color = {0, 0, 127}));
-  connect(min4.y, limiter4.u) annotation(
-    Line(points = {{-95, 150}, {-84, 150}}, color = {0, 0, 127}));
+    Line(points = {{-188, -80}, {-122, -80}, {-122, 144}, {-110, 144}}, color = {0, 0, 127}));
   connect(switch13.y, product.u1) annotation(
     Line(points = {{-182, 122}, {-172, 122}, {-172, -70}, {188, -70}, {188, -68}}, color = {0, 0, 127}));
   connect(limiter5.y, division.u2) annotation(
     Line(points = {{-154, 142}, {-152, 142}, {-152, 148}, {-148, 148}, {-148, 150}}, color = {0, 0, 127}));
   connect(switch13.y, limiter5.u) annotation(
     Line(points = {{-182, 122}, {-180, 122}, {-180, 144}, {-178, 144}, {-178, 142}}, color = {0, 0, 127}));
+  connect(feedback2.y, product1.u1) annotation(
+    Line(points = {{-124, 104}, {-126, 104}, {-126, 116}, {-102, 116}, {-102, 116}}, color = {0, 0, 127}));
+  connect(feedback2.y, product1.u2) annotation(
+    Line(points = {{-124, 104}, {-102, 104}, {-102, 104}, {-102, 104}}, color = {0, 0, 127}));
+  connect(product1.y, feedback3.u1) annotation(
+    Line(points = {{-78, 110}, {-70, 110}, {-70, -106}, {-70, -106}}, color = {0, 0, 127}));
+  connect(product1.y, feedback4.u1) annotation(
+    Line(points = {{-78, 110}, {-70, 110}, {-70, 118}, {-37, 118}}, color = {0, 0, 127}));
+  connect(product3.y, feedback3.u2) annotation(
+    Line(points = {{-99, -114}, {-78, -114}}, color = {0, 0, 127}));
+  connect(min.y, product3.u1) annotation(
+    Line(points = {{-174, -114}, {-160, -114}, {-160, -108}, {-122, -108}}, color = {0, 0, 127}));
+  connect(min.y, product3.u2) annotation(
+    Line(points = {{-174, -114}, {-160, -114}, {-160, -120}, {-122, -120}}, color = {0, 0, 127}));
+  connect(min4.y, product4.u1) annotation(
+    Line(points = {{-87, 150}, {-80, 150}, {-80, 156}, {-62, 156}}, color = {0, 0, 127}));
+  connect(min4.y, product4.u2) annotation(
+    Line(points = {{-87, 150}, {-80, 150}, {-80, 144}, {-62, 144}}, color = {0, 0, 127}));
+  connect(product4.y, feedback4.u2) annotation(
+    Line(points = {{-39, 150}, {-30, 150}, {-30, 126}, {-29, 126}}, color = {0, 0, 127}));
+  connect(gain1.y, switch11.u3) annotation(
+    Line(points = {{162, 100}, {210, 100}, {210, 192}, {218, 192}}, color = {0, 0, 127}));
+  connect(min2.y, switch11.u1) annotation(
+    Line(points = {{162, 226}, {210, 226}, {210, 208}, {218, 208}}, color = {0, 0, 127}));
+  connect(gain1.y, greater.u2) annotation(
+    Line(points = {{162, 100}, {170, 100}, {170, 190}, {178, 190}, {178, 192}}, color = {0, 0, 127}));
+  connect(min2.y, greater.u1) annotation(
+    Line(points = {{162, 226}, {168, 226}, {168, 200}, {178, 200}, {178, 200}}, color = {0, 0, 127}));
+  connect(greater.y, switch11.u2) annotation(
+    Line(points = {{202, 200}, {218, 200}}, color = {255, 0, 255}));
   annotation(
     Diagram(coordinateSystem(extent = {{-250, -150}, {250, 250}})),
     Icon(coordinateSystem(extent = {{-180, -180}, {180, 180}}, initialScale = 0.1), graphics = {Rectangle(origin = {0, -1}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-180, -180}, {180, 180}}), Text(origin = {-54, 133}, extent = {{-70, 37}, {172, -143}}, textString = "Current"), Text(origin = {-56, 53}, extent = {{-104, 87}, {214, -193}}, textString = "limitation"), Text(origin = {6, -97}, extent = {{-106, 81}, {92, -45}}, textString = "module")}));

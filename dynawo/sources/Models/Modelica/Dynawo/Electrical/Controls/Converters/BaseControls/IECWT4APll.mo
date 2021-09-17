@@ -58,6 +58,7 @@ model IECWT4APll
     Placement(visible = true, transformation(origin = {-9, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
+
   connect(switch11.y, integrator.u) annotation(
     Line(points = {{11, -12}, {18, -12}}, color = {0, 0, 127}));
   connect(const1.y, switch11.u1) annotation(

@@ -4,6 +4,7 @@ model IECWP4AControlModel
 
   import Modelica;
   import Dynawo.Types;
+  import Dynawo;
 
   /*Nominal Parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
@@ -97,9 +98,11 @@ model IECWP4AControlModel
   parameter Types.Angle UPhase0 "Start value of voltage angle at plan terminal (PCC) in rad";
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)";
   parameter Types.ActivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)";
-  final parameter Types.ComplexPerUnit u0Pu = ComplexMath.fromPolar(U0Pu, UPhase0) "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
-  final parameter Types.ComplexPerUnit i0Pu = ComplexMath.conj(Complex(P0Pu, Q0Pu) / u0Pu) "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef)";
 
+  parameter Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
+  parameter Types.ComplexPerUnit i0Pu "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef)";
+
+  /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput pWPRefPu(start = -P0Pu * SystemBase.SnRef / SNom) "WP reference active power value" annotation(
     Placement(visible = true, transformation(origin = {-180, 40}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {170, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealInput xWPRefPu(start = -Q0Pu * SystemBase.SnRef / SNom) "WP reference reactive power value" annotation(
@@ -115,74 +118,77 @@ model IECWP4AControlModel
   Modelica.Blocks.Interfaces.RealInput omegaRefPu(start = SystemBase.omegaRef0Pu) "Global power system grid frequency applied for frequency measurements because angles are calculated in the corresponding stationary reference frame" annotation(
     Placement(visible = true, transformation(origin = {180, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 180), iconTransformation(origin = {120, -110}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
 
+  /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput pPDRefComPu(start = -P0Pu * SystemBase.SnRef / SNom) "WT reference active power value" annotation(
     Placement(visible = true, transformation(origin = {180, 70}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-170, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealOutput xPDRefComPu(start = -Q0Pu * SystemBase.SnRef / SNom) "WT reference reactive power value" annotation(
     Placement(visible = true, transformation(origin = {180, 30}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-170, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
 
-  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4APControl IECWP4APControl(Kiwpp = Kiwpp, Kpwpp = Kpwpp, Kwppref = Kwppref, P0Pu = P0Pu, Q0Pu = Q0Pu, SNom = SNom, U0Pu = U0Pu, dpRefMax = dpRefMax, dpRefMin = dpRefMin, dpWPRefMax = dpWPRefMax, dpWPRefMin = dpWPRefMin, pErrMax = pErrMax, pErrMin = pErrMin, pKIWPpMax = pKIWPpMax, pKIWPpMin = pKIWPpMin, pRefMax = pRefMax, pRefMin = pRefMin, pWPHookPu = pWPHookPu) annotation(
+  /*Blocks*/
+  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4APControl iECWP4APControl(Kiwpp = Kiwpp, Kpwpp = Kpwpp, Kwppref = Kwppref, P0Pu = P0Pu, Q0Pu = Q0Pu, SNom = SNom, U0Pu = U0Pu, dpRefMax = dpRefMax, dpRefMin = dpRefMin, dpWPRefMax = dpWPRefMax, dpWPRefMin = dpWPRefMin, pErrMax = pErrMax, pErrMin = pErrMin, pKIWPpMax = pKIWPpMax, pKIWPpMin = pKIWPpMin, pRefMax = pRefMax, pRefMin = pRefMin, pWPHookPu = pWPHookPu) annotation(
     Placement(visible = true, transformation(origin = {-1, 59.2857}, extent = {{-29, -20.7143}, {29, 20.7143}}, rotation = 0)));
 
-  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4AQControl IECWP4AQControl(Kiwpx = Kiwpx, Kpwpx = Kpwpx, Kwpqref = Kwpqref, Kwpqu = Kwpqu, Mwpqmode = Mwpqmode, P0Pu = P0Pu, Q0Pu = Q0Pu, RDrop = RDrop, SNom = SNom, Tuqfilt = Tuqfilt, U0Pu = U0Pu, XDrop = XDrop, dxRefMax = dxRefMax, dxRefMin = dxRefMin, uWPqdip = uWPqdip, uWPqrise = uWPqrise, xKIWPxMax = xKIWPxMax, xKIWPxMin = xKIWPxMin, xRefMax = xRefMax, xRefMin = xRefMin, xerrmax = xerrmax, xerrmin = xerrmin) annotation(
+  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4AQControl iECWP4AQControl(Kiwpx = Kiwpx, Kpwpx = Kpwpx, Kwpqref = Kwpqref, Kwpqu = Kwpqu, Mwpqmode = Mwpqmode, P0Pu = P0Pu, Q0Pu = Q0Pu, RDrop = RDrop, SNom = SNom, Tuqfilt = Tuqfilt, U0Pu = U0Pu, XDrop = XDrop, dxRefMax = dxRefMax, dxRefMin = dxRefMin, uWPqdip = uWPqdip, uWPqrise = uWPqrise, xKIWPxMax = xKIWPxMax, xKIWPxMin = xKIWPxMin, xRefMax = xRefMax, xRefMin = xRefMin, xerrmax = xerrmax, xerrmin = xerrmin) annotation(
     Placement(visible = true, transformation(origin = {-0.888889, 0}, extent = {{-31.1111, -20}, {31.1111, 20}}, rotation = 0)));
 
-  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4ALinearCommunicationWPRef IECWP4ALinearCommunicationWPRef(P0Pu = P0Pu, Q0Pu = Q0Pu,SNom = SNom, Tlag = Tlag, Tlead = Tlead, U0Pu = U0Pu) annotation(
+  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4ALinearCommunicationWPRef iECWP4ALinearCommunicationWPRef(P0Pu = P0Pu, Q0Pu = Q0Pu,SNom = SNom, Tlag = Tlag, Tlead = Tlead, U0Pu = U0Pu) annotation(
     Placement(visible = true, transformation(origin = {-123, 1.9984e-15}, extent = {{-25, -20}, {25, 20}}, rotation = 0)));
 
-  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4ALinearCommunicationPD IECWP4ALinearCommunicationPD(P0Pu = P0Pu, Q0Pu = Q0Pu,SNom = SNom, Tlag = Tlag, Tlead = Tlead, U0Pu = U0Pu) annotation(
+  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4ALinearCommunicationPD iECWP4ALinearCommunicationPD(P0Pu = P0Pu, Q0Pu = Q0Pu,SNom = SNom, Tlag = Tlag, Tlead = Tlead, U0Pu = U0Pu) annotation(
     Placement(visible = true, transformation(origin = {91, 48}, extent = {{-30, -24}, {30, 24}}, rotation = 0)));
 
-  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4ALinearCommunicationWPM IECWP4ALinearCommunicationWPM(P0Pu = P0Pu, Q0Pu = Q0Pu,SNom = SNom, Tlag = Tlag, Tlead = Tlead, U0Pu = U0Pu) annotation(
+  Dynawo.Electrical.Controls.Converters.BaseControls.IECWP4ALinearCommunicationWPM iECWP4ALinearCommunicationWPM(P0Pu = P0Pu, Q0Pu = Q0Pu,SNom = SNom, Tlag = Tlag, Tlead = Tlead, U0Pu = U0Pu) annotation(
     Placement(visible = true, transformation(origin = {-0.999998, -58.6}, extent = {{34.3334, -20.6}, {-34.3334, 20.6}}, rotation = 0)));
- Dynawo.Electrical.Controls.Converters.BaseControls.IECWT4AMeasures iECWT4AMeasures(P0Pu = P0Pu, Q0Pu = Q0Pu,SNom = SNom, Tffilt = Tffilt, Tpfilt = Tpfilt, Tqfilt = Tqfilt, Tufilt = Tufilt, U0Pu = U0Pu, UPhase0 = UPhase0) annotation(
+ Dynawo.Electrical.Controls.Converters.BaseControls.IECWT4AMeasures iECWT4AMeasures(P0Pu = P0Pu, Q0Pu = Q0Pu,SNom = SNom, Tffilt = Tffilt, Tpfilt = Tpfilt, Tqfilt = Tqfilt, Tufilt = Tufilt, U0Pu = U0Pu, UPhase0 = UPhase0, i0Pu = i0Pu, u0Pu = u0Pu) annotation(
     Placement(visible = true, transformation(origin = {91, -60}, extent = {{-20, -20}, {20, 20}}, rotation = 180)));
 
 equation
-  connect(pWPRefPu, IECWP4ALinearCommunicationWPRef.pWPRefPu) annotation(
+
+  connect(pWPRefPu, iECWP4ALinearCommunicationWPRef.pWPRefPu) annotation(
     Line(points = {{-180, 40}, {-152, 40}, {-152, 10}, {-150, 10}}, color = {0, 0, 127}));
- connect(xWPRefPu, IECWP4ALinearCommunicationWPRef.xWPRefPu) annotation(
+  connect(xWPRefPu, iECWP4ALinearCommunicationWPRef.xWPRefPu) annotation(
     Line(points = {{-180, -40}, {-152, -40}, {-152, -10}, {-150, -10}}, color = {0, 0, 127}));
- connect(IECWP4ALinearCommunicationWPRef.pWPRefComPu, IECWP4APControl.pWPRefComPu) annotation(
+  connect(iECWP4ALinearCommunicationWPRef.pWPRefComPu, iECWP4APControl.pWPRefComPu) annotation(
     Line(points = {{-96, 10}, {-90, 10}, {-90, 76}, {-32, 76}}, color = {0, 0, 127}));
- connect(IECWP4ALinearCommunicationWPRef.xWPRefComPu, IECWP4AQControl.xWPRefComPu) annotation(
+  connect(iECWP4ALinearCommunicationWPRef.xWPRefComPu, iECWP4AQControl.xWPRefComPu) annotation(
     Line(points = {{-96, -10}, {-80, -10}, {-80, 16}, {-34, 16}, {-34, 16}}, color = {0, 0, 127}));
- connect(IECWP4ALinearCommunicationWPM.pWPfiltComPu, IECWP4APControl.pWPfiltComPu) annotation(
+  connect(iECWP4ALinearCommunicationWPM.pWPfiltComPu, iECWP4APControl.pWPfiltComPu) annotation(
     Line(points = {{-38, -44}, {-70, -44}, {-70, 66}, {-32, 66}, {-32, 66}}, color = {0, 0, 127}));
- connect(IECWP4ALinearCommunicationWPM.pWPfiltComPu, IECWP4AQControl.pWPfiltComPu) annotation(
+  connect(iECWP4ALinearCommunicationWPM.pWPfiltComPu, iECWP4AQControl.pWPfiltComPu) annotation(
     Line(points = {{-38, -44}, {-70, -44}, {-70, 6}, {-34, 6}, {-34, 6}}, color = {0, 0, 127}));
- connect(IECWP4ALinearCommunicationWPM.qWPfiltComPu, IECWP4AQControl.qWPfiltComPu) annotation(
+  connect(iECWP4ALinearCommunicationWPM.qWPfiltComPu, iECWP4AQControl.qWPfiltComPu) annotation(
     Line(points = {{-38, -54}, {-60, -54}, {-60, -4}, {-34, -4}, {-34, -6}}, color = {0, 0, 127}));
- connect(IECWP4ALinearCommunicationWPM.omegaRefFiltComPu, IECWP4APControl.omegaRefPu) annotation(
+  connect(iECWP4ALinearCommunicationWPM.omegaRefFiltComPu, iECWP4APControl.omegaRefPu) annotation(
     Line(points = {{-38, -74}, {-40, -74}, {-40, 54}, {-32, 54}, {-32, 54}}, color = {0, 0, 127}));
- connect(IECWP4AQControl.Fwpfrt, IECWP4APControl.Fwpfrt) annotation(
+  connect(iECWP4AQControl.Fwpfrt, iECWP4APControl.Fwpfrt) annotation(
     Line(points = {{32, 6}, {40, 6}, {40, 30}, {-34, 30}, {-34, 42}, {-32, 42}}, color = {255, 0, 255}));
- connect(IECWP4ALinearCommunicationWPM.uWPfiltComPu, IECWP4AQControl.uWPfiltComPu) annotation(
+  connect(iECWP4ALinearCommunicationWPM.uWPfiltComPu, iECWP4AQControl.uWPfiltComPu) annotation(
     Line(points = {{-38, -64}, {-50, -64}, {-50, -16}, {-34, -16}, {-34, -16}}, color = {0, 0, 127}));
- connect(IECWP4AQControl.xPDRef, IECWP4ALinearCommunicationPD.xPDRefPu) annotation(
+  connect(iECWP4AQControl.xPDRef, iECWP4ALinearCommunicationPD.xPDRefPu) annotation(
     Line(points = {{32, -6}, {58, -6}, {58, 36}, {58, 36}}, color = {0, 0, 127}));
- connect(IECWP4APControl.pPDRefPu, IECWP4ALinearCommunicationPD.pPDRefPu) annotation(
+  connect(iECWP4APControl.pPDRefPu, iECWP4ALinearCommunicationPD.pPDRefPu) annotation(
     Line(points = {{30, 60}, {60, 60}, {60, 60}, {58, 60}}, color = {0, 0, 127}));
- connect(IECWP4ALinearCommunicationPD.pPDRefComPu, pPDRefComPu) annotation(
+  connect(iECWP4ALinearCommunicationPD.pPDRefComPu, pPDRefComPu) annotation(
     Line(points = {{124, 60}, {140, 60}, {140, 70}, {180, 70}, {180, 70}}, color = {0, 0, 127}));
- connect(IECWP4ALinearCommunicationPD.xPDRefComPu, xPDRefComPu) annotation(
+  connect(iECWP4ALinearCommunicationPD.xPDRefComPu, xPDRefComPu) annotation(
     Line(points = {{124, 36}, {140, 36}, {140, 30}, {180, 30}, {180, 30}}, color = {0, 0, 127}));
- connect(omegaRefPu, iECWT4AMeasures.omegaRefPu) annotation(
+  connect(omegaRefPu, iECWT4AMeasures.omegaRefPu) annotation(
     Line(points = {{180, 0}, {128, 0}, {128, -44}, {114, -44}}, color = {0, 0, 127}));
- connect(uWTImPu, iECWT4AMeasures.uWtImPu) annotation(
+  connect(uWTImPu, iECWT4AMeasures.uWtImPu) annotation(
     Line(points = {{180, -30}, {140, -30}, {140, -52}, {114, -52}}, color = {0, 0, 127}));
- connect(uWTRePu, iECWT4AMeasures.uWtRePu) annotation(
+  connect(uWTRePu, iECWT4AMeasures.uWtRePu) annotation(
     Line(points = {{180, -60}, {112, -60}, {112, -60}, {114, -60}}, color = {0, 0, 127}));
- connect(iWTImPu, iECWT4AMeasures.iWtImPu) annotation(
+  connect(iWTImPu, iECWT4AMeasures.iWtImPu) annotation(
     Line(points = {{180, -90}, {140, -90}, {140, -68}, {114, -68}, {114, -68}}, color = {0, 0, 127}));
- connect(iWTRePu, iECWT4AMeasures.iWtRePu) annotation(
+  connect(iWTRePu, iECWT4AMeasures.iWtRePu) annotation(
     Line(points = {{150, -120}, {150, -98}, {130, -98}, {130, -76}, {114, -76}}, color = {0, 0, 127}));
- connect(iECWT4AMeasures.qWTCfiltPu, IECWP4ALinearCommunicationWPM.qWPfiltPu) annotation(
+  connect(iECWT4AMeasures.qWTCfiltPu, iECWP4ALinearCommunicationWPM.qWPfiltPu) annotation(
     Line(points = {{70, -44}, {36, -44}, {36, -44}, {36, -44}}, color = {0, 0, 127}));
- connect(iECWT4AMeasures.pWTCfiltPu, IECWP4ALinearCommunicationWPM.pWPfiltPu) annotation(
+  connect(iECWT4AMeasures.pWTCfiltPu, iECWP4ALinearCommunicationWPM.pWPfiltPu) annotation(
     Line(points = {{70, -50}, {60, -50}, {60, -54}, {36, -54}}, color = {0, 0, 127}));
- connect(iECWT4AMeasures.omegaRefFiltPu, IECWP4ALinearCommunicationWPM.omegaRefFiltPu) annotation(
+  connect(iECWT4AMeasures.omegaRefFiltPu, iECWP4ALinearCommunicationWPM.omegaRefFiltPu) annotation(
     Line(points = {{70, -64}, {36, -64}, {36, -64}, {36, -64}}, color = {0, 0, 127}));
- connect(iECWT4AMeasures.uWTCfiltPu, IECWP4ALinearCommunicationWPM.uWPfiltfPu) annotation(
+  connect(iECWT4AMeasures.uWTCfiltPu, iECWP4ALinearCommunicationWPM.uWPfiltfPu) annotation(
     Line(points = {{70, -70}, {60, -70}, {60, -74}, {36, -74}}, color = {0, 0, 127}));
 annotation(
     Diagram(coordinateSystem(extent = {{-160, -100}, {160, 100}})),

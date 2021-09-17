@@ -24,6 +24,7 @@ set(MODEL_FILES
   IECGenSystem.extvar
   IECFrameRotation.mo
   IECFrameRotation.extvar
+  IECVSCI.mo
   )
 
 #

@@ -15,6 +15,7 @@ set(MODEL_FILES
   package.order
   IECWP4A.mo
   IECWT4A.mo
+  IECWT4AVs.mo
   )
 
 #
