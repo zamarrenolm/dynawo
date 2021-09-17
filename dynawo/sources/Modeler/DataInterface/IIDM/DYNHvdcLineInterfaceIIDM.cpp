@@ -227,9 +227,8 @@ HvdcLineInterfaceIIDM::getConverterMode() const {
       return HvdcLineInterface::RECTIFIER_INVERTER;
     case IIDM::HvdcLine::mode_InverterRectifier:
       return HvdcLineInterface::INVERTER_RECTIFIER;
-    default:
-      throw DYNError(Error::MODELER, ConvertersModeError, getID());
   }
+  throw DYNError(Error::MODELER, ConvertersModeError, getID());
 }
 
 string
