@@ -257,7 +257,10 @@ class Dictionary:
             header_file.write("    enum value\n")
             header_file.write("    {\n")
             for key in sorted(self.messages):
-                header_file.write("      " + (key + ",").ljust(70) + "  ///< " + self.messages[key] + "\n")
+                try:
+                    header_file.write("      " + (key + ",").ljust(70) + "  ///< " + self.messages[key] + "\n")
+                except UnicodeEncodeError:
+                    header_file.write("      " + (key.encode('utf-8') + ",").ljust(70) + "  ///< " + self.messages[key].encode('utf-8') + "\n")
             header_file.write("    };\n\n")
             header_file.write("    /**\n")
             header_file.write("    * @brief Return the name associated to the enum.\n")
