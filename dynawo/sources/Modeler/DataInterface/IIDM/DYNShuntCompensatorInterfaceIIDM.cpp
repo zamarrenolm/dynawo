@@ -57,8 +57,10 @@ ShuntCompensatorInterfaceIIDM::getComponentVarIndex(const std::string& varName) 
 void
 ShuntCompensatorInterfaceIIDM::exportStateVariablesUnitComponent() {
   bool connected = (getValue<int>(VAR_STATE) == CLOSED);
-  shuntCompensatorIIDM_.q(getValue<double>(VAR_Q) * SNREF);
-  shuntCompensatorIIDM_.currentSection(getValue<int>(VAR_CURRENTSECTION));
+  if (connected) {
+    shuntCompensatorIIDM_.q(getValue<double>(VAR_Q) * SNREF);
+    shuntCompensatorIIDM_.currentSection(getValue<int>(VAR_CURRENTSECTION));
+  }
 
   if (shuntCompensatorIIDM_.has_connection()) {
     if (shuntCompensatorIIDM_.connectionPoint()->is_bus()) {

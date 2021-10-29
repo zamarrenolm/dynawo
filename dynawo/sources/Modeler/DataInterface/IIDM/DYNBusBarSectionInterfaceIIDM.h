@@ -57,6 +57,13 @@ class BusBarSectionInterfaceIIDM : public BusBarSectionInterface {
   }
 
   /**
+   * @copydoc BusBarSectionInterface::hasV() const
+   */
+  inline bool hasV() const {
+    return bbs_.has_v();
+  }
+
+  /**
    * @copydoc BusBarSectionInterface::setV( const double& v)
    */
   inline void setV(const double& v) {

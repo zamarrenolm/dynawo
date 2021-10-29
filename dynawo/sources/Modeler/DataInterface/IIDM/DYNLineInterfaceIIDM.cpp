@@ -273,13 +273,16 @@ LineInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
 void
 LineInterfaceIIDM::exportStateVariablesUnitComponent() {
   int state = getValue<int>(VAR_STATE);
-  lineIIDM_.p1(getValue<double>(VAR_P1) * SNREF);
-  lineIIDM_.q1(getValue<double>(VAR_Q1) * SNREF);
-  lineIIDM_.p2(getValue<double>(VAR_P2) * SNREF);
-  lineIIDM_.q2(getValue<double>(VAR_Q2) * SNREF);
-
   bool connected1 = (state == CLOSED) || (state == CLOSED_1);
   bool connected2 = (state == CLOSED) || (state == CLOSED_2);
+  if (connected1) {
+    lineIIDM_.p1(getValue<double>(VAR_P1) * SNREF);
+    lineIIDM_.q1(getValue<double>(VAR_Q1) * SNREF);
+  }
+  if (connected2) {
+    lineIIDM_.p2(getValue<double>(VAR_P2) * SNREF);
+    lineIIDM_.q2(getValue<double>(VAR_Q2) * SNREF);
+  }
 
   if (lineIIDM_.has_connection(IIDM::side_1)) {
     if (lineIIDM_.connection(IIDM::side_1)->is_bus()) {

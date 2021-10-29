@@ -58,8 +58,10 @@ GeneratorInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
 void
 GeneratorInterfaceIIDM::exportStateVariablesUnitComponent() {
   bool connected = (getValue<int>(VAR_STATE) == CLOSED);
-  generatorIIDM_.p(-1 * getValue<double>(VAR_P) * SNREF);
-  generatorIIDM_.q(-1 * getValue<double>(VAR_Q) * SNREF);
+  if (connected) {
+    generatorIIDM_.p(-1 * getValue<double>(VAR_P) * SNREF);
+    generatorIIDM_.q(-1 * getValue<double>(VAR_Q) * SNREF);
+  }
 
   if (generatorIIDM_.has_connection()) {
     if (generatorIIDM_.connectionPoint()->is_bus()) {

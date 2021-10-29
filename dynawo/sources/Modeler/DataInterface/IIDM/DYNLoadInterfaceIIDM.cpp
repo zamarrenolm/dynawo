@@ -60,8 +60,10 @@ LoadInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
 void
 LoadInterfaceIIDM::exportStateVariablesUnitComponent() {
   bool connected = (getValue<int>(VAR_STATE) == CLOSED);
-  loadIIDM_.p(getValue<double>(VAR_P) * SNREF);
-  loadIIDM_.q(getValue<double>(VAR_Q) * SNREF);
+  if (connected) {
+    loadIIDM_.p(getValue<double>(VAR_P) * SNREF);
+    loadIIDM_.q(getValue<double>(VAR_Q) * SNREF);
+  }
 
   if (loadIIDM_.has_connection()) {
     if (loadIIDM_.connectionPoint()->is_bus()) {

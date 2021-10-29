@@ -22,9 +22,11 @@
 #include <IIDM/components/Bus.h>
 #include <IIDM/components/VoltageLevel.h>
 #include "DYNBusInterfaceIIDM.h"
+#include "DYNCommon.h"
 #include "DYNCommonConstants.h"
 #include "DYNStateVariable.h"
 #include "DYNTrace.h"
+
 using boost::shared_ptr;
 using std::string;
 
@@ -128,8 +130,10 @@ BusInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
 
 void
 BusInterfaceIIDM::exportStateVariablesUnitComponent() {
-  busIIDM_.v(getStateVarV());
-  busIIDM_.angle(getStateVarAngle());
+  if (busIIDM_.has_v() || !doubleEquals(getStateVarV(), 0.)) {
+    busIIDM_.v(getStateVarV());
+    busIIDM_.angle(getStateVarAngle());
+  }
 }
 
 void

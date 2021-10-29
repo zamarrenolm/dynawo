@@ -59,9 +59,10 @@ LoadInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
 void
 LoadInterfaceIIDM::exportStateVariablesUnitComponent() {
   bool connected = (getValue<int>(VAR_STATE) == CLOSED);
-
-  loadIIDM_.getTerminal().setP(getValue<double>(VAR_P) * SNREF);
-  loadIIDM_.getTerminal().setQ(getValue<double>(VAR_Q) * SNREF);
+  if (connected) {
+    loadIIDM_.getTerminal().setP(getValue<double>(VAR_P) * SNREF);
+    loadIIDM_.getTerminal().setQ(getValue<double>(VAR_Q) * SNREF);
+  }
 
   if (getVoltageLevelInterfaceInjector()->isNodeBreakerTopology()) {
     // should be removed once a solution has been found to propagate switches (de)connection

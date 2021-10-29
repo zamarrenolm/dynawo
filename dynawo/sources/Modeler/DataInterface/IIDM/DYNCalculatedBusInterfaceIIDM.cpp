@@ -24,9 +24,11 @@
 
 #include "DYNCalculatedBusInterfaceIIDM.h"
 #include "DYNBusBarSectionInterface.h"
+#include "DYNCommon.h"
 #include "DYNCommonConstants.h"
 #include "DYNStateVariable.h"
 #include "DYNTrace.h"
+
 using boost::shared_ptr;
 using std::string;
 using std::set;
@@ -147,9 +149,14 @@ CalculatedBusInterfaceIIDM::getComponentVarIndex(const std::string& varName) con
 
 void
 CalculatedBusInterfaceIIDM::exportStateVariablesUnitComponent() {
-  for (unsigned int i = 0; i < busBarSections_.size(); ++i) {
-    busBarSections_[i]->setV(getStateVarV());
-    busBarSections_[i]->setAngle(getStateVarAngle());
+  double stateVarV = getStateVarV();
+  double stateVarAngle = getStateVarAngle();
+  for (vector<shared_ptr<BusBarSectionInterface> >::iterator itBusBarSection = busBarSections_.begin();
+       itBusBarSection != busBarSections_.end(); ++itBusBarSection) {
+    if ((*itBusBarSection)->hasV() || !doubleEquals(stateVarV, 0.)) {
+      (*itBusBarSection)->setV(stateVarV);
+      (*itBusBarSection)->setAngle(stateVarAngle);
+    }
   }
 }
 

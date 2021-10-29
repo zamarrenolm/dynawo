@@ -58,8 +58,10 @@ BatteryInterfaceIIDM::getComponentVarIndex(const std::string& varName) const {
 void
 BatteryInterfaceIIDM::exportStateVariablesUnitComponent() {
   bool connected = (getValue<int>(VAR_STATE) == CLOSED);
-  batteryIIDM_.p(-1 * getValue<double>(VAR_P) * SNREF);
-  batteryIIDM_.q(-1 * getValue<double>(VAR_Q) * SNREF);
+  if (connected) {
+    batteryIIDM_.p(-1 * getValue<double>(VAR_P) * SNREF);
+    batteryIIDM_.q(-1 * getValue<double>(VAR_Q) * SNREF);
+  }
 
   if (batteryIIDM_.has_connection()) {
     if (batteryIIDM_.connectionPoint()->is_bus()) {

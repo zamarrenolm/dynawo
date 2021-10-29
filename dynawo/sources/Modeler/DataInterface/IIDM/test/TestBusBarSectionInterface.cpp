@@ -80,6 +80,7 @@ TEST(DataInterfaceTest, testBusBarSectionInterface) {
   ASSERT_EQ(bbs.angle(), 3);
   bbsIIDM.setV(240);
   ASSERT_EQ(bbs.v(), 240);
+  ASSERT_TRUE(bbsIIDM.hasV());
 }
 
 }  // namespace DYN

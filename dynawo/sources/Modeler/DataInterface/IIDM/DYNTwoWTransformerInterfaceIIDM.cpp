@@ -244,19 +244,22 @@ TwoWTransformerInterfaceIIDM::getComponentVarIndex(const std::string& varName) c
 void
 TwoWTransformerInterfaceIIDM::exportStateVariablesUnitComponent() {
   int state = getValue<int>(VAR_STATE);
-  tfoIIDM_.p1(getValue<double>(VAR_P1) * SNREF);
-  tfoIIDM_.q1(getValue<double>(VAR_Q1) * SNREF);
-  tfoIIDM_.p2(getValue<double>(VAR_P2) * SNREF);
-  tfoIIDM_.q2(getValue<double>(VAR_Q2) * SNREF);
+  bool connected1 = (state == CLOSED) || (state == CLOSED_1);
+  bool connected2 = (state == CLOSED) || (state == CLOSED_2);
+  if (connected1) {
+    tfoIIDM_.p1(getValue<double>(VAR_P1) * SNREF);
+    tfoIIDM_.q1(getValue<double>(VAR_Q1) * SNREF);
+  }
+  if (connected2) {
+    tfoIIDM_.p2(getValue<double>(VAR_P2) * SNREF);
+    tfoIIDM_.q2(getValue<double>(VAR_Q2) * SNREF);
+  }
 
   if (getPhaseTapChanger()) {
     getPhaseTapChanger()->setCurrentPosition(getValue<int>(VAR_TAPINDEX));
   }  else if (getRatioTapChanger()) {
     getRatioTapChanger()->setCurrentPosition(getValue<int>(VAR_TAPINDEX));
   }
-
-  bool connected1 = (state == CLOSED) || (state == CLOSED_1);
-  bool connected2 = (state == CLOSED) || (state == CLOSED_2);
 
   if (tfoIIDM_.has_connection(IIDM::side_1)) {
     if (tfoIIDM_.connection(IIDM::side_1)->is_bus()) {

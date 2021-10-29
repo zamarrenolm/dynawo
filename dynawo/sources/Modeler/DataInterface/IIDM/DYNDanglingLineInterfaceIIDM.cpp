@@ -59,8 +59,10 @@ DanglingLineInterfaceIIDM::getComponentVarIndex(const std::string& varName) cons
 void
 DanglingLineInterfaceIIDM::exportStateVariablesUnitComponent() {
   bool connected = (getValue<int>(VAR_STATE) == CLOSED);
-  danglingLineIIDM_.p(getValue<double>(VAR_P) * SNREF);
-  danglingLineIIDM_.q(getValue<double>(VAR_Q) * SNREF);
+  if (connected) {
+    danglingLineIIDM_.p(getValue<double>(VAR_P) * SNREF);
+    danglingLineIIDM_.q(getValue<double>(VAR_Q) * SNREF);
+  }
 
   if (danglingLineIIDM_.has_connection()) {
     if (danglingLineIIDM_.connectionPoint()->is_bus()) {
