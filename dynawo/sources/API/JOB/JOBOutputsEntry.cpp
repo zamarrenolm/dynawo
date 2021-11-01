@@ -121,6 +121,16 @@ OutputsEntry::getCurvesEntry() const {
 }
 
 void
+OutputsEntry::setFinalStateValuesEntry(const boost::shared_ptr<FinalStateValuesEntry>& finalStateValuesEntry) {
+  finalStateValuesEntry_ = finalStateValuesEntry;
+}
+
+boost::shared_ptr<FinalStateValuesEntry>
+OutputsEntry::getFinalStateValuesEntry() const {
+  return finalStateValuesEntry_;
+}
+
+void
 OutputsEntry::setLostEquipmentsEntry(const boost::shared_ptr<LostEquipmentsEntry>& lostEquipmentsEntry) {
   lostEquipmentsEntry_ = lostEquipmentsEntry;
 }

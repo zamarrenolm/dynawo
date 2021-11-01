@@ -11,6 +11,7 @@
 add_subdirectory(PAR)
 add_subdirectory(TL)
 add_subdirectory(CRV)
+add_subdirectory(FSV)
 add_subdirectory(CRT)
 add_subdirectory(FS)
 add_subdirectory(CSTR)

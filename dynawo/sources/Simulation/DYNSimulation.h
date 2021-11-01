@@ -88,6 +88,15 @@ class Simulation {
   } exportCurvesMode_t;
 
   /**
+   * @brief Export mode for final states values
+   * Final states' export mode controlling the final states values available in the output.
+   */
+  typedef enum {
+    EXPORT_FINAL_STATE_VALUES_NONE,  ///< Export zero final states values
+    EXPORT_FINAL_STATE_VALUES_XML,  ///< Export final states values selected in input file in XML mode in output file
+  } exportFinalStateValuesMode_t;
+
+  /**
    * @brief Export mode for timeline
    * Timeline's export mode controlling the format of the timeline's output file
    */
@@ -247,6 +256,12 @@ class Simulation {
   void importCurvesRequest();
 
   /**
+   * @brief import final state values request from a file (i.e final states values that the user wants to see)
+   * @warning the file should be set before the call of this method
+   */
+  void importFinalStateValuesRequest();
+
+  /**
    * @brief setter for the output file of the timeline
    * @param outputFile timeline's output file
    */
@@ -280,6 +295,27 @@ class Simulation {
    */
   inline void setCurvesOutputFile(const std::string& outputFile) {
     curvesOutputFile_ = outputFile;
+  }
+  /**
+   * @brief setter for the export mode of final state values
+   * @param mode final state values' export mode
+   */
+  inline void setFinalStateValuesExportMode(const exportFinalStateValuesMode_t& mode) {
+    exportFinalStateValuesMode_ = mode;
+  }
+  /**
+   * @brief setter for the final state values' input file
+   * @param inputFile final state values input file
+   */
+  inline void setFinalStateValuesInputFile(const std::string& inputFile) {
+    finalStateValuesInputFile_ = inputFile;
+  }
+  /**
+   * @brief setter for the final state values' output file
+   * @param outputFile final state values' output file
+   */
+  inline void setFinalStateValuesOutputFile(const std::string& outputFile) {
+    finalStateValuesOutputFile_ = outputFile;
   }
   /**
    * @brief setter for the export mode of final state
@@ -447,6 +483,12 @@ class Simulation {
   void printCurves(std::ostream& stream) const;
 
   /**
+   * @brief print final state values of the simulation in the given stream
+   * @param stream stream where the final state values should be printed
+   */
+  void printFinalStateValues(std::ostream& stream) const;
+
+  /**
    * @brief print timeline output of the simulation in the given stream
    * @param stream stream where the timeline output should be printed
    */
@@ -592,6 +634,10 @@ class Simulation {
   std::string curvesInputFile_;  ///< curves' resquest input file
   std::string curvesOutputFile_;  ///< curves' output file
 
+  exportFinalStateValuesMode_t exportFinalStateValuesMode_;  ///< final state values export mode
+  std::string finalStateValuesInputFile_;  ///< final state values input file
+  std::string finalStateValuesOutputFile_;  ///< final state values output file
+
   exportTimelineMode_t exportTimelineMode_;  ///< timeline's output mode
   bool exportTimelineWithTime_;  ///< whether to export time when exporting timeline
   boost::optional<int> exportTimelineMaxPriority_;  ///< maximum priority when exporting timeline
@@ -642,6 +688,11 @@ class Simulation {
    * @brief configure the curve outputs
    */
   void configureCurveOutputs();
+
+  /**
+   * @brief configure the final state outputs
+   */
+  void configureFinalStateValueOutputs();
 
   /**
    * @brief configure the final state outputs
