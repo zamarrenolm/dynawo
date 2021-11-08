@@ -23,7 +23,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_set.hpp>
-#include <sundials/sundials_types.h>
 
 namespace DYN {
 class Model;
@@ -214,28 +213,28 @@ class SparseMatrix {
    */
   CheckError check() const;
 
-  inline const std::vector<sunindextype>& getAp() const {
+  inline const std::vector<long int>& getAp() const {
     return Ap_;
   }
 
-  inline const std::vector<sunindextype>& getAi() const {
+  inline const std::vector<long int>& getAi() const {
     return Ai_;
   }
 
-  inline const std::vector<realtype>& getAx() const {
+  inline const std::vector<double>& getAx() const {
     return Ax_;
   }
 
-  inline std::vector<sunindextype>& getNonCstAp() {
-    return const_cast<std::vector<sunindextype>&>(getAp());
+  inline std::vector<long int>& getNonCstAp() {
+    return const_cast<std::vector<long int>&>(getAp());
   }
 
   inline std::vector<sunindextype>& getNonCstAi() {
-    return const_cast<std::vector<sunindextype>&>(getAi());
+    return const_cast<std::vector<long int>&>(getAi());
   }
 
-  inline std::vector<realtype>& getNonCstAx() {
-    return const_cast<std::vector<realtype>&>(getAx());
+  inline std::vector<double>& getNonCstAx() {
+    return const_cast<std::vector<double>&>(getAx());
   }
 
  private:
@@ -280,9 +279,9 @@ class SparseMatrix {
   int nbTerm_;  ///< current number of values stored in the matrix
   int currentMaxTerm_;  ///< current maximum number of term that could be stored in the matrix without increasing the size of arrays
 
-  std::vector<sunindextype> Ap_;  ///< for each column, first non null element index in Ai and Ax
-  std::vector<sunindextype> Ai_;  ///< row index for each non null element
-  std::vector<realtype> Ax_;  ///< non null element value;
+  std::vector<long int> Ap_;  ///< for each column, first non null element index in Ai and Ax
+  std::vector<long int> Ai_;  ///< row index for each non null element
+  std::vector<double> Ax_;  ///< non null element value;
 };
 
 }  // end of namespace DYN
