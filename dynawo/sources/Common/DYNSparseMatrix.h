@@ -229,7 +229,7 @@ class SparseMatrix {
     return const_cast<std::vector<long int>&>(getAp());
   }
 
-  inline std::vector<sunindextype>& getNonCstAi() {
+  inline std::vector<long int>& getNonCstAi() {
     return const_cast<std::vector<long int>&>(getAi());
   }
 
