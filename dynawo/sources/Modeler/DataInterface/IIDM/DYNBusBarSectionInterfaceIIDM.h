@@ -32,6 +32,11 @@ class BusBarSection;
 
 namespace DYN {
 
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wweak-vtables"
+#endif  // __clang__
+
 /**
  * @class BusBarSectionInterfaceIIDM
  * @brief Specialisation of BusBarSectionInterface class for IIDM
@@ -80,5 +85,10 @@ class BusBarSectionInterfaceIIDM : public BusBarSectionInterface {
  private:
   IIDM::BusBarSection& bbs_;  ///< instance of IIDM bus bar section
 };  ///< Interface class for BusBarSection
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif  // __clang__
+
 }  ///< namespace DYN
 #endif  // MODELER_DATAINTERFACE_IIDM_DYNBUSBARSECTIONINTERFACEIIDM_H_
