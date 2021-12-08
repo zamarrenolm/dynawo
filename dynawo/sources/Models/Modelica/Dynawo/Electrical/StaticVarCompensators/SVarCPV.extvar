@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!--
-    Copyright (c) 2015-2020, RTE (http://www.rte-france.com)
+    Copyright (c) 2021, RTE (http://www.rte-france.com)
     See AUTHORS.txt
     All rights reserved.
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,6 +15,7 @@
   <variable type="continuous" id="terminal.V.im"/>
   <variable type="discrete" id="setModeManual"/>
   <variable type="discrete" id="selectModeAuto" defaultValue="true"/>
+  <variable type="discrete" id="URef"/>
   <variable type="discrete" id="switchOffSignal1.value" defaultValue="false"/>
   <variable type="discrete" id="switchOffSignal2.value" defaultValue="false"/>
 </external_variables>

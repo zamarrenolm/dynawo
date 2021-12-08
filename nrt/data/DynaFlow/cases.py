@@ -145,42 +145,164 @@ if os.environ["DYNAWO_CXX11_ENABLED"] == "YES" and os.environ.get("DYNAWO_USE_LE
 
     test_cases.append((case_name, case_description, job_file, 1, standardReturnCodeType, standardReturnCode))
 
-###########################################
-#           SVarCPV_1_StepUref              #
-###########################################
+##################################################################
+# Small System with PV Static Var Compensator and Load variation #
+##################################################################
 
-case_name = "DynaFlow - SVarCPV - Step Uref"
-case_description = "SVarCPV test case with a step on the reference voltage"
-job_file = os.path.join(os.path.dirname(__file__),  "SVarCPV", "SVarC_1_StepUref", "SVarC.jobs")
-
-test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
-
-##########################################
-#           SVarCPV_2_LoadVarQ             #
-##########################################
-
-case_name = "DynaFlow - SVarCPV - Load variation"
+case_name = "DynaFlow - LoadVar - SVarCPV"
 case_description = "SVarCPV test case with a load variation"
-job_file = os.path.join(os.path.dirname(__file__),  "SVarCPV", "SVarC_2_LoadVarQ", "SVarC.jobs")
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_LoadVar", "SVarCPV", "SVarC.jobs")
 
 test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
 
-###########################################
-#           SVarCPVRemote_1_StepUref              #
-###########################################
+#######################################################################
+# Small System with PV Prop Static Var Compensator and Load variation #
+#######################################################################
 
-case_name = "DynaFlow - SVarCPVRemote - Step Uref"
-case_description = "SVarCPV Remote test case with a step on the reference voltage"
-job_file = os.path.join(os.path.dirname(__file__),  "SVarCPVRemote", "SVarC_1_StepUref", "SVarC.jobs")
+case_name = "DynaFlow - LoadVar - SVarCPVProp"
+case_description = "SVarCPVProp test case with a load variation"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_LoadVar", "SVarCPVProp", "SVarC.jobs")
 
 test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
 
-##########################################
-#           SVarCPVRemote_2_LoadVarQ             #
-##########################################
+##################################################################################
+# Small System with PV Prop Simplified Static Var Compensator and Load variation #
+##################################################################################
 
-case_name = "DynaFlow - SVarCPVRemote - Load variation"
-case_description = "SVarCPV Remote test case with a load variation"
-job_file = os.path.join(os.path.dirname(__file__),  "SVarCPVRemote", "SVarC_2_LoadVarQ", "SVarC.jobs")
+case_name = "DynaFlow - LoadVar - SVarCPVPropSimplified"
+case_description = "SVarCPVPropSimplfied test case with a load variation"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_LoadVar", "SVarCPVPropSimplified", "SVarC.jobs")
 
-test_cases.append((case_name, case_description, job_file, 1, standardReturnCodeType, standardReturnCode))
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+#########################################################################
+# Small System with PV Remote Static Var Compensator and Load variation #
+#########################################################################
+
+case_name = "DynaFlow - LoadVar - SVarCPVRemote"
+case_description = "SVarCPVRemote test case with a load variation"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_LoadVar", "SVarCPVRemote", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+##############################################################################
+# Small System with PV Remote Prop Static Var Compensator and Load variation #
+##############################################################################
+
+case_name = "DynaFlow - LoadVar - SVarCPVRemoteProp"
+case_description = "SVarCPVRemoteProp test case with a load variation"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_LoadVar", "SVarCPVRemoteProp", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+#########################################################################################
+# Small System with PV Remote Prop Simplified Static Var Compensator and Load variation #
+#########################################################################################
+
+case_name = "DynaFlow - LoadVar - SVarCPVRemotePropSimplified"
+case_description = "SVarCPVRemotePropSimplified test case with a load variation"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_LoadVar", "SVarCPVRemotePropSimplified", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+####################################################################################
+# Small System with PV Remote Simplified Static Var Compensator and Load variation #
+####################################################################################
+
+case_name = "DynaFlow - LoadVar - SVarCPVRemoteSimplified"
+case_description = "SVarCPVRemoteSimplified test case with a load variation"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_LoadVar", "SVarCPVRemoteSimplified", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+#############################################################################
+# Small System with PV Simplified Static Var Compensator and Load variation #
+#############################################################################
+
+case_name = "DynaFlow - LoadVar - SVarCPVSimplified"
+case_description = "SVarCPVSimplified test case with a load variation"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_LoadVar", "SVarCPVSimplified", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+######
+
+###################################################################################
+# Small System with PV Static Var Compensator and a step on the reference voltage #
+###################################################################################
+
+case_name = "DynaFlow - StepURef - SVarCPV"
+case_description = "SVarCPV test case with a step on the reference voltage"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_StepURef", "SVarCPV", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+########################################################################################
+# Small System with PV Prop Static Var Compensator and a step on the reference voltage #
+########################################################################################
+
+case_name = "DynaFlow - StepURef - SVarCPVProp"
+case_description = "SVarCPVProp test case with a step on the reference voltage"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_StepURef", "SVarCPVProp", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+###################################################################################################
+# Small System with PV Prop Simplified Static Var Compensator and a step on the reference voltage #
+###################################################################################################
+
+case_name = "DynaFlow - StepURef - SVarCPVPropSimplified"
+case_description = "SVarCPVPropSimplfied test case with a step on the reference voltage"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_StepURef", "SVarCPVPropSimplified", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+##########################################################################################
+# Small System with PV Remote Static Var Compensator and a step on the reference voltage #
+##########################################################################################
+
+case_name = "DynaFlow - StepURef - SVarCPVRemote"
+case_description = "SVarCPVRemote test case with a step on the reference voltage"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_StepURef", "SVarCPVRemote", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+###############################################################################################
+# Small System with PV Remote Prop Static Var Compensator and a step on the reference voltage #
+###############################################################################################
+
+case_name = "DynaFlow - StepURef - SVarCPVRemoteProp"
+case_description = "SVarCPVRemoteProp test case with a step on the reference voltage"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_StepURef", "SVarCPVRemoteProp", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+######################################################################################################
+# Small System with PV Remote Prop Simplified Static Var Compensator a step on the reference voltage #
+######################################################################################################
+
+case_name = "DynaFlow - StepURef - SVarCPVRemotePropSimplified"
+case_description = "SVarCPVRemotePropSimplified test case with a step on the reference voltage"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_StepURef", "SVarCPVRemotePropSimplified", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+#################################################################################################
+# Small System with PV Remote Simplified Static Var Compensator a step on the reference voltage #
+#################################################################################################
+
+case_name = "DynaFlow - StepURef - SVarCPVRemoteSimplified"
+case_description = "SVarCPVRemoteSimplified test case with a step on the reference voltage"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_StepURef", "SVarCPVRemoteSimplified", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))
+
+##############################################################################################
+# Small System with PV Simplified Static Var Compensator and a step on the reference voltage #
+##############################################################################################
+
+case_name = "DynaFlow - StepURef - SVarCPVSimplified"
+case_description = "SVarCPVSimplified test case with a step on the reference voltage"
+job_file = os.path.join(os.path.dirname(__file__),  "StaticVarCompensators", "SVarC_StepURef", "SVarCPVSimplified", "SVarC.jobs")
+
+test_cases.append((case_name, case_description, job_file, 30, standardReturnCodeType, standardReturnCode))

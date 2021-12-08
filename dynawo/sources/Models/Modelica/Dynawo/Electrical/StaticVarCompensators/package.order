@@ -1,7 +1,12 @@
 BaseControls
 SVarCPV
 SVarCPV_INIT
-SVarCPVRemote
-SVarCPVRemote_INIT
+SVarCPVProp
+SVarCPVPropSimplified
+SVarCPVRemoteProp
+SVarCPVRemotePropSimplified
+SVarCPVSimplified
 SVarCStandard
 SVarCStandard_INIT
+SVarCPVRemote
+SVarCPVRemoteSimplified

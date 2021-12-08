@@ -18,9 +18,20 @@ set(MODEL_FILES
   SVarCPV.mo
   SVarCPV.extvar
   SVarCPV_INIT.mo
+  SVarCPVProp.mo
+  SVarCPVProp.extvar
+  SVarCPVPropSimplified.mo
+  SVarCPVPropSimplified.extvar
   SVarCPVRemote.mo
   SVarCPVRemote.extvar
-  SVarCPVRemote_INIT.mo
+  SVarCPVRemoteProp.mo
+  SVarCPVRemoteProp.extvar
+  SVarCPVRemotePropSimplified.mo
+  SVarCPVRemotePropSimplified.extvar
+  SVarCPVRemoteSimplified.mo
+  SVarCPVRemoteSimplified.extvar
+  SVarCPVSimplified.mo
+  SVarCPVSimplified.extvar
   SVarCStandard.mo
   SVarCStandard.extvar
   SVarCStandard_INIT.mo

@@ -84,7 +84,13 @@ set(MODELICA_PREASSEMBLED_MODELS
   SignalN.xml
   StaticVarCompensator.xml
   StaticVarCompensatorPV.xml
+  StaticVarCompensatorPVProp.xml
+  StaticVarCompensatorPVPropSimplified.xml
   StaticVarCompensatorPVRemote.xml
+  StaticVarCompensatorPVRemoteProp.xml
+  StaticVarCompensatorPVRemotePropSimplified.xml
+  StaticVarCompensatorPVRemoteSimplified.xml
+  StaticVarCompensatorPVSimplified.xml
   Step.xml
   TapChangerAutomaton.xml
   TapChangerBlockingAutomaton1.xml
