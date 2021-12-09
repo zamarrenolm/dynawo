@@ -98,7 +98,7 @@ class Graph {
   /**
    * @brief add an edge between two vertices
    *
-   * @param idVertex1 id of th first vertex
+   * @param idVertex1 id of the first vertex
    * @param idVertex2 id of the second vertex
    * @param id id of the edge
    */

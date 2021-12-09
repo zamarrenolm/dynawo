@@ -166,25 +166,6 @@ TEST(DataInterfaceTest, VoltageLevel) {
                           .setHighVoltageLimit(420.)
                           .setLowVoltageLimit(380.)
                           .add();
-//   vlIIDM2.getNodeBreakerView().newBusbarSection()
-//         .setId("BBS1")
-//         .setName("BBS1_NAME")
-//         .setNode(0)
-//         .add();
-//   vlIIDM2.getNodeBreakerView().newDisconnector()
-//         .setId("BK")
-//         .setName("BK_NAME")
-//         .setNode1(0)
-//         .setNode2(10)
-//         .setOpen(false)
-//         .setRetained(true)
-//         .add();
-//   vlIIDM2.newLoad()
-//         .setId("LOAD3")
-//         .setNode(10)
-//         .setP0(600.0)
-//         .setQ0(200.0)
-//         .add();
 
   vlIIDM2.getNodeBreakerView().newBusbarSection()
         .setId("BBS1")
