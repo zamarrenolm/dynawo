@@ -77,7 +77,7 @@ TEST(ModelicaCompilerTestSuite, BasicCompilationTest) {
   remove_all_in_directory("res");
   ASSERT_EQ(boost::filesystem::remove(fspath), true);
 }
-
+/*
 TEST(ModelicaCompilerTestSuite, TestPackageOption) {
   std::string varExtCommand = "../compileModelicaModel --model Test --lib Test" + std::string(sharedLibraryExtension()) +
       " --model-dir . --compilation-dir compilation --package-name Test";
@@ -163,7 +163,7 @@ TEST(ModelicaCompilerTestSuite, TestCompilationSilentZ) {
   executeCommand("diff ModelicaModel/reference_Test/Test_DynSilentZ.cpp compilationSilentZ/TestSilentZ_Dyn.cpp", ssDiff);
   std::cout << ssDiff.str() << std::endl;
   ASSERT_EQ(ssDiff.str(), "Executing command : diff ModelicaModel/reference_Test/Test_DynSilentZ.cpp compilationSilentZ/TestSilentZ_Dyn.cpp\n");
-}
+} */
 
 
 }  // namespace DYN
