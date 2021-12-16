@@ -62,7 +62,7 @@ model PControl "Active power control"
     Placement(visible = true, transformation(origin = {-3.5, 35.5}, extent = {{-5.5, -5.5}, {5.5, 5.5}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain(k = -DroopFP)  annotation(
     Placement(visible = true, transformation(origin = {-29, 25}, extent = {{-4, -4}, {4, 4}}, rotation = 0)));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder2 annotation(
+  Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = 0.01, y_start = SystemBase.omegaRef0Pu)  annotation(
     Placement(visible = true, transformation(origin = {-48, 12}, extent = {{-3, -3}, {3, 3}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = RPmaxPu, uMin = -RPmaxPu) annotation(
     Placement(visible = true, transformation(origin = {-18, 25}, extent = {{-3, -3}, {3, 3}}, rotation = 0)));

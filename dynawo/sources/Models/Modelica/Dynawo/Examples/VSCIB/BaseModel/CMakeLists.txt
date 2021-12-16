@@ -12,6 +12,8 @@
 set(MODEL_FILES
   package.mo
   GfolConverter.mo
+  GfolConverterDroop.mo
+  GfolConverterdVOC.mo
   )
 
 #

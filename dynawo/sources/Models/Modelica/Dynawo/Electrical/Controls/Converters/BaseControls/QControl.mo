@@ -45,7 +45,7 @@ model QControl "Reactive power Control"
     Placement(visible = true, transformation(origin = {34, -4.44089e-16}, extent = {{-6, -6}, {6, 6}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain(k = DroopUQ)  annotation(
     Placement(visible = true, transformation(origin = {4, 40}, extent = {{-4, -4}, {4, 4}}, rotation = 0)));
-  Modelica.Blocks.Math.Add add1(k1 = 1, k2 = 1)  annotation(
+  Modelica.Blocks.Math.Add add1 annotation(
     Placement(visible = true, transformation(origin = {18.5, 37.5}, extent = {{-4.5, -4.5}, {4.5, 4.5}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const(k = 0.1)  annotation(
     Placement(visible = true, transformation(origin = {-25, -35}, extent = {{-5, -5}, {5, 5}}, rotation = 0)));
@@ -57,7 +57,7 @@ model QControl "Reactive power Control"
     Placement(visible = true, transformation(origin = {-42, 26}, extent = {{-4, -4}, {4, 4}}, rotation = 0)));
   Modelica.Blocks.Math.Add add(k1 = 1, k2 = -1) annotation(
     Placement(visible = true, transformation(origin = {-10, 48}, extent = {{-4, -4}, {4, 4}}, rotation = 0)));
-  Modelica.Blocks.Math.Add add2(k1 = 1, k2 = 1) annotation(
+  Modelica.Blocks.Math.Add add2 annotation(
     Placement(visible = true, transformation(origin = {-31, 18}, extent = {{-3, -3}, {3, 3}}, rotation = 0)));
   Modelica.Blocks.Math.Sqrt sqrt1 annotation(
     Placement(visible = true, transformation(origin = {-22, 18}, extent = {{-3, -3}, {3, 3}}, rotation = 0)));

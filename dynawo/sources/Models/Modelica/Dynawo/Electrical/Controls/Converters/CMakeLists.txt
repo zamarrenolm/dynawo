@@ -34,6 +34,9 @@ set(MODEL_FILES
   IECWT4AControl_INIT.mo
   IECWP4AControl_INIT.mo
   IECWT4AControlVs_INIT.mo
+  IECAUXControl.mo
+  IECWT4BControl.mo
+  IECWT4BControl.extvar
   )
 
 #

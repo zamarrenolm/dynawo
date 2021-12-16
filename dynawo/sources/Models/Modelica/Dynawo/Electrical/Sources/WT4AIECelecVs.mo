@@ -161,16 +161,16 @@ equation
     Line(points = {{110, 10}, {86, 10}, {86, 10}, {86, 10}}, color = {0, 0, 127}));
  connect(iECElecSystem.terminal, terminal) annotation(
     Line(points = {{-80, 0}, {-92, 0}, {-92, 0}, {-94, 0}}, color = {0, 0, 255}));
- connect(iECVSCI.iGspPu, iECFrameRotation.ipCmdPu) annotation(
-    Line(points = {{42, 14}, {20, 14}, {20, 28}, {14, 28}, {14, 28}}, color = {0, 0, 127}));
- connect(iECVSCI.iGsqPu, iECFrameRotation.iqCmdPu) annotation(
-    Line(points = {{42, 6}, {20, 6}, {20, 0}, {14, 0}, {14, -2}}, color = {0, 0, 127}));
  connect(theta, iECFrameRotation.theta) annotation(
     Line(points = {{0, 111}, {0, 60}, {26, 60}, {26, -30}, {14, -30}}, color = {0, 0, 127}));
  connect(iECElecSystem.uGsRePu, iECVSCI.uGsRePu) annotation(
     Line(points = {{-42, -22}, {-42, -22}, {-42, -40}, {32, -40}, {32, -6}, {42, -6}, {42, -6}}, color = {0, 0, 127}));
  connect(iECElecSystem.uGsImPu, iECVSCI.uGsImPu) annotation(
     Line(points = {{-48, -22}, {-48, -22}, {-48, -50}, {42, -50}, {42, -14}, {42, -14}}, color = {0, 0, 127}));
+ connect(iECVSCI.iGsqPu, iECFrameRotation.iqCmdPu) annotation(
+    Line(points = {{42, 6}, {32, 6}, {32, 0}, {14, 0}, {14, -2}}, color = {0, 0, 127}));
+ connect(iECVSCI.iGspPu, iECFrameRotation.ipCmdPu) annotation(
+    Line(points = {{42, 14}, {32, 14}, {32, 28}, {14, 28}}, color = {0, 0, 127}));
   annotation(
     Icon(graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 30}, extent = {{-90, -30}, {90, 30}}, textString = "IEC WT4A"), Text(origin = {0, -30}, extent = {{-90, -30}, {90, 30}}, textString = "Converter")}, coordinateSystem(initialScale = 0.1)));
 

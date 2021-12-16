@@ -61,6 +61,7 @@ UdcPu       (Cdc)     |  DC/AC   |  uConvPu         uFilterPu (Cfilter)         
   parameter Types.PerUnit Udc0Pu "Start value of the DC bus voltage in p.u (base UNom)";
   parameter Types.PerUnit IdcSource0Pu "Start value of the DC source current in p.u (base UNom, SNom)";
 
+  //Inputs
   Modelica.Blocks.Interfaces.RealInput theta(start = Theta0) "Phase shift between the converter's rotating frame and the grid rotating frame in radians" annotation(
     Placement(visible = true, transformation(origin = {-108, -48}, extent = {{-8, -8}, {8, 8}}, rotation = 0), iconTransformation(origin = {108, 80}, extent = {{8, -8}, {-8, 8}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput omegaPu(start = SystemBase.omegaRef0Pu) "Converter angular frequency in p.u (base OmegaNom)" annotation(
@@ -72,10 +73,16 @@ UdcPu       (Cdc)     |  DC/AC   |  uConvPu         uFilterPu (Cfilter)         
   Modelica.Blocks.Interfaces.RealInput IdcSourcePu(start = IdcSource0Pu) "DC source injected current in p.u (base UNom, SNom)" annotation(
         Placement(visible = true, transformation(origin = {-108, -100}, extent = {{-8, -8}, {8, 8}}, rotation = 0), iconTransformation(origin = {108, -80}, extent = {{8, -8}, {-8, 8}}, rotation = 0)));
 
+  //Outputs
   Modelica.Blocks.Interfaces.RealOutput udPccPu(start = u0Pu.re*cos(Theta0) + u0Pu.im*sin(Theta0)) "d-axis voltage at the PCC in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {108, 94}, extent = {{-8, -8}, {8, 8}}, rotation = 0), iconTransformation(origin = {-89, -109}, extent = {{9, -9}, {-9, 9}}, rotation = 90)));
   Modelica.Blocks.Interfaces.RealOutput uqPccPu(start = -u0Pu.re*sin(Theta0) + u0Pu.im*cos(Theta0)) "q-axis voltage at the PCC in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {108, 84}, extent = {{-8, -8}, {8, 8}}, rotation = 0), iconTransformation(origin = {-67, -109}, extent = {{9, -9}, {-9, 9}}, rotation = 90)));
+  Modelica.Blocks.Interfaces.RealOutput idPccPu(start = (-i0Pu.re*cos(Theta0) - i0Pu.im*sin(Theta0)) * SystemBase.SnRef / SNom) "d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)" annotation(
+        Placement(visible = true, transformation(origin = {110.5, -51.5}, extent = {{-8, -8}, {8, 8}}, rotation = 0), iconTransformation(origin = {-109.5, -80.5}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
+  Modelica.Blocks.Interfaces.RealOutput iqPccPu(start = (i0Pu.re*sin(Theta0) - i0Pu.im*cos(Theta0)) * SystemBase.SnRef / SNom) "q-axis current injected at the PCC in p.u  (base UNom, SNom) (generator convention)" annotation(
+        Placement(visible = true, transformation(origin = {110.5, -67.5}, extent = {{-8, -8}, {8, 8}}, rotation = 0), iconTransformation(origin = {-109.5, -50.5}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
+
   Modelica.Blocks.Interfaces.RealOutput udFilterPu(start = UdFilter0Pu) "d-axis voltage at the converter terminal (filter) in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {108, 70}, extent = {{-8, -8}, {8, 8}}, rotation = 0), iconTransformation(origin = {23, -109}, extent = {{9, -9}, {-9, 9}}, rotation = 90)));
   Modelica.Blocks.Interfaces.RealOutput uqFilterPu(start = 0) "q-axis voltage at the converter terminal (filter) in p.u (base UNom)" annotation(
@@ -99,7 +106,7 @@ UdcPu       (Cdc)     |  DC/AC   |  uConvPu         uFilterPu (Cfilter)         
   Dynawo.Electrical.Sources.BaseConverters.VSCAverage vSCAverage(Cfilter = Cfilter, IdConv0Pu = IdConv0Pu, IdPcc0Pu = IdPcc0Pu, IqConv0Pu = IqConv0Pu, IqPcc0Pu = IqPcc0Pu, Lfilter = Lfilter, Rfilter = Rfilter, UdConv0Pu = UdConv0Pu, UdFilter0Pu = UdFilter0Pu, UqConv0Pu = UqConv0Pu)  annotation(
     Placement(visible = true, transformation(origin = {8, -20}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Dynawo.Electrical.Sources.BaseConverters.DCbusIdcSource dCbusIdcSource(Cdc = Cdc, ConvFixLossPu = ConvFixLossPu, ConvVarLossPu = ConvVarLossPu, IdcSource0Pu = IdcSource0Pu, Udc0Pu = Udc0Pu)  annotation(
-    Placement(visible = true, transformation(origin = {68, -20}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {66, -20}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   BaseConverters.GridInterface gridInterface(Ltransformer = Ltransformer, P0Pu = P0Pu, Q0Pu = Q0Pu, Rtransformer = Rtransformer, SNom = SNom, Theta0 = Theta0, UdFilter0Pu = UdFilter0Pu, i0Pu = i0Pu, u0Pu = u0Pu) annotation(
     Placement(visible = true, transformation(origin = {-60, -20}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
 
@@ -110,16 +117,16 @@ equation
   running.value = gridInterface.running;
   running.value = vSCAverage.running;
   running.value = dCbusIdcSource.running;
-  connect(vSCAverage.PConvPu, dCbusIdcSource.PConvPu) annotation(
-    Line(points = {{30, -20}, {46, -20}}, color = {0, 0, 127}));
+ connect(vSCAverage.PConvPu, dCbusIdcSource.PConvPu) annotation(
+    Line(points = {{30, -20}, {44, -20}}, color = {0, 0, 127}));
   connect(omegaPu, vSCAverage.omegaPu) annotation(
     Line(points = {{-108, -60}, {-20, -60}, {-20, -36}, {-14, -36}}, color = {0, 0, 127}));
   connect(udConvPu, vSCAverage.udConvPu) annotation(
     Line(points = {{-108, -74}, {0, -74}, {0, -42}}, color = {0, 0, 127}));
   connect(uqConvPu, vSCAverage.uqConvPu) annotation(
     Line(points = {{-108, -86}, {17, -86}, {17, -42}}, color = {0, 0, 127}));
-  connect(IdcSourcePu, dCbusIdcSource.IdcSourcePu) annotation(
-    Line(points = {{-108, -100}, {68, -100}, {68, -42}}, color = {0, 0, 127}));
+ connect(IdcSourcePu, dCbusIdcSource.IdcSourcePu) annotation(
+    Line(points = {{-108, -100}, {66, -100}, {66, -42}}, color = {0, 0, 127}));
   connect(vSCAverage.iqConvPu, iqConvPu) annotation(
     Line(points = {{24, 2}, {24, 6}, {108, 6}}, color = {0, 0, 127}));
   connect(vSCAverage.idConvPu, idConvPu) annotation(
@@ -128,8 +135,8 @@ equation
     Line(points = {{-14, -12}, {-20, -12}, {-20, 58}, {108, 58}}, color = {0, 0, 127}));
   connect(vSCAverage.udFilterPu, udFilterPu) annotation(
     Line(points = {{-14, -4}, {-32, -4}, {-32, 70}, {108, 70}}, color = {0, 0, 127}));
-  connect(dCbusIdcSource.UdcPu, UdcPu) annotation(
-    Line(points = {{90, -20}, {102, -20}, {102, -20}, {108, -20}}, color = {0, 0, 127}));
+ connect(dCbusIdcSource.UdcPu, UdcPu) annotation(
+    Line(points = {{88, -20}, {108, -20}}, color = {0, 0, 127}));
   connect(vSCAverage.PFilterPu, PFilterPu) annotation(
     Line(points = {{0, 2}, {0, 43}, {108, 43}}, color = {0, 0, 127}));
   connect(vSCAverage.QFilterPu, QFilterPu) annotation(
@@ -152,7 +159,11 @@ equation
     Line(points = {{-38, -28}, {-14, -28}}, color = {0, 0, 127}));
   connect(gridInterface.idPccPu, vSCAverage.idPccPu) annotation(
     Line(points = {{-38, -20}, {-14, -20}}, color = {0, 0, 127}));
+ connect(gridInterface.idPccPu, idPccPu) annotation(
+    Line(points = {{-38, -20}, {-26, -20}, {-26, -52}, {110, -52}, {110, -52}}, color = {0, 0, 127}));
+ connect(gridInterface.iqPccPu, iqPccPu) annotation(
+    Line(points = {{-38, -28}, {-32, -28}, {-32, -68}, {110.5, -68}, {110.5, -67.5}}, color = {0, 0, 127}));
   annotation(
-    Icon(graphics = {Rectangle(extent = {{-100, 100}, {100, -100}}), Text(origin = {-3, 6}, extent = {{-49, 42}, {49, -42}}, textString = "VSC")}, coordinateSystem(initialScale = 0.1)));
+    Icon(graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {-1, 6}, extent = {{-49, 42}, {49, -42}}, textString = "VSC")}, coordinateSystem(initialScale = 0.1)));
 
 end VSCIdcSource;

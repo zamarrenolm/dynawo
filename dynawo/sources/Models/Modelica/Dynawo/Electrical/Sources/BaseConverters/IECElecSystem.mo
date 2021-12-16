@@ -86,23 +86,28 @@ model IECElecSystem
 equation
 
   /* Voltage at WT terminals (before breaker, so grid side) */
-  uWtRePu = terminal.V.re;
+  uWtRePu = max(terminal.V.re, 0.001);
+//  uWtRePu = terminal.V.re;
   uWtImPu = terminal.V.im;
   //
   if running then
+
     /* Injected current at WT terminals (grid side, generator convention and base SNom, UNom) */
     iWtRePu = -terminal.i.re * (SystemBase.SnRef / SNom);
     iWtImPu = -terminal.i.im * (SystemBase.SnRef / SNom);
+
     /* Voltage at generator (converter side, base UNom) */
     uWtRePu = uGsRePu - Res * iWtRePu + Xes * iWtImPu;
     uWtImPu = uGsImPu - Res * iWtImPu - Xes * iWtRePu;
-    /* Current at generator (converter side, generator convention and base SNom, UNom) */
     iGsRePu = iWtRePu + (uGsRePu * Ges - uGsImPu * Bes);
     iGsImPu = iWtImPu + (uGsRePu * Bes + uGsImPu * Ges);
+
     /* Module of the voltage and currents at grid and converter side in p.u. (base UNom) */
     uGsPu = sqrt(uGsRePu ^ 2 + uGsImPu ^ 2);
     iGsPu = sqrt(iGsRePu ^ 2 + iGsImPu ^ 2);
+
   else
+
     uGsRePu = 0;
     uGsImPu = 0;
     iGsRePu = 0;
@@ -111,6 +116,7 @@ equation
     iWtImPu = 0;
     uGsPu=0;
     iGsPu=0;
+
   end if;
 
 annotation(

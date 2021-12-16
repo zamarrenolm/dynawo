@@ -71,23 +71,23 @@ model DroopControl "Droop Control"
     Placement(visible = true, transformation(origin = {20, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain (k=Mp)annotation(
     Placement(visible = true, transformation(origin = {46, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder(T=1/Wf, k=1) annotation(
+  Modelica.Blocks.Continuous.FirstOrder firstOrder(T=1/Wf, k=1, y_start = 0) annotation(
     Placement(visible = true, transformation(origin = {76, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add add1 annotation(
     Placement(visible = true, transformation(origin = {122, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback2 annotation(
     Placement(visible = true, transformation(origin = {176, 60}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.Integrator integrator(k=SystemBase.omegaNom) annotation(
+  Modelica.Blocks.Continuous.Integrator integrator(k = SystemBase.omegaNom, y_start = Theta0) annotation(
     Placement(visible = true, transformation(origin = {208, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder1(T = 1 / Wf, k=1)  annotation(
+  Modelica.Blocks.Continuous.FirstOrder firstOrder1(T = 1 / Wf, k=1, y_start = QRef0Pu)  annotation(
     Placement(visible = true, transformation(origin = {20, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain1(k = Kff)  annotation(
     Placement(visible = true, transformation(origin = {14, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain2(k = Kff)  annotation(
     Placement(visible = true, transformation(origin = {14, -110}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = 1 / Wff, k = 1)  annotation(
+  Modelica.Blocks.Continuous.FirstOrder firstOrder2(T = 1 / Wff, k = 1, y_start = UdFilter0Pu)  annotation(
     Placement(visible = true, transformation(origin = {44, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder3(T = 1 / Wff, k = 1)  annotation(
+  Modelica.Blocks.Continuous.FirstOrder firstOrder3(T = 1 / Wff, k = 1, y_start = 0)  annotation(
     Placement(visible = true, transformation(origin = {44, -110}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback3 annotation(
     Placement(visible = true, transformation(origin = {50, -28}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));

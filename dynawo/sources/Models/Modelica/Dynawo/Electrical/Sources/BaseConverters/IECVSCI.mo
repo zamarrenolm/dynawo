@@ -81,7 +81,12 @@ equation
   Cfilter / SystemBase.omegaNom * der(uGsqPu) = iqConvPu - omegaPu * Cfilter * uGspPu - iGsqPu;
   Lfilter / SystemBase.omegaNom * der(ipConvPu) = upCmdPu - Rfilter * ipConvPu + omegaPu * Lfilter * iqConvPu - uGspPu;
   Lfilter / SystemBase.omegaNom * der(iqConvPu) = uqCmdPu - Rfilter * iqConvPu - omegaPu * Lfilter * ipConvPu - uGsqPu;
-
+/*
+  0 = ipConvPu + omegaPu * Cfilter * uGsqPu - iGspPu;
+  0 = iqConvPu - omegaPu * Cfilter * uGspPu - iGsqPu;
+  Lfilter / SystemBase.omegaNom * der(ipConvPu) = upCmdPu - Rfilter * ipConvPu + omegaPu * Lfilter * iqConvPu - uGspPu;
+  Lfilter / SystemBase.omegaNom * der(iqConvPu) = uqCmdPu - Rfilter * iqConvPu - omegaPu * Lfilter * ipConvPu - uGsqPu;
+*/
 annotation(
         Icon(graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {-26, 23}, extent = {{-38, 51}, {92, -97}}, textString = "VSCI")}, coordinateSystem(initialScale = 0.1)),
     Diagram);

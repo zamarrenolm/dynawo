@@ -2,21 +2,20 @@ within Dynawo.Examples.IECWT4ANeplan.BaseModel;
 
 model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembling the electrical part that includes the electrical and generator module, with the control, that includes the plant and generator control sub-structure, the measurement and grid protection modules"
   /*
-  * Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
-  * See AUTHORS.txt
-  * All rights reserved.
-  * This Source Code Form is subject to the terms of the Mozilla Public
-  * License, v. 2.0. If a copy of the MPL was not distributed with this
-  * file, you can obtain one at http://mozilla.org/MPL/2.0/.
-  * SPDX-License-Identifier: MPL-2.0
-  *
-  * This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-  */
+            * Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+            * See AUTHORS.txt
+            * All rights reserved.
+            * This Source Code Form is subject to the terms of the Mozilla Public
+            * License, v. 2.0. If a copy of the MPL was not distributed with this
+            * file, you can obtain one at http://mozilla.org/MPL/2.0/.
+            * SPDX-License-Identifier: MPL-2.0
+            *
+            * This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+            */
   import Dynawo;
   import Dynawo.Types;
   import Dynawo.Connectors;
   import Dynawo.Electrical.SystemBase;
-
   /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
   parameter Types.PerUnit Res "Electrical system serial resistance in p.u (base UNom, SNom)" annotation(
@@ -29,17 +28,16 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "Electrical"));
   parameter Types.PerUnit PstepHPu "Height of the active power step in p.u (base SNom)" annotation(
     Dialog(group = "group", tab = "Reference steps"));
-  parameter Types.PerUnit QstepHPu "Height of the reactive power step in p.u (base SNom)" annotation(
+  parameter Types.PerUnit XstepHPu "Height of the reactive power step in p.u (base SNom)" annotation(
     Dialog(group = "group", tab = "Reference steps"));
   parameter Types.PerUnit OmegastepHPu "Height of the reactive power step in p.u (base SNom)" annotation(
     Dialog(group = "group", tab = "Reference steps"));
   parameter Types.Time t_Pstep "Time of the active power step in p.u (base SNom)" annotation(
     Dialog(group = "group", tab = "Reference steps"));
-  parameter Types.Time t_Qstep "Time of the reactive power step in p.u (base SNom)" annotation(
+  parameter Types.Time t_Xstep "Time of the reactive power step in p.u (base SNom)" annotation(
     Dialog(group = "group", tab = "Reference steps"));
   parameter Types.Time t_Omegastep "Time of the reactive power step in p.u (base SNom)" annotation(
     Dialog(group = "group", tab = "Reference steps"));
-
   /*Control parameters generator module*/
   parameter Types.Time Tpll "Time constant for PLL first order filter model in seconds";
   parameter Types.PerUnit Upll1 "Voltage below which the angle of the voltage is filtered/frozen in p.u (base UNom)";
@@ -52,7 +50,6 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "Generator"));
   parameter Types.PerUnit DiqMin "Minimum reactive current ramp rate in p.u (base UNom, SNom)" annotation(
     Dialog(group = "group", tab = "Generator"));
-
   /*P control parameters*/
   parameter Types.Time TpOrdp4A "Time constant in power order lag in seconds" annotation(
     Dialog(group = "group", tab = "Pcontrol"));
@@ -68,12 +65,11 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "Pcontrol"));
   parameter Types.PerUnit UpDip "Voltage dip threshold for P control in p.u (base UNom). Part of WT control, often different from converter thersholds" annotation(
     Dialog(group = "group", tab = "Pcontrol"));
-
   /*Q control parameters */
   parameter Types.Time Ts "Integration time step";
-  parameter Types.PerUnit RDrop "Resistive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
+  parameter Types.PerUnit RWTDrop "Resistive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
-  parameter Types.PerUnit XDrop "Reactive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
+  parameter Types.PerUnit XWTDrop "Reactive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
   parameter Types.PerUnit UMax "Maximum voltage in voltage PI controller integral term in p.u (base UNom)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
@@ -117,13 +113,12 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "Qcontrol"));
   parameter Types.PerUnit Kqv "Voltage scaling factor for FRT current in p.u (base SNom, UNom)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
-  parameter Types.PerUnit TanPhi "Constant Tangent Phi" annotation(
-    Dialog(group = "group", tab = "Qcontrol"));
+/*  parameter Types.PerUnit TanPhi "Constant Tangent Phi" annotation(
+    Dialog(group = "group", tab = "Qcontrol"));*/
   parameter Integer Mqfrt "FRT Q control modes (0-3): Normal operation controller (0), Fault current injection (1)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
   parameter Integer MqG "General Q control mode (0-4): Voltage control (0), Reactive power control (1), Power factor control (3)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
-
   /*Q limitation Parameters*/
   parameter Boolean QlConst "Fixed reactive power limits (1), 0 otherwise" annotation(
     Dialog(group = "group", tab = "Qlimit"));
@@ -131,7 +126,6 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "Qlimit"));
   parameter Types.PerUnit QMin "Fixed value of the minimum reactive power (base SNom) (generator convention)" annotation(
     Dialog(group = "group", tab = "Qlimit"));
-
   /*Current Limiter Parameters*/
   parameter Types.PerUnit IMax "Maximum continuous current at the WT terminals in p.u (base UNom, SNom) (generator convention)" annotation(
     Dialog(group = "group", tab = "CurrentLimit"));
@@ -149,35 +143,39 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "CurrentLimit"));
   parameter Types.PerUnit Kpqu "Partial derivative of reactive current limits vs. voltage" annotation(
     Dialog(group = "group", tab = "CurrentLimit"));
-
   /*Grid Measurement Parameters*/
   parameter Types.Time Tpfilt "Time constant in active power measurement filter" annotation(
     Dialog(group = "group", tab = "GridMeasurement"));
   parameter Types.Time Tqfilt "Time constant in reactive power measurement filter" annotation(
     Dialog(group = "group", tab = "GridMeasurement"));
-  //parameter Types.Time Tifilt "Time constant in current measurement filter" annotation(Dialog(group = "group", tab = "GridMeasurement"));
-  //parameter Types.PerUnit dphimax "Maximum rate of change of frequency" annotation(Dialog(group = "group", tab = "GridMeasurement"));
   parameter Types.Time Tufilt "Time constant in voltage measurement filter" annotation(
     Dialog(group = "group", tab = "GridMeasurement"));
   parameter Types.Time Tffilt "Time constant in frequency measurement filter" annotation(
     Dialog(group = "group", tab = "GridMeasurement"));
-
+  parameter Types.Time dfMax "Maximum rate of change of frequency" annotation(
+    Dialog(group = "group", tab = "GridMeasurement"));
+  parameter Types.Time dfMin "Mmum rate of change of frequency" annotation(
+    Dialog(group = "group", tab = "GridMeasurement"));
+  //Grid Protection parameters
+  parameter Types.PerUnit uOver "WT over voltage protection activation threshold" annotation(
+    Dialog(group = "group", tab = "GridProtection"));
+  parameter Types.PerUnit uUnder "WT under voltage protection activation threshold" annotation(
+    Dialog(group = "group", tab = "GridProtection"));
+  parameter Types.PerUnit fOver "WT over frequency protection activation threshold" annotation(
+    Dialog(group = "group", tab = "GridProtection"));
+  parameter Types.PerUnit fUnder "WT under frequency protection activation threshold" annotation(
+    Dialog(group = "group", tab = "GridProtection"));
   /*Linear Communication Parameters*/
   parameter Types.PerUnit Tlead "Communication lead time constant" annotation(
     Dialog(group = "group", tab = "LinearCommunication"));
   parameter Types.PerUnit Tlag "Communication lag time constant" annotation(
     Dialog(group = "group", tab = "LinearCommunication"));
-
   /*WP PControl Parameters*/
   parameter Types.PerUnit Kpwpp "Power PI controller proportional gain" annotation(
     Dialog(group = "group", tab = "PControlWP"));
   parameter Types.PerUnit Kiwpp "Power PI controller integration gain" annotation(
     Dialog(group = "group", tab = "PControlWP"));
   parameter Types.PerUnit Kwppref "Active power reference gain" annotation(
-    Dialog(group = "group", tab = "PControlWP"));
-  parameter Types.PerUnit dpRefMax "Maximum posite ramp rate for PD power reference" annotation(
-    Dialog(group = "group", tab = "PControlWP"));
-  parameter Types.PerUnit dpRefMin "Minimum negative ramp rate for PD power reference" annotation(
     Dialog(group = "group", tab = "PControlWP"));
   parameter Types.PerUnit dpWPRefMax "Maximum posite ramp rate for WP power reference" annotation(
     Dialog(group = "group", tab = "PControlWP"));
@@ -197,8 +195,15 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "PControlWP"));
   parameter Types.PerUnit pWPHookPu "WP hook active power" annotation(
     Dialog(group = "group", tab = "PControlWP"));
-
+  parameter Types.PerUnit dpRefMax "Maximum posite ramp rate for WP power reference" annotation(
+    Dialog(group = "group", tab = "PControlWP"));
+  parameter Types.PerUnit dpRefMin "Minimum negative ramp rate for WP power reference" annotation(
+    Dialog(group = "group", tab = "PControlWP"));
   /*WP QControl*/
+  parameter Types.PerUnit RWPDrop "Resistive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
+    Dialog(group = "group", tab = "QControlWP"));
+  parameter Types.PerUnit XWPDrop "Reactive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
+    Dialog(group = "group", tab = "QControlWP"));
   parameter Types.PerUnit uWPqdip "Voltage threshold for UVRT detection" annotation(
     Dialog(group = "group", tab = "QControlWP"));
   parameter Types.PerUnit uWPqrise "Voltage threshold for OVRT detection" annotation(
@@ -231,7 +236,6 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "QControlWP"));
   parameter Integer Mwpqmode "Reactive power/voltage control mode (0 reactive power reference, 1 power factor reference, 2 UQ static, 3 voltage control)" annotation(
     Dialog(group = "group", tab = "QControlWP"));
-
   /*Parameters for initialization from load flow*/
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)" annotation(
     Dialog(group = "group", tab = "Operating point"));
@@ -240,6 +244,10 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+    Dialog(group = "group", tab = "Operating point"));
+  parameter Types.PerUnit X0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
+    Dialog(group = "group", tab = "Operating point"));
+  parameter Types.PerUnit XWT0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
   /*Parameters for internal initialization*/
   parameter Types.PerUnit IpMax0Pu "Start value of the maximum active current in p.u (base UNom, SNom)" annotation(
@@ -252,45 +260,39 @@ model IECWP4A "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assembli
     Dialog(group = "group", tab = "Operating point"));
   parameter Types.PerUnit QMin0Pu "Start value minimum reactive power (Sbase)" annotation(
     Dialog(group = "group", tab = "Operating point"));
-
   parameter Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)" annotation(
-  Dialog(group = "group", tab = "Operating point"));
+    Dialog(group = "group", tab = "Operating point"));
   parameter Types.ComplexPerUnit i0Pu "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef)" annotation(
-  Dialog(group = "group", tab = "Operating point"));
+    Dialog(group = "group", tab = "Operating point"));
   parameter Types.PerUnit UGsRe0Pu "Start value of the real component of the voltage at the converter's terminals (generator system) in p.u (base UNom)" annotation(
-  Dialog(group = "group", tab = "Operating point"));
+    Dialog(group = "group", tab = "Operating point"));
   parameter Types.PerUnit UGsIm0Pu "Start value of the imaginary component of the voltage at the converter's terminals (generator system) in p.u (base UNom)" annotation(
-  Dialog(group = "group", tab = "Operating point"));
+    Dialog(group = "group", tab = "Operating point"));
   parameter Types.PerUnit IGsRe0Pu "Start value of the real component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)" annotation(
-  Dialog(group = "group", tab = "Operating point"));
+    Dialog(group = "group", tab = "Operating point"));
   parameter Types.PerUnit IGsIm0Pu "Start value of the imaginary component of the current at the converter's terminals (generator system) in p.u (Ubase, SNom) (generator convention)" annotation(
-  Dialog(group = "group", tab = "Operating point"));
-
+    Dialog(group = "group", tab = "Operating point"));
+  //Inputs
   /*Blocks*/
   Modelica.Blocks.Sources.Step PrefPu(height = PstepHPu, offset = -P0Pu * SystemBase.SnRef / SNom, startTime = t_Pstep) annotation(
-    Placement(visible = true, transformation(origin = {88, 50}, extent = {{-11, -11}, {11, 11}}, rotation = 180)));
-  Modelica.Blocks.Sources.Step QrefPu(height = QstepHPu, offset = -Q0Pu * SystemBase.SnRef / SNom, startTime = t_Qstep) annotation(
-    Placement(visible = true, transformation(origin = {88, -50}, extent = {{-11, -11}, {11, 11}}, rotation = 180)));
+    Placement(visible = true, transformation(origin = {90, 50}, extent = {{-11, -11}, {11, 11}}, rotation = 180)));
+  Modelica.Blocks.Sources.Step XrefPu(height = XstepHPu, offset = X0Pu, startTime = t_Xstep) annotation(
+    Placement(visible = true, transformation(origin = {90, -50}, extent = {{-11, -11}, {11, 11}}, rotation = 180)));
   Dynawo.Electrical.Sources.WT4AIECelec wT4AIECelec(Bes = Bes, DipMax = DipMax, DiqMax = DiqMax, DiqMin = DiqMin, Ges = Ges, IGsIm0Pu = IGsIm0Pu, IGsRe0Pu = IGsRe0Pu, IpMax0Pu = IpMax0Pu, IqMax0Pu = IqMax0Pu, IqMin0Pu = IqMin0Pu, P0Pu = P0Pu, Q0Pu = Q0Pu, Res = Res, SNom = SNom, Tg = Tg, U0Pu = U0Pu, UGsIm0Pu = UGsIm0Pu, UGsRe0Pu = UGsRe0Pu, UPhase0 = UPhase0, Xes = Xes, i0Pu = i0Pu, u0Pu = u0Pu) annotation(
     Placement(visible = true, transformation(origin = {-50, 0}, extent = {{-25, -25}, {25, 25}}, rotation = 0)));
-  Dynawo.Electrical.Controls.Converters.IECWP4AControl iECWP4AControl(DpMaxp4A = DpMaxp4A, DpRefMax4A = DpRefMax4A, DpRefMin4A = DpRefMin4A, IMax = IMax, IMaxDip = IMaxDip, IMaxHookPu = IMaxHookPu, IdfHook = IdfHook, IpMax0Pu = IpMax0Pu, IpfHook = IpfHook, IqH1 = IqH1, IqMax = IqMax, IqMax0Pu = IqMax0Pu, IqMaxHook = IqMaxHook, IqMin = IqMin, IqMin0Pu = IqMin0Pu, IqPost = IqPost, Kiq = Kiq, Kiu = Kiu, Kiwpp = Kiwpp, Kiwpx = Kiwpx, Kpq = Kpq, Kpqu = Kpqu, Kpu = Kpu, Kpufrt = Kpufrt, Kpwpp = Kpwpp, Kpwpx = Kpwpx, Kqv = Kqv, Kwppref = Kwppref, Kwpqref = Kwpqref, Kwpqu = Kwpqu, Mdfslim = Mdfslim, MpUScale = MpUScale, MqG = MqG, Mqfrt = Mqfrt, Mqpri = Mqpri, Mwpqmode = Mwpqmode, P0Pu = P0Pu, Q0Pu = Q0Pu, QMax = QMax, QMax0Pu = QMax0Pu, QMin = QMin, QMin0Pu = QMin0Pu, QlConst = QlConst, RDrop = RDrop, SNom = SNom, TanPhi = TanPhi, Td = Td, Tffilt = Tffilt, Tlag = Tlag, Tlead = Tlead, TpOrdp4A = TpOrdp4A, TpWTRef4A = TpWTRef4A, Tpfilt = Tpfilt, Tpll = Tpll, TqOrd = TqOrd, Tqfilt = Tqfilt, Ts = Ts, Tufilt = Tufilt, Tuqfilt = Tuqfilt, Tuss = Tuss, U0Pu = U0Pu, UMax = UMax, UMin = UMin, UPhase0 = UPhase0, UdbOne = UdbOne, UdbTwo = UdbTwo, UpDip = UpDip, Upll1 = Upll1, Upll2 = Upll2, UpquMax = UpquMax, UqDip = UqDip, UqRise = UqRise, XDrop = XDrop, dpRefMax = dpRefMax, dpRefMin = dpRefMin, dpWPRefMax = dpWPRefMax, dpWPRefMin = dpWPRefMin, dxRefMax = dxRefMax, dxRefMin = dxRefMin, i0Pu = i0Pu, pErrMax = pErrMax, pErrMin = pErrMin, pKIWPpMax = pKIWPpMax, pKIWPpMin = pKIWPpMin, pRefMax = pRefMax, pRefMin = pRefMin, pWPHookPu = pWPHookPu, u0Pu = u0Pu, uWPqdip = uWPqdip, uWPqrise = uWPqrise, xKIWPxMax = xKIWPxMax, xKIWPxMin = xKIWPxMin, xRefMax = xRefMax, xRefMin = xRefMin, xerrmax = xerrmax, xerrmin = xerrmin) annotation(
+  Dynawo.Electrical.Controls.Converters.IECWP4AControl iECWP4AControl(DpMaxp4A = DpMaxp4A, DpRefMax4A = DpRefMax4A, DpRefMin4A = DpRefMin4A, IMax = IMax, IMaxDip = IMaxDip, IMaxHookPu = IMaxHookPu, IdfHook = IdfHook, IpMax0Pu = IpMax0Pu, IpfHook = IpfHook, IqH1 = IqH1, IqMax = IqMax, IqMax0Pu = IqMax0Pu, IqMaxHook = IqMaxHook, IqMin = IqMin, IqMin0Pu = IqMin0Pu, IqPost = IqPost, Kiq = Kiq, Kiu = Kiu, Kiwpp = Kiwpp, Kiwpx = Kiwpx, Kpq = Kpq, Kpqu = Kpqu, Kpu = Kpu, Kpufrt = Kpufrt, Kpwpp = Kpwpp, Kpwpx = Kpwpx, Kqv = Kqv, Kwppref = Kwppref, Kwpqref = Kwpqref, Kwpqu = Kwpqu, Mdfslim = Mdfslim, MpUScale = MpUScale, MqG = MqG, Mqfrt = Mqfrt, Mqpri = Mqpri, Mwpqmode = Mwpqmode, P0Pu = P0Pu, Q0Pu = Q0Pu, QMax = QMax, QMax0Pu = QMax0Pu, QMin = QMin, QMin0Pu = QMin0Pu, QlConst = QlConst, RWPDrop = RWPDrop, RWTDrop = RWTDrop, SNom = SNom, Td = Td, Tffilt = Tffilt, Tlag = Tlag, Tlead = Tlead, TpOrdp4A = TpOrdp4A, TpWTRef4A = TpWTRef4A, Tpfilt = Tpfilt, Tpll = Tpll, TqOrd = TqOrd, Tqfilt = Tqfilt, Ts = Ts, Tufilt = Tufilt, Tuqfilt = Tuqfilt, Tuss = Tuss, U0Pu = U0Pu, UMax = UMax, UMin = UMin, UPhase0 = UPhase0, UdbOne = UdbOne, UdbTwo = UdbTwo, UpDip = UpDip, Upll1 = Upll1, Upll2 = Upll2, UpquMax = UpquMax, UqDip = UqDip, UqRise = UqRise, X0Pu = X0Pu, XWPDrop = XWPDrop, XWT0Pu = XWT0Pu, XWTDrop = XWTDrop, dfMax = dfMax, dfMin = dfMin, dpRefMax = dpRefMax, dpRefMin = dpRefMin, dpWPRefMax = dpWPRefMax, dpWPRefMin = dpWPRefMin, dxRefMax = dxRefMax, dxRefMin = dxRefMin, fOver = fOver, fUnder = fUnder, i0Pu = i0Pu, pErrMax = pErrMax, pErrMin = pErrMin, pKIWPpMax = pKIWPpMax, pKIWPpMin = pKIWPpMin, pRefMax = pRefMax, pRefMin = pRefMin, pWPHookPu = pWPHookPu, u0Pu = u0Pu, uOver = uOver, uUnder = uUnder, uWPqdip = uWPqdip, uWPqrise = uWPqrise, xKIWPxMax = xKIWPxMax, xKIWPxMin = xKIWPxMin, xRefMax = xRefMax, xRefMin = xRefMin, xerrmax = xerrmax, xerrmin = xerrmin) annotation(
     Placement(visible = true, transformation(origin = {30, 0}, extent = {{-25, -25}, {25, 25}}, rotation = 0)));
-  Dynawo.Connectors.ACPower aCPower annotation(
+  Dynawo.Connectors.ACPower aCPower(V(re(start = u0Pu.re), im(start = u0Pu.im)), i(re(start = i0Pu.re), im(start = i0Pu.im))) annotation(
     Placement(visible = true, transformation(origin = {-93, 0}, extent = {{-7, -7}, {7, 7}}, rotation = 0), iconTransformation(origin = {-110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  //
-  Modelica.Blocks.Sources.Step omegaRef(height = OmegastepHPu, offset = SystemBase.omegaRef0Pu, startTime = t_Omegastep) annotation(
-    Placement(visible = true, transformation(origin = {90, 0}, extent = {{-11, -11}, {11, 11}}, rotation = 180)));
-
+  Modelica.Blocks.Interfaces.RealInput omegaPu(start = SystemBase.omegaRef0Pu) annotation(
+    Placement(visible = true, transformation(origin = {120, 0}, extent = {{20, -20}, {-20, 20}}, rotation = 0), iconTransformation(origin = {-108, -1.40998e-14}, extent = {{8, 8}, {-8, -8}}, rotation = 180)));
 equation
-
   wT4AIECelec.switchOffSignal1.value = false;
   wT4AIECelec.switchOffSignal2.value = false;
   wT4AIECelec.switchOffSignal3.value = false;
 /*Connectors*/
   connect(iECWP4AControl.PRefPu, PrefPu.y) annotation(
-    Line(points = {{57.5, 13}, {69, 13}, {69, 50}, {76, 50}}, color = {0, 0, 127}));
-  connect(iECWP4AControl.QRefPu, QrefPu.y) annotation(
-    Line(points = {{57.5, -12}, {69, -12}, {69, -50}, {76, -50}}, color = {0, 0, 127}));
+    Line(points = {{57.5, 13}, {69, 13}, {69, 50}, {78, 50}}, color = {0, 0, 127}));
   connect(iECWP4AControl.ipMaxPu, wT4AIECelec.ipMaxPu) annotation(
     Line(points = {{2.5, 20}, {-22, 20}}, color = {0, 0, 127}));
   connect(iECWP4AControl.iqMaxPu, wT4AIECelec.iqMaxPu) annotation(
@@ -313,9 +315,10 @@ equation
     Line(points = {{-70, -28}, {-70, -52}, {50, -52}, {50, -27.5}}, color = {0, 0, 127}));
   connect(wT4AIECelec.terminal, aCPower) annotation(
     Line(points = {{-78, 0}, {-93, 0}}, color = {0, 0, 255}));
-  connect(omegaRef.y, iECWP4AControl.omegaRefPu) annotation(
-    Line(points = {{78, 0}, {57.5, 0}}, color = {0, 0, 127}));
-
+  connect(XrefPu.y, iECWP4AControl.xRefPu) annotation(
+    Line(points = {{78, -50}, {66, -50}, {66, -12}, {58, -12}, {58, -12}}, color = {0, 0, 127}));
+  connect(omegaPu, iECWP4AControl.omegaRefPu) annotation(
+    Line(points = {{120, 0}, {56, 0}, {56, 0}, {58, 0}}, color = {0, 0, 127}));
   annotation(
     experiment(StartTime = 0, StopTime = 30, Tolerance = 0.000001),
     __OpenModelica_simulationFlags(initialStepSize = "0.001", lv = "LOG_STATS", nls = "kinsol", s = "ida", nlsLS = "klu", maxIntegrationOrder = "2", maxStepSize = "10", emit_protected = "()"),
@@ -332,6 +335,5 @@ equation
     </div><div><br></div><div>Initial equation are provided on the generator's differential variables to ensure a steady state initialisation by the Modelica tool. It had to be written here and not directly in Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronous because the Dynawo simulator applies a different initialisation strategy that does not involve the initial equation section.
     </div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><span style=\"font-size: 12px;\"><br></span></div></div></body></html>
     "),
-    Icon(coordinateSystem(initialScale = 0.1, grid = {1, 1}), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {-1.5, -1}, extent = {{-66.5, 32}, {66.5, -32}}, textString = "IEC")}));
-
+    Icon(coordinateSystem(initialScale = 0.1, grid = {1, 1}), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {-1.5, -1}, extent = {{-66.5, 32}, {66.5, -32}}, textString = "IEC WP4A")}));
 end IECWP4A;

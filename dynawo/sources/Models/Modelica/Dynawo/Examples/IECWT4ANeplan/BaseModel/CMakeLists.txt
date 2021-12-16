@@ -14,6 +14,8 @@ set(MODEL_FILES
   IECWP4A.mo
   IECWT4A.mo
   IECWT4AVs.mo
+  IECWP4AAUX.mo
+  IECWP4APC.mo
   )
 
 #

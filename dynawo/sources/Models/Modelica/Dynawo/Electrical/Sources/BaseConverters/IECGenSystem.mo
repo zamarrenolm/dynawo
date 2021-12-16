@@ -74,7 +74,7 @@ model IECGenSystem
   Modelica.Blocks.Interfaces.RealInput iqMinPu(start = IqMin0Pu) "Minimal q-axis reference current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-70, -10}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
   Modelica.Blocks.Interfaces.RealInput theta(start = UPhase0) "Phase shift of the converter's rotating frame with respect to the grid rotating frame in radians" annotation(
-    Placement(visible = true, transformation(origin = {-70, -55}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {0, 110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
+    Placement(visible = true, transformation(origin = {-70, -41}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {0, 110}, extent = {{10, -10}, {-10, 10}}, rotation = 90)));
     /*Ouputs*/
   Modelica.Blocks.Interfaces.RealOutput iGsRePu(start = IGsRe0Pu) "Real component of the current at the generator system module (converter) terminal in p.u (Ubase,SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {70, 27.5}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-110, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 180)));
@@ -84,8 +84,10 @@ model IECGenSystem
   /*Blocks*/
   Dynawo.Electrical.Sources.BaseConverters.IECFrameRotation iECFrameRotation(P0Pu = P0Pu, Q0Pu = Q0Pu, SNom = SNom, U0Pu = U0Pu, UPhase0 = UPhase0) annotation(
     Placement(visible = true, transformation(origin = {34.65, 10.8333}, extent = {{-9.65, -32.1667}, {9.65, 32.1667}}, rotation = 0)));
+
   Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimitIp(DuMax = DipMax, DuMin = -999, GainAW = 100, T = Tg, k = 1, y_start = -P0Pu * SystemBase.SnRef / (SNom * U0Pu)) annotation(
     Placement(visible = true, transformation(origin = {-13, 40}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
+
   Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimitIq(DuMax = DiqMax, DuMin = DiqMin, GainAW = 100, T = Tg, k = 1, y_start = -Q0Pu * SystemBase.SnRef / (SNom * U0Pu)) annotation(
     Placement(visible = true, transformation(origin = {-36, 5}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const(k = -999) annotation(
@@ -94,7 +96,8 @@ model IECGenSystem
     Placement(visible = true, transformation(origin = {-5, 5}, extent = {{-5, -5}, {5, 5}}, rotation = 0)));
   //
 equation
-/*Connectors*/
+
+  /*Connectors*/
   connect(ipMaxPu, firstOrderRampLimitIp.uMax) annotation(
     Line(points = {{-70, 55}, {-28, 55}, {-28, 47}, {-24, 47}}, color = {0, 0, 127}));
   connect(ipCmdPu, firstOrderRampLimitIp.u) annotation(
@@ -112,7 +115,7 @@ equation
   connect(iqMinPu, firstOrderRampLimitIq.uMin) annotation(
     Line(points = {{-70, -10}, {-56, -10}, {-56, -2}, {-47, -2}, {-47, -2}}, color = {0, 0, 127}));
   connect(theta, iECFrameRotation.theta) annotation(
-    Line(points = {{-70, -55}, {-2, -55}, {-2, -18}, {22, -18}, {22, -18}}, color = {0, 0, 127}));
+    Line(points = {{-70, -41}, {-2, -41}, {-2, -18}, {22, -18}}, color = {0, 0, 127}));
   connect(iECFrameRotation.iGsImPu, iGsImPu) annotation(
     Line(points = {{48, -5}, {66, -5}, {66, -5}, {70, -5}}, color = {0, 0, 127}));
   connect(iECFrameRotation.iGsRePu, iGsRePu) annotation(
@@ -121,8 +124,10 @@ equation
     Line(points = {{-25, 5}, {-12, 5}, {-12, 5}, {-11, 5}}, color = {0, 0, 127}));
   connect(gain.y, iECFrameRotation.iqCmdPu) annotation(
     Line(points = {{1, 5}, {10, 5}, {10, 11}, {22, 11}, {22, 11}}, color = {0, 0, 127}));
+
   annotation(
     preferredView = "text",
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-60, -60}, {60, 60}})),
     Icon(coordinateSystem(grid = {1, 1}, initialScale = 0.1), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {0, 30}, extent = {{-100, -20}, {100, 20}}, textString = "Generator"), Text(origin = {0, -30}, extent = {{-100, -20}, {100, 20}}, textString = "System")}));
+
 end IECGenSystem;

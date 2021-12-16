@@ -34,13 +34,13 @@ model IECWP4APControl
     Dialog(group = "group", tab = "PControlWP"));
   parameter Types.PerUnit pKIWPpMin "Minimum active power reference from integration" annotation(
     Dialog(group = "group", tab = "PControlWP"));
-  parameter Types.PerUnit dpRefMax "Maximum posite ramp rate for PD power reference" annotation(
-    Dialog(group = "group", tab = "PControlWP"));
-  parameter Types.PerUnit dpRefMin "Minimum negative ramp rate for PD power reference" annotation(
-    Dialog(group = "group", tab = "PControlWP"));
   parameter Types.PerUnit dpWPRefMax "Maximum posite ramp rate for WP power reference" annotation(
     Dialog(group = "group", tab = "PControlWP"));
   parameter Types.PerUnit dpWPRefMin "Minimum negative ramp rate for WP power reference" annotation(
+    Dialog(group = "group", tab = "PControlWP"));
+  parameter Types.PerUnit dpRefMax "Maximum posite ramp rate for WP power reference" annotation(
+    Dialog(group = "group", tab = "PControlWP"));
+  parameter Types.PerUnit dpRefMin "Minimum negative ramp rate for WP power reference" annotation(
     Dialog(group = "group", tab = "PControlWP"));
 
   /*Operational Parameters*/
@@ -63,7 +63,7 @@ model IECWP4APControl
     Placement(visible = true, transformation(origin = {160, -1.22125e-15}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {151, -1}, extent = {{-11, -11}, {11, 11}}, rotation = 0)));
 
   Modelica.Blocks.Math.Add add annotation(
-    Placement(visible = true, transformation(origin = {-76, 74}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-60, 74}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add add1 annotation(
     Placement(visible = true, transformation(origin = {-96, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Feedback feedback annotation(
@@ -82,25 +82,29 @@ model IECWP4APControl
     Placement(visible = true, transformation(origin = {10, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const(k = pWPHookPu)  annotation(
     Placement(visible = true, transformation(origin = {-130, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Nonlinear.SlewRateLimiter slewRateLimiter2(Falling = dpWPRefMin, Rising = dpWPRefMax, y_start = -P0Pu * SystemBase.SnRef / SNom)  annotation(
-    Placement(visible = true, transformation(origin = {-112, 40}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Tables.CombiTable1D combiTable1D(table = tablePwpbiasFwpfiltCom) annotation(
     Placement(visible = true, transformation(origin = {-126, -6}, extent = {{-6, -6}, {6, 6}}, rotation = 0)));
   Modelica.Blocks.Nonlinear.Limiter limiter4(limitsAtInit = true, uMax = pKIWPpMax, uMin = pKIWPpMin) annotation(
-    Placement(visible = true, transformation(origin = {22, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {24, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Continuous.Integrator integrator(k = Kiwpp, y_start = -P0Pu * SystemBase.SnRef / SNom)  annotation(
-    Placement(visible = true, transformation(origin = {-4, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {0, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Logical.Switch switch1 annotation(
-    Placement(visible = true, transformation(origin = {-30, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-46, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const1(k = 0)  annotation(
-    Placement(visible = true, transformation(origin = {-86, -24}, extent = {{-6, -6}, {6, 6}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-84, -24}, extent = {{-6, -6}, {6, 6}}, rotation = 0)));
   Modelica.Blocks.Math.Add add4(k2 = -1)  annotation(
-    Placement(visible = true, transformation(origin = {70, -70}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {70, -90}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Add add5(k1 = -100)  annotation(
-    Placement(visible = true, transformation(origin = {-30, -60}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
-
+    Placement(visible = true, transformation(origin = {-30, -70}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+  Modelica.Blocks.Nonlinear.Limiter limiter3(limitsAtInit = true, uMax = dpRefMax, uMin = dpRefMin) annotation(
+    Placement(visible = true, transformation(origin = {-24, -30}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
+  Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRamp firstOrderRamp(DuMax = dpWPRefMax, DuMin = dpWPRefMin, T = 0.001, y_start = -P0Pu * SystemBase.SnRef / SNom)  annotation(
+    Placement(visible = true, transformation(origin = {-110, 40}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
+  Modelica.Blocks.Math.Add add6(k2 = -1) annotation(
+    Placement(visible = true, transformation(origin = {38, -60}, extent = {{8, -8}, {-8, 8}}, rotation = 0)));
+  Modelica.Blocks.Math.Add add7 annotation(
+    Placement(visible = true, transformation(origin = {8, -60}, extent = {{8, -8}, {-8, 8}}, rotation = 0)));
 equation
-
   connect(limiter1.y, pPDRefPu) annotation(
     Line(points = {{129, 0}, {160, 0}}, color = {0, 0, 127}));
   connect(add1.y, feedback.u1) annotation(
@@ -108,11 +112,11 @@ equation
   connect(feedback.y, limiter2.u) annotation(
     Line(points = {{-57, 0}, {-47, 0}}, color = {0, 0, 127}));
   connect(add.y, add1.u1) annotation(
-    Line(points = {{-65, 74}, {-60, 74}, {-60, 26}, {-114, 26}, {-114, 6}, {-108, 6}}, color = {0, 0, 127}));
+    Line(points = {{-49, 74}, {-44, 74}, {-44, 20}, {-114, 20}, {-114, 6}, {-108, 6}}, color = {0, 0, 127}));
   connect(limiter2.y, gain.u) annotation(
     Line(points = {{-33, 0}, {-28, 0}, {-28, 28}, {-8, 28}}, color = {0, 0, 127}));
   connect(add2.y, add3.u2) annotation(
-    Line(points = {{61, 0}, {64, 0}, {64, -6}, {76, -6}}, color = {0, 0, 127}));
+    Line(points = {{61, 0}, {68, 0}, {68, -6}, {76, -6}}, color = {0, 0, 127}));
   connect(gain1.y, add3.u1) annotation(
     Line(points = {{21, 60}, {68, 60}, {68, 6}, {76, 6}}, color = {0, 0, 127}));
   connect(add3.y, limiter1.u) annotation(
@@ -120,40 +124,49 @@ equation
   connect(pWPfiltComPu, feedback.u2) annotation(
     Line(points = {{-160, -40}, {-64, -40}, {-64, -6}}, color = {0, 0, 127}));
   connect(add1.y, gain1.u) annotation(
-    Line(points = {{-85, 0}, {-78, 0}, {-78, 18}, {-46, 18}, {-46, 60}, {-2, 60}}, color = {0, 0, 127}));
+    Line(points = {{-85, 0}, {-78, 0}, {-78, 14}, {-34, 14}, {-34, 60}, {-2, 60}}, color = {0, 0, 127}));
   connect(const.y, add.u1) annotation(
-    Line(points = {{-118, 80}, {-88, 80}}, color = {0, 0, 127}));
-  connect(pWPRefComPu, slewRateLimiter2.u) annotation(
-    Line(points = {{-160, 40}, {-122, 40}}, color = {0, 0, 127}));
-  connect(slewRateLimiter2.y, add.u2) annotation(
-    Line(points = {{-103, 40}, {-94, 40}, {-94, 68}, {-88, 68}}, color = {0, 0, 127}));
+    Line(points = {{-118, 80}, {-72, 80}}, color = {0, 0, 127}));
   connect(combiTable1D.y[1], add1.u2) annotation(
     Line(points = {{-119, -6}, {-108, -6}}, color = {0, 0, 127}));
   connect(omegaRefPu, combiTable1D.u[1]) annotation(
     Line(points = {{-160, 0}, {-140, 0}, {-140, -6}, {-133, -6}}, color = {0, 0, 127}));
   connect(gain.y, add2.u1) annotation(
-    Line(points = {{15, 28}, {32, 28}, {32, 6}, {38, 6}}, color = {0, 0, 127}));
+    Line(points = {{15, 28}, {34, 28}, {34, 6}, {38, 6}}, color = {0, 0, 127}));
   connect(limiter4.y, add2.u2) annotation(
-    Line(points = {{31, -30}, {32, -30}, {32, -6}, {38, -6}}, color = {0, 0, 127}));
+    Line(points = {{33, -30}, {34, -30}, {34, -6}, {38, -6}}, color = {0, 0, 127}));
   connect(integrator.y, limiter4.u) annotation(
-    Line(points = {{5, -30}, {12, -30}}, color = {0, 0, 127}));
-  connect(switch1.y, integrator.u) annotation(
-    Line(points = {{-21, -30}, {-14, -30}}, color = {0, 0, 127}));
+    Line(points = {{9, -30}, {14, -30}}, color = {0, 0, 127}));
   connect(const1.y, switch1.u1) annotation(
-    Line(points = {{-79, -24}, {-40, -24}}, color = {0, 0, 127}));
+    Line(points = {{-77, -24}, {-56, -24}}, color = {0, 0, 127}));
   connect(Fwpfrt, switch1.u2) annotation(
-    Line(points = {{-160, -80}, {-60, -80}, {-60, -30}, {-40, -30}, {-40, -30}}, color = {255, 0, 255}));
+    Line(points = {{-160, -80}, {-62, -80}, {-62, -30}, {-56, -30}}, color = {255, 0, 255}));
   connect(limiter1.y, add4.u2) annotation(
-    Line(points = {{129, 0}, {134, 0}, {134, -76}, {82, -76}}, color = {0, 0, 127}));
+    Line(points = {{129, 0}, {134, 0}, {134, -96}, {82, -96}}, color = {0, 0, 127}));
   connect(add3.y, add4.u1) annotation(
-    Line(points = {{100, 0}, {100, 0}, {100, -64}, {82, -64}, {82, -64}}, color = {0, 0, 127}));
-  connect(add4.y, add5.u1) annotation(
-    Line(points = {{58, -70}, {40, -70}, {40, -54}, {-18, -54}, {-18, -54}}, color = {0, 0, 127}));
+    Line(points = {{100, 0}, {100, -84}, {82, -84}}, color = {0, 0, 127}));
   connect(limiter2.y, add5.u2) annotation(
-    Line(points = {{-34, 0}, {-28, 0}, {-28, -14}, {-56, -14}, {-56, -80}, {0, -80}, {0, -66}, {-18, -66}, {-18, -66}}, color = {0, 0, 127}));
+    Line(points = {{-34, 0}, {-28, 0}, {-28, -14}, {-60, -14}, {-60, -92}, {0, -92}, {0, -76}, {-18, -76}}, color = {0, 0, 127}));
   connect(add5.y, switch1.u3) annotation(
-    Line(points = {{-42, -60}, {-48, -60}, {-48, -36}, {-40, -36}, {-40, -36}}, color = {0, 0, 127}));
-
+    Line(points = {{-41, -70}, {-58, -70}, {-58, -36}, {-56, -36}}, color = {0, 0, 127}));
+  connect(limiter3.y, integrator.u) annotation(
+    Line(points = {{-15, -30}, {-10, -30}}, color = {0, 0, 127}));
+  connect(switch1.y, limiter3.u) annotation(
+    Line(points = {{-37, -30}, {-34, -30}}, color = {0, 0, 127}));
+  connect(pWPRefComPu, firstOrderRamp.y) annotation(
+    Line(points = {{-160, 40}, {-100, 40}, {-100, 40}, {-98, 40}}, color = {0, 0, 127}));
+  connect(firstOrderRamp.y, add.u2) annotation(
+    Line(points = {{-98, 40}, {-90, 40}, {-90, 68}, {-72, 68}, {-72, 68}}, color = {0, 0, 127}));
+  connect(limiter4.y, add6.u2) annotation(
+    Line(points = {{32, -30}, {70, -30}, {70, -65}, {48, -65}}, color = {0, 0, 127}));
+  connect(integrator.y, add6.u1) annotation(
+    Line(points = {{8, -30}, {12, -30}, {12, -46}, {60, -46}, {60, -56}, {48, -56}, {48, -55}}, color = {0, 0, 127}));
+  connect(add6.y, add7.u1) annotation(
+    Line(points = {{30, -60}, {26, -60}, {26, -54}, {18, -54}, {18, -56}}, color = {0, 0, 127}));
+  connect(add4.y, add7.u2) annotation(
+    Line(points = {{60, -90}, {26, -90}, {26, -64}, {18, -64}, {18, -64}}, color = {0, 0, 127}));
+  connect(add7.y, add5.u1) annotation(
+    Line(points = {{0, -60}, {-8, -60}, {-8, -64}, {-18, -64}, {-18, -64}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(extent = {{-140, -100}, {140, 100}})),
     Icon(coordinateSystem(extent = {{-140, -100}, {140, 100}}, initialScale = 0.1), graphics = {Rectangle(origin = {1, -1}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-141, 101}, {139, -99}}), Text(origin = {44, 24}, extent = {{-86, 52}, {-2, 6}}, textString = "WP"), Text(origin = {-10, 0}, extent = {{-94, 60}, {116, -54}}, textString = "P Control"), Text(origin = {22, -92}, extent = {{-94, 60}, {48, 12}}, textString = "module")}));

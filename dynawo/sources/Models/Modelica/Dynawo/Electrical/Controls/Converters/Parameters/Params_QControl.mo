@@ -18,16 +18,12 @@ record Params_QControl
   parameter Real tableQwpMinPwpfiltCom32 = -0.33;
   parameter Real tableQwpMinPwpfiltCom[:,:] = [tableQwpMinPwpfiltCom11,tableQwpMinPwpfiltCom12;tableQwpMinPwpfiltCom21,tableQwpMinPwpfiltCom22;tableQwpMinPwpfiltCom31,tableQwpMinPwpfiltCom32] "PQ diagram";
 
-  parameter Real tableQwpUerr11 = -0.5;
-  parameter Real tableQwpUerr12 = -0.33;
-  parameter Real tableQwpUerr21 = -0.25;
-  parameter Real tableQwpUerr22 = -0.15;
-  parameter Real tableQwpUerr31 = 0;
-  parameter Real tableQwpUerr32 = 0;
-  parameter Real tableQwpUerr41 = 0.25;
-  parameter Real tableQwpUerr42 = 0.15;
-  parameter Real tableQwpUerr51 = 0.5;
-  parameter Real tableQwpUerr52 = 0.33;
-  parameter Real tableQwpUerr[:,:] = [tableQwpUerr11,tableQwpUerr12;tableQwpUerr21,tableQwpUerr22;tableQwpUerr31,tableQwpUerr32;tableQwpUerr41,tableQwpUerr42;tableQwpUerr51,tableQwpUerr52] "PQ diagram";
+  parameter Real tableQwpUerr11 = -0.05;
+  parameter Real tableQwpUerr12 = 1.21;
+  parameter Real tableQwpUerr21 = 0;
+  parameter Real tableQwpUerr22 = 0.21;
+  parameter Real tableQwpUerr31 = 0.05;
+  parameter Real tableQwpUerr32 = -0.79;
+  parameter Real tableQwpUerr[:,:] = [tableQwpUerr11,tableQwpUerr12;tableQwpUerr21,tableQwpUerr22;tableQwpUerr31,tableQwpUerr32] "PQ diagram";
 
 end Params_QControl;

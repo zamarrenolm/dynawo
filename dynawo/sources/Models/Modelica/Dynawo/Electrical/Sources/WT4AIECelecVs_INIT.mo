@@ -12,9 +12,8 @@ model WT4AIECelecVs_INIT "Converter Model and grid interface according to IEC 61
         *
         * This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
         */
-  /*
-          Equivalent circuit and conventions:
-          */
+  /*Equivalent circuit and conventions:*/
+
   import Modelica;
   import Modelica.Math;
   import Modelica.ComplexMath;
@@ -53,6 +52,7 @@ model WT4AIECelecVs_INIT "Converter Model and grid interface according to IEC 61
   parameter Types.ReactivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)" annotation(
     Dialog(group = "group", tab = "Operating point"));
 
+  //Variables
   Types.ComplexPerUnit u0Pu "Start value of the complex voltage at plant terminal (PCC) in p.u (base UNom)";
   Types.ComplexPerUnit i0Pu "Start value of the complex current at plant terminal (PCC) in p.u (base UNom, SnRef) (receptor convention)";
 
@@ -68,8 +68,8 @@ model WT4AIECelecVs_INIT "Converter Model and grid interface according to IEC 61
   Types.PerUnit IGsp0Pu "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
   Types.PerUnit IGsq0Pu "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
 
-  Types.PerUnit IpCmd0Pu "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
-  Types.PerUnit IqCmd0Pu "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
+  Types.PerUnit IpConv0Pu "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
+  Types.PerUnit IqConv0Pu "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
 
   Types.PerUnit UpCmd0Pu "Start value of the d-axis voltage at the converter terminal (filter) in p.u (base UNom)";
   Types.PerUnit UqCmd0Pu "Start value of the q-axis voltage at the converter terminal (filter) in p.u (base UNom)";
@@ -83,7 +83,7 @@ equation
   UGsIm0Pu = u0Pu.im - Res * (i0Pu.im* SystemBase.SnRef / SNom) - Xes * (i0Pu.re* SystemBase.SnRef / SNom) "Real component of the voltage at the converter's terminals (generator system) in p.u (base UNom)";
 
   IGsRe0Pu = (-i0Pu.re * SystemBase.SnRef / SNom) + (u0Pu.re * Ges - u0Pu.im*Bes) "Initial value of the real component of the current at the generator system module (converter) terminal in p.u (Ubase, SNom) in generator convention";
-  IGsIm0Pu = (-i0Pu.im * SystemBase.SnRef / SNom )+ (u0Pu.re * Bes + u0Pu.im * Ges) "Initial value of the imaginary component of the current at the generator system module (converter) terminal in p.u (Ubase, SNom) in generator convention";
+  IGsIm0Pu = (-i0Pu.im * SystemBase.SnRef / SNom ) + (u0Pu.re * Bes + u0Pu.im * Ges) "Initial value of the imaginary component of the current at the generator system module (converter) terminal in p.u (Ubase, SNom) in generator convention";
 
   UGsp0Pu = UGsRe0Pu * cos(UPhase0) + UGsIm0Pu * sin(UPhase0) "Start value of the d-axis voltage at the converter terminal (filter) in p.u (base UNom)";
   UGsq0Pu = -UGsRe0Pu * sin(UPhase0) + UGsIm0Pu * cos(UPhase0) "Start value of the q-axis voltage at the converter terminal (filter) in p.u (base UNom)";
@@ -91,11 +91,11 @@ equation
   IGsp0Pu = IGsRe0Pu * cos(UPhase0) + IGsIm0Pu * sin(UPhase0) "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
   IGsq0Pu = -IGsRe0Pu * sin(UPhase0) + IGsIm0Pu * cos(UPhase0) "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
 
-  IpCmd0Pu = IGsp0Pu - SystemBase.omegaRef0Pu * Cfilter * UGsp0Pu "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
-  IqCmd0Pu = IGsq0Pu + SystemBase.omegaRef0Pu * Cfilter * UGsq0Pu "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
+  IpConv0Pu = IGsp0Pu - SystemBase.omegaRef0Pu * Cfilter * UGsq0Pu "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
+  IqConv0Pu = IGsq0Pu + SystemBase.omegaRef0Pu * Cfilter * UGsp0Pu "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
 
-  UpCmd0Pu = UGsp0Pu + Rfilter * IpCmd0Pu - SystemBase.omegaRef0Pu * Lfilter *IqCmd0Pu "Start value of the d-axis voltage at the converter terminal (filter) in p.u (base UNom)";
-  UqCmd0Pu = UGsq0Pu + Rfilter * IqCmd0Pu + SystemBase.omegaRef0Pu * Lfilter * IpCmd0Pu "Start value of the q-axis voltage at the converter terminal (filter) in p.u (base UNom)";
+  UpCmd0Pu = UGsp0Pu + Rfilter * IpConv0Pu - SystemBase.omegaRef0Pu * Lfilter *IqConv0Pu "Start value of the d-axis voltage at the converter terminal (filter) in p.u (base UNom)";
+  UqCmd0Pu = UGsq0Pu + Rfilter * IqConv0Pu + SystemBase.omegaRef0Pu * Lfilter * IpConv0Pu "Start value of the q-axis voltage at the converter terminal (filter) in p.u (base UNom)";
 
 annotation(
     Icon(coordinateSystem(initialScale = 0.1)));

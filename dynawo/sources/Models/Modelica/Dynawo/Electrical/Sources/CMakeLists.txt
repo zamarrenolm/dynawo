@@ -31,6 +31,12 @@ set(MODEL_FILES
   WT4AIECelecVs.mo
   WT4AIECelecVs.extvar
   WT4AIECelecVs_INIT.mo
+  IECPowerCollector.mo
+  WT4BIECelec.mo
+  WT4BIECelec.extvar
+  WT4AIECelecAux.mo
+  WT4AIECelecAux.extvar
+  WT4AIECelecPC.mo
   )
 
 #

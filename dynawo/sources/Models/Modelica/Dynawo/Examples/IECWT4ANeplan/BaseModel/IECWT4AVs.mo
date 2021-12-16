@@ -76,9 +76,9 @@ model IECWT4AVs "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assemb
     Dialog(group = "group", tab = "Pcontrol"));
   /*Q control parameters */
   parameter Types.Time Ts "Integration time step";
-  parameter Types.PerUnit RDrop "Resistive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
+  parameter Types.PerUnit RWTDrop "Resistive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
-  parameter Types.PerUnit XDrop "Reactive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
+  parameter Types.PerUnit XWTDrop "Reactive component of voltage drop impedance in p.u (base SNom, UNom)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
   parameter Types.PerUnit UMax "Maximum voltage in voltage PI controller integral term in p.u (base UNom)" annotation(
     Dialog(group = "group", tab = "Qcontrol"));
@@ -205,23 +205,24 @@ model IECWT4AVs "Wind Turbine Type 4A model from IEC 61400-27-1 standard: assemb
     Placement(visible = true, transformation(origin = {88, 50}, extent = {{-11, -11}, {11, 11}}, rotation = 180)));
   Modelica.Blocks.Sources.Step QrefPu(height = QstepHPu, offset = -Q0Pu * SystemBase.SnRef / SNom, startTime = t_Qstep) annotation(
     Placement(visible = true, transformation(origin = {88, -50}, extent = {{-11, -11}, {11, 11}}, rotation = 180)));
-  Dynawo.Electrical.Controls.Converters.IECWT4AControlVs iECWT4AControlVs(Cfilter = Cfilter, DipMax = DipMax, DiqMax = DiqMax, DiqMin = DiqMin, DpMaxp4A = DpMaxp4A, DpRefMax4A = DpRefMax4A, DpRefMin4A = DpRefMin4A, IGsIm0Pu = IGsIm0Pu, IGsRe0Pu = IGsRe0Pu, IGsp0Pu = IGsp0Pu, IGsq0Pu = IGsq0Pu, IMax = IMax, IMaxDip = IMaxDip, IMaxHookPu = IMaxHookPu, IdfHook = IdfHook, IpConv0Pu = IpConv0Pu, IpMax0Pu = IpMax0Pu, IpfHook = IpfHook, IqConv0Pu = IqConv0Pu, IqH1 = IqH1, IqMax = IqMax, IqMax0Pu = IqMax0Pu, IqMaxHook = IqMaxHook, IqMin = IqMin, IqMin0Pu = IqMin0Pu, IqPost = IqPost, KiPll = KiPll, Kic = Kic, Kiq = Kiq, Kiu = Kiu, KpPll = KpPll, Kpc = Kpc, Kpq = Kpq, Kpqu = Kpqu, Kpu = Kpu, Kpufrt = Kpufrt, Kqv = Kqv, Lfilter = Lfilter, Mdfslim = Mdfslim, MpUScale = MpUScale, MqG = MqG, Mqfrt = Mqfrt, Mqpri = Mqpri, P0Pu = P0Pu, Q0Pu = Q0Pu, QMax = QMax, QMax0Pu = QMax0Pu, QMin = QMin, QMin0Pu = QMin0Pu, QlConst = QlConst, RDrop = RDrop, Rfilter = Rfilter, SNom = SNom, TanPhi = TanPhi, Td = Td, Tffilt = Tffilt, TpOrdp4A = TpOrdp4A, TpWTRef4A = TpWTRef4A, Tpfilt = Tpfilt, TqOrd = TqOrd, Tqfilt = Tqfilt, Ts = Ts, Tufilt = Tufilt, Tuss = Tuss, U0Pu = U0Pu, UGsIm0Pu = UGsIm0Pu, UGsRe0Pu = UGsRe0Pu, UGsp0Pu = UGsp0Pu, UGsq0Pu = UGsq0Pu, UMax = UMax, UMin = UMin, UPhase0 = UPhase0, UdbOne = UdbOne, UdbTwo = UdbTwo, UpCdm0Pu = 0.9637, UpDip = UpDip, Upll2 = Upll2, UpquMax = UpquMax, UqCmd0Pu = 0.1514, UqDip = UqDip, UqRise = UqRise, XDrop = XDrop, i0Pu = i0Pu, u0Pu = u0Pu) annotation(
+  Dynawo.Electrical.Controls.Converters.IECWT4AControlVs iECWT4AControlVs(Cfilter = Cfilter, DipMax = DipMax, DiqMax = DiqMax, DiqMin = DiqMin, DpMaxp4A = DpMaxp4A, DpRefMax4A = DpRefMax4A, DpRefMin4A = DpRefMin4A, IGsIm0Pu = IGsIm0Pu, IGsRe0Pu = IGsRe0Pu, IGsp0Pu = IGsp0Pu, IGsq0Pu = IGsq0Pu, IMax = IMax, IMaxDip = IMaxDip, IMaxHookPu = IMaxHookPu, IdfHook = IdfHook, IpConv0Pu = IpConv0Pu, IpMax0Pu = IpMax0Pu, IpfHook = IpfHook, IqConv0Pu = IqConv0Pu, IqH1 = IqH1, IqMax = IqMax, IqMax0Pu = IqMax0Pu, IqMaxHook = IqMaxHook, IqMin = IqMin, IqMin0Pu = IqMin0Pu, IqPost = IqPost, KiPll = KiPll, Kic = Kic, Kiq = Kiq, Kiu = Kiu, KpPll = KpPll, Kpc = Kpc, Kpq = Kpq, Kpqu = Kpqu, Kpu = Kpu, Kpufrt = Kpufrt, Kqv = Kqv, Lfilter = Lfilter, Mdfslim = Mdfslim, MpUScale = MpUScale, MqG = MqG, Mqfrt = Mqfrt, Mqpri = Mqpri, P0Pu = P0Pu, Q0Pu = Q0Pu, QMax = QMax, QMax0Pu = QMax0Pu, QMin = QMin, QMin0Pu = QMin0Pu, QlConst = QlConst, RWTDrop = RWTDrop, Rfilter = Rfilter, SNom = SNom, TanPhi = TanPhi, Td = Td, Tffilt = Tffilt, TpOrdp4A = TpOrdp4A, TpWTRef4A = TpWTRef4A, Tpfilt = Tpfilt, TqOrd = TqOrd, Tqfilt = Tqfilt, Ts = Ts, Tufilt = Tufilt, Tuss = Tuss, U0Pu = U0Pu, UGsIm0Pu = UGsIm0Pu, UGsRe0Pu = UGsRe0Pu, UGsp0Pu = UGsp0Pu, UGsq0Pu = UGsq0Pu, UMax = UMax, UMin = UMin, UPhase0 = UPhase0, UdbOne = UdbOne, UdbTwo = UdbTwo, UpCdm0Pu = UpCmd0Pu, UpDip = UpDip, Upll2 = Upll2, UpquMax = UpquMax, UqCmd0Pu = UqCmd0Pu, UqDip = UqDip, UqRise = UqRise, XWTDrop = XWTDrop, i0Pu = i0Pu, u0Pu = u0Pu) annotation(
     Placement(visible = true, transformation(origin = {36, 0}, extent = {{-25, -25}, {25, 25}}, rotation = 0)));
   Dynawo.Connectors.ACPower aCPower(V(re(start = u0Pu.re), im(start = u0Pu.im)), i(re(start = i0Pu.re), im(start = i0Pu.im))) annotation(
     Placement(visible = true, transformation(origin = {-93, 0}, extent = {{-7, -7}, {7, 7}}, rotation = 0), iconTransformation(origin = {-110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Step omegaRef(height = OmegastepHPu, offset = SystemBase.omegaRef0Pu, startTime = t_Omegastep) annotation(
     Placement(visible = true, transformation(origin = {90, 0}, extent = {{-11, -11}, {11, 11}}, rotation = 180)));
   Dynawo.Electrical.Sources.WT4AIECelecVs wT4AIECelecVs(Bes = Bes, Cfilter = Cfilter, DipMax = DipMax, DiqMax = DiqMax, DiqMin = DiqMin, Ges = Ges, IGsIm0Pu = IGsIm0Pu, IGsRe0Pu = IGsRe0Pu, IGsp0Pu = IGsp0Pu, IGsq0Pu = IGsq0Pu, IpConv0Pu = IpConv0Pu, IqConv0Pu = IqConv0Pu, Lfilter = Lfilter, P0Pu = P0Pu, Q0Pu = Q0Pu, Res = Res, Rfilter = Rfilter, SNom = SNom, Tg = Tg, U0Pu = U0Pu, UGsIm0Pu = UGsIm0Pu, UGsRe0Pu = UGsRe0Pu, UGsp0Pu = UGsp0Pu, UGsq0Pu = UGsq0Pu, UPhase0 = UPhase0, UpCdm0Pu = UpCmd0Pu, UqCmd0Pu = UqCmd0Pu, Xes = Xes, i0Pu = i0Pu, u0Pu = u0Pu) annotation(
-    Placement(visible = true, transformation(origin = {-30, -4.44089e-15}, extent = {{-24, -24}, {24, 24}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-28, -4.44089e-15}, extent = {{-24, -24}, {24, 24}}, rotation = 0)));
+
 equation
   wT4AIECelecVs.switchOffSignal1.value = false;
   wT4AIECelecVs.switchOffSignal2.value = false;
   wT4AIECelecVs.switchOffSignal3.value = false;
 /*Connectors*/
   connect(iECWT4AControlVs.upCmdPu, wT4AIECelecVs.upCmdPu) annotation(
-    Line(points = {{10, 10}, {3, 10}, {3, 14}, {-4, 14}}, color = {0, 0, 127}));
+    Line(points = {{10, 10}, {5, 10}, {5, 14}, {-2, 14}}, color = {0, 0, 127}));
   connect(iECWT4AControlVs.uqCmdPu, wT4AIECelecVs.uqCmdPu) annotation(
-    Line(points = {{10, -10}, {3, -10}, {3, -14}, {-4, -14}}, color = {0, 0, 127}));
+    Line(points = {{10, -10}, {5, -10}, {5, -14}, {-2, -14}}, color = {0, 0, 127}));
   connect(PrefPu.y, iECWT4AControlVs.PRefPu) annotation(
     Line(points = {{76, 50}, {70, 50}, {70, 10}, {62, 10}}, color = {0, 0, 127}));
   connect(QrefPu.y, iECWT4AControlVs.QRefPu) annotation(
@@ -229,27 +230,27 @@ equation
   connect(omegaRef.y, iECWT4AControlVs.omegaRefPu) annotation(
     Line(points = {{78, 0}, {62, 0}}, color = {0, 0, 127}));
   connect(iECWT4AControlVs.theta, wT4AIECelecVs.theta) annotation(
-    Line(points = {{36, 27}, {36, 50}, {-30, 50}, {-30, 26}}, color = {0, 0, 127}));
+    Line(points = {{36, 27}, {36, 50}, {-28, 50}, {-28, 26}}, color = {0, 0, 127}));
   connect(wT4AIECelecVs.terminal, aCPower) annotation(
-    Line(points = {{-56, 0}, {-92, 0}, {-92, 0}, {-92, 0}}, color = {0, 0, 255}));
+    Line(points = {{-54, 0}, {-92, 0}}, color = {0, 0, 255}));
   connect(wT4AIECelecVs.uWtRePu, iECWT4AControlVs.uWtRePu) annotation(
-    Line(points = {{-22, -26}, {-22, -40}, {20, -40}, {20, -27}}, color = {0, 0, 127}));
+    Line(points = {{-21, -26}, {-21, -40}, {20, -40}, {20, -27}}, color = {0, 0, 127}));
   connect(wT4AIECelecVs.uWtImPu, iECWT4AControlVs.uWtImPu) annotation(
-    Line(points = {{-14, -26}, {-14, -34}, {14, -34}, {14, -27}}, color = {0, 0, 127}));
+    Line(points = {{-11, -26}, {-11, -34}, {14, -34}, {14, -27}}, color = {0, 0, 127}));
   connect(iECWT4AControlVs.omegaPu, wT4AIECelecVs.omegaPu) annotation(
-    Line(points = {{10, 0}, {-2, 0}, {-2, 0}, {-4, 0}}, color = {0, 0, 127}));
+    Line(points = {{10, 0}, {-2, 0}}, color = {0, 0, 127}));
   connect(wT4AIECelecVs.iWtImPu, iECWT4AControlVs.iWtImPu) annotation(
-    Line(points = {{-38, -26}, {-38, -46}, {26, -46}, {26, -27}}, color = {0, 0, 127}));
+    Line(points = {{-35, -26}, {-35, -46}, {26, -46}, {26, -27}}, color = {0, 0, 127}));
   connect(wT4AIECelecVs.iWtRePu, iECWT4AControlVs.iWtRePu) annotation(
-    Line(points = {{-46, -26}, {-48, -26}, {-48, -52}, {32, -52}, {32, -27}}, color = {0, 0, 127}));
+    Line(points = {{-45, -26}, {-48, -26}, {-48, -52}, {32, -52}, {32, -27}}, color = {0, 0, 127}));
   connect(wT4AIECelecVs.iqConvPu, iECWT4AControlVs.iqConvPu) annotation(
-    Line(points = {{-56, -20}, {-56, -58}, {40, -58}, {40, -27}}, color = {0, 0, 127}));
+    Line(points = {{-54, -19}, {-54, -58}, {40, -58}, {40, -27}}, color = {0, 0, 127}));
   connect(wT4AIECelecVs.ipConvPu, iECWT4AControlVs.ipConvPu) annotation(
-    Line(points = {{-56, -10}, {-64, -10}, {-64, -64}, {46, -64}, {46, -27}}, color = {0, 0, 127}));
+    Line(points = {{-54, -10}, {-64, -10}, {-64, -64}, {46, -64}, {46, -27}}, color = {0, 0, 127}));
   connect(wT4AIECelecVs.uGsqPu, iECWT4AControlVs.uGsqPu) annotation(
-    Line(points = {{-56, 10}, {-72, 10}, {-72, -70}, {52, -70}, {52, -27}}, color = {0, 0, 127}));
+    Line(points = {{-54, 10}, {-72, 10}, {-72, -70}, {52, -70}, {52, -27}}, color = {0, 0, 127}));
   connect(wT4AIECelecVs.uGspPu, iECWT4AControlVs.uGspPu) annotation(
-    Line(points = {{-56, 20}, {-80, 20}, {-80, -76}, {58.5, -76}, {58.5, -27}}, color = {0, 0, 127}));
+    Line(points = {{-54, 19}, {-80, 19}, {-80, -76}, {58.5, -76}, {58.5, -27}}, color = {0, 0, 127}));
   annotation(
     experiment(StartTime = 0, StopTime = 30, Tolerance = 0.000001),
     __OpenModelica_simulationFlags(initialStepSize = "0.001", lv = "LOG_STATS", nls = "kinsol", s = "ida", nlsLS = "klu", maxIntegrationOrder = "2", maxStepSize = "10", emit_protected = "()"),
@@ -266,6 +267,6 @@ equation
     </div><div><br></div><div>Initial equation are provided on the generator's differential variables to ensure a steady state initialisation by the Modelica tool. It had to be written here and not directly in Dynawo.Electrical.Machines.OmegaRef.GeneratorSynchronous because the Dynawo simulator applies a different initialisation strategy that does not involve the initial equation section.
     </div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><span style=\"font-size: 12px;\"><br></span></div></div></body></html>
     "),
-    Icon(coordinateSystem(initialScale = 0.1, grid = {1, 1}), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {-1.5, -1}, extent = {{-66.5, 32}, {66.5, -32}}, textString = "IEC VS")}),
+    Icon(coordinateSystem(initialScale = 0.1, grid = {1, 1}), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {-37.5, 33}, extent = {{-49.5, 18}, {128.5, -84}}, textString = "IEC WT VS")}),
   Diagram);
 end IECWT4AVs;

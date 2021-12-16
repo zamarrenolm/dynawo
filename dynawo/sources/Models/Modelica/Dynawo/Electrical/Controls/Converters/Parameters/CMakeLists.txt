@@ -16,6 +16,7 @@ set(MODEL_FILES
   Params_QLimit.mo
   Params_PControl.mo
   Params_QControl.mo
+  Params_GProtection.mo
   )
 
 #

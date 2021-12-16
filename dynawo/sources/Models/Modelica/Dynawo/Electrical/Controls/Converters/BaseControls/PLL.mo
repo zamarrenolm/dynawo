@@ -51,7 +51,7 @@ model PLL "Phase-locked loop"
   Modelica.Blocks.Math.Add add1 annotation(
     Placement(visible = true, transformation(origin = {-38.5, 10.5}, extent = {{-10.5, -10.5}, {10.5, 10.5}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain(k = KpPll)  annotation(
-    Placement(visible = true, transformation(origin = {-72.5, 29.5}, extent = {{-7.5, -7.5}, {7.5, 7.5}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-69.5, 30.5}, extent = {{-7.5, -7.5}, {7.5, 7.5}}, rotation = 0)));
   Modelica.Blocks.Continuous.Integrator integrator1(k = KiPll, y_start = 0) annotation(
     Placement(visible = true, transformation(origin = {-70, -10}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Logical.Switch switch1 annotation(
@@ -63,8 +63,8 @@ model PLL "Phase-locked loop"
  Modelica.Blocks.Sources.Constant const1(k = 0) annotation(
     Placement(visible = true, transformation(origin = {-40, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
-  connect(gain.y, add1.u1) annotation(
-    Line(points = {{-64, 29.5}, {-51, 29.5}, {-51, 17}}, color = {0, 0, 127}));
+ connect(gain.y, add1.u1) annotation(
+    Line(points = {{-61, 30.5}, {-51, 30.5}, {-51, 17}}, color = {0, 0, 127}));
   connect(integrator1.y, add1.u2) annotation(
     Line(points = {{-59, -10}, {-51, -10}, {-51, 4}}, color = {0, 0, 127}));
   connect(add.y, omegaPu) annotation(
@@ -73,8 +73,8 @@ equation
     Line(points = {{64, 11}, {109, 11}, {109, 11}, {121, 11}}, color = {0, 0, 127}));
   connect(uqFilterPu, integrator1.u) annotation(
     Line(points = {{-119, 0}, {-89, 0}, {-89, -10}, {-82, -10}}, color = {0, 0, 127}));
-  connect(uqFilterPu, gain.u) annotation(
-    Line(points = {{-119, 0}, {-89, 0}, {-89, 29.5}, {-81.5, 29.5}}, color = {0, 0, 127}));
+ connect(uqFilterPu, gain.u) annotation(
+    Line(points = {{-119, 0}, {-89, 0}, {-89, 30.5}, {-78.5, 30.5}}, color = {0, 0, 127}));
   connect(omegaRefPu, add.u1) annotation(
     Line(points = {{-120, 70}, {26, 70}, {26, 70}, {27, 70}}, color = {0, 0, 127}));
   connect(uWTCPu, less1.u1) annotation(

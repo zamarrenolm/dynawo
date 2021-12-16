@@ -19,20 +19,21 @@ model IECWP4ALinearCommunicationWPRef
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)";
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)";
   parameter Types.ActivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)";
+  parameter Types.PerUnit X0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)";
 
   Modelica.Blocks.Interfaces.RealInput pWPRefPu(start = -P0Pu * SystemBase.SnRef / SNom) "WP reference active power" annotation(
     Placement(visible = true, transformation(origin = {-120, 40}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput xWPRefPu(start = -Q0Pu * SystemBase.SnRef / SNom) "WP reference reactive power" annotation(
+  Modelica.Blocks.Interfaces.RealInput xWPRefPu(start = X0Pu) "WP reference reactive power" annotation(
     Placement(visible = true, transformation(origin = {-120, -40}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Modelica.Blocks.Interfaces.RealOutput pWPRefComPu(start = -P0Pu * SystemBase.SnRef / SNom) "WP reference active power communicated" annotation(
     Placement(visible = true, transformation(origin = {120, 40}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealOutput xWPRefComPu(start = -Q0Pu * SystemBase.SnRef / SNom) "WP reference reactive power" annotation(
+  Modelica.Blocks.Interfaces.RealOutput xWPRefComPu(start = X0Pu) "WP reference reactive power" annotation(
     Placement(visible = true, transformation(origin = {120, -40}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Dynawo.NonElectrical.Blocks.Continuous.LeadLag leadLag(T1 = Tlead, T2 = Tlag, y_start = -P0Pu * SystemBase.SnRef / SNom) annotation(
     Placement(visible = true, transformation(origin = {4.44089e-16, 40}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-  Dynawo.NonElectrical.Blocks.Continuous.LeadLag leadLag1(T1 = Tlead, T2 = Tlag, y_start = -Q0Pu * SystemBase.SnRef / SNom) annotation(
+  Dynawo.NonElectrical.Blocks.Continuous.LeadLag leadLag1(T1 = Tlead, T2 = Tlag, y_start = X0Pu) annotation(
     Placement(visible = true, transformation(origin = {0, -40}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
 
 equation

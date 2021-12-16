@@ -72,6 +72,6 @@ equation
 //
 //
   annotation(
-    Icon(graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(origin = {0, -30}, extent = {{-90, -20}, {90, 20}}, textString = "Ramp Limit"), Text(origin = {0, 30}, extent = {{-90, -20}, {90, 20}}, textString = "First Order")}, coordinateSystem(extent = {{-80, -80}, {80, 80}}, initialScale = 0.1)),
+    Icon(graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}),  Text(origin = {0, 70}, extent = {{-90, -20}, {90, 20}}, textString = "First Order"), Text(extent = {{-90, -20}, {90, 20}}, textString = "Ramp & Max/Min"),  Text(origin = {0, -68}, extent = {{-90, -20}, {90, 20}}, textString = "Limit")}, coordinateSystem(extent = {{-80, -80}, {80, 80}}, initialScale = 0.1)),
     Diagram(coordinateSystem(extent = {{-80, -80}, {80, 80}})));
 end FirstOrderRampLimit;

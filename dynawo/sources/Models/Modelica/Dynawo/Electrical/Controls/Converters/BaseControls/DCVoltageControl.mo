@@ -23,15 +23,15 @@ model DCVoltageControl "DC Voltage control"
 
  Modelica.Blocks.Interfaces.RealInput IdcSourceRefPu(start = IdcSourceRef0Pu) "DC current reference in p.u" annotation(
  Placement(visible = true, transformation(origin = {-140, 80}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
- Modelica.Blocks.Interfaces.RealInput UdcPu (start = Udc0Pu) "DC voltage in p.u (base UNom)" annotation(
+ Modelica.Blocks.Interfaces.RealInput UdcPu(start = Udc0Pu) "DC voltage in p.u (base UNom)" annotation(
  Placement(visible = true, transformation(origin = {-140, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
- Modelica.Blocks.Interfaces.RealInput UdcRefPu (start = Udc0Pu) "DC voltage reference in p.u (base UNom)" annotation(
+ Modelica.Blocks.Interfaces.RealInput UdcRefPu(start = Udc0Pu) "DC voltage reference in p.u (base UNom)" annotation(
  Placement(visible = true, transformation(origin = {-140, 40}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
  Modelica.Blocks.Interfaces.RealOutput IdcSourcePu(start = IdcSource0Pu) "DC current in p.u" annotation(
  Placement(visible = true, transformation(origin = {40, 46}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
- Modelica.Blocks.Math.Gain gaindc (k = Kpdc) annotation(
+ Modelica.Blocks.Math.Gain gaindc(k = Kpdc) annotation(
  Placement(visible = true, transformation(origin = {-46, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
  Modelica.Blocks.Math.Feedback feedback annotation(
  Placement(visible = true, transformation(origin = {-90, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));

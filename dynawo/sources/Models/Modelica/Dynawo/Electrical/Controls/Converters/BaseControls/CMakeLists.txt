@@ -31,9 +31,11 @@ set(MODEL_FILES
   IECWT4AQLimitation.extvar
   IECWT4ACurrentLimitation.mo
   IECWT4ACurrentLimitation.extvar
+  IECWT4ACurrentLimitationAux.mo
   IECQcontrolVDrop.mo
   IECQcontrolVDrop.extvar
   IECWT4AMeasures.mo
+  IECWT4AMeasuresAux.mo
   IECWT4AMeasures.extvar
   IECWT4APll.mo
   IECWT4APll.extvar
@@ -51,6 +53,8 @@ set(MODEL_FILES
   IECWP4AControlModel.extvar
   IECWT4ACurrentControl.mo
   IECWT4ACurrentControl.extvar
+  IECWT4ACurrentControlHani.mo
+  IECWT4BPControl.mo
   CurrentLoop.mo
   CurrentLoop.extvar
   VoltageLoop.mo
@@ -65,6 +69,7 @@ set(MODEL_FILES
   MatchingControl.extvar
   DispatchableVirtualOscillatorControl.mo
   DispatchableVirtualOscillatorControl.extvar
+  GridProtectionSystem.mo
   )
 
 #

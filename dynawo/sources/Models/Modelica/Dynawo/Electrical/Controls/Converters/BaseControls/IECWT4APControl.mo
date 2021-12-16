@@ -78,7 +78,7 @@ model IECWT4APControl "IEC Wind turbine active power control"
   Modelica.Blocks.Nonlinear.Limiter limiter1(limitsAtInit = true, uMax = 999, uMin = 0.01)  annotation(
     Placement(visible = true, transformation(origin = {0, 85}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const2(k = 0) annotation(
-    Placement(visible = true, transformation(origin = {15, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {15, -84}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Division division annotation(
     Placement(visible = true, transformation(origin = {85, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Dynawo.NonElectrical.Blocks.Continuous.FirstOrderRampLimit firstOrderRampLimit(DuMax = DpMaxp4A, DuMin = -999, GainAW = 1000, T = TpOrdp4A, k = 1, y_start = -P0Pu*SystemBase.SnRef / SNom)  annotation(
@@ -87,7 +87,6 @@ model IECWT4APControl "IEC Wind turbine active power control"
     Placement(visible = true, transformation(origin = {-74, -63}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.BooleanConstant booleanConstant(k = MpUScale)  annotation(
     Placement(visible = true, transformation(origin = {-74, 28}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
 equation
 
   connect(uWTCfiltPu, limiter1.u) annotation(
@@ -106,12 +105,10 @@ equation
     Line(points = {{64, -55}, {72, -55}, {72, -54}, {73, -54}}, color = {0, 0, 127}));
   connect(limiter1.y, division.u2) annotation(
     Line(points = {{11, 85}, {68, 85}, {68, -67}, {73, -67}, {73, -66}}, color = {0, 0, 127}));
-  connect(product1.y, firstOrderRampLimit.uMax) annotation(
-    Line(points = {{11, 55}, {31, 55}, {31, -46}, {36, -46}, {36, -46}}, color = {0, 0, 127}));
   connect(switch1.y, firstOrderRampLimit.u) annotation(
     Line(points = {{26, -55}, {36, -55}, {36, -55}, {36, -55}}, color = {0, 0, 127}));
   connect(const2.y, firstOrderRampLimit.uMin) annotation(
-    Line(points = {{26, -80}, {30, -80}, {30, -64}, {36, -64}, {36, -64}}, color = {0, 0, 127}));
+    Line(points = {{26, -84}, {30, -84}, {30, -64}, {36, -64}}, color = {0, 0, 127}));
   connect(and1.y, switch1.u2) annotation(
     Line(points = {{-4, 20}, {-2, 20}, {-2, -56}, {3, -56}, {3, -55}}, color = {255, 0, 255}));
   connect(division.y, ipCmdPu) annotation(
@@ -128,6 +125,8 @@ equation
     Line(points = {{-19, -35}, {-12, -35}, {-12, -47}, {3, -47}, {3, -47}}, color = {0, 0, 127}));
   connect(booleanConstant.y, and1.u1) annotation(
     Line(points = {{-63, 28}, {-47, 28}, {-47, 21}, {-27, 21}, {-27, 20}}, color = {255, 0, 255}));
+  connect(product1.y, firstOrderRampLimit.uMax) annotation(
+    Line(points = {{11, 55}, {31, 55}, {31, -46}, {36, -46}, {36, -46}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(grid = {1, 1}, extent = {{-100, -100}, {100, 100}})),
     preferredView = "diagram",

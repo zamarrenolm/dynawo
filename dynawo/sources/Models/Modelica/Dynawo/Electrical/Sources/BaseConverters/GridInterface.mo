@@ -80,8 +80,11 @@ equation
     [idPccPu; iqPccPu] = -[cos(theta), sin(theta); -sin(theta), cos(theta)] * [terminal.i.re; terminal.i.im] * SystemBase.SnRef / SNom;
 
     /* RL Transformer dynamic equation */
-    Ltransformer / SystemBase.omegaNom * der(idPccPu) = udFilterPu - Rtransformer * idPccPu + omegaPu * Ltransformer * iqPccPu - udPccPu;
-    Ltransformer / SystemBase.omegaNom * der(iqPccPu) = uqFilterPu - Rtransformer * iqPccPu - omegaPu * Ltransformer * idPccPu - uqPccPu;
+/*    Ltransformer / SystemBase.omegaNom * der(idPccPu) = udFilterPu - Rtransformer * idPccPu + omegaPu * Ltransformer * iqPccPu - udPccPu;
+    Ltransformer / SystemBase.omegaNom * der(iqPccPu) = uqFilterPu - Rtransformer * iqPccPu - omegaPu * Ltransformer * idPccPu - uqPccPu; */
+
+    0 = udFilterPu - Rtransformer * idPccPu + omegaPu * Ltransformer * iqPccPu - udPccPu;
+    0 = uqFilterPu - Rtransformer * iqPccPu - omegaPu * Ltransformer * idPccPu - uqPccPu;
 
     /* Voltage module at PCC in p.u. (base UNom) */
     UPccPu = sqrt(udPccPu ^ 2 + uqPccPu ^ 2);

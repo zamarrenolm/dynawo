@@ -14,10 +14,8 @@ model IECWT4AVs "GWind Turbine Type 4A model from IEC 61400-27-1 standard with i
   */
   import Dynawo;
   extends Icons.Example;
-  Dynawo.Electrical.Buses.InfiniteBus infiniteBus(UPhase = -0.04, UPu = 1.0678) annotation(
-    Placement(visible = true, transformation(origin = {138, 0}, extent = {{-20, -20}, {20, 20}}, rotation = -90)));
   Dynawo.Electrical.Transformers.TransformerFixedRatio transformer(BPu = 0, GPu = 0, RPu = 0, XPu = 0.1, rTfoPu = 1) annotation(
-    Placement(visible = true, transformation(origin = {-1, 0}, extent = {{15, -15}, {-15, 15}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-3, 0}, extent = {{15, -15}, {-15, 15}}, rotation = 0)));
   Dynawo.Electrical.Transformers.TransformerFixedRatio transformer2(BPu = 0, GPu = 0, RPu = 0, XPu = 0.05, rTfoPu = 1) annotation(
     Placement(visible = true, transformation(origin = {-83, 0}, extent = {{-15, -15}, {15, 15}}, rotation = 0)));
   Dynawo.Electrical.Lines.Line line(BPu = 0.005, GPu = 0, RPu = 0.015, XPu = 0.025) annotation(
@@ -30,12 +28,16 @@ model IECWT4AVs "GWind Turbine Type 4A model from IEC 61400-27-1 standard with i
     Placement(visible = true, transformation(origin = {79, -20}, extent = {{-15, -15}, {15, 15}}, rotation = 0)));
   Dynawo.Electrical.Events.NodeFault nodeFault(RPu = 0, XPu = 0, tBegin = 6, tEnd = 6.25) annotation(
     Placement(visible = true, transformation(origin = {56, -38}, extent = {{-15, 15}, {15, -15}}, rotation = 0)));
-  Dynawo.Examples.IECWT4ANeplan.BaseModel.IECWT4AVs iecwt4aVs(Bes = 0, Cfilter = 0.066, DipMax = 1, DiqMax = 100, DiqMin = -100, DpMaxp4A = 1, DpRefMax4A = 100, DpRefMin4A = -100, Ges = 0, IGsIm0Pu = 0.4231, IGsRe0Pu = 0.93, IGsp0Pu = 1, IGsq0Pu = 0.21, IMax = 1.3, IMaxDip = 1.3, IMaxHookPu = 0, IdfHook = 0, IpConv0Pu = 1, IpMax0Pu = 1.2, IpfHook = 0, IqConv0Pu = 0.276, IqH1 = 1.05, IqMax = 1.05, IqMax0Pu = 0.4, IqMaxHook = 0, IqMin = -1.05, IqMin0Pu = -0.4, IqPost = 0, KiPll = 2, Kic = 25, Kiq = 0, Kiu = 0, KpPll = 0.12, Kpc = 2.4, Kpq = 1.1, Kpqu = 20, Kpu = 2, Kpufrt = 2, Kqv = -2, Lfilter = 0.15, Mdfslim = false, MpUScale = false, MqG = 1, Mqfrt = 1, Mqpri = true, OmegastepHPu = 0, P0Pu = -1, PstepHPu = -0.5, Q0Pu = 0.21, QMax = 0.8, QMax0Pu = 0.8, QMin = -0.8, QMin0Pu = -0.8, QlConst = true, QstepHPu = 0.41, RDrop = 0, Res = 0, Rfilter = 0.005, SNom = 100, TanPhi = 0.3, Td = 0, Tffilt = 0.01, Tg = 0.01, TpOrdp4A = 0.1, TpWTRef4A = 0.01, Tpfilt = 0.01, TqOrd = 0.001, Tqfilt = 0.01, Ts = 0, Tufilt = 0.01, Tuss = 1, U0Pu = 1, UGsIm0Pu = 0.2182, UGsRe0Pu = 0.9758, UGsp0Pu = 1, UGsq0Pu = 0, UMax = 1.1, UMin = 0.9, UPhase0 = 0.22, UdbOne = -0.1, UdbTwo = 0.1, UpCmd0Pu = 0.9636, UpDip = 0, Upll2 = 0.13, UpquMax = 1.1, UqCmd0Pu = 0.1514, UqDip = 0.9, UqRise = 1.1, XDrop = 0, Xes = 0, i0Pu = Complex(-0.93, -0.4231), t_Omegastep = 10, t_Pstep = 2, t_Qstep = 4, u0Pu = Complex(0.9758, 0.2182))  annotation(
+  Dynawo.Examples.IECWT4ANeplan.BaseModel.IECWT4AVs iecwt4aVs(Bes = 0, Cfilter = 0.066, DipMax = 1, DiqMax = 100, DiqMin = -100, DpMaxp4A = 1, DpRefMax4A = 100, DpRefMin4A = -100, Ges = 0, IGsIm0Pu = 0.4231, IGsRe0Pu = 0.93, IGsp0Pu = 1, IGsq0Pu = 0.21, IMax = 1.3, IMaxDip = 1.3, IMaxHookPu = 0, IdfHook = 0, IpConv0Pu = 1, IpMax0Pu = 1.2, IpfHook = 0, IqConv0Pu = 0.276, IqH1 = 1.05, IqMax = 1.05, IqMax0Pu = 0.4, IqMaxHook = 0, IqMin = -1.05, IqMin0Pu = -0.4, IqPost = 0, KiPll = 2, Kic = 25, Kiq = 0, Kiu = 0, KpPll = 0.12, Kpc = 2.5, Kpq = 1.1, Kpqu = 20, Kpu = 2, Kpufrt = 2, Kqv = -2, Lfilter = 0.00015, Mdfslim = false, MpUScale = false, MqG = 1, Mqfrt = 1, Mqpri = true, OmegastepHPu = 0, P0Pu = -1, PstepHPu = -0.5, Q0Pu = 0.21, QMax = 0.8, QMax0Pu = 0.8, QMin = -0.8, QMin0Pu = -0.8, QlConst = true, QstepHPu = 0.41, RWTDrop = 0, Res = 0, Rfilter = 0.005, SNom = 100, TanPhi = 0.3, Td = 0, Tffilt = 0.01, Tg = 0.01, TpOrdp4A = 0.1, TpWTRef4A = 0.01, Tpfilt = 0.01, TqOrd = 0.001, Tqfilt = 0.01, Ts = 0, Tufilt = 0.01, Tuss = 1, U0Pu = 1, UGsIm0Pu = 0.2182, UGsRe0Pu = 0.9758, UGsp0Pu = 1, UGsq0Pu = 0, UMax = 1.1, UMin = 0.9, UPhase0 = 0.22, UdbOne = -0.1, UdbTwo = 0.1, UpCmd0Pu = 0.9636, UpDip = 0, Upll2 = 0.13, UpquMax = 1.1, UqCmd0Pu = 0.1514, UqDip = 0.9, UqRise = 1.1, XWTDrop = 0, Xes = 0, i0Pu = Complex(-0.93, -0.4231), t_Omegastep = 10, t_Pstep = 2, t_Qstep = 4, u0Pu = Complex(0.9758, 0.2182))  annotation(
   Placement(visible = true, transformation(origin = {-124, 0}, extent = {{15, -15}, {-15, 15}}, rotation = 0)));
   Dynawo.Electrical.Lines.Line line4(BPu = 0, GPu = 0, RPu = 0, XPu = 0.0457) annotation(
     Placement(visible = true, transformation(origin = {115, 0}, extent = {{-15, -15}, {15, 15}}, rotation = 0)));
   Dynawo.Electrical.Events.NodeFault nodeFault1(RPu = 0, XPu = 0.01, tBegin = 12, tEnd = 12.15) annotation(
     Placement(visible = true, transformation(origin = {-100, -34}, extent = {{-15, 15}, {15, -15}}, rotation = 0)));
+
+  Dynawo.Electrical.Buses.InfiniteBusWithVariations infiniteBusWithVariations(U0Pu = 1.0678, UEvtPu = 0, UPhase = -0.04, omega0Pu = 1, omegaEvtPu = 0.99, tOmegaEvtEnd = 18.5, tOmegaEvtStart = 18, tUEvtEnd = 0, tUEvtStart = 0)  annotation(
+    Placement(visible = true, transformation(origin = {138, 0}, extent = {{-20, -20}, {20, 20}}, rotation = -90)));
+
 equation
   line.switchOffSignal1.value = false;
   line.switchOffSignal2.value = false;
@@ -54,13 +56,13 @@ equation
   connect(transformer2.terminal2, line.terminal1) annotation(
     Line(points = {{-68, 0}, {-58, 0}}, color = {0, 0, 255}));
   connect(line.terminal2, transformer.terminal2) annotation(
-    Line(points = {{-28, 0}, {-16, 0}}, color = {0, 0, 255}));
+    Line(points = {{-28, 0}, {-18, 0}}, color = {0, 0, 255}));
   connect(transformer.terminal1, line2.terminal1) annotation(
-    Line(points = {{14, 0}, {20, 0}, {20, -20}, {26, -20}}, color = {0, 0, 255}));
+    Line(points = {{12, 0}, {20, 0}, {20, -20}, {26, -20}}, color = {0, 0, 255}));
   connect(line2.terminal2, line3.terminal1) annotation(
     Line(points = {{56, -20}, {64, -20}}, color = {0, 0, 255}));
   connect(transformer.terminal1, line1.terminal1) annotation(
-    Line(points = {{14, 0}, {20, 0}, {20, 20}, {44, 20}}, color = {0, 0, 255}));
+    Line(points = {{12, 0}, {20, 0}, {20, 20}, {44, 20}}, color = {0, 0, 255}));
   connect(iecwt4aVs.aCPower, transformer2.terminal1) annotation(
     Line(points = {{-107.5, 0}, {-98, 0}}, color = {0, 0, 255}));
   connect(nodeFault.terminal, line2.terminal2) annotation(
@@ -69,10 +71,10 @@ equation
     Line(points = {{74, 20}, {100, 20}, {100, 0}}, color = {0, 0, 255}));
   connect(line3.terminal2, line4.terminal1) annotation(
     Line(points = {{94, -20}, {100, -20}, {100, 0}}, color = {0, 0, 255}));
-  connect(line4.terminal2, infiniteBus.terminal) annotation(
-    Line(points = {{130, 0}, {138, 0}}, color = {0, 0, 255}));
   connect(nodeFault1.terminal, transformer2.terminal1) annotation(
     Line(points = {{-100, -34}, {-98, -34}, {-98, 0}, {-98, 0}}, color = {0, 0, 255}));
+  connect(infiniteBusWithVariations.terminal, line4.terminal2) annotation(
+    Line(points = {{138, 0}, {130, 0}, {130, 0}, {130, 0}}, color = {0, 0, 255}));
   annotation(
     experiment(StartTime = 0, StopTime = 4, Tolerance = 1e-06, Interval = 0.004),
     __OpenModelica_simulationFlags(initialStepSize = "0.001", lv = "LOG_STATS", nls = "kinsol", s = "ida", nlsLS = "klu", maxIntegrationOrder = "2", maxStepSize = "10", emit_protected = "()"),

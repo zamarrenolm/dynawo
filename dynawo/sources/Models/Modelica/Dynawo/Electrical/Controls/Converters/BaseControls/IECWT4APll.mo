@@ -13,6 +13,7 @@ within Dynawo.Electrical.Controls.Converters.BaseControls;
 */
 
 model IECWT4APll
+
   import Modelica;
   import Dynawo.Types;
 
@@ -30,18 +31,21 @@ model IECWT4APll
   parameter Types.Angle UPhase0 "Start value of voltage angle at plan terminal (PCC) in rad" annotation(
   Dialog(group = "group", tab = "Operating point"));
 
+  //Inputs
   Modelica.Blocks.Interfaces.RealInput uWTCPu(start = U0Pu) annotation(
     Placement(visible = true, transformation(origin = {-120, -50}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput theta(start = UPhase0) annotation(
     Placement(visible = true, transformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
+  //Outputs
   Modelica.Blocks.Interfaces.RealOutput y(start = UPhase0) annotation(
     Placement(visible = true, transformation(origin = {120, 4.44089e-16}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
+  //Blocks
   Modelica.Blocks.Math.Feedback feedback1 annotation(
     Placement(visible = true, transformation(origin = {-70, -20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Gain gain(k = 1 / Tpll)  annotation(
-    Placement(visible = true, transformation(origin = {-38, -20}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-40, -20}, extent = {{-8, -8}, {8, 8}}, rotation = 0)));
   Modelica.Blocks.Continuous.Integrator integrator(y_start = UPhase0)  annotation(
     Placement(visible = true, transformation(origin = {30, -12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Logical.Switch switch11 annotation(
@@ -58,19 +62,18 @@ model IECWT4APll
     Placement(visible = true, transformation(origin = {-9, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
-
   connect(switch11.y, integrator.u) annotation(
     Line(points = {{11, -12}, {18, -12}}, color = {0, 0, 127}));
   connect(const1.y, switch11.u1) annotation(
     Line(points = {{-39, 10}, {-20, 10}, {-20, -4}, {-12, -4}}, color = {0, 0, 127}));
   connect(feedback1.y, gain.u) annotation(
-    Line(points = {{-61, -20}, {-48, -20}}, color = {0, 0, 127}));
+    Line(points = {{-61, -20}, {-50, -20}}, color = {0, 0, 127}));
   connect(integrator.y, feedback1.u2) annotation(
     Line(points = {{41, -12}, {50, -12}, {50, -40}, {-70, -40}, {-70, -28}}, color = {0, 0, 127}));
   connect(less1.y, switch11.u2) annotation(
     Line(points = {{-29, -62}, {-20, -62}, {-20, -12}, {-12, -12}}, color = {255, 0, 255}));
   connect(gain.y, switch11.u3) annotation(
-    Line(points = {{-29, -20}, {-12, -20}}, color = {0, 0, 127}));
+    Line(points = {{-31, -20}, {-12, -20}}, color = {0, 0, 127}));
   connect(constant1.y, less1.u2) annotation(
     Line(points = {{-69, -70}, {-52, -70}}, color = {0, 0, 127}));
   connect(uWTCPu, less1.u1) annotation(
@@ -82,7 +85,7 @@ equation
   connect(switch1.y, y) annotation(
     Line(points = {{82, 20}, {90, 20}, {90, 0}, {120, 0}, {120, 0}}, color = {0, 0, 127}));
   connect(integrator.y, switch1.u1) annotation(
-    Line(points = {{42, -12}, {50, -12}, {50, 28}, {58, 28}, {58, 28}}, color = {0, 0, 127}));
+    Line(points = {{41, -12}, {50, -12}, {50, 28}, {58, 28}}, color = {0, 0, 127}));
   connect(theta, feedback1.u1) annotation(
     Line(points = {{-120, 0}, {-100, 0}, {-100, -20}, {-78, -20}, {-78, -20}}, color = {0, 0, 127}));
   connect(theta, switch1.u3) annotation(

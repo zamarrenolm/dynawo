@@ -147,7 +147,7 @@ equation
   connect(pllGF.omegaPu, pControl.omegaPu) annotation(
     Line(points = {{-49, 75}, {-44, 75}, {-44, 30}, {-74, 30}, {-74, 21}, {-71, 21}}, color = {0, 0, 127}));
   connect(pllGF.omegaPu, currentControl.omegaPu) annotation(
-    Line(points = {{-49, 75}, {-3, 75}, {-3, -1}, {5, -1}}, color = {0, 0, 127}));
+    Line(points = {{-49, 75}, {-2, 75}, {-2, -1}, {5, -1}}, color = {0, 0, 127}));
   connect(uqFilterPu, pllGF.uqFilterPu) annotation(
     Line(points = {{-110, 55}, {-88, 55}, {-88, 65}, {-71, 65}}, color = {0, 0, 127}));
   connect(omegaRefPu, pllGF.omegaRefPu) annotation(

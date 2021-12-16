@@ -88,8 +88,8 @@ equation
   IGsp0Pu = IGsRe0Pu * cos(UPhase0) + IGsIm0Pu * sin(UPhase0) "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
   IGsq0Pu = -IGsRe0Pu * sin(UPhase0) + IGsIm0Pu * cos(UPhase0) "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
 
-  IpConv0Pu = IGsp0Pu - SystemBase.omegaRef0Pu * Cfilter * UGsp0Pu "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
-  IqConv0Pu = IGsq0Pu + SystemBase.omegaRef0Pu * Cfilter * UGsq0Pu "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
+  IpConv0Pu = IGsp0Pu - SystemBase.omegaRef0Pu * Cfilter * UGsq0Pu "Start value of the d-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
+  IqConv0Pu = IGsq0Pu + SystemBase.omegaRef0Pu * Cfilter * UGsp0Pu "Start value of the q-axis current injected at the PCC in p.u (base UNom, SNom) (generator convention)";
 
   UpCmd0Pu = UGsp0Pu + Rfilter * IpConv0Pu - SystemBase.omegaRef0Pu * Lfilter *IqConv0Pu "Start value of the d-axis voltage at the converter terminal (filter) in p.u (base UNom)";
   UqCmd0Pu = UGsq0Pu + Rfilter * IqConv0Pu + SystemBase.omegaRef0Pu * Lfilter * IpConv0Pu "Start value of the q-axis voltage at the converter terminal (filter) in p.u (base UNom)";

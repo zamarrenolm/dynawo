@@ -20,11 +20,16 @@ set(MODEL_FILES
   VSCAverage.extvar
   IECElecSystem.mo
   IECElecSystem.extvar
+  IECElecSystemPC.mo
   IECGenSystem.mo
   IECGenSystem.extvar
   IECFrameRotation.mo
   IECFrameRotation.extvar
   IECVSCI.mo
+  IECMechanical.mo
+  IECElecSystemAux.mo
+  IECGenSystemAux.mo
+  IECFrameRotationAux.mo
   )
 
 #

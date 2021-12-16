@@ -13,6 +13,7 @@ set(MODEL_FILES
   package.order
   FirstOrderRamp.mo
   FirstOrderRampLimit.mo
+  IntegratorFixLimits.mo
   IntegratorVariableLimits.mo
   PIAntiWindup.mo
   PIAntiWindupVariableLimits.mo

@@ -21,15 +21,19 @@ block IECQcontrolVDrop
 
   /*Constructive parameters*/
   parameter Types.ApparentPowerModule SNom "Nominal converter apparent power in MVA";
+
   /*Control parameters*/
   parameter Types.PerUnit RDrop "Resistive component of voltage drop impedance in p.u (base SNom, UNom)";
   parameter Types.PerUnit XDrop "Reactive component of voltage drop impedance in p.u (base SNom, UNom)";
+
   /*Parameters for initialization from load flow*/
   parameter Types.VoltageModulePu U0Pu "Start value of voltage amplitude at plant terminal (PCC) in p.u (base UNom)";
   parameter Types.ActivePowerPu P0Pu "Start value of active power at PCC in p.u (base SnRef) (receptor convention)";
   parameter Types.ActivePowerPu Q0Pu "Start value of reactive power at PCC in p.u (base SnRef) (receptor convention)";
+
   /*Parameters for internal initialization*/
   final parameter Types.PerUnit Uint0 = sqrt((U0Pu + RDrop * P0Pu * SystemBase.SnRef / (U0Pu * SNom) + XDrop * Q0Pu * SystemBase.SnRef / (U0Pu * SNom))^2 + (XDrop * P0Pu * SystemBase.SnRef / (U0Pu * SNom) - RDrop * Q0Pu * SystemBase.SnRef / (U0Pu * SNom))^2) "Initial value of the voltage at the point of control of WT in p.u (base UNom)";
+
   /*Inputs*/
   Modelica.Blocks.Interfaces.RealInput pWTCfiltPu(start = -P0Pu * SystemBase.SnRef / SNom) "Filtered active power at PCC in p.u (base SNom) (generator convention)" annotation(
     Placement(visible = true, transformation(origin = {-120, 70}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -37,6 +41,7 @@ block IECQcontrolVDrop
     Placement(visible = true, transformation(origin = {-120, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput uWTCfiltPu(start = U0Pu) "Filtered voltage amplitude at wind turbine terminals in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {-120, -70}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-110, -70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
   /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput uWTCfiltDropPu(start = Uint0) "Calculated voltage at the point of control in p.u (base UNom)" annotation(
     Placement(visible = true, transformation(origin = {120, 4.44089e-16}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));

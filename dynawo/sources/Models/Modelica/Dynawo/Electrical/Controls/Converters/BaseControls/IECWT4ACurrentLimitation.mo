@@ -69,7 +69,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
   Modelica.Blocks.Interfaces.RealInput OmegaPu(start = SystemBase.omegaRef0Pu) "Convereter frequency in p.u" annotation(
   Placement(visible = true, transformation(origin = {-270, 130}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-200, 0}, extent = {{20, -20}, {-20, 20}}, rotation = 180)));
   Modelica.Blocks.Interfaces.IntegerInput Ffrt(start = 0) annotation(
-    Placement(visible = true, transformation(origin = {-270, 225}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-200, -80}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-270, 219}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-200, -80}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
 
   /*Outputs*/
   Modelica.Blocks.Interfaces.RealOutput ipMaxPu(start = IpMax0Pu) "Maximum active current (Ibase)" annotation(
@@ -152,7 +152,6 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
   Modelica.Blocks.Math.Min min annotation(
     Placement(visible = true, transformation(origin = {-185, -114}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-
   Modelica.Blocks.Sources.Constant const5(k = IqMaxHook)  annotation(
     Placement(visible = true, transformation(origin = {-200, -29}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Tables.CombiTable1D combiTable1D1(table = tableIpMaxUwt) annotation(
@@ -173,6 +172,7 @@ model IECWT4ACurrentLimitation "IEC Wind Turbine type 4A Current Limitation"
     Placement(visible = true, transformation(origin = {190, 200}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
+
   connect(iqMaxPu, switch11.y) annotation(
     Line(points = {{270, 200}, {241, 200}}, color = {0, 0, 127}));
   connect(gain.y, min2.u1) annotation(
@@ -208,7 +208,7 @@ equation
   connect(product2.y, switch12.M) annotation(
     Line(points = {{-48, 200}, {110, 200}, {110, 114}, {110, 114}, {110, 114}}, color = {255, 127, 0}));
   connect(Ffrt, product2.u[2]) annotation(
-    Line(points = {{-270, 226}, {-80, 226}, {-80, 202}, {-70, 202}, {-70, 200}}, color = {255, 127, 0}));
+    Line(points = {{-270, 219}, {-80, 219}, {-80, 202}, {-70, 202}, {-70, 200}}, color = {255, 127, 0}));
   connect(const6.y, feedback2.u2) annotation(
     Line(points = {{-139, 91}, {-135, 91}, {-135, 96}, {-132, 96}}, color = {0, 0, 127}));
   connect(switch15.y, feedback2.u1) annotation(
@@ -224,7 +224,7 @@ equation
   connect(OmegaPu, switch13.u1) annotation(
     Line(points = {{-270, 130}, {-205, 130}}, color = {0, 0, 127}));
   connect(Ffrt, switch15.M) annotation(
-    Line(points = {{-270, 226}, {-168, 226}, {-168, 70}, {-150, 70}, {-150, 58}, {-150, 58}}, color = {255, 127, 0}));
+    Line(points = {{-270, 219}, {-168, 219}, {-168, 70}, {-150, 70}, {-150, 58}}, color = {255, 127, 0}));
   connect(product2.y, switch14.M) annotation(
     Line(points = {{-48, 200}, {89, 200}, {89, -87}}, color = {255, 127, 0}));
   connect(switch14.y, product.u2) annotation(
