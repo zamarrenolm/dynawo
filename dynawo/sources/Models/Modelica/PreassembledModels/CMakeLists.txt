@@ -97,6 +97,7 @@ set(MODELICA_PREASSEMBLED_MODELS
   TransformerFixedRatio.xml
   UnderVoltageAutomaton.xml
   VRRemote.xml
+  WindTurbine4AWeccCurrentSource.xml
   )
 
 # PYTHON scripts preassembled models
